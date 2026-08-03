@@ -410,24 +410,7 @@ export function GamePlayClient({ code }: { code: string }) {
                       <NarratorArchive supabase={supabase} roomId={room.id} round={room.round} questions={questions} />
                     ),
                   },
-                  {
-                    key: "overleg",
-                    label: "Overleg",
-                    badge: unreadChatCount,
-                    content: (
-                      <ChatPanel
-                        supabase={supabase}
-                        roomId={room.id}
-                        playerId={playerId}
-                        playerName={currentPlayer?.name ?? ""}
-                        chatMessages={chatMessages}
-                        narrating={narrating}
-                        narratorId={room.narrator_id}
-                      />
-                    ),
-                  },
                 ]}
-                onTabChange={(key) => key === "overleg" && setChatSeenCount(chatMessages.length)}
               />
             ) : (
               <Tabs
@@ -455,24 +438,7 @@ export function GamePlayClient({ code }: { code: string }) {
                       />
                     ),
                   },
-                  {
-                    key: "overleg",
-                    label: "Overleg",
-                    badge: unreadChatCount,
-                    content: (
-                      <ChatPanel
-                        supabase={supabase}
-                        roomId={room.id}
-                        playerId={playerId}
-                        playerName={currentPlayer?.name ?? ""}
-                        chatMessages={chatMessages}
-                        narrating={narrating}
-                        narratorId={room.narrator_id}
-                      />
-                    ),
-                  },
                 ]}
-                onTabChange={(key) => key === "overleg" && setChatSeenCount(chatMessages.length)}
               />
             )}
           </div>

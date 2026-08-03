@@ -1,0 +1,74 @@
+{
+  "pack": {
+    "slug": "scifi-originals-vol1",
+    "name": "Deep Space Files Vol. 1",
+    "theme": "Sci-Fi",
+    "published": true
+  },
+  "puzzles": [
+    {
+      "title": "Het signaal dat zichzelf beantwoordde",
+      "scenario": "Een ruimtestation vangt een radiosignaal op vanuit een richting waar volgens alle sterrenkaarten niets bestaat. Na ontcijfering blijkt het exact de vraag te beantwoorden die het station een dag eerder de ruimte in stuurde.",
+      "solution": "Een tot dan toe onbekende ijsplaneet met een sterk reflecterend oppervlak kaatste hun eigen verzonden bericht terug. Geen buitenaards antwoord, maar een kosmische echo van hun eigen vraag.",
+      "category": "Signalen",
+      "difficulty": "medium",
+      "hint": "Kan een vraag ooit als antwoord op zichzelf terugkomen?"
+    },
+    {
+      "title": "De bemanning die twee keer at",
+      "scenario": "Op een ruimteschip onderweg naar Mars merkt de logistiek officier dat het voedsel twee keer zo snel opraakt als berekend, terwijl niemand aan boord meer eet dan zijn toegewezen rantsoen en er geen extra bemanningsleden zijn.",
+      "solution": "Het schip herbergt een verstekeling — geen mens, maar een kolonie knaagdieren die als eitjes zijn meegereisd in de voorraadkisten en zich sindsdien ongemerkt voeden met de opslag.",
+      "category": "Voorraad",
+      "difficulty": "easy",
+      "hint": "Is de extra eter per se een mens?"
+    },
+    {
+      "title": "De planeet die terugpraatte",
+      "scenario": "Kolonisten op een nieuwe planeet ontdekken dat elk geluid dat ze maken — een schreeuw, een gesprek, muziek — enkele seconden later exact wordt herhaald vanuit de bergen, met een subtiele vervorming alsof het een antwoord is in plaats van een echo.",
+      "solution": "Het gesteente van de bergketen bevat kristallijne structuren die geluidsgolven opslaan en met vertraging opnieuw uitzenden — een natuurlijk fenomeen, vergelijkbaar met een extreem sterke akoestische echo, geen intelligent wezen dat reageert.",
+      "category": "Vreemde planeet",
+      "difficulty": "medium",
+      "hint": "Is dit een reactie, of een naklank?"
+    },
+    {
+      "title": "De astronaut die zijn eigen taal vergat",
+      "scenario": "Na drie jaar solo in de diepe ruimte keert een astronaut terug en spreekt hij zijn moedertaal foutloos — maar met een accent dat volledig vreemd klinkt, alsof hij ergens anders is opgegroeid.",
+      "solution": "Om zijn mentale gezondheid te bewaken tijdens de isolatie sprak hij drie jaar lang uitsluitend met de boordcomputer, die een buitenlands geprogrammeerd stemaccent had. Hij nam dat accent onbewust over als enige gesprekspartner.",
+      "category": "Isolatie",
+      "difficulty": "medium",
+      "hint": "Met wie heeft hij drie jaar lang gepraat?"
+    },
+    {
+      "title": "Het luik dat zichzelf opende in het luchtledige",
+      "scenario": "Een onbemand vrachtschip in een baan om de aarde meldt dat een extern luik zich heeft geopend in de vacuümruimte. De grondstations verwachten een catastrofale drukval, maar er verandert niets aan boord.",
+      "solution": "Het compartiment was al een lege, niet-drukgereguleerde opslagruimte voor apparatuur die tegen vacuüm bestand is. Het openen van het luik was een geplande test van het automatische systeem, geen storing.",
+      "category": "Techniek",
+      "difficulty": "easy",
+      "hint": "Moest daar überhaupt lucht zitten?"
+    },
+    {
+      "title": "De klok die zichzelf gelijk had",
+      "scenario": "Een ruimtestation in een baan rond de aarde ziet zijn boordklok geleidelijk afwijken van de tijd op aarde — niet door een storing, maar exact zoals de natuurkundigen aan boord al hadden voorspeld. Toch veroorzaakt het een crisis in de planning.",
+      "solution": "Het gaat om tijdsdilatatie door de snelheid van het station: de klok loopt écht iets langzamer dan op aarde, wetenschappelijk correct volgens de relativiteitstheorie. Niemand had alleen rekening gehouden met de praktische gevolgen voor het synchroniseren van bevoorradingsmissies.",
+      "category": "Natuurkunde",
+      "difficulty": "hard",
+      "hint": "Is de klok stuk, of doet ze precies wat de natuurkunde voorspelt?"
+    },
+    {
+      "title": "De vondst die meteen moest verdwijnen",
+      "scenario": "Een team op een verre maan vindt duidelijke sporen van een eerdere, intelligente aanwezigheid — werktuigen, structuren. De missieleiding op aarde beveelt hen echter de vondst volledig te verzwijgen en de site meteen te verlaten.",
+      "solution": "De sporen zijn resten van een eerdere, geheime bemande missie van een rivaliserend land, dat daar decennia eerder illegaal een buitenpost bouwde. Verzwijgen voorkomt een diplomatiek schandaal, niet een ontmoeting met buitenaards leven.",
+      "category": "Politiek",
+      "difficulty": "hard",
+      "hint": "Is de eerdere aanwezigheid per se niet van de mensheid zelf?"
+    },
+    {
+      "title": "Het ruimtepak dat leek te ademen",
+      "scenario": "Tijdens een ruimtewandeling ziet een astronaut een leeg ruimtepak langzaam om het station heen zweven, met actieve zuurstoftoevoer en een beslagen vizier, alsof er net nog iemand in ademde.",
+      "solution": "Het pak werd eerder die dag met opzet losgelaten om een lek te simuleren voor een reddingsoefening, met een verwarmingselement aan om ijsvorming te voorkomen. Dat element veroorzaakte de condens op het vizier — geen aanwezige adem.",
+      "category": "Reddingsoefening",
+      "difficulty": "medium",
+      "hint": "Moet er iemand ademen om een vizier te laten beslaan?"
+    }
+  ]
+}

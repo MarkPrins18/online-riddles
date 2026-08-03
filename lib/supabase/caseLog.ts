@@ -1,0 +1,55 @@
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "./database.types";
+import type { CaseLogEntry, CaseOutcome } from "@/types/caseLog";
+import type { PuzzleDifficulty } from "@/types/puzzle";
+
+type Client = SupabaseClient<Database>;
+
+const UNIQUE_VIOLATION = "23505";
+
+/**
+ * Records how a round ended — the "zaken-archief" entry. Guarded by a
+ * (room_id, round) unique constraint and silently no-ops on a duplicate,
+ * so a rare double-trigger (e.g. two guesses resolving a round back to
+ * back) can't crash the flow or produce two entries for one round.
+ */
+export async function logCaseOutcome(
+  supabase: Client,
+  entry: {
+    roomId: string;
+    round: number;
+    puzzleTitle: string;
+    difficulty: PuzzleDifficulty;
+    outcome: CaseOutcome;
+    solverName: string | null;
+    narratorName: string | null;
+    questionsAsked: number;
+  }
+): Promise<void> {
+  const { error } = await supabase.from("case_log").insert({
+    room_id: entry.roomId,
+    round: entry.round,
+    puzzle_title: entry.puzzleTitle,
+    difficulty: entry.difficulty,
+    outcome: entry.outcome,
+    solver_name: entry.solverName,
+    narrator_name: entry.narratorName,
+    questions_asked: entry.questionsAsked,
+  });
+
+  if (error && error.code !== UNIQUE_VIOLATION) throw error;
+}
+
+export async function getCaseLogForRoom(
+  supabase: Client,
+  roomId: string
+): Promise<CaseLogEntry[]> {
+  const { data, error } = await supabase
+    .from("case_log")
+    .select("*")
+    .eq("room_id", roomId)
+    .order("round", { ascending: true });
+
+  if (error) throw error;
+  return (data ?? []) as CaseLogEntry[];
+}

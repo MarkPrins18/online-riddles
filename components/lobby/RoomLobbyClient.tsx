@@ -1,0 +1,127 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useGameState } from "@/lib/game/useGameState";
+import { getStoredPlayerId } from "@/lib/session";
+import { resolveNarrator, type NarratorSelection } from "@/lib/game/roles";
+import type { RoomSettingsInput } from "@/types/room";
+import { createKickHandler } from "@/lib/game/membership";
+import { Card } from "@/components/ui/Card";
+import { RoomCodeDisplay } from "./RoomCodeDisplay";
+import { PlayerList } from "./PlayerList";
+import { JoinRoomForm } from "./JoinRoomForm";
+import { StartGameButton } from "./StartGameButton";
+import { NarratorPicker } from "./NarratorPicker";
+import { RoomSettingsForm } from "./RoomSettingsForm";
+import { LeaveRoomButton } from "./LeaveRoomButton";
+
+export function RoomLobbyClient({ code }: { code: string }) {
+  const { state, supabase } = useGameState(code);
+  const router = useRouter();
+  const [playerId, setPlayerId] = useState(() => getStoredPlayerId(code));
+  const [narratorSelection, setNarratorSelection] = useState<NarratorSelection>({
+    mode: "auto",
+  });
+  const [roomSettings, setRoomSettings] = useState<RoomSettingsInput>({
+    roundDurationSeconds: 600,
+    maxRounds: 5,
+    packThemeFilter: [],
+    hardcoreMode: false,
+    teamLives: 5,
+  });
+
+  useEffect(() => {
+    if (state.room?.status === "playing" || state.room?.status === "revealed") {
+      router.push(`/room/${code}/play`);
+    }
+  }, [state.room?.status, code, router]);
+
+  if (state.error) {
+    return (
+      <p className="font-mono text-sm text-danger">
+        Er ging iets mis: {state.error}
+      </p>
+    );
+  }
+
+  if (!state.room) {
+    return (
+      <p className="font-mono text-sm text-text-secondary">Kamer laden...</p>
+    );
+  }
+
+  const isHost = playerId === state.room.host_id;
+  const narratorPreview = resolveNarrator(narratorSelection, state.players, null);
+
+  return (
+    <div className="flex w-full max-w-md flex-col gap-6">
+      <RoomCodeDisplay code={state.room.code} />
+
+      <Card>
+        <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary">
+          Spelers ({state.players.length})
+        </p>
+        <PlayerList
+          players={state.players}
+          onKick={isHost ? createKickHandler(supabase, state.players) : undefined}
+        />
+      </Card>
+
+      {playerId ? (
+        isHost ? (
+          <>
+            <Card>
+              <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary">
+                Instellingen
+              </p>
+              <RoomSettingsForm
+                supabase={supabase}
+                value={roomSettings}
+                onChange={setRoomSettings}
+                narratorPreviewName={narratorPreview?.name}
+              />
+            </Card>
+            <Card>
+              <NarratorPicker
+                players={state.players}
+                selection={narratorSelection}
+                onChange={setNarratorSelection}
+              />
+            </Card>
+            <StartGameButton
+              supabase={supabase}
+              roomId={state.room.id}
+              roomCode={state.room.code}
+              players={state.players}
+              narratorSelection={narratorSelection}
+              playedPuzzleIds={state.room.played_puzzle_ids}
+              roomSettings={roomSettings}
+            />
+          </>
+        ) : (
+          <p className="text-center font-mono text-sm text-text-secondary">
+            Wacht tot de host het spel start...
+          </p>
+        )
+      ) : (
+        <Card>
+          <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary">
+            Doe mee
+          </p>
+          <JoinRoomForm presetCode={code} onJoined={setPlayerId} />
+        </Card>
+      )}
+
+      {playerId && (
+        <LeaveRoomButton
+          supabase={supabase}
+          roomId={state.room.id}
+          roomCode={state.room.code}
+          players={state.players}
+          playerId={playerId}
+        />
+      )}
+    </div>
+  );
+}

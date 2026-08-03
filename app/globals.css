@@ -1,26 +1,264 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Tells the browser this page has its own considered dark theme, so
+     Chrome/Edge "force dark" auto-inversion leaves it alone. Without this,
+     some browsers invert the one deliberately-light surface (paper cards:
+     Stel-een-vraag, Aanwijzingen, Verhoor) on top of our own colors —
+     producing near-white text on a near-white background. */
+  color-scheme: dark;
+
+  /* Warm, worn-leather near-black — replaces the cooler blue-black; this
+     is a desk, not a screen glow, so every neutral leans warm. */
+  --bg-primary: #15120e;
+  --bg-secondary: #1e1810;
+  /* Deeper brown for case-tone panels (the mystery itself) — distinct from
+     bg-secondary via warmth/depth alone now that there's no lamp-glow to
+     do that job. */
+  --bg-case: #241a10;
+  --accent: #d9a441;
+  --accent-muted: #8a6b2e;
+  /* Cool steel-blue for emphasis that isn't about the mystery itself
+     (score tallies, unread indicators) — keeps gold meaning "this is
+     about the case" instead of being reused for every highlight. */
+  --accent-secondary: #6f93ad;
+  --text-primary: #ede7d8;
+  --text-secondary: #9c9080;
+  --danger: #ab3f2f;
+  --paper: #e8e0c9;
+  --ink: #1c1810;
+
+  --font-serif: var(--font-fraunces);
+  --font-mono: var(--font-plex-mono);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-case: var(--bg-case);
+  --color-accent: var(--accent);
+  --color-accent-muted: var(--accent-muted);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-danger: var(--danger);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-serif: var(--font-serif);
+  --font-mono: var(--font-mono);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text-primary);
+  /* Desk-mat texture, not a screen vignette: a faint woven dot grid over
+     the base color, like felt or a cutting mat under the paperwork. Static,
+     fixed, cheap — no per-panel glow, no film-grain-over-everything trope. */
+  background-color: var(--bg-primary);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 0);
+  background-size: 15px 15px;
+}
+
+::selection {
+  background: var(--accent-muted);
+  color: var(--text-primary);
+}
+
+/* Keyboard-focus visibility across the app; mouse users don't see it. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/*
+ * Game screen: players | game | chat. Areas are named so the mobile stack
+ * order can differ from the desktop column order without touching markup.
+ */
+.game-layout {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "header"
+    "dossier"
+    "clues"
+    "guess"
+    "chat"
+    "players"
+    "footer";
+}
+
+@media (min-width: 1024px) {
+  .game-layout {
+    grid-template-columns: 260px minmax(0, 1fr) 360px;
+    align-items: start;
+    grid-template-areas:
+      "header  header  header"
+      "players dossier chat"
+      "players clues   chat"
+      "players guess   chat"
+      "footer  footer  footer";
+  }
+}
+
+/*
+ * "The desk": a "vast" zone (status bar, dossier, ask/solve forms) that
+ * never changes height, stacked above a "main" zone that holds whatever
+ * grows with the game (Verhoor/Aanwijzingen or Postvak/Archief, as tabs).
+ * From xl (1280px) up, Overleg gets its own permanent column next to
+ * "vast" (not "main") — GamePlayClient measures "vast" with a
+ * ResizeObserver and pins Overleg's height to match it exactly, so it has
+ * a real fixed height instead of growing forever, its bottom edge landing
+ * on the same line as "vast"'s last card. "Stel een vraag" moves to a
+ * "side" area next to "main" instead, directly under Overleg.
+ *
+ * Below xl, "main" gets the *opposite* treatment: `minmax(0, 1fr)` on its
+ * row (plus the default grid `stretch` alignment) makes it fill whatever
+ * vertical space "vast" isn't using, growing when "vast" is short
+ * (dossier collapsed) instead of shrink-wrapping to its own content. The
+ * `min-height` gives the grid something to have "leftover" space *of* —
+ * without it 1fr has nothing to distribute and just falls back to content
+ * size. Both are reset at xl, which uses its own sticky/max-height
+ * technique on "main" instead (see GamePlayClient).
+ */
+.desk-layout {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "status"
+    "vast"
+    "main"
+    "footer";
+  min-height: calc(100dvh - 5rem);
+}
+
+@media (min-width: 1280px) {
+  .desk-layout {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    grid-template-rows: none;
+    min-height: 0;
+    align-items: start;
+    grid-template-areas:
+      "status status"
+      "vast   chat"
+      "main   side"
+      "footer footer";
+  }
+}
+
+/* Ragged, torn-paper edge — used on "paper" surfaces instead of a rounded
+   corner, so they read as a loose sheet rather than a UI card. Fixed
+   jagged path (not per-instance random) keeps it cheap and predictable. */
+.torn-edge {
+  clip-path: polygon(
+    0% 1%, 4% 0%, 9% 1.5%, 14% 0%, 19% 1%, 24% 0.2%, 29% 1.3%, 34% 0%,
+    39% 1%, 44% 0.3%, 49% 1.4%, 54% 0%, 59% 1%, 64% 0.2%, 69% 1.3%, 74% 0%,
+    79% 1%, 84% 0.3%, 89% 1.4%, 94% 0%, 100% 1%,
+    100% 99%, 96% 100%, 91% 98.7%, 86% 100%, 81% 99%, 76% 99.8%, 71% 98.6%,
+    66% 100%, 61% 99%, 56% 99.7%, 51% 98.6%, 46% 100%, 41% 99%, 36% 99.8%,
+    31% 98.7%, 26% 100%, 21% 99%, 16% 99.7%, 11% 98.6%, 6% 100%, 0% 99%
+  );
+}
+
+/* A single paperclip, pinned to a corner — a decorative pseudo-element so
+   it never competes with real content or needs its own DOM node. */
+.paperclip::before {
+  content: "";
+  position: absolute;
+  top: -14px;
+  right: 22px;
+  width: 14px;
+  height: 34px;
+  border: 3px solid rgba(140, 140, 150, 0.65);
+  border-radius: 7px;
+  border-bottom-color: transparent;
+  transform: rotate(-8deg);
+  pointer-events: none;
+}
+
+.paperclip::after {
+  content: "";
+  position: absolute;
+  top: -8px;
+  right: 26px;
+  width: 8px;
+  height: 22px;
+  border: 3px solid rgba(140, 140, 150, 0.65);
+  border-radius: 5px;
+  border-top-color: transparent;
+  transform: rotate(-8deg);
+  pointer-events: none;
+}
+
+/* Folder tab — a trapezoid trigger for the on-demand drawers, standing in
+   for icon buttons so nothing relies on emoji glyphs for meaning. */
+.tab-shape {
+  clip-path: polygon(8% 0%, 92% 0%, 100% 100%, 0% 100%);
+}
+
+@keyframes pin-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96) rotate(var(--pin-rotate, 0deg));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(var(--pin-rotate, 0deg));
+  }
+}
+
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Redaction stamp lifting off the text, in place of a plain fade — used
+   for solution/score reveals. The bar covers the text at 0%, then slides
+   off; content underneath is already laid out, so no reflow. */
+@keyframes redact-lift {
+  0% {
+    transform: scaleX(1);
+  }
+  100% {
+    transform: scaleX(0);
+  }
+}
+
+.redact-reveal {
+  position: relative;
+  overflow: hidden;
+}
+
+.redact-reveal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--bg-primary);
+  transform-origin: right;
+  animation: redact-lift 420ms 260ms cubic-bezier(0.65, 0, 0.35, 1) both;
+  pointer-events: none;
+}
+
+/* Rubber-stamp settle for an answer badge appearing. */
+@keyframes answer-stamp {
+  0% {
+    opacity: 0;
+    transform: scale(1.5) rotate(-10deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(0.92) rotate(3deg);
+  }
+  100% {
+    transform: scale(1) rotate(var(--stamp-rotate, -2deg));
+  }
 }

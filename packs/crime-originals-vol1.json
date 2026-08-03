@@ -1,0 +1,74 @@
+{
+  "pack": {
+    "slug": "crime-originals-vol1",
+    "name": "Crime Files Vol. 2 — Originals",
+    "theme": "Crime",
+    "published": true
+  },
+  "puzzles": [
+    {
+      "title": "De inbraak zonder buit",
+      "scenario": "Een woninginbreker breekt 's nachts in bij een villa, doorzoekt zichtbaar alle kasten en laden en forceert meerdere sloten — maar er wordt niets vermist, zelfs niet het contante geld dat openlijk op tafel lag.",
+      "solution": "Het was geen inbreker maar een privédetective, ingehuurd door de echtgenote, op zoek naar bewijs van overspel — foto's, kwitanties, brieven. Geld en sieraden waren voor hem waardeloos, dus liet hij ze onaangeroerd liggen.",
+      "category": "Vals spoor",
+      "difficulty": "medium",
+      "hint": "Zocht de indringer naar geld, of naar iets anders?"
+    },
+    {
+      "title": "Het alibi dat te goed was",
+      "scenario": "Een verdachte overtuigt de rechtbank met een waterdicht alibi: hij was op het exacte tijdstip van de inbraak te zien op televisie, met tijdcode en getuigen erbij. Toch veroordeelt de rechter hem alsnog voor diezelfde inbraak.",
+      "solution": "De uitzending was weken eerder opgenomen en pas nu uitgezonden. De tijdcode in beeld hoorde bij het programma zelf en zei niets over wanneer de opname werkelijk was gemaakt — dus bewees niets over zijn locatie op de avond van de inbraak.",
+      "category": "Alibi",
+      "difficulty": "hard",
+      "hint": "Bewijst het moment van uitzenden ook het moment van opnemen?"
+    },
+    {
+      "title": "De handtekening onder het verkeerde stuk",
+      "scenario": "Een notaris ontdekt een rechtsgeldig ondertekend testament van een overledene — terwijl die persoon door een beroerte al twee weken vóór zijn dood niet meer kon schrijven.",
+      "solution": "De handtekening stond al jaren op een blanco vel dat hij ooit voortekende voor een heel andere machtiging. Iemand typte het testament later om die bestaande, geldige handtekening heen.",
+      "category": "Vervalsing",
+      "difficulty": "hard",
+      "hint": "Stond de handtekening er al vóór de tekst, of erna?"
+    },
+    {
+      "title": "De diefstal die zichzelf aangaf",
+      "scenario": "Een winkelierster mist structureel kleine bedragen uit de kassa en installeert een camera om de dief te betrappen. De volgende ochtend ligt er een envelop met precies het gestolen bedrag, en een dag later nog een envelop met het dubbele.",
+      "solution": "Een vaste klant kreeg per ongeluk te veel wisselgeld terug en merkte dat pas thuis op bij het natellen van haar bonnetjes. Uit schaamte bracht ze het stiekem terug, in twee delen omdat ze de eerste keer bang was betrapt te worden.",
+      "category": "Vals spoor",
+      "difficulty": "easy",
+      "hint": "Is dit wel diefstal, of beweegt het geld de andere kant op?"
+    },
+    {
+      "title": "Het spoor dat de verkeerde deur wees",
+      "scenario": "Een speurhond volgt feilloos een geur van de plaats delict naar het huis van een volstrekt onschuldige buurman, die overtuigend kan bewijzen dat hij die avond in het buitenland was.",
+      "solution": "De echte dader stal kleren van de buurman van diens waslijn en droeg die tijdens het misdrijf om zijn eigen spoor te maskeren. De hond volgde dus terecht een geur — alleen niet die van de dader zelf.",
+      "category": "Forensisch onderzoek",
+      "difficulty": "medium",
+      "hint": "Volgt de hond een persoon, of een geur die verplaatst kan worden?"
+    },
+    {
+      "title": "De kluis met twee combinaties",
+      "scenario": "Een bankkluis wordt leeggeroofd zonder enig teken van geweld of een gekraakte code. De bank houdt vol dat er maar één combinatie bestaat, gekend door de huidige directeur, die zelf aangifte doet.",
+      "solution": "Er bestond nog een tweede, verouderde code: die van de vorige directeur, die na zijn ontslag nooit is gewijzigd omdat niemand dacht dat hij die nog zou gebruiken. Hij pleegde de diefstal uit wraak voor zijn ontslag.",
+      "category": "Beveiligingsfout",
+      "difficulty": "medium",
+      "hint": "Is er ooit echt maar één combinatie geweest?"
+    },
+    {
+      "title": "De getuige die niets kon hebben gezien",
+      "scenario": "Een blinde vrouw verklaart bij de politie tot in detail te hebben 'gezien' hoe de verdachte wegrende van de plaats delict — zijn jas, zijn tempo, de richting. De rechter accepteert haar verklaring als cruciaal bewijs.",
+      "solution": "Ze is pas de laatste twee jaar blind en herkende de verdachte aan zijn zeer kenmerkende, onregelmatige manier van rennen: het geluid van zijn voetstappen, dat ze al jaren uit de buurt kende. 'Zag' was haar manier om te zeggen dat ze het hoorde en herkende.",
+      "category": "Getuigenverklaring",
+      "difficulty": "hard",
+      "hint": "Moet je iets letterlijk zien om het te herkennen?"
+    },
+    {
+      "title": "De losgeldbrief die te laat kwam",
+      "scenario": "Een gezin ontvangt een losgeldbrief voor hun ontvoerde hond, compleet met instructies en deadline — terwijl de hond op dat moment allang veilig op de bank ligt, al drie dagen terug thuis.",
+      "solution": "De brief kwam van een dierendief die de hond had gestolen maar hem, uit angst voor de aandacht die de zaak inmiddels in het lokale nieuws kreeg, alweer stiekem had vrijgelaten. De brief zelf was door de post vertraagd en dus achterhaald toen hij aankwam.",
+      "category": "Losgeld",
+      "difficulty": "easy",
+      "hint": "Is de brief wel op tijd bezorgd voor wat erin staat?"
+    }
+  ]
+}

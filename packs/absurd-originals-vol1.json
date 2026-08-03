@@ -1,0 +1,74 @@
+{
+  "pack": {
+    "slug": "absurd-originals-vol1",
+    "name": "Vreemde Zaken Vol. 1",
+    "theme": "Absurd",
+    "published": true
+  },
+  "puzzles": [
+    {
+      "title": "De rij voor een deur die niet opengaat",
+      "scenario": "Elke zaterdagochtend staat er een lange, geduldige rij mensen te wachten voor een deur die nooit opengaat en waar nooit iemand doorheen loopt. Toch gaat niemand teleurgesteld naar huis.",
+      "solution": "Het is het decor van een fotostudio, gebouwd voor een actie waarbij mensen betalen om een foto te laten maken alsof ze in de rij staan voor een beroemde, fictieve club. De deur is nep — de rij zelf is het hele product.",
+      "category": "Marketing",
+      "difficulty": "medium",
+      "hint": "Is de deur wel echt, of is het wachten zelf het punt?"
+    },
+    {
+      "title": "De marathon die niemand won",
+      "scenario": "Honderden lopers finishen een officiële marathon, hun tijden worden geregistreerd en medailles worden uitgereikt — maar de organisatie weigert een winnaar aan te wijzen, terwijl de snelste tijd overduidelijk is.",
+      "solution": "Het is een fun-run zonder klassement, met opzet: tijden worden alleen gemeten zodat lopers hun eigen record kunnen zien. De organisatie wil bewust geen winnaarscultuur, om de nadruk op deelname te houden.",
+      "category": "Evenement",
+      "difficulty": "easy",
+      "hint": "Moet een gemeten tijd altijd tot een winnaar leiden?"
+    },
+    {
+      "title": "De stilte die geld kostte",
+      "scenario": "Een man betaalt maandelijks een flink bedrag aan een bedrijf dat, voor zover hij weet, helemaal niets levert — geen product, geen dienst, geen contact. Zijn boekhouder raadt hem met klem aan om te blijven betalen.",
+      "solution": "Het bedrijf houdt tegen betaling een oude radiofrequentie 'stil' die hij ooit reserveerde voor een hobbyproject. Stopt hij met betalen, dan verliest hij de licentie op die frequentie aan de eerstvolgende aanvrager.",
+      "category": "Administratie",
+      "difficulty": "hard",
+      "hint": "Betaalt hij voor iets dat gebeurt, of juist voor iets dat wegblijft?"
+    },
+    {
+      "title": "De man die zijn trein miste om op tijd te zijn",
+      "scenario": "Een forens laat elke ochtend bewust de trein rijden waarmee hij ruim op tijd voor zijn werk zou zijn, en neemt steevast de volgende, latere trein. Toch komt hij nooit te laat op kantoor.",
+      "solution": "Zijn werkgever geeft een toeslag aan medewerkers die na de spits reizen, om de vroege trein vrij te houden voor essentiële forensen. Hij werkt daardoor bewust flexibele uren en begint later — de 'late' trein is voor hem gewoon op tijd.",
+      "category": "Werk",
+      "difficulty": "medium",
+      "hint": "Op tijd voor wie, en voor welke starttijd precies?"
+    },
+    {
+      "title": "De bibliotheek met maar één boek",
+      "scenario": "Een openbare bibliotheek heeft duizenden lege planken en precies één boek in de hele collectie. Toch komen er elke dag tientallen bezoekers, en niemand klaagt over het aanbod.",
+      "solution": "Het is een tijdelijke kunstinstallatie over 'het enige boek dat je echt nodig hebt'. Bezoekers komen voor de installatie en het gesprek erover, niet om te lenen zoals in een gewone bibliotheek.",
+      "category": "Kunst",
+      "difficulty": "easy",
+      "hint": "Is dit wel een bibliotheek in de gewone zin van het woord?"
+    },
+    {
+      "title": "De wekker die harder afging naarmate je dichterbij kwam",
+      "scenario": "Een vrouw loopt 's ochtends naar haar wekker om hem uit te zetten, maar merkt dat het alarm juist luider wordt naarmate ze dichterbij komt, in plaats van te stoppen.",
+      "solution": "Het is een 'loop-wekker', speciaal ontworpen voor mensen die snoozen overslaan: hij stopt pas als je aan de andere kant van de kamer een code scant, en wordt onderweg expres luider als motivatie om echt op te staan.",
+      "category": "Gadgets",
+      "difficulty": "easy",
+      "hint": "Is dit een storing, of precies de bedoeling?"
+    },
+    {
+      "title": "Het applaus voor een lege bühne",
+      "scenario": "Op een theaterfestival staat het publiek na afloop luid en langdurig te klappen voor een podium waar niemand op staat en niemand zich ooit heeft laten zien.",
+      "solution": "De voorstelling was audiotheater in het donker: de acteurs speelden hun rol vanuit de zaal zelf, verspreid tussen het publiek, terwijl licht en geluid alle aandacht naar het lege podium trokken. Het applaus was voor hen — alleen niet naar de juiste plek gericht.",
+      "category": "Theater",
+      "difficulty": "medium",
+      "hint": "Zijn de acteurs er niet, of staan ze gewoon ergens anders?"
+    },
+    {
+      "title": "De winkel die nooit een kassa had",
+      "scenario": "Reizigers op een vliegveld lopen constant een winkel in en uit, met tassen vol aankopen — maar nergens is een kassa, personeel of scanner te bekennen, en niemand betaalt zichtbaar iets.",
+      "solution": "Het is een volledig geautomatiseerde winkel: aankopen worden via een app en gezichtsherkenning afgerekend op het moment dat je de winkel verlaat. Er wordt wél betaald, alleen onzichtbaar, op de drempel in plaats van bij een kassa.",
+      "category": "Technologie",
+      "difficulty": "easy",
+      "hint": "Moet betalen altijd zichtbaar zijn, bij een kassa?"
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "pack": {
+    "slug": "mystery-originals-vol1",
+    "name": "Alledaagse Mysteries Vol. 1",
+    "theme": "Mysterie",
+    "published": true
+  },
+  "puzzles": [
+    {
+      "title": "Zes ochtenden, zes verse bloemen",
+      "scenario": "Een weduwnaar vindt zes ochtenden op rij een verse bos bloemen op de stoep vóór zijn deur, zonder kaartje en zonder dat een bezorger ooit is gezien. Op de zevende dag stopt het abrupt — dezelfde dag dat zijn buurvrouw voor het eerst niet groet vanuit haar raam.",
+      "solution": "De buurvrouw, die zelf nog maar zelden buitenkomt, legt al zes ochtenden zelfgekweekte bloemen uit haar tuin vóór zonsopgang stiekem bij hem neer, uit schuldgevoel over een ruzie van jaren geleden die ze nooit heeft goedgemaakt. Op de zevende dag wordt ze met spoed opgenomen in het ziekenhuis.",
+      "category": "Nabuurschap",
+      "difficulty": "medium",
+      "hint": "Let niet op wie er komt, maar op wie er ineens niet meer is."
+    },
+    {
+      "title": "De stopwatch die altijd hetzelfde getal toonde",
+      "scenario": "Een zwemcoach ziet dat zijn topzwemster elke training exact dezelfde tijd noteert, tot op de honderdste seconde nauwkeurig — ook op dagen dat ze duidelijk trager of juist sneller zwemt dan anders.",
+      "solution": "Haar horloge is na een val in het bad blijven hangen op één vaste tijd. Uit pure gewoonte schrijft ze die tijd op in haar logboek, zonder te kijken naar de officiële trainingsklok aan de wand.",
+      "category": "Sport",
+      "difficulty": "easy",
+      "hint": "Ligt het probleem bij de zwemster, of bij wat ze afleest?"
+    },
+    {
+      "title": "Het pakketje dat zichzelf terugstuurde",
+      "scenario": "Een bezorger levert een pakket af bij een leegstaand huis met dichtgetimmerde brievenbus. Drie dagen later staat hetzelfde pakket weer bij het distributiecentrum, gemarkeerd als 'afgeleverd én geretourneerd' — zonder dat iemand het ophaalde of terugbracht.",
+      "solution": "De scanner-app toont huisnummer 12 en 12A als hetzelfde adres. Het pakket ging in werkelijkheid naar het bewoonde 12A, waar de bewoner de bestelling niet herkende en meteen weigerde. Nooit is het bij het leegstaande huis geweest.",
+      "category": "Logistiek",
+      "difficulty": "medium",
+      "hint": "Was het pakket op het juiste adres, of alleen op het juiste nummer?"
+    },
+    {
+      "title": "De les die niemand volgde",
+      "scenario": "Een yogaleraar geeft elke ochtend om zes uur les in een zaal vol mensen — hij hoort de deur, voetstappen, ademhaling, matjes die worden uitgerold. Maar zodra hij zijn ogen opent bij de slotmeditatie, is de zaal altijd leeg.",
+      "solution": "Hij geeft zijn les via een livestream. Naast hem staat een speaker die sfeergeluid afspeelt: een oude opname van een drukke, fysieke les, bedoeld om de kijkers thuis een gevoel van gezelschap te geven. Hij hoort zijn eigen verleden, geen aanwezig publiek.",
+      "category": "Werk",
+      "difficulty": "hard",
+      "hint": "Is het geluid dat hij hoort live, of eerder opgenomen?"
+    },
+    {
+      "title": "De rook die niemand kon vinden",
+      "scenario": "Een boswachter ziet drie avonden op rij rook opstijgen uit hetzelfde stuk bos, steeds tussen acht en negen uur. Elke keer als hij ter plaatse komt, brandt er niets en is er geen vuur te bekennen.",
+      "solution": "Een imker rookt op dat vaste tijdstip zijn bijenkasten met een handrookpot om de bijen rustig te houden voor het legen van de raten. Het lijkt op rook van een brand, maar komt van een klein, volkomen ongevaarlijk apparaat.",
+      "category": "Natuur",
+      "difficulty": "easy",
+      "hint": "Rook hoeft niet van een brand te komen."
+    },
+    {
+      "title": "De handtas die zichzelf verplaatste",
+      "scenario": "Een vrouw legt haar tas elke ochtend op het aanrecht voordat ze na een nachtdienst gaat slapen. Acht uur later vindt ze hem steevast in de gang terug — terwijl ze alleen woont en niemand een sleutel heeft.",
+      "solution": "Haar schoonmaakster komt op vaste tijden en zet de tas altijd opzij naar de gang om het aanrecht te kunnen soppen. De vrouw slaapt inmiddels al vast voordat de schoonmaakster arriveert en merkt er nooit iets van.",
+      "category": "Huishouden",
+      "difficulty": "easy",
+      "hint": "Woont ze echt alleen, of komt er weleens iemand terwijl zij slaapt?"
+    },
+    {
+      "title": "De stem in de wachtrij",
+      "scenario": "Een man belt de klantenservice van zijn energieleverancier. Terwijl hij in de wachtrij staat, hoort hij via de wachtmuziek zijn eigen stem een boodschap voorlezen die hij zich niet kan herinneren ooit te hebben ingesproken.",
+      "solution": "Jaren geleden werkte hij als stemacteur voor een reclamebureau dat voice-overs leverde aan callcenters. Het bedrijf hergebruikt zijn oude opname, zonder dat hij dat ooit wist, voor een volledig ander script over wachttijden.",
+      "category": "Toeval",
+      "difficulty": "medium",
+      "hint": "Heeft hij ooit met zijn stem gewerkt, ook al is dat lang geleden?"
+    },
+    {
+      "title": "Het schoolrapport uit de toekomst",
+      "scenario": "Een moeder ontvangt het rapport van haar zoon. De cijferlijst klopt exact met wat hij die periode heeft geleerd — behalve dat de datum bovenaan het document een jaar in de toekomst ligt.",
+      "solution": "De administratie hergebruikte een oud sjabloon en vergat bij het printen het jaartal aan te passen. Puur een typefout in de kop van het document; de cijfers zelf zijn helemaal correct.",
+      "category": "Administratie",
+      "difficulty": "easy",
+      "hint": "Zit het probleem in de inhoud, of alleen in het jaartal erboven?"
+    }
+  ]
+}

@@ -50,7 +50,7 @@ export function GuessForm({
       <input
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Wat is de oplossing?"
+        placeholder="Wat denk jij dat het antwoord is?"
         maxLength={280}
         className="w-full rounded-md border border-white/10 bg-bg-primary px-3 py-2.5 font-mono text-sm text-text-primary placeholder:text-text-secondary/60 focus:border-accent-muted"
       />

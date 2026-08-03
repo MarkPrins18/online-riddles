@@ -311,9 +311,6 @@ export function GamePlayClient({ code }: { code: string }) {
                     label: "Los de zaak op",
                     content: (
                       <Card>
-                        <p className="mb-3 font-mono text-xs text-text-secondary">
-                          Alleen de Verteller ziet jouw theorie.
-                        </p>
                         <GuessForm
                           supabase={supabase}
                           roomId={room.id}
@@ -333,7 +330,7 @@ export function GamePlayClient({ code }: { code: string }) {
           {!narrating && !isRevealed && (
             <Card className="hidden xl:block">
               <p className="mb-3 font-mono text-xs text-text-secondary">
-                Los de zaak op — alleen de Verteller ziet jouw theorie.
+                Los de zaak op.
               </p>
               <GuessForm
                 supabase={supabase}

@@ -30,6 +30,8 @@ import { InterrogationLog } from "./InterrogationLog";
 import { CluesList } from "./CluesList";
 import { QuestionForm } from "./QuestionForm";
 import { ChatPanel } from "./ChatPanel";
+import { ChatDrawer } from "./ChatDrawer";
+import { ChatIconButton } from "./ChatIconButton";
 import { GuessForm } from "./GuessForm";
 import { MyGuessFeedback } from "./MyGuessFeedback";
 import { NarratorInbox } from "./NarratorInbox";
@@ -54,6 +56,7 @@ export function GamePlayClient({ code }: { code: string }) {
   const [nextCaseError, setNextCaseError] = useState<string | null>(null);
   const [corkboardOpen, setCorkboardOpen] = useState(false);
   const [playersOpen, setPlayersOpen] = useState(false);
+  const [chatDrawerOpen, setChatDrawerOpen] = useState(false);
   // Drives the "Overleg" tab's unread badge on narrow screens (chat has its
   // own permanent column from xl up, so no badge is needed there).
   const [chatSeenCount, setChatSeenCount] = useState(() => state.chatMessages.length);
@@ -275,6 +278,22 @@ export function GamePlayClient({ code }: { code: string }) {
               )}
             </Card>
           </div>
+
+          {/* Overleg shortcut for narrow screens: xl+ has a permanent chat
+              column, but below xl it's buried at the bottom of a tab strip
+              shared with Postvak/Verhoor/etc. This opens it directly from
+              the vast column instead, for both roles. */}
+          {!isRevealed && (
+            <div className="flex justify-end xl:hidden">
+              <ChatIconButton
+                onClick={() => {
+                  setChatDrawerOpen(true);
+                  setChatSeenCount(chatMessages.length);
+                }}
+                unreadCount={unreadChatCount}
+              />
+            </div>
+          )}
 
           {narrating && !isRevealed && (
             <NarratorTensionPanel solution={puzzle.solution} guesses={guesses} questions={questions} />
@@ -623,6 +642,22 @@ export function GamePlayClient({ code }: { code: string }) {
           narratorId={room.narrator_id}
           onKick={isHost ? createKickHandler(supabase, players) : undefined}
           onClose={() => setPlayersOpen(false)}
+        />
+      )}
+
+      {chatDrawerOpen && (
+        <ChatDrawer
+          supabase={supabase}
+          roomId={room.id}
+          playerId={playerId}
+          playerName={currentPlayer?.name ?? ""}
+          chatMessages={chatMessages}
+          narrating={narrating}
+          narratorId={room.narrator_id}
+          onClose={() => {
+            setChatDrawerOpen(false);
+            setChatSeenCount(chatMessages.length);
+          }}
         />
       )}
 

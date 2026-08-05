@@ -5,9 +5,11 @@ import { medalForRank } from "@/lib/game/ranking";
 export function ScoreBoard({
   players,
   onKick,
+  onlinePlayerIds,
 }: {
   players: Player[];
   onKick?: (playerId: string) => void;
+  onlinePlayerIds?: Set<string>;
 }) {
   const ranked = [...players].sort((a, b) => b.score - a.score);
 
@@ -19,10 +21,26 @@ export function ScoreBoard({
             <span className="shrink-0 font-mono text-xs text-text-secondary">
               {medalForRank(index) ?? String(index + 1).padStart(2, "0")}
             </span>
+            {onlinePlayerIds && (
+              <span
+                className={`h-1.5 w-1.5 shrink-0 rounded-full ${
+                  onlinePlayerIds.has(player.id) ? "bg-accent" : "bg-text-secondary/30"
+                }`}
+              >
+                <span className="sr-only">
+                  {onlinePlayerIds.has(player.id) ? "Online" : "Offline"}
+                </span>
+              </span>
+            )}
             <span className="truncate font-mono text-sm text-text-primary">{player.name}</span>
             {player.is_narrator && (
               <Badge tone="accent" className="shrink-0">
                 Verteller
+              </Badge>
+            )}
+            {player.is_spectator && (
+              <Badge tone="neutral" className="shrink-0">
+                Toeschouwer
               </Badge>
             )}
           </div>

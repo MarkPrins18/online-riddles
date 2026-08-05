@@ -8,6 +8,8 @@ import { resolveNarrator, type NarratorSelection } from "@/lib/game/roles";
 import type { RoomSettingsInput } from "@/types/room";
 import { createKickHandler } from "@/lib/game/membership";
 import { Card } from "@/components/ui/Card";
+import { HowToPlayButton } from "@/components/HowToPlayButton";
+import { ClaimHostBanner } from "@/components/ClaimHostBanner";
 import { RoomCodeDisplay } from "./RoomCodeDisplay";
 import { PlayerList } from "./PlayerList";
 import { JoinRoomForm } from "./JoinRoomForm";
@@ -17,9 +19,9 @@ import { RoomSettingsForm } from "./RoomSettingsForm";
 import { LeaveRoomButton } from "./LeaveRoomButton";
 
 export function RoomLobbyClient({ code }: { code: string }) {
-  const { state, supabase } = useGameState(code);
-  const router = useRouter();
   const [playerId, setPlayerId] = useState(() => getStoredPlayerId(code));
+  const { state, supabase } = useGameState(code, playerId);
+  const router = useRouter();
   const [narratorSelection, setNarratorSelection] = useState<NarratorSelection>({
     mode: "auto",
   });
@@ -27,6 +29,7 @@ export function RoomLobbyClient({ code }: { code: string }) {
     roundDurationSeconds: 600,
     maxRounds: 5,
     packThemeFilter: [],
+    communityPackIds: null,
     hardcoreMode: false,
     teamLives: 5,
   });
@@ -57,6 +60,16 @@ export function RoomLobbyClient({ code }: { code: string }) {
   return (
     <div className="flex w-full max-w-md flex-col gap-6">
       <RoomCodeDisplay code={state.room.code} />
+      <HowToPlayButton className="self-center" />
+
+      <ClaimHostBanner
+        supabase={supabase}
+        roomId={state.room.id}
+        players={state.players}
+        hostId={state.room.host_id}
+        onlinePlayerIds={state.onlinePlayerIds}
+        playerId={playerId}
+      />
 
       <Card>
         <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary">
@@ -65,6 +78,7 @@ export function RoomLobbyClient({ code }: { code: string }) {
         <PlayerList
           players={state.players}
           onKick={isHost ? createKickHandler(supabase, state.players) : undefined}
+          onlinePlayerIds={state.onlinePlayerIds}
         />
       </Card>
 

@@ -8,15 +8,18 @@ import { getQuestionsForPuzzle } from "@/lib/supabase/questions";
 import { getGuessesForPuzzle } from "@/lib/supabase/guesses";
 import { getChatMessages } from "@/lib/supabase/chatMessages";
 import { getCaseLogForRoom } from "@/lib/supabase/caseLog";
-import { subscribeToRoom, unsubscribeFromRoom } from "@/lib/realtime/room-channel";
+import { subscribeToRoom, unsubscribeFromRoom, trackPresence } from "@/lib/realtime/room-channel";
 import { getErrorMessage } from "@/lib/errors";
 import type { Room } from "@/types/room";
+import type { RealtimeChannel } from "@supabase/supabase-js";
 import { gameReducer, initialGameState } from "./reducer";
 
-export function useGameState(roomCode: string) {
+export function useGameState(roomCode: string, playerId: string | null = null) {
   const [state, dispatch] = useReducer(gameReducer, initialGameState);
   const [supabase] = useState(() => createClient());
   const currentPuzzleIdRef = useRef<string | null>(null);
+  const channelRef = useRef<RealtimeChannel | null>(null);
+  const trackedPlayerIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -118,7 +121,10 @@ export function useGameState(roomCode: string) {
           onGuessUpdate: (guess) => dispatch({ type: "GUESS_UPDATED", payload: guess }),
           onChatMessageInsert: (message) => dispatch({ type: "CHAT_MESSAGE_SENT", payload: message }),
           onCaseLogInsert: (entry) => dispatch({ type: "CASE_LOGGED", payload: entry }),
+          onPresenceSync: (players) =>
+            dispatch({ type: "PRESENCE_SYNCED", payload: new Set(players.map((p) => p.player_id)) }),
         });
+        channelRef.current = channel;
 
         return { channel, handleVisibilityChange };
       } catch (error) {
@@ -139,8 +145,28 @@ export function useGameState(roomCode: string) {
         document.removeEventListener("visibilitychange", setup.handleVisibilityChange);
         window.removeEventListener("focus", setup.handleVisibilityChange);
       });
+      channelRef.current = null;
+      trackedPlayerIdRef.current = null;
     };
   }, [roomCode, supabase]);
+
+  // Announces this client's presence once its own player row is known —
+  // playerId can arrive after the channel does (e.g. joining a room from
+  // its lobby), so this can't just live inside hydrate(). Guarded by a ref
+  // (not state) so it tracks once per player id instead of re-tracking on
+  // every unrelated players-list change.
+  useEffect(() => {
+    if (!playerId || trackedPlayerIdRef.current === playerId) return;
+    const me = state.players.find((p) => p.id === playerId);
+    if (!me || !channelRef.current) return;
+
+    trackedPlayerIdRef.current = playerId;
+    trackPresence(channelRef.current, {
+      player_id: playerId,
+      name: me.name,
+      online_at: new Date().toISOString(),
+    });
+  }, [playerId, state.players]);
 
   return { state, supabase };
 }

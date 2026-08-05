@@ -59,11 +59,13 @@ export function CluesList({
               — {clue.player_name}
             </p>
             {onPinToBoard && (
+              // Prikbord itself is desktop-only (see GamePlayClient) — this
+              // is the only other way to open it, so it needs the same gate.
               <button
                 type="button"
                 onClick={() => handlePin(clue.id)}
                 disabled={pinningId === clue.id}
-                className="font-mono text-[11px] uppercase tracking-widest text-[#3d2609] hover:text-black disabled:opacity-50"
+                className="hidden font-mono text-[11px] uppercase tracking-widest text-[#3d2609] hover:text-black disabled:opacity-50 xl:inline"
               >
                 {pinningId === clue.id ? "Bezig…" : "Speld op prikbord"}
               </button>

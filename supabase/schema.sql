@@ -21,6 +21,7 @@ create table if not exists rooms (
   round_duration_seconds int,
   max_rounds int not null default 5,
   pack_theme_filter text[],
+  community_pack_ids uuid[],
   hardcore_mode boolean not null default false,
   team_lives_total int,
   team_lives_remaining int,
@@ -32,6 +33,7 @@ create table if not exists rooms (
 -- Same reasoning as the players.user_id migration below: needed when this
 -- table already existed from before revealed_at was added.
 alter table rooms add column if not exists revealed_at timestamptz;
+alter table rooms add column if not exists community_pack_ids uuid[];
 
 create table if not exists players (
   id uuid primary key default gen_random_uuid(),
@@ -40,9 +42,12 @@ create table if not exists players (
   name text not null,
   is_narrator boolean not null default false,
   is_host boolean not null default false,
+  is_spectator boolean not null default false,
   score int not null default 0,
   joined_at timestamptz not null default now()
 );
+
+alter table players add column if not exists is_spectator boolean not null default false;
 
 -- Covers both a fresh install (column already exists from the create table
 -- above, this is a no-op) and migrating an existing database (adds the
@@ -51,6 +56,28 @@ create table if not exists players (
 -- user_id, so every RLS check below will reject them) — it just lets the
 -- app boot; start a fresh room to actually play.
 alter table players add column if not exists user_id uuid references auth.users (id) on delete cascade;
+
+-- Anyone joining while a round is already in progress starts as a
+-- spectator (can watch, can't ask/guess) instead of a full player who
+-- missed the round's earlier questions/answers — computed server-side from
+-- the room's actual status rather than trusted from the client, same
+-- reasoning as the moderation/rate-limit triggers further down.
+create or replace function set_spectator_on_join()
+returns trigger
+language plpgsql
+security definer
+as $$
+begin
+  select (status <> 'lobby') into new.is_spectator
+  from rooms where id = new.room_id;
+  return new;
+end;
+$$;
+
+drop trigger if exists set_spectator_on_join on players;
+create trigger set_spectator_on_join
+  before insert on players
+  for each row execute function set_spectator_on_join();
 
 -- A story pack groups puzzles under one theme (Crime, Sci-Fi, Absurd, ...)
 -- and can be released independently via is_published.
@@ -91,7 +118,7 @@ create table if not exists admins (
 -- of quietly running as the view owner.
 create or replace view published_puzzles
   with (security_invoker = true) as
-  select p.id, p.pack_id, p.title, p.scenario, p.solution, p.category, p.difficulty, p.hint, p.created_at, sp.theme
+  select p.id, p.pack_id, p.title, p.scenario, p.solution, p.category, p.difficulty, p.hint, p.created_at, sp.theme, p.created_by, p.is_community
   from puzzles p
   join story_packs sp on sp.id = p.pack_id
   where sp.is_published = true;
@@ -215,6 +242,30 @@ create trigger clear_board_on_new_round
   after update on rooms
   for each row execute function clear_board_on_new_round();
 
+-- Same trigger condition as clear_board_on_new_round — a new puzzle is the
+-- right moment to promote any mid-round joiners to full players, since
+-- everyone starts that puzzle on equal footing. Covers both "Volgende
+-- zaak" and "Sla deze zaak over" (both change current_puzzle_id) with no
+-- special-casing needed at either call site.
+create or replace function promote_spectators_on_new_round()
+returns trigger
+language plpgsql
+security definer
+as $$
+begin
+  if new.current_puzzle_id is distinct from old.current_puzzle_id then
+    update players set is_spectator = false
+    where room_id = new.id and is_spectator = true;
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists promote_spectators_on_new_round on rooms;
+create trigger promote_spectators_on_new_round
+  after update on rooms
+  for each row execute function promote_spectators_on_new_round();
+
 -- Stamps the moment a round is revealed so every client can compute the
 -- same "volgende ronde begint over..." countdown from one shared timestamp
 -- instead of racing independent local timers. Cleared when a new round
@@ -326,6 +377,34 @@ begin
   update players set is_host = false where room_id = room_id_input;
   update players set is_host = true where id = player_id_input and room_id = room_id_input;
   update rooms set host_id = player_id_input where id = room_id_input;
+end;
+$$;
+
+-- Unlike set_host, deliberately does NOT require the caller to already be
+-- host — this exists specifically for when the current host has
+-- disconnected, so by definition no client can authenticate as them
+-- anymore. Presence (who's actually connected) only lives in the realtime
+-- layer, not the database, so this can't verify server-side that the old
+-- host is really gone — it trusts the caller the same way the rest of this
+-- anonymous-session app already does. Self-claim only (not "assign anyone"),
+-- and the client only ever surfaces this to the one deterministic successor
+-- (see lib/game/membership.ts: pickNextHost) rather than every player.
+create or replace function claim_host(room_id_input uuid, claiming_player_id uuid)
+returns void
+language plpgsql
+security definer
+as $$
+begin
+  if not is_room_member(room_id_input) then
+    raise exception 'Not a member of this room';
+  end if;
+  if not is_own_player(claiming_player_id) then
+    raise exception 'Can only claim host for yourself';
+  end if;
+
+  update players set is_host = false where room_id = room_id_input;
+  update players set is_host = true where id = claiming_player_id and room_id = room_id_input;
+  update rooms set host_id = claiming_player_id where id = room_id_input;
 end;
 $$;
 
@@ -765,6 +844,17 @@ create table if not exists puzzle_votes (
   unique (puzzle_id, user_id)
 );
 
+-- A player's personal shortlist of community packs, built while browsing
+-- /community — purely private curation (unlike puzzle_votes) so the host can
+-- later pull it into a room's community-pack selection via "Gebruik mijn
+-- favorieten" without exposing who favorited what to anyone else.
+create table if not exists pack_favorites (
+  pack_id uuid not null references story_packs (id) on delete cascade,
+  user_id uuid not null references auth.users (id) on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key (pack_id, user_id)
+);
+
 -- Vote totals per puzzle, for sorting/display. security_invoker so it's
 -- bound by the querying role's own RLS, same reasoning as published_puzzles.
 create or replace view puzzle_vote_totals
@@ -830,6 +920,7 @@ create trigger moderate_puzzles
 
 alter table profiles enable row level security;
 alter table puzzle_votes enable row level security;
+alter table pack_favorites enable row level security;
 
 drop policy if exists "public read profiles" on profiles;
 create policy "public read profiles" on profiles for select using (true);
@@ -847,6 +938,14 @@ create policy "change own vote" on puzzle_votes for update
   using (user_id = auth.uid()) with check (user_id = auth.uid());
 drop policy if exists "remove own vote" on puzzle_votes;
 create policy "remove own vote" on puzzle_votes for delete using (user_id = auth.uid());
+
+-- Private: only the favoriting player can see or change their own shortlist.
+drop policy if exists "read own pack favorites" on pack_favorites;
+create policy "read own pack favorites" on pack_favorites for select using (user_id = auth.uid());
+drop policy if exists "add own pack favorite" on pack_favorites;
+create policy "add own pack favorite" on pack_favorites for insert with check (user_id = auth.uid());
+drop policy if exists "remove own pack favorite" on pack_favorites;
+create policy "remove own pack favorite" on pack_favorites for delete using (user_id = auth.uid());
 
 -- Extends story_packs/puzzles write access: alongside the existing
 -- admins-only policy, the pack/puzzle's own creator may manage it.

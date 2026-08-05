@@ -9,9 +9,10 @@ export function pickNextNarrator(
   players: Player[],
   currentNarratorId: string | null
 ): Player | null {
-  if (players.length === 0) return null;
+  const eligible = players.filter((p) => !p.is_spectator);
+  if (eligible.length === 0) return null;
 
-  const ordered = [...players].sort(
+  const ordered = [...eligible].sort(
     (a, b) => new Date(a.joined_at).getTime() - new Date(b.joined_at).getTime()
   );
 

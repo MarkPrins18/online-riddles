@@ -1,24 +1,38 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "./database.types";
 import type { Puzzle, PublishedPuzzle, PuzzleDifficulty } from "@/types/puzzle";
+import { getVoteTotals } from "./votes";
 
 type Client = SupabaseClient<Database>;
+
+// A puzzle needs at least this many votes before its score is trusted for
+// anything — below that, a couple of noisy votes (one grumpy friend, one
+// biased upvote) would swing it unfairly, and a brand-new puzzle would
+// otherwise never get drawn to collect votes in the first place. Only used
+// to filter out a clear consensus of "this one's bad" (score at or below
+// the threshold), not to boost highly-rated puzzles — with typical vote
+// counts that ranking signal is too noisy to act on constructively.
+const MIN_VOTES_TO_TRUST_SCORE = 5;
+const BAD_SCORE_THRESHOLD = -3;
 
 /**
  * Only pulls from packs that have been published — see published_puzzles
  * view. Excludes `excludeIds` (puzzles this room already played) so a
  * game night doesn't repeat a riddle everyone already knows the answer
  * to; falls back to the full pool once every puzzle has been used.
- * `themes`, if given, restricts the pool to those pack themes, and
- * `preferredDifficulty` further narrows it to match the round's target
- * difficulty (see lib/game/difficulty.ts) — both fall back to the wider
- * pool if the narrowed set happens to be empty, rather than blocking the
- * game over a combination with zero puzzles.
+ * `officialThemes` restricts non-community puzzles to those pack themes
+ * (empty = no restriction); `communityPackIds` restricts community puzzles
+ * to those specific packs (null = every published community pack, [] =
+ * none). `preferredDifficulty` further narrows the result to match the
+ * round's target difficulty (see lib/game/difficulty.ts) — every filter
+ * falls back to the wider pool if the narrowed set happens to be empty,
+ * rather than blocking the game over a combination with zero puzzles.
  */
 export async function getRandomPuzzle(
   supabase: Client,
   excludeIds: string[] = [],
-  themes: string[] = [],
+  officialThemes: string[] = [],
+  communityPackIds: string[] | null = null,
   preferredDifficulty?: PuzzleDifficulty
 ): Promise<Puzzle> {
   const { data, error } = await supabase
@@ -32,8 +46,11 @@ export async function getRandomPuzzle(
   }
 
   const puzzles = data as PublishedPuzzle[];
-  const themeFiltered =
-    themes.length > 0 ? puzzles.filter((p) => themes.includes(p.theme)) : puzzles;
+  const themeFiltered = puzzles.filter((p) =>
+    p.is_community
+      ? communityPackIds === null || communityPackIds.includes(p.pack_id)
+      : officialThemes.length === 0 || officialThemes.includes(p.theme)
+  );
   const themeCandidates = themeFiltered.length > 0 ? themeFiltered : puzzles;
 
   const difficultyFiltered = preferredDifficulty
@@ -41,8 +58,20 @@ export async function getRandomPuzzle(
     : themeCandidates;
   const candidates = difficultyFiltered.length > 0 ? difficultyFiltered : themeCandidates;
 
-  const unplayed = candidates.filter((p) => !excludeIds.includes(p.id));
-  const pool = unplayed.length > 0 ? unplayed : candidates;
+  const voteTotals = await getVoteTotals(
+    supabase,
+    candidates.map((p) => p.id)
+  );
+  const wellRated = candidates.filter((p) => {
+    const totals = voteTotals.get(p.id);
+    if (!totals) return true;
+    const voteCount = totals.upvotes + totals.downvotes;
+    return voteCount < MIN_VOTES_TO_TRUST_SCORE || totals.score > BAD_SCORE_THRESHOLD;
+  });
+  const ratingFiltered = wellRated.length > 0 ? wellRated : candidates;
+
+  const unplayed = ratingFiltered.filter((p) => !excludeIds.includes(p.id));
+  const pool = unplayed.length > 0 ? unplayed : ratingFiltered;
 
   const picked = pool[Math.floor(Math.random() * pool.length)];
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- drop theme, the only field published_puzzles adds over Puzzle

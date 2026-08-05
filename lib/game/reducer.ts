@@ -14,6 +14,10 @@ export type GameState = {
   guesses: Guess[];
   chatMessages: ChatMessage[];
   caseLog: CaseLogEntry[];
+  // Player ids currently tracked as present on the room's realtime channel
+  // (see lib/realtime/room-channel.ts) — reflects actual connection state,
+  // not anything persisted in the database.
+  onlinePlayerIds: Set<string>;
   error: string | null;
 };
 
@@ -25,6 +29,7 @@ export const initialGameState: GameState = {
   guesses: [],
   chatMessages: [],
   caseLog: [],
+  onlinePlayerIds: new Set(),
   error: null,
 };
 
@@ -43,6 +48,7 @@ export type GameAction =
   | { type: "GUESS_UPDATED"; payload: Guess }
   | { type: "CHAT_MESSAGE_SENT"; payload: ChatMessage }
   | { type: "CASE_LOGGED"; payload: CaseLogEntry }
+  | { type: "PRESENCE_SYNCED"; payload: Set<string> }
   | { type: "ERROR"; payload: string };
 
 export function gameReducer(state: GameState, action: GameAction): GameState {
@@ -116,6 +122,9 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       if (exists) return state;
       return { ...state, caseLog: [...state.caseLog, action.payload] };
     }
+
+    case "PRESENCE_SYNCED":
+      return { ...state, onlinePlayerIds: action.payload };
 
     case "ERROR":
       return { ...state, error: action.payload };

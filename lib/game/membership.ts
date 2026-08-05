@@ -18,15 +18,37 @@ export async function handlePlayerLeave(
   const leavingPlayer = players.find((p) => p.id === leavingPlayerId);
   const remaining = players.filter((p) => p.id !== leavingPlayerId);
 
-  if (leavingPlayer?.is_host && remaining.length > 0) {
-    const ordered = [...remaining].sort(
-      (a, b) => new Date(a.joined_at).getTime() - new Date(b.joined_at).getTime()
-    );
+  if (leavingPlayer?.is_host) {
+    const ordered = remaining
+      .filter((p) => !p.is_spectator)
+      .sort((a, b) => new Date(a.joined_at).getTime() - new Date(b.joined_at).getTime());
     const newHost = ordered[0];
-    await setHost(supabase, roomId, newHost.id);
+    if (newHost) await setHost(supabase, roomId, newHost.id);
   }
 
   await leaveRoom(supabase, leavingPlayerId);
+}
+
+/**
+ * Who should claim host when the current one appears offline (see
+ * ClaimHostBanner) — same "earliest joiner wins" rule as the explicit-leave
+ * path above, but restricted to players Presence currently reports as
+ * connected, since offering the role to another absent player wouldn't fix
+ * anything. Returns null if nobody currently online qualifies (including
+ * when the current host is themselves still online, or there's nobody else).
+ */
+export function pickNextHost(
+  players: Player[],
+  onlinePlayerIds: Set<string>,
+  currentHostId: string
+): Player | null {
+  if (onlinePlayerIds.has(currentHostId)) return null;
+
+  const candidates = players
+    .filter((p) => p.id !== currentHostId && !p.is_spectator && onlinePlayerIds.has(p.id))
+    .sort((a, b) => new Date(a.joined_at).getTime() - new Date(b.joined_at).getTime());
+
+  return candidates[0] ?? null;
 }
 
 /**

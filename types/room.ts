@@ -12,6 +12,7 @@ export type Room = {
   round_duration_seconds: number | null;
   max_rounds: number;
   pack_theme_filter: string[] | null;
+  community_pack_ids: string[] | null;
   hardcore_mode: boolean;
   team_lives_total: number | null;
   team_lives_remaining: number | null;
@@ -24,6 +25,8 @@ export type RoomSettingsInput = {
   roundDurationSeconds: number | null;
   maxRounds: number;
   packThemeFilter: string[];
+  /** null = every published community pack, [] = none, else an explicit pack-id subset. */
+  communityPackIds: string[] | null;
   hardcoreMode: boolean;
   teamLives: number;
 };

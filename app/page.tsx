@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CreateRoomForm } from "@/components/lobby/CreateRoomForm";
 import { JoinRoomForm } from "@/components/lobby/JoinRoomForm";
 import { Card } from "@/components/ui/Card";
+import { HowToPlayButton } from "@/components/HowToPlayButton";
 
 export default function Home() {
   return (
@@ -46,11 +47,12 @@ export default function Home() {
           </div>
         </div>
 
-        <p className="mt-16 text-center font-mono text-xs uppercase tracking-widest text-text-secondary sm:mt-10">
+        <div className="mt-16 flex flex-col items-center gap-2 text-center font-mono text-xs uppercase tracking-widest text-text-secondary sm:mt-10 sm:flex-row sm:justify-center sm:gap-4">
           <Link href="/community" className="underline decoration-accent/60 hover:text-accent">
             Bekijk raadsels van de community &rarr;
           </Link>
-        </p>
+          <HowToPlayButton />
+        </div>
       </div>
     </main>
   );

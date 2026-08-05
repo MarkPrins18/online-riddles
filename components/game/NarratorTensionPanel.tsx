@@ -1,5 +1,6 @@
 import type { Guess } from "@/types/guess";
 import type { Question } from "@/types/question";
+import { Button } from "@/components/ui/Button";
 
 /**
  * Private to the Verteller: the solution plus a running tally of how badly
@@ -11,10 +12,16 @@ export function NarratorTensionPanel({
   solution,
   guesses,
   questions,
+  onSkip,
+  isSkipping,
+  skipError,
 }: {
   solution: string;
   guesses: Guess[];
   questions: Question[];
+  onSkip: () => void;
+  isSkipping: boolean;
+  skipError: string | null;
 }) {
   const incorrectGuesses = [...guesses].filter((g) => g.status === "incorrect").reverse();
   const answeredCount = questions.filter((q) => q.answer !== null).length;
@@ -41,6 +48,12 @@ export function NarratorTensionPanel({
           ))}
         </ul>
       )}
+      <div className="mt-4 border-t border-white/5 pt-4">
+        <Button variant="ghost" className="w-full" onClick={onSkip} disabled={isSkipping}>
+          {isSkipping ? "Bezig..." : "Sla deze zaak over"}
+        </Button>
+        {skipError && <p className="mt-2 font-mono text-xs text-danger">{skipError}</p>}
+      </div>
     </div>
   );
 }

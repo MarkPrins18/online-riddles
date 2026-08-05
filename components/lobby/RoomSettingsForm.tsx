@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { RoomSettingsInput } from "@/types/room";
-import { getAvailableThemes } from "@/lib/supabase/storyPacks";
+import { getOfficialThemes } from "@/lib/supabase/storyPacks";
+import { countPublishedCommunityPacks } from "@/lib/supabase/communityPacks";
 
 const DURATION_OPTIONS: Array<{ label: string; value: number | null }> = [
   { label: "5 minuten", value: 300 },
@@ -28,16 +29,20 @@ export function RoomSettingsForm({
   onChange: (value: RoomSettingsInput) => void;
   narratorPreviewName?: string;
 }) {
-  const [availableThemes, setAvailableThemes] = useState<string[] | null>(null);
+  const [officialThemes, setOfficialThemes] = useState<string[] | null>(null);
+  const [communityPackCount, setCommunityPackCount] = useState<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    getAvailableThemes(supabase).then((themes) => {
+    getOfficialThemes(supabase).then((themes) => {
       if (cancelled) return;
-      setAvailableThemes(themes);
+      setOfficialThemes(themes);
       if (value.packThemeFilter.length === 0 && themes.length > 0) {
         onChange({ ...value, packThemeFilter: themes });
       }
+    });
+    countPublishedCommunityPacks(supabase).then((count) => {
+      if (!cancelled) setCommunityPackCount(count);
     });
     return () => {
       cancelled = true;
@@ -53,6 +58,10 @@ export function RoomSettingsForm({
       ? value.packThemeFilter.filter((t) => t !== theme)
       : [...value.packThemeFilter, theme];
     onChange({ ...value, packThemeFilter: next });
+  }
+
+  function toggleCommunity(enabled: boolean) {
+    onChange({ ...value, communityPackIds: enabled ? null : [] });
   }
 
   return (
@@ -108,15 +117,15 @@ export function RoomSettingsForm({
         <legend className="mb-1 font-mono text-xs uppercase tracking-widest text-text-secondary">
           Thema&rsquo;s
         </legend>
-        {availableThemes === null ? (
+        {officialThemes === null ? (
           <p className="font-mono text-xs text-text-secondary">Thema&rsquo;s laden...</p>
-        ) : availableThemes.length === 0 ? (
+        ) : officialThemes.length === 0 ? (
           <p className="font-mono text-xs text-text-secondary">
             Nog geen gepubliceerde puzzels beschikbaar.
           </p>
         ) : (
           <div className="flex flex-col gap-1.5">
-            {availableThemes.map((theme) => (
+            {officialThemes.map((theme) => (
               <label key={theme} className="flex items-center gap-2 font-mono text-sm text-text-primary">
                 <input
                   type="checkbox"
@@ -129,12 +138,46 @@ export function RoomSettingsForm({
             ))}
           </div>
         )}
-        {availableThemes !== null &&
-          availableThemes.length > 0 &&
-          value.packThemeFilter.length === 0 && (
-            <p className="mt-1 font-mono text-xs text-danger">Kies minstens één thema.</p>
-          )}
       </fieldset>
+
+      <fieldset className="border-t border-white/5 pt-4">
+        <legend className="mb-1 font-mono text-xs uppercase tracking-widest text-text-secondary">
+          Community
+        </legend>
+        {communityPackCount === null ? (
+          <p className="font-mono text-xs text-text-secondary">Community laden...</p>
+        ) : communityPackCount === 0 ? (
+          <p className="font-mono text-xs text-text-secondary">
+            Nog geen gepubliceerde community-packs.
+          </p>
+        ) : (
+          <>
+            <label className="flex items-center gap-2 font-mono text-sm text-text-primary">
+              <input
+                type="checkbox"
+                className="accent-accent"
+                checked={value.communityPackIds === null}
+                onChange={(e) => toggleCommunity(e.target.checked)}
+              />
+              Community packs meespelen
+              <span className="font-mono text-xs text-text-secondary">({communityPackCount})</span>
+            </label>
+            <p className="mt-1 font-mono text-xs text-text-secondary">
+              Raadsels gemaakt door andere spelers, los van de officiële thema&rsquo;s hierboven.
+            </p>
+          </>
+        )}
+      </fieldset>
+
+      {officialThemes !== null &&
+        communityPackCount !== null &&
+        officialThemes.length + communityPackCount > 0 &&
+        value.packThemeFilter.length === 0 &&
+        (value.communityPackIds === null ? communityPackCount === 0 : value.communityPackIds.length === 0) && (
+          <p className="font-mono text-xs text-danger">
+            Kies minstens één thema of community pack.
+          </p>
+        )}
 
       <div className="border-t border-white/5 pt-4">
         <label className="flex items-center gap-2 font-mono text-sm text-text-primary">

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, IBM_Plex_Mono } from "next/font/google";
+import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -19,14 +20,21 @@ export const metadata: Metadata = {
   title: "Online Riddles",
   description:
     "Een lateral thinking puzzelspel voor groepen. Stel ja/nee-vragen, verzamel aanwijzingen en ontrafel het mysterie.",
+  icons: {
+    icon: "/icons/192",
+    apple: "/icons/180",
+  },
 };
 
 // Declares this as a deliberately dark-themed page, so browsers with
 // automatic "force dark" page inversion (common on Windows/Android) don't
 // try to re-invert our own colors — which was turning the light "paper"
 // cards (Stel-een-vraag, Aanwijzingen, Verhoor) into near-white-on-white.
+// themeColor tints the browser/OS chrome (status bar, task switcher) to
+// match when installed as a PWA.
 export const viewport: Viewport = {
   colorScheme: "dark",
+  themeColor: "#241a10",
 };
 
 export default function RootLayout({
@@ -41,6 +49,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-bg-primary text-text-primary">
         {children}
+        <ServiceWorkerRegister />
       </body>
     </html>
   );

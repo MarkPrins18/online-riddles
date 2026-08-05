@@ -88,6 +88,23 @@ export async function listCommunityPacks(supabase: Client): Promise<StoryPackWit
   }));
 }
 
+/**
+ * Just the count of published community packs, for the room-settings
+ * "Community" section — deliberately a `head: true` count query instead of
+ * fetching rows, since the picker only ever shows three options (alle/
+ * favorieten/geen) and must stay cheap no matter how many packs exist.
+ */
+export async function countPublishedCommunityPacks(supabase: Client): Promise<number> {
+  const { count, error } = await supabase
+    .from("story_packs")
+    .select("id", { count: "exact", head: true })
+    .eq("is_community", true)
+    .eq("is_published", true);
+
+  if (error) throw error;
+  return count ?? 0;
+}
+
 /** The caller's own community packs (published or not), for the "mijn" page. */
 export async function listOwnPacks(supabase: Client, userId: string): Promise<StoryPack[]> {
   const { data, error } = await supabase

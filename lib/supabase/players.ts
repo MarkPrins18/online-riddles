@@ -88,6 +88,26 @@ export async function setHost(
   if (error) throw error;
 }
 
+/**
+ * Self-claim only, for when the current host has disconnected (no client
+ * can authenticate as them to call setHost). Enforced server-side (see
+ * claim_host in schema.sql): any room member may claim host for
+ * themselves — the caller decides when this is appropriate (see
+ * lib/game/membership.ts: pickNextHost), not the database.
+ */
+export async function claimHost(
+  supabase: Client,
+  roomId: string,
+  claimingPlayerId: string
+): Promise<void> {
+  const { error } = await supabase.rpc("claim_host", {
+    room_id_input: roomId,
+    claiming_player_id: claimingPlayerId,
+  });
+
+  if (error) throw error;
+}
+
 export async function leaveRoom(
   supabase: Client,
   playerId: string

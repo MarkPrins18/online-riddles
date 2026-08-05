@@ -9,6 +9,7 @@ import type { BoardItem, BoardItemKind, BoardNoteColor } from "@/types/boardItem
 import type { BoardConnection } from "@/types/boardConnection";
 import type { Profile } from "@/types/profile";
 import type { PuzzleVote, PuzzleVoteTotals, VoteValue } from "@/types/vote";
+import type { PackFavorite } from "@/types/packFavorite";
 
 type TableShape<Row, Insert, Update> = {
   Row: Row;
@@ -39,6 +40,10 @@ export type Database = {
       };
       set_host: {
         Args: { room_id_input: string; player_id_input: string };
+        Returns: void;
+      };
+      claim_host: {
+        Args: { room_id_input: string; claiming_player_id: string };
         Returns: void;
       };
       get_room_puzzle: {
@@ -146,6 +151,11 @@ export type Database = {
         PuzzleVote,
         Partial<PuzzleVote> & { puzzle_id: string; user_id: string; value: VoteValue },
         Partial<PuzzleVote>
+      >;
+      pack_favorites: TableShape<
+        PackFavorite,
+        Partial<PackFavorite> & { pack_id: string; user_id: string },
+        Partial<PackFavorite>
       >;
     };
   };

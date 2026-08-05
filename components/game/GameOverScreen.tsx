@@ -4,6 +4,7 @@ import type { Player } from "@/types/player";
 import { Button } from "@/components/ui/Button";
 import { medalForRank } from "@/lib/game/ranking";
 import { SessionRecapPanel } from "./SessionRecapPanel";
+import { ShareRecapButton } from "./ShareRecapButton";
 
 /**
  * Terminal state when the team's shared lives (Hardcore modus) hit zero —
@@ -51,8 +52,12 @@ export function GameOverScreen({
 
       <SessionRecapPanel supabase={supabase} roomId={roomId} bare />
 
+      <div className="mt-8">
+        <ShareRecapButton supabase={supabase} roomId={roomId} players={players} />
+      </div>
+
       {isHost && (
-        <Button variant="secondary" className="mt-8 w-full" onClick={onNewGame}>
+        <Button variant="secondary" className="mt-3 w-full" onClick={onNewGame}>
           Nieuw spel starten
         </Button>
       )}

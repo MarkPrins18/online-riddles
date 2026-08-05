@@ -76,12 +76,25 @@ export async function listPacksWithPuzzleCounts(
   }));
 }
 
-/** Distinct themes across published packs, for the host's room-settings form. */
+/** Distinct themes across published packs, for theme-name suggestions when creating a pack. */
 export async function getAvailableThemes(supabase: Client): Promise<string[]> {
   const { data, error } = await supabase
     .from("story_packs")
     .select("theme")
     .eq("is_published", true);
+
+  if (error) throw error;
+  const themes = new Set((data ?? []).map((row) => row.theme));
+  return [...themes].sort();
+}
+
+/** Distinct themes across published *official* packs only — the room-settings form's "Thema's" list, kept separate from community packs so it doesn't grow into an unreadable row as those pile up. */
+export async function getOfficialThemes(supabase: Client): Promise<string[]> {
+  const { data, error } = await supabase
+    .from("story_packs")
+    .select("theme")
+    .eq("is_published", true)
+    .eq("is_community", false);
 
   if (error) throw error;
   const themes = new Set((data ?? []).map((row) => row.theme));

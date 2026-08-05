@@ -19,15 +19,20 @@ export function NarratorTakeoverControl({
   roomId,
   players,
   currentNarratorId,
+  narratorOnline = true,
 }: {
   supabase: SupabaseClient<Database>;
   roomId: string;
   players: Player[];
   currentNarratorId: string | null;
+  /** When false (Presence reports the Verteller disconnected), this opens
+   * itself by default instead of staying collapsed — the whole point of
+   * detecting it is that the host shouldn't have to remember to check. */
+  narratorOnline?: boolean;
 }) {
   const [savingId, setSavingId] = useState<string | null>(null);
 
-  const candidates = players.filter((p) => p.id !== currentNarratorId);
+  const candidates = players.filter((p) => p.id !== currentNarratorId && !p.is_spectator);
   if (candidates.length === 0) return null;
 
   async function handleTransfer(playerId: string) {
@@ -37,11 +42,14 @@ export function NarratorTakeoverControl({
   }
 
   return (
-    <details className="mt-4 border-t border-white/5 pt-4">
+    <details className="mt-4 border-t border-white/5 pt-4" open={!narratorOnline || undefined}>
       <summary className="cursor-pointer font-mono text-xs uppercase tracking-widest text-text-secondary">
         Verteller afwezig?
       </summary>
       <div className="mt-3 flex flex-col gap-2">
+        {!narratorOnline && (
+          <p className="font-mono text-xs text-danger">Verteller lijkt offline.</p>
+        )}
         {candidates.map((player) => (
           <Button
             key={player.id}

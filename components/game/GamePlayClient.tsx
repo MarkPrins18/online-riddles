@@ -31,7 +31,10 @@ import { CluesList } from "./CluesList";
 import { QuestionForm } from "./QuestionForm";
 import { ChatPanel } from "./ChatPanel";
 import { ChatDrawer } from "./ChatDrawer";
+import { NarratorCaseDrawer } from "./NarratorCaseDrawer";
+import { NarratorBriefingScreen } from "./NarratorBriefingScreen";
 import { ChatIconButton } from "./ChatIconButton";
+import { ClaimHostBanner } from "@/components/ClaimHostBanner";
 import { GuessForm } from "./GuessForm";
 import { MyGuessFeedback } from "./MyGuessFeedback";
 import { NarratorInbox } from "./NarratorInbox";
@@ -49,14 +52,24 @@ import { SolutionReveal } from "./SolutionReveal";
 import { Timer } from "./Timer";
 
 export function GamePlayClient({ code }: { code: string }) {
-  const { state, supabase } = useGameState(code);
-  const router = useRouter();
   const [playerId] = useState(() => getStoredPlayerId(code));
+  const { state, supabase } = useGameState(code, playerId);
+  const router = useRouter();
   const now = useNowTick();
   const [nextCaseError, setNextCaseError] = useState<string | null>(null);
+  const [isSkippingPuzzle, setIsSkippingPuzzle] = useState(false);
+  const [skipPuzzleError, setSkipPuzzleError] = useState<string | null>(null);
   const [corkboardOpen, setCorkboardOpen] = useState(false);
   const [playersOpen, setPlayersOpen] = useState(false);
   const [chatDrawerOpen, setChatDrawerOpen] = useState(false);
+  const [caseDrawerOpen, setCaseDrawerOpen] = useState(false);
+  // The Verteller hasn't seen this puzzle's solution before (it's assigned
+  // at random) — the briefing screen is a required first read, not
+  // optional reference material, so it's tracked separately from the
+  // on-demand NarratorCaseDrawer above. "Last acknowledged puzzle id"
+  // rather than a boolean: a mid-round narrator handoff still needs its
+  // own briefing even though the puzzle itself didn't change state.
+  const [briefingSeenPuzzleId, setBriefingSeenPuzzleId] = useState<string | undefined>(undefined);
   // Drives the "Overleg" tab's unread badge on narrow screens (chat has its
   // own permanent column from xl up, so no badge is needed there).
   const [chatSeenCount, setChatSeenCount] = useState(() => state.chatMessages.length);
@@ -173,6 +186,9 @@ export function GamePlayClient({ code }: { code: string }) {
   const narrating = currentPlayer ? isNarrator(currentPlayer, room.narrator_id) : false;
   const isHost = playerId === room.host_id;
   const isRevealed = room.status === "revealed";
+  const isSpectator = currentPlayer?.is_spectator ?? false;
+
+  const needsBriefing = narrating && !isRevealed && puzzle.id !== briefingSeenPuzzleId;
   const solver = guesses.find((g) => g.status === "correct");
   const nextNarrator = pickNextNarrator(players, room.narrator_id);
   const lastYesAt = getLastYesAt(questions, room.round_started_at);
@@ -182,6 +198,8 @@ export function GamePlayClient({ code }: { code: string }) {
   const unansweredCount = questions.filter((q) => q.answer === null).length;
   const pendingGuessCount = guesses.filter((g) => g.status === "pending").length;
   const unreadChatCount = Math.max(0, chatMessages.length - chatSeenCount);
+  const incorrectGuessCount = guesses.filter((g) => g.status === "incorrect").length;
+  const answeredCount = questions.length - unansweredCount;
 
   async function handlePinToBoard(questionId: string) {
     if (!playerId) return;
@@ -209,6 +227,7 @@ export function GamePlayClient({ code }: { code: string }) {
         supabase,
         currentRoom.played_puzzle_ids,
         currentRoom.pack_theme_filter ?? [],
+        currentRoom.community_pack_ids,
         targetDifficultyForRound(nextRound, currentRoom.max_rounds)
       );
       await setNarrator(supabase, currentRoom.id, narrator.id);
@@ -221,14 +240,90 @@ export function GamePlayClient({ code }: { code: string }) {
     }
   }
 
+  async function handleSkipPuzzle() {
+    const currentRoom = state.room;
+    if (!currentRoom || isSkippingPuzzle) return;
+    if (
+      (questions.length > 0 || guesses.length > 0) &&
+      !window.confirm("Deze zaak overslaan? Alle vragen en gokken hiervoor gaan verloren.")
+    ) {
+      return;
+    }
+
+    setIsSkippingPuzzle(true);
+    setSkipPuzzleError(null);
+    try {
+      const nextPuzzle = await getRandomPuzzle(
+        supabase,
+        currentRoom.played_puzzle_ids,
+        currentRoom.pack_theme_filter ?? [],
+        currentRoom.community_pack_ids,
+        targetDifficultyForRound(currentRoom.round, currentRoom.max_rounds)
+      );
+      await setRoomPuzzle(supabase, currentRoom.id, nextPuzzle.id, currentRoom.played_puzzle_ids);
+      // Otherwise the manual drawer can stay open on top of the new
+      // briefing dialog that needsBriefing triggers for the fresh puzzle.
+      setCaseDrawerOpen(false);
+    } catch (error) {
+      setSkipPuzzleError(getErrorMessage(error, "Kon geen andere zaak ophalen. Probeer het opnieuw."));
+    } finally {
+      setIsSkippingPuzzle(false);
+    }
+  }
+
   return (
     <>
+      {needsBriefing && (
+        // Mobile only — desktop already shows the dossier/oplossing inline
+        // permanently, so there's nothing to gate there.
+        <div className="xl:hidden">
+          <Dialog>
+            <NarratorBriefingScreen
+              title={puzzle.title}
+              scenario={puzzle.scenario}
+              solution={puzzle.solution}
+              onAcknowledge={() => setBriefingSeenPuzzleId(puzzle.id)}
+              onSkip={handleSkipPuzzle}
+              isSkipping={isSkippingPuzzle}
+              skipError={skipPuzzleError}
+            />
+          </Dialog>
+        </div>
+      )}
+
+      <div className="mb-4 flex w-full max-w-[72rem] flex-col gap-3">
+        <ClaimHostBanner
+          supabase={supabase}
+          roomId={room.id}
+          players={players}
+          hostId={room.host_id}
+          onlinePlayerIds={state.onlinePlayerIds}
+          playerId={playerId}
+        />
+        {isHost && !narrating && !isRevealed && room.narrator_id &&
+          !state.onlinePlayerIds.has(room.narrator_id) && (
+            <div className="flex items-center justify-between gap-3 rounded-md border border-danger/40 bg-danger/5 p-3">
+              <p className="font-mono text-xs text-text-secondary">Verteller lijkt offline.</p>
+              <Button variant="danger" onClick={() => setPlayersOpen(true)}>
+                Open Spelers
+              </Button>
+            </div>
+          )}
+      </div>
+
       <div className="desk-layout w-full max-w-[72rem]">
         <div className="flex flex-nowrap items-center justify-between gap-2 overflow-x-auto [grid-area:status]">
           <div className="flex shrink-0 flex-nowrap items-center gap-2 whitespace-nowrap font-mono text-sm text-text-secondary sm:gap-3">
             <span>Ronde {room.round + 1}</span>
             {narrating && (
               <span className="hidden text-accent sm:inline">Jij bent de Verteller</span>
+            )}
+            {isSpectator && <span>Toeschouwer</span>}
+            {narrating && !isRevealed && (
+              <span>
+                {incorrectGuessCount > 0 && <span className="text-danger">{incorrectGuessCount} fout · </span>}
+                {answeredCount} beantwoord
+              </span>
             )}
             {room.hardcore_mode && room.team_lives_remaining !== null && room.team_lives_total !== null && (
               <TeamLivesDisplay remaining={room.team_lives_remaining} total={room.team_lives_total} />
@@ -243,8 +338,14 @@ export function GamePlayClient({ code }: { code: string }) {
                 durationSeconds={room.round_duration_seconds}
               />
             )}
-            {!narrating && (
-              <div className="hidden sm:block">
+            {/* Prikbord is a freeform drag-and-connect canvas with
+                fixed-width cards (180-200px) — deliberately desktop-only.
+                Below xl those cards eat most of the screen width and the
+                small connector-drag targets are hard to hit with a finger;
+                it'd need its own simplified mobile design (e.g. a plain
+                list) rather than just unhiding this button. */}
+            {!narrating && !isSpectator && (
+              <div className="hidden xl:block">
                 <CorkboardButton onClick={() => setCorkboardOpen(true)} />
               </div>
             )}
@@ -255,29 +356,52 @@ export function GamePlayClient({ code }: { code: string }) {
             Verteller panel, and (for raders) the ask/solve forms all live
             here so they're never at the mercy of a long Verhoor/Postvak. */}
         <div ref={vastRef} className="flex flex-col gap-3 [grid-area:vast] sm:gap-4">
-          <div className="relative -rotate-[0.4deg]">
-            <span className="absolute -top-3 left-6 -rotate-2 rounded-[2px_8px_2px_8px] border-2 border-accent/60 bg-bg-primary px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-accent">
-              Zaak-dossier
-            </span>
-            <Card tone="case" className="!p-4 sm:!p-6">
-              <button
-                type="button"
-                onClick={() => setDossierOpen((v) => !v)}
-                aria-expanded={dossierOpen}
-                className="flex w-full items-center justify-between gap-3 text-left"
-              >
-                <h1 className="font-serif text-xl text-text-primary sm:text-2xl">{puzzle.title}</h1>
-                <span className="shrink-0 font-mono text-xs text-text-secondary" aria-hidden="true">
-                  {dossierOpen ? "▾" : "▸"}
-                </span>
-              </button>
-              {dossierOpen && (
-                <p className="mt-3 font-serif text-base leading-relaxed text-text-primary/90">
-                  {puzzle.scenario}
-                </p>
-              )}
-            </Card>
+          {/* Verteller already knows the case and the solution — pinning
+              both open here is what was pushing Postvak (the thing that
+              actually needs attention) off the bottom of the screen below
+              xl. So below xl it's a single button opening NarratorCaseDrawer
+              instead; from xl up there's no space pressure, so it stays
+              inline exactly like the rader's dossier does. Raders need the
+              scenario actively (to ask questions), so theirs stays inline
+              and open/closed as before at every width. */}
+          <div className={narrating ? "hidden xl:block" : undefined}>
+            <div className="relative -rotate-[0.4deg]">
+              <span className="absolute -top-3 left-6 -rotate-2 rounded-[2px_8px_2px_8px] border-2 border-accent/60 bg-bg-primary px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-accent">
+                Zaak-dossier
+              </span>
+              <Card tone="case" className="!p-4 sm:!p-6">
+                <button
+                  type="button"
+                  onClick={() => setDossierOpen((v) => !v)}
+                  aria-expanded={dossierOpen}
+                  className="flex w-full items-center justify-between gap-3 text-left"
+                >
+                  <h1 className="font-serif text-xl text-text-primary sm:text-2xl">{puzzle.title}</h1>
+                  <span className="shrink-0 font-mono text-xs text-text-secondary" aria-hidden="true">
+                    {dossierOpen ? "▾" : "▸"}
+                  </span>
+                </button>
+                {dossierOpen && (
+                  <p className="mt-3 font-serif text-base leading-relaxed text-text-primary/90">
+                    {puzzle.scenario}
+                  </p>
+                )}
+              </Card>
+            </div>
           </div>
+
+          {narrating && (
+            <div className="xl:hidden">
+              <Button
+                type="button"
+                variant="secondary"
+                className="w-full"
+                onClick={() => setCaseDrawerOpen(true)}
+              >
+                Zaak &amp; oplossing
+              </Button>
+            </div>
+          )}
 
           {/* Overleg shortcut for narrow screens: xl+ has a permanent chat
               column, but below xl it's buried at the bottom of a tab strip
@@ -296,10 +420,21 @@ export function GamePlayClient({ code }: { code: string }) {
           )}
 
           {narrating && !isRevealed && (
-            <NarratorTensionPanel solution={puzzle.solution} guesses={guesses} questions={questions} />
+            <div className="hidden xl:block">
+              <NarratorTensionPanel
+                solution={puzzle.solution}
+                guesses={guesses}
+                questions={questions}
+                onSkip={handleSkipPuzzle}
+                isSkipping={isSkippingPuzzle}
+                skipError={skipPuzzleError}
+              />
+            </div>
           )}
 
-          {isRevealed && <SolutionReveal puzzle={puzzle} solverName={solver?.player_name} />}
+          {isRevealed && (
+            <SolutionReveal supabase={supabase} puzzle={puzzle} solverName={solver?.player_name} />
+          )}
 
           {/* Below xl: one tab pair instead of two stacked cards, so
               Aanwijzingen/Verhoor/Overleg get more of the screen. From xl
@@ -307,46 +442,54 @@ export function GamePlayClient({ code }: { code: string }) {
               "Stel een vraag" moves to the "side" column next to Overleg. */}
           {!narrating && !isRevealed && (
             <div className="xl:hidden">
-              <Tabs
-                tabs={[
-                  {
-                    key: "vraag",
-                    label: "Stel een vraag",
-                    content: (
-                      <Card tone="paper" className="w-full p-4">
-                        <QuestionForm
-                          supabase={supabase}
-                          roomId={room.id}
-                          puzzleId={puzzle.id}
-                          playerId={playerId}
-                          playerName={currentPlayer?.name ?? ""}
-                          round={room.round}
-                        />
-                      </Card>
-                    ),
-                  },
-                  {
-                    key: "oplossing",
-                    label: "Los de zaak op",
-                    content: (
-                      <Card>
-                        <GuessForm
-                          supabase={supabase}
-                          roomId={room.id}
-                          puzzleId={puzzle.id}
-                          playerId={playerId}
-                          playerName={currentPlayer?.name ?? ""}
-                        />
-                        <MyGuessFeedback guesses={guesses} playerId={playerId} />
-                      </Card>
-                    ),
-                  },
-                ]}
-              />
+              {isSpectator ? (
+                <Card>
+                  <p className="font-mono text-sm text-text-secondary">
+                    Je kijkt mee tot de volgende zaak begint...
+                  </p>
+                </Card>
+              ) : (
+                <Tabs
+                  tabs={[
+                    {
+                      key: "vraag",
+                      label: "Stel een vraag",
+                      content: (
+                        <Card tone="paper" className="w-full p-4">
+                          <QuestionForm
+                            supabase={supabase}
+                            roomId={room.id}
+                            puzzleId={puzzle.id}
+                            playerId={playerId}
+                            playerName={currentPlayer?.name ?? ""}
+                            round={room.round}
+                          />
+                        </Card>
+                      ),
+                    },
+                    {
+                      key: "oplossing",
+                      label: "Los de zaak op",
+                      content: (
+                        <Card>
+                          <GuessForm
+                            supabase={supabase}
+                            roomId={room.id}
+                            puzzleId={puzzle.id}
+                            playerId={playerId}
+                            playerName={currentPlayer?.name ?? ""}
+                          />
+                          <MyGuessFeedback guesses={guesses} playerId={playerId} />
+                        </Card>
+                      ),
+                    },
+                  ]}
+                />
+              )}
             </div>
           )}
 
-          {!narrating && !isRevealed && (
+          {!narrating && !isRevealed && !isSpectator && (
             <Card className="hidden xl:block">
               <p className="mb-3 font-mono text-xs text-text-secondary">
                 Los de zaak op.
@@ -407,7 +550,13 @@ export function GamePlayClient({ code }: { code: string }) {
                     key: "archief",
                     label: "Archief",
                     content: (
-                      <NarratorArchive supabase={supabase} roomId={room.id} round={room.round} questions={questions} />
+                      <NarratorArchive
+                        supabase={supabase}
+                        roomId={room.id}
+                        round={room.round}
+                        questions={questions}
+                        guesses={guesses}
+                      />
                     ),
                   },
                 ]}
@@ -420,7 +569,12 @@ export function GamePlayClient({ code }: { code: string }) {
                     key: "aanwijzingen",
                     label: "Aanwijzingen",
                     badge: clueCount,
-                    content: <CluesList questions={questions} onPinToBoard={handlePinToBoard} />,
+                    content: (
+                      <CluesList
+                        questions={questions}
+                        onPinToBoard={isSpectator ? undefined : handlePinToBoard}
+                      />
+                    ),
                   },
                   {
                     key: "verhoor",
@@ -473,7 +627,13 @@ export function GamePlayClient({ code }: { code: string }) {
                     key: "archief",
                     label: "Archief",
                     content: (
-                      <NarratorArchive supabase={supabase} roomId={room.id} round={room.round} questions={questions} />
+                      <NarratorArchive
+                        supabase={supabase}
+                        roomId={room.id}
+                        round={room.round}
+                        questions={questions}
+                        guesses={guesses}
+                      />
                     ),
                   },
                 ]}
@@ -486,7 +646,12 @@ export function GamePlayClient({ code }: { code: string }) {
                     key: "aanwijzingen",
                     label: "Aanwijzingen",
                     badge: clueCount,
-                    content: <CluesList questions={questions} onPinToBoard={handlePinToBoard} />,
+                    content: (
+                      <CluesList
+                        questions={questions}
+                        onPinToBoard={isSpectator ? undefined : handlePinToBoard}
+                      />
+                    ),
                   },
                   {
                     key: "verhoor",
@@ -536,7 +701,7 @@ export function GamePlayClient({ code }: { code: string }) {
         {/* Directly under Overleg: what overleg usually leads to. Moving
             it out of "vast" frees that column up, so Aanwijzingen/Verhoor
             gets the full column height on the left. */}
-        {!narrating && !isRevealed && (
+        {!narrating && !isRevealed && !isSpectator && (
           <div className="hidden [grid-area:side] xl:block">
             <Card tone="paper" className="w-full p-4">
               <p className="font-mono text-[11px] uppercase tracking-widest text-black/60">
@@ -606,9 +771,30 @@ export function GamePlayClient({ code }: { code: string }) {
           isHost={isHost}
           isRevealed={isRevealed}
           narratorId={room.narrator_id}
+          onlinePlayerIds={state.onlinePlayerIds}
           onKick={isHost ? createKickHandler(supabase, players) : undefined}
           onClose={() => setPlayersOpen(false)}
         />
+      )}
+
+      {caseDrawerOpen && (
+        // xl+ already shows the dossier/oplossing inline (see "vast"
+        // above) — the drawer would just be a redundant overlay there, so
+        // this wrapper keeps the auto-open-per-round logic breakpoint-
+        // agnostic while only ever rendering the overlay below xl.
+        <div className="xl:hidden">
+          <NarratorCaseDrawer
+            title={puzzle.title}
+            scenario={puzzle.scenario}
+            solution={puzzle.solution}
+            guesses={guesses}
+            questions={questions}
+            onClose={() => setCaseDrawerOpen(false)}
+            onSkip={handleSkipPuzzle}
+            isSkipping={isSkippingPuzzle}
+            skipError={skipPuzzleError}
+          />
+        </div>
       )}
 
       {chatDrawerOpen && (

@@ -35,7 +35,9 @@ export function StartGameButton({
   const [isStarting, setIsStarting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const settingsIncomplete = roomSettings.packThemeFilter.length === 0;
+  const hasCommunitySelection =
+    roomSettings.communityPackIds === null || roomSettings.communityPackIds.length > 0;
+  const settingsIncomplete = roomSettings.packThemeFilter.length === 0 && !hasCommunitySelection;
 
   async function handleStart() {
     setIsStarting(true);
@@ -53,6 +55,7 @@ export function StartGameButton({
         supabase,
         playedPuzzleIds,
         roomSettings.packThemeFilter,
+        roomSettings.communityPackIds,
         targetDifficultyForRound(0, roomSettings.maxRounds)
       );
       await setNarrator(supabase, roomId, narrator.id);
@@ -76,7 +79,7 @@ export function StartGameButton({
           : players.length < 2
             ? "Wacht op meer spelers..."
             : settingsIncomplete
-              ? "Kies minstens één thema..."
+              ? "Kies minstens één thema of community pack..."
               : "Start het spel"}
       </Button>
     </div>

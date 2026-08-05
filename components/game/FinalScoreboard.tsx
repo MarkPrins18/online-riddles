@@ -4,6 +4,7 @@ import type { Player } from "@/types/player";
 import { Button } from "@/components/ui/Button";
 import { medalForRank } from "@/lib/game/ranking";
 import { SessionRecapPanel } from "./SessionRecapPanel";
+import { ShareRecapButton } from "./ShareRecapButton";
 
 export function FinalScoreboard({
   supabase,
@@ -51,8 +52,12 @@ export function FinalScoreboard({
 
       <SessionRecapPanel supabase={supabase} roomId={roomId} bare />
 
+      <div className="mt-8">
+        <ShareRecapButton supabase={supabase} roomId={roomId} players={players} />
+      </div>
+
       {isHost && (
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+        <div className="mt-3 flex flex-col gap-3 sm:flex-row">
           <Button className="w-full" onClick={onPlayAnotherRound}>
             Nog een ronde spelen
           </Button>

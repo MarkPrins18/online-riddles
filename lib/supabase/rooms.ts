@@ -94,6 +94,7 @@ export async function updateRoomSettings(
       round_duration_seconds: settings.roundDurationSeconds,
       max_rounds: settings.maxRounds,
       pack_theme_filter: settings.packThemeFilter,
+      community_pack_ids: settings.communityPackIds,
       hardcore_mode: settings.hardcoreMode,
       team_lives_total: settings.hardcoreMode ? settings.teamLives : null,
       team_lives_remaining: settings.hardcoreMode ? settings.teamLives : null,

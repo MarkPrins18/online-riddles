@@ -26,6 +26,7 @@ export function PlayersDrawer({
   isHost,
   isRevealed,
   narratorId,
+  onlinePlayerIds,
   onKick,
   onClose,
 }: {
@@ -38,6 +39,7 @@ export function PlayersDrawer({
   isHost: boolean;
   isRevealed: boolean;
   narratorId: string | null;
+  onlinePlayerIds?: Set<string>;
   onKick?: (playerId: string) => void;
   onClose: () => void;
 }) {
@@ -45,13 +47,16 @@ export function PlayersDrawer({
     <Drawer title="Spelers" onClose={onClose}>
       <div className="flex flex-col gap-6">
         <div>
-          <ScoreBoard players={players} onKick={onKick} />
+          <ScoreBoard players={players} onKick={onKick} onlinePlayerIds={onlinePlayerIds} />
           {isHost && !isRevealed && (
             <NarratorTakeoverControl
               supabase={supabase}
               roomId={roomId}
               players={players}
               currentNarratorId={narratorId}
+              narratorOnline={
+                !narratorId || !onlinePlayerIds ? true : onlinePlayerIds.has(narratorId)
+              }
             />
           )}
         </div>

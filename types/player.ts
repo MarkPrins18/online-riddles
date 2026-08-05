@@ -6,6 +6,7 @@ export type Player = {
   is_narrator: boolean;
   score: number;
   is_host: boolean;
+  is_spectator: boolean;
   joined_at: string;
 };
 

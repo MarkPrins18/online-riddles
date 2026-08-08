@@ -17,7 +17,7 @@ export function ChatThread({
   }
 
   return (
-    <ul className="flex flex-col gap-2">
+    <ul className="flex flex-col gap-2" role="log" aria-live="polite">
       {messages.map((message) => (
         <li key={message.id} className="flex items-baseline gap-2">
           <span className="font-mono text-xs text-text-secondary">

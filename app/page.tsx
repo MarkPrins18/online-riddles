@@ -6,7 +6,7 @@ import { HowToPlayButton } from "@/components/HowToPlayButton";
 
 export default function Home() {
   return (
-    <main className="flex flex-1 flex-col items-center justify-center px-6 py-16">
+    <main id="main-content" className="flex flex-1 flex-col items-center justify-center px-6 py-16">
       <div className="w-full max-w-3xl">
         {/* Cover: title stamped on a tab, notes typed off to the side —
             left-aligned and asymmetric rather than a centered hero block. */}

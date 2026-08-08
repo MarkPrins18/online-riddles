@@ -108,6 +108,29 @@ export async function claimHost(
   if (error) throw error;
 }
 
+/**
+ * For automatic offline-takeover only (see lib/game/membership.ts:
+ * pickNarratorTakeoverElector / pickRandomOnlineCandidate and
+ * GamePlayClient's narrator-offline effect). Unlike claimHost, this isn't
+ * self-claim-only — the caller assigns the role to a different, randomly
+ * chosen player, since the whole point is that the Verteller isn't around to
+ * claim it themselves. Enforced server-side (see claim_narrator in
+ * schema.sql): any room member may reassign the Verteller to any other
+ * member, same trust model as claimHost.
+ */
+export async function claimNarrator(
+  supabase: Client,
+  roomId: string,
+  newNarratorId: string
+): Promise<void> {
+  const { error } = await supabase.rpc("claim_narrator", {
+    room_id_input: roomId,
+    new_narrator_id: newNarratorId,
+  });
+
+  if (error) throw error;
+}
+
 export async function leaveRoom(
   supabase: Client,
   playerId: string

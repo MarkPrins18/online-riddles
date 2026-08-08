@@ -18,7 +18,11 @@ export function ChatIconButton({
       variant="secondary"
       iconOnly
       onClick={onClick}
-      aria-label="Open overleg"
+      aria-label={
+        unreadCount > 0
+          ? `Open overleg, ${unreadCount} ongelezen ${unreadCount === 1 ? "bericht" : "berichten"}`
+          : "Open overleg"
+      }
       className={`relative ${className}`}
     >
       <svg

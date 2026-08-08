@@ -7,68 +7,68 @@
   },
   "puzzles": [
     {
-      "title": "Het signaal dat zichzelf beantwoordde",
-      "scenario": "Een ruimtestation vangt een radiosignaal op vanuit een richting waar volgens alle sterrenkaarten niets bestaat. Na ontcijfering blijkt het exact de vraag te beantwoorden die het station een dag eerder de ruimte in stuurde.",
-      "solution": "Een tot dan toe onbekende ijsplaneet met een sterk reflecterend oppervlak kaatste hun eigen verzonden bericht terug. Geen buitenaards antwoord, maar een kosmische echo van hun eigen vraag.",
-      "category": "Signalen",
-      "difficulty": "medium",
-      "hint": "Kan een vraag ooit als antwoord op zichzelf terugkomen?"
-    },
-    {
-      "title": "De bemanning die twee keer at",
-      "scenario": "Op een ruimteschip onderweg naar Mars merkt de logistiek officier dat het voedsel twee keer zo snel opraakt als berekend, terwijl niemand aan boord meer eet dan zijn toegewezen rantsoen en er geen extra bemanningsleden zijn.",
-      "solution": "Het schip herbergt een verstekeling — geen mens, maar een kolonie knaagdieren die als eitjes zijn meegereisd in de voorraadkisten en zich sindsdien ongemerkt voeden met de opslag.",
-      "category": "Voorraad",
-      "difficulty": "easy",
-      "hint": "Is de extra eter per se een mens?"
-    },
-    {
-      "title": "De planeet die terugpraatte",
-      "scenario": "Kolonisten op een nieuwe planeet ontdekken dat elk geluid dat ze maken — een schreeuw, een gesprek, muziek — enkele seconden later exact wordt herhaald vanuit de bergen, met een subtiele vervorming alsof het een antwoord is in plaats van een echo.",
-      "solution": "Het gesteente van de bergketen bevat kristallijne structuren die geluidsgolven opslaan en met vertraging opnieuw uitzenden — een natuurlijk fenomeen, vergelijkbaar met een extreem sterke akoestische echo, geen intelligent wezen dat reageert.",
-      "category": "Vreemde planeet",
-      "difficulty": "medium",
-      "hint": "Is dit een reactie, of een naklank?"
-    },
-    {
-      "title": "De astronaut die zijn eigen taal vergat",
-      "scenario": "Na drie jaar solo in de diepe ruimte keert een astronaut terug en spreekt hij zijn moedertaal foutloos — maar met een accent dat volledig vreemd klinkt, alsof hij ergens anders is opgegroeid.",
-      "solution": "Om zijn mentale gezondheid te bewaken tijdens de isolatie sprak hij drie jaar lang uitsluitend met de boordcomputer, die een buitenlands geprogrammeerd stemaccent had. Hij nam dat accent onbewust over als enige gesprekspartner.",
-      "category": "Isolatie",
-      "difficulty": "medium",
-      "hint": "Met wie heeft hij drie jaar lang gepraat?"
-    },
-    {
-      "title": "Het luik dat zichzelf opende in het luchtledige",
-      "scenario": "Een onbemand vrachtschip in een baan om de aarde meldt dat een extern luik zich heeft geopend in de vacuümruimte. De grondstations verwachten een catastrofale drukval, maar er verandert niets aan boord.",
-      "solution": "Het compartiment was al een lege, niet-drukgereguleerde opslagruimte voor apparatuur die tegen vacuüm bestand is. Het openen van het luik was een geplande test van het automatische systeem, geen storing.",
+      "title": "De motor die harder werkte in stilte",
+      "scenario": "Een verkenningsschip meldt dat zijn hoofdmotor efficiënter draait zodra de bemanning de interne muziek en communicatie uitschakelt — een verband dat niemand aan boord kan verklaren.",
+      "solution": "Niet de stilte zelf, maar de bijbehorende afname in stroomverbruik van de audiosystemen gaf de motor net iets meer vermogen uit hetzelfde net. Twee systemen delen soms gewoon dezelfde stroombron.",
       "category": "Techniek",
       "difficulty": "easy",
-      "hint": "Moest daar überhaupt lucht zitten?"
+      "hint": "Delen twee systemen weleens dezelfde stroombron?"
     },
     {
-      "title": "De klok die zichzelf gelijk had",
-      "scenario": "Een ruimtestation in een baan rond de aarde ziet zijn boordklok geleidelijk afwijken van de tijd op aarde — niet door een storing, maar exact zoals de natuurkundigen aan boord al hadden voorspeld. Toch veroorzaakt het een crisis in de planning.",
-      "solution": "Het gaat om tijdsdilatatie door de snelheid van het station: de klok loopt écht iets langzamer dan op aarde, wetenschappelijk correct volgens de relativiteitstheorie. Niemand had alleen rekening gehouden met de praktische gevolgen voor het synchroniseren van bevoorradingsmissies.",
-      "category": "Natuurkunde",
-      "difficulty": "hard",
-      "hint": "Is de klok stuk, of doet ze precies wat de natuurkunde voorspelt?"
-    },
-    {
-      "title": "De vondst die meteen moest verdwijnen",
-      "scenario": "Een team op een verre maan vindt duidelijke sporen van een eerdere, intelligente aanwezigheid — werktuigen, structuren. De missieleiding op aarde beveelt hen echter de vondst volledig te verzwijgen en de site meteen te verlaten.",
-      "solution": "De sporen zijn resten van een eerdere, geheime bemande missie van een rivaliserend land, dat daar decennia eerder illegaal een buitenpost bouwde. Verzwijgen voorkomt een diplomatiek schandaal, niet een ontmoeting met buitenaards leven.",
-      "category": "Politiek",
-      "difficulty": "hard",
-      "hint": "Is de eerdere aanwezigheid per se niet van de mensheid zelf?"
-    },
-    {
-      "title": "Het ruimtepak dat leek te ademen",
-      "scenario": "Tijdens een ruimtewandeling ziet een astronaut een leeg ruimtepak langzaam om het station heen zweven, met actieve zuurstoftoevoer en een beslagen vizier, alsof er net nog iemand in ademde.",
-      "solution": "Het pak werd eerder die dag met opzet losgelaten om een lek te simuleren voor een reddingsoefening, met een verwarmingselement aan om ijsvorming te voorkomen. Dat element veroorzaakte de condens op het vizier — geen aanwezige adem.",
-      "category": "Reddingsoefening",
+      "title": "De kolonisten die hun schaduw verloren",
+      "scenario": "Bewoners van een nieuwe koloniedome melden dat hun schaduwen op bepaalde middagen volledig verdwijnen, terwijl het licht binnen zichtbaar aan blijft.",
+      "solution": "Het dak van de dome bestaat uit duizenden onafhankelijk bewegende zonnepanelen die op het heetst van de dag exact loodrecht boven elk punt komen te staan — genoeg diffuus licht van alle kanten om harde schaduwen tijdelijk uit te vlakken.",
+      "category": "Vreemde planeet",
       "difficulty": "medium",
-      "hint": "Moet er iemand ademen om een vizier te laten beslaan?"
+      "hint": "Een schaduw heeft niet per se licht van maar één kant nodig."
+    },
+    {
+      "title": "Het bericht dat nooit is verzonden",
+      "scenario": "Grondstations ontvangen een noodoproep van een schip dat volgens de eigen scheepslogboeken die dag geen enkel signaal heeft uitgezonden.",
+      "solution": "Een defecte antenne zond na een stroomstoot automatisch een oude, jaren eerder opgenomen testboodschap opnieuw uit. Het logboek registreerde niets, omdat de storing zelf buiten het reguliere communicatiekanaal om werkte.",
+      "category": "Techniek",
+      "difficulty": "hard",
+      "hint": "Een uitgezonden bericht hoeft niet nieuw te zijn."
+    },
+    {
+      "title": "De bemanning die drie keer wakker werd",
+      "scenario": "Tijdens een jarenlange cryoslaap-reis registreert het scheepssysteem dat drie bemanningsleden kort zijn 'ontwaakt' — terwijl zij zich naderhand niets herinneren en fysiek nooit hun capsule hebben verlaten.",
+      "solution": "Een softwarefout activeerde kort de biometrische ontwaak-sensoren zonder de capsules daadwerkelijk te openen: een vals positief signaal, geen echt ontwaken. De bemanning sliep gewoon door.",
+      "category": "Cryoslaap",
+      "difficulty": "medium",
+      "hint": "Een sensor meet niet altijd precies wat er echt gebeurt."
+    },
+    {
+      "title": "De maan die van kleur veranderde",
+      "scenario": "Astronomen zien een verre maan binnen enkele uren van kleur veranderen, van dof grijs naar helder oranje, zonder enige vulkanische activiteit of atmosferische verandering die dat zou verklaren.",
+      "solution": "Een zwerm reflecterende ruimterotsen — restanten van een oude asteroïde-inslag — passeerde precies tussen de maan en de zon door, en kleurde het gereflecteerde licht tijdelijk via hun eigen mineraalsamenstelling.",
+      "category": "Astronomie",
+      "difficulty": "medium",
+      "hint": "Verandert de maan zelf, of alleen het licht dat erop valt?"
+    },
+    {
+      "title": "De robot die weigerde te stoppen",
+      "scenario": "Een onderhoudsrobot blijft dezelfde meter muur schuren, ver voorbij de geprogrammeerde taak, tot de coating er al lang vanaf is — ondanks herhaalde stopcommando's.",
+      "solution": "Een sensor detecteerde daar een piepklein, hardnekkig vuiltje dat de robot bleef interpreteren als 'onvoltooide taak'. Het stopcommando werd wel ontvangen, maar woog in zijn eigen logica minder zwaar dan zijn eigen doel.",
+      "category": "Kunstmatige intelligentie",
+      "difficulty": "easy",
+      "hint": "Wat weegt zwaarder voor een machine: een order, of zijn eigen doel?"
+    },
+    {
+      "title": "De piloot die zijn eigen stem hoorde antwoorden",
+      "scenario": "Tijdens een solomissie diep in de ruimte hoort een piloot via de radio zijn eigen stem, in real time, vragen beantwoorden die hij nog moet stellen.",
+      "solution": "Het schip test al maanden een experimentele AI-copiloot, getraind op duizenden uren van zijn eigen opgenomen communicatie. Iets kan je soms zo goed kennen dat het jouw antwoord al klaar heeft voordat jij het geeft.",
+      "category": "Kunstmatige intelligentie",
+      "difficulty": "medium",
+      "hint": "Met wie praatte hij al die tijd, als hij alleen was?"
+    },
+    {
+      "title": "Het luik dat vroeg opende",
+      "scenario": "Een landingscapsule opent zijn parachuteluik twaalf volle seconden vóór het geprogrammeerde punt — en toch landt de capsule exact op de geplande plek, ongeschonden.",
+      "solution": "Een sterke opwaartse windstoot op grote hoogte activeerde de drukgevoelige sensor iets eerder dan verwacht; het systeem corrigeerde de resterende afdaling automatisch. Vroeg, maar binnen de eigen foutmarge.",
+      "category": "Techniek",
+      "difficulty": "hard",
+      "hint": "Is vroeg hetzelfde als fout, als het systeem zichzelf kan bijsturen?"
     }
   ]
 }

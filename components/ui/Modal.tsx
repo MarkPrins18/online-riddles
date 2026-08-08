@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import type { ReactNode } from "react";
+import { useDialog } from "@/lib/a11y/useDialog";
 
 export function Modal({
   onClose,
@@ -12,6 +13,8 @@ export function Modal({
   children: ReactNode;
   className?: string;
 }) {
+  const dialogRef = useDialog<HTMLDivElement>();
+
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
@@ -28,6 +31,10 @@ export function Modal({
       }}
     >
       <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        tabIndex={-1}
         className={`flex min-h-0 flex-1 flex-col rounded-lg border border-white/5 bg-bg-secondary ${className}`}
       >
         {children}

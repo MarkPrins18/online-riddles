@@ -11,7 +11,7 @@ import { getCaseLogForRoom } from "@/lib/supabase/caseLog";
 import { subscribeToRoom, unsubscribeFromRoom, trackPresence } from "@/lib/realtime/room-channel";
 import { getErrorMessage } from "@/lib/errors";
 import type { Room } from "@/types/room";
-import type { RealtimeChannel } from "@supabase/supabase-js";
+import { REALTIME_SUBSCRIBE_STATES, type RealtimeChannel } from "@supabase/supabase-js";
 import { gameReducer, initialGameState } from "./reducer";
 
 export function useGameState(roomCode: string, playerId: string | null = null) {
@@ -20,6 +20,10 @@ export function useGameState(roomCode: string, playerId: string | null = null) {
   const currentPuzzleIdRef = useRef<string | null>(null);
   const channelRef = useRef<RealtimeChannel | null>(null);
   const trackedPlayerIdRef = useRef<string | null>(null);
+  // Set once the channel has reached SUBSCRIBED for the first time — after
+  // that, seeing SUBSCRIBED again means the socket dropped and reconnected,
+  // which is the resync signal (see handleStatusChange below).
+  const hasConnectedOnceRef = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -60,6 +64,50 @@ export function useGameState(roomCode: string, playerId: string | null = null) {
           },
         });
 
+        // Full resync for a room whose id we already know: re-fetches
+        // everything realtime could have silently missed rows for while
+        // disconnected (postgres_changes only pushes events while the
+        // socket is actually open — a dropped connection never replays what
+        // happened during the gap). Deliberately refetches players and chat
+        // too, not just the current round's puzzle/questions/guesses,
+        // because *any* table's insert/update could have been the one that
+        // got lost, not only questions.
+        function resyncRoom(freshRoom: Room) {
+          currentPuzzleIdRef.current = freshRoom.current_puzzle_id;
+          Promise.all([
+            getPlayersInRoom(supabase, freshRoom.id),
+            freshRoom.current_puzzle_id ? getRoomPuzzle(supabase, freshRoom.id) : null,
+            freshRoom.current_puzzle_id
+              ? getQuestionsForPuzzle(supabase, freshRoom.id, freshRoom.current_puzzle_id)
+              : [],
+            freshRoom.current_puzzle_id
+              ? getGuessesForPuzzle(supabase, freshRoom.id, freshRoom.current_puzzle_id)
+              : [],
+            getChatMessages(supabase, freshRoom.id),
+            getCaseLogForRoom(supabase, freshRoom.id),
+          ])
+            .then(([freshPlayers, freshPuzzle, freshQuestions, freshGuesses, freshChatMessages, freshCaseLog]) => {
+              dispatch({
+                type: "HYDRATE",
+                payload: {
+                  room: freshRoom,
+                  players: freshPlayers,
+                  puzzle: freshPuzzle ?? undefined,
+                  questions: freshQuestions,
+                  guesses: freshGuesses,
+                  chatMessages: freshChatMessages,
+                  caseLog: freshCaseLog,
+                },
+              });
+            })
+            .catch((error) => {
+              dispatch({
+                type: "ERROR",
+                payload: getErrorMessage(error, "Kon de kamer niet opnieuw synchroniseren."),
+              });
+            });
+        }
+
         function handleRoomUpdate(updated: Room) {
           dispatch({ type: "ROOM_UPDATED", payload: updated });
 
@@ -90,17 +138,17 @@ export function useGameState(roomCode: string, playerId: string | null = null) {
           }
         }
 
-        // Safety net: a realtime WebSocket connection can silently drop
+        // Safety net #1: a realtime WebSocket connection can silently drop
         // (backgrounded tab, brief network blip) without an obvious
-        // reconnect, leaving a client stuck on a stale room state — e.g.
-        // the end-of-game screen — until they manually refresh. Re-fetch
-        // the room whenever the tab regains focus/visibility, so a missed
-        // update self-heals instead of requiring a reload.
+        // reconnect, leaving a client stuck on stale state until they
+        // manually refresh. Full resync whenever the tab regains
+        // focus/visibility, so a missed update self-heals instead of
+        // requiring a reload.
         function handleVisibilityChange() {
           if (document.visibilityState !== "visible") return;
           getRoomByCode(supabase, roomCode)
             .then((freshRoom) => {
-              if (freshRoom) handleRoomUpdate(freshRoom);
+              if (freshRoom) resyncRoom(freshRoom);
             })
             .catch(() => {
               // Best-effort — the realtime subscription remains the
@@ -109,6 +157,27 @@ export function useGameState(roomCode: string, playerId: string | null = null) {
         }
         document.addEventListener("visibilitychange", handleVisibilityChange);
         window.addEventListener("focus", handleVisibilityChange);
+
+        // Safety net #2: catches the same silent-drop case even when the
+        // tab never lost focus (e.g. a brief Wi-Fi blip on a foregrounded
+        // phone) — the channel itself reports SUBSCRIBED again once the
+        // socket reconnects. The very first SUBSCRIBED is the initial
+        // connect (hydrate() above already fetched everything), so only
+        // treat the second-and-later ones as reconnects worth resyncing.
+        function handleStatusChange(status: REALTIME_SUBSCRIBE_STATES) {
+          if (status !== REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) return;
+          if (!hasConnectedOnceRef.current) {
+            hasConnectedOnceRef.current = true;
+            return;
+          }
+          getRoomByCode(supabase, roomCode)
+            .then((freshRoom) => {
+              if (freshRoom) resyncRoom(freshRoom);
+            })
+            .catch(() => {
+              // Best-effort — same fallback rationale as handleVisibilityChange.
+            });
+        }
 
         const channel = subscribeToRoom(supabase, room.id, {
           onRoomUpdate: handleRoomUpdate,
@@ -123,6 +192,7 @@ export function useGameState(roomCode: string, playerId: string | null = null) {
           onCaseLogInsert: (entry) => dispatch({ type: "CASE_LOGGED", payload: entry }),
           onPresenceSync: (players) =>
             dispatch({ type: "PRESENCE_SYNCED", payload: new Set(players.map((p) => p.player_id)) }),
+          onStatusChange: handleStatusChange,
         });
         channelRef.current = channel;
 
@@ -147,6 +217,7 @@ export function useGameState(roomCode: string, playerId: string | null = null) {
       });
       channelRef.current = null;
       trackedPlayerIdRef.current = null;
+      hasConnectedOnceRef.current = false;
     };
   }, [roomCode, supabase]);
 

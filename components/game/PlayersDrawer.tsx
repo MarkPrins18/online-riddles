@@ -54,9 +54,6 @@ export function PlayersDrawer({
               roomId={roomId}
               players={players}
               currentNarratorId={narratorId}
-              narratorOnline={
-                !narratorId || !onlinePlayerIds ? true : onlinePlayerIds.has(narratorId)
-              }
             />
           )}
         </div>

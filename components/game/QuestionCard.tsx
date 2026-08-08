@@ -172,6 +172,7 @@ export function QuestionCard({
                 value={customDraft}
                 onChange={(e) => setCustomDraft(e.target.value)}
                 placeholder="Typ een genuanceerd antwoord..."
+                aria-label="Genuanceerd antwoord"
                 maxLength={200}
                 autoFocus
                 className="flex-1 rounded-md border border-black/15 bg-white/50 px-3 py-2 font-mono text-sm text-ink placeholder:text-black/40 focus:border-accent-muted"

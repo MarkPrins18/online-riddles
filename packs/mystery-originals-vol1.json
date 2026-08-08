@@ -7,68 +7,68 @@
   },
   "puzzles": [
     {
-      "title": "Zes ochtenden, zes verse bloemen",
-      "scenario": "Een weduwnaar vindt zes ochtenden op rij een verse bos bloemen op de stoep vóór zijn deur, zonder kaartje en zonder dat een bezorger ooit is gezien. Op de zevende dag stopt het abrupt — dezelfde dag dat zijn buurvrouw voor het eerst niet groet vanuit haar raam.",
-      "solution": "De buurvrouw, die zelf nog maar zelden buitenkomt, legt al zes ochtenden zelfgekweekte bloemen uit haar tuin vóór zonsopgang stiekem bij hem neer, uit schuldgevoel over een ruzie van jaren geleden die ze nooit heeft goedgemaakt. Op de zevende dag wordt ze met spoed opgenomen in het ziekenhuis.",
-      "category": "Nabuurschap",
-      "difficulty": "medium",
-      "hint": "Let niet op wie er komt, maar op wie er ineens niet meer is."
-    },
-    {
-      "title": "De stopwatch die altijd hetzelfde getal toonde",
-      "scenario": "Een zwemcoach ziet dat zijn topzwemster elke training exact dezelfde tijd noteert, tot op de honderdste seconde nauwkeurig — ook op dagen dat ze duidelijk trager of juist sneller zwemt dan anders.",
-      "solution": "Haar horloge is na een val in het bad blijven hangen op één vaste tijd. Uit pure gewoonte schrijft ze die tijd op in haar logboek, zonder te kijken naar de officiële trainingsklok aan de wand.",
-      "category": "Sport",
+      "title": "De post die zichzelf vooruit liep",
+      "scenario": "Een man ontvangt een verjaardagskaart twee dagen vóór zijn verjaardag, gedateerd en gestempeld op de dag ná zijn verjaardag.",
+      "solution": "De poststempel van het sorteercentrum liep een dag achter door een niet-omgezette klok na de zomertijdwissel. De kaart was gewoon te vroeg bezorgd — alleen de datum erop klopte niet.",
+      "category": "Post",
       "difficulty": "easy",
-      "hint": "Ligt het probleem bij de zwemster, of bij wat ze afleest?"
+      "hint": "Klopt de datum op de stempel, of alleen de dag van bezorgen?"
     },
     {
-      "title": "Het pakketje dat zichzelf terugstuurde",
-      "scenario": "Een bezorger levert een pakket af bij een leegstaand huis met dichtgetimmerde brievenbus. Drie dagen later staat hetzelfde pakket weer bij het distributiecentrum, gemarkeerd als 'afgeleverd én geretourneerd' — zonder dat iemand het ophaalde of terugbracht.",
-      "solution": "De scanner-app toont huisnummer 12 en 12A als hetzelfde adres. Het pakket ging in werkelijkheid naar het bewoonde 12A, waar de bewoner de bestelling niet herkende en meteen weigerde. Nooit is het bij het leegstaande huis geweest.",
-      "category": "Logistiek",
+      "title": "Het huis dat altijd warmer was aan één kant",
+      "scenario": "Bewoners van een nieuwbouwwijk klagen dat hun huis structureel drie graden warmer is aan de linkerkant dan aan de rechterkant, ondanks identieke isolatie volgens de bouwtekening.",
+      "solution": "De aannemer verwisselde bij de helft van de huizen de leidingen van de vloerverwarming met een verkeerde thermostaatgroep, waardoor die kant altijd meestookte op de instelling van de buren.",
+      "category": "Bouw",
       "difficulty": "medium",
-      "hint": "Was het pakket op het juiste adres, of alleen op het juiste nummer?"
+      "hint": "Regelt elk deel van het huis echt zijn eigen temperatuur?"
     },
     {
-      "title": "De les die niemand volgde",
-      "scenario": "Een yogaleraar geeft elke ochtend om zes uur les in een zaal vol mensen — hij hoort de deur, voetstappen, ademhaling, matjes die worden uitgerold. Maar zodra hij zijn ogen opent bij de slotmeditatie, is de zaal altijd leeg.",
-      "solution": "Hij geeft zijn les via een livestream. Naast hem staat een speaker die sfeergeluid afspeelt: een oude opname van een drukke, fysieke les, bedoeld om de kijkers thuis een gevoel van gezelschap te geven. Hij hoort zijn eigen verleden, geen aanwezig publiek.",
-      "category": "Werk",
-      "difficulty": "hard",
-      "hint": "Is het geluid dat hij hoort live, of eerder opgenomen?"
+      "title": "De sleutel die op geen enkel slot paste",
+      "scenario": "Een vrouw erft van haar overleden vader een op maat gemaakte sleutel, prachtig afgewerkt — maar hij past op geen enkele deur, kluis of kast in zijn hele huis.",
+      "solution": "De sleutel hoort bij een kluisje op zijn werk, jaren geleden, dat allang is opgeruimd. Hij bewaarde de sleutel puur als aandenken aan die tijd, niet omdat hij nog ergens toegang toe gaf.",
+      "category": "Erfenis",
+      "difficulty": "medium",
+      "hint": "Moet een sleutel per se nog ergens bij passen?"
     },
     {
-      "title": "De rook die niemand kon vinden",
-      "scenario": "Een boswachter ziet drie avonden op rij rook opstijgen uit hetzelfde stuk bos, steeds tussen acht en negen uur. Elke keer als hij ter plaatse komt, brandt er niets en is er geen vuur te bekennen.",
-      "solution": "Een imker rookt op dat vaste tijdstip zijn bijenkasten met een handrookpot om de bijen rustig te houden voor het legen van de raten. Het lijkt op rook van een brand, maar komt van een klein, volkomen ongevaarlijk apparaat.",
+      "title": "De buurman die nooit zijn gordijnen opende",
+      "scenario": "Een gepensioneerde buurman houdt al vijf jaar zijn gordijnen dag en nacht dicht, terwijl de buren zien dat er licht aan blijft en af en toe schaduwen bewegen.",
+      "solution": "Hij kweekt achter die gordijnen, volkomen legaal, zeldzame orchideeën die schade oplopen van direct zonlicht. De bewegende schaduwen zijn hemzelf, druk bezig met water geven en bijsnoeien.",
+      "category": "Hobby",
+      "difficulty": "easy",
+      "hint": "Wat heeft er behoefte aan licht, maar niet aan zonlicht?"
+    },
+    {
+      "title": "Het cijfer dat nooit veranderde",
+      "scenario": "Een leraar merkt dat één leerling voor elke toets, in elk vak, exact een 7,3 haalt — nooit hoger, nooit lager, ongeacht de moeilijkheidsgraad.",
+      "solution": "De leerling gebruikt bewust een vaste strategie: precies genoeg vragen goed beantwoorden voor een ruime voldoende, nooit meer, om onder de radar te blijven voor extra aandacht of hogere verwachtingen.",
+      "category": "School",
+      "difficulty": "medium",
+      "hint": "Is dit toeval, of een doelbewuste keuze?"
+    },
+    {
+      "title": "De plant die 's nachts groeide",
+      "scenario": "Een kamerplant groeit aantoonbaar sneller in het donker dan overdag, wat indruist tegen alles wat de eigenaar over planten dacht te weten.",
+      "solution": "Overdag verdampt de plant vooral water via de bladeren, 's nachts gaat de energie juist naar celgroei — een bekend dag-nachtritme, alleen niet zichtbaar voor wie nooit 's nachts kijkt.",
       "category": "Natuur",
-      "difficulty": "easy",
-      "hint": "Rook hoeft niet van een brand te komen."
+      "difficulty": "hard",
+      "hint": "Doet een plant overdag en 's nachts wel hetzelfde soort werk?"
     },
     {
-      "title": "De handtas die zichzelf verplaatste",
-      "scenario": "Een vrouw legt haar tas elke ochtend op het aanrecht voordat ze na een nachtdienst gaat slapen. Acht uur later vindt ze hem steevast in de gang terug — terwijl ze alleen woont en niemand een sleutel heeft.",
-      "solution": "Haar schoonmaakster komt op vaste tijden en zet de tas altijd opzij naar de gang om het aanrecht te kunnen soppen. De vrouw slaapt inmiddels al vast voordat de schoonmaakster arriveert en merkt er nooit iets van.",
-      "category": "Huishouden",
-      "difficulty": "easy",
-      "hint": "Woont ze echt alleen, of komt er weleens iemand terwijl zij slaapt?"
+      "title": "De brief in een taal die niemand kende",
+      "scenario": "Een familie vindt tussen de spullen van hun overleden oma een dagboek, volledig geschreven in een taal die geen van hen herkent, laat staan kan lezen.",
+      "solution": "Oma schreef fonetisch in haar eigen, zelfbedachte code — een mengsel van haar moedertaal en het Nederlands, ontwikkeld tijdens de oorlog om haar dagboek onleesbaar te maken voor wie het zou vinden.",
+      "category": "Familie",
+      "difficulty": "hard",
+      "hint": "Is dit een bestaande taal, of een uitvinding van één persoon?"
     },
     {
-      "title": "De stem in de wachtrij",
-      "scenario": "Een man belt de klantenservice van zijn energieleverancier. Terwijl hij in de wachtrij staat, hoort hij via de wachtmuziek zijn eigen stem een boodschap voorlezen die hij zich niet kan herinneren ooit te hebben ingesproken.",
-      "solution": "Jaren geleden werkte hij als stemacteur voor een reclamebureau dat voice-overs leverde aan callcenters. Het bedrijf hergebruikt zijn oude opname, zonder dat hij dat ooit wist, voor een volledig ander script over wachttijden.",
-      "category": "Toeval",
+      "title": "Het pakket dat zichzelf betaalde",
+      "scenario": "Een webshopeigenaar ziet een bestelling binnenkomen die volledig is afgerekend, verzonden en bevestigd — zonder dat er ooit een klant is ingelogd of een account is aangemaakt.",
+      "solution": "Een terugkerende klant had 'opnieuw bestellen met één klik' jaren geleden geactiveerd via een browserextensie, die per ongeluk opnieuw werd getriggerd door een verlopen cookie-herinnering.",
+      "category": "E-commerce",
       "difficulty": "medium",
-      "hint": "Heeft hij ooit met zijn stem gewerkt, ook al is dat lang geleden?"
-    },
-    {
-      "title": "Het schoolrapport uit de toekomst",
-      "scenario": "Een moeder ontvangt het rapport van haar zoon. De cijferlijst klopt exact met wat hij die periode heeft geleerd — behalve dat de datum bovenaan het document een jaar in de toekomst ligt.",
-      "solution": "De administratie hergebruikte een oud sjabloon en vergat bij het printen het jaartal aan te passen. Puur een typefout in de kop van het document; de cijfers zelf zijn helemaal correct.",
-      "category": "Administratie",
-      "difficulty": "easy",
-      "hint": "Zit het probleem in de inhoud, of alleen in het jaartal erboven?"
+      "hint": "Moet iemand echt opnieuw inloggen om iets te bestellen?"
     }
   ]
 }

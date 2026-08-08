@@ -408,6 +408,37 @@ begin
 end;
 $$;
 
+-- For automatic offline-takeover only (see lib/game/membership.ts:
+-- pickNarratorTakeoverElector / pickRandomOnlineCandidate, called from
+-- GamePlayClient after the Verteller has been offline past a timeout).
+-- Unlike claim_host, this is NOT self-claim-only: the caller assigns the
+-- role to a different, randomly-chosen player, since the whole point is
+-- that the Verteller isn't around to claim it themselves. Any room member
+-- may reassign the Verteller to any other room member — same trust model as
+-- claim_host (Presence isn't visible server-side, so this can't verify the
+-- old Verteller is really gone; the client decides when this is warranted).
+create or replace function claim_narrator(room_id_input uuid, new_narrator_id uuid)
+returns void
+language plpgsql
+security definer
+as $$
+begin
+  if not is_room_member(room_id_input) then
+    raise exception 'Not a member of this room';
+  end if;
+  if not exists (
+    select 1 from players
+    where id = new_narrator_id and room_id = room_id_input and not is_spectator
+  ) then
+    raise exception 'Target player not in this room';
+  end if;
+
+  update players set is_narrator = false where room_id = room_id_input;
+  update players set is_narrator = true where id = new_narrator_id and room_id = room_id_input;
+  update rooms set narrator_id = new_narrator_id where id = room_id_input;
+end;
+$$;
+
 -- Returns the room's current puzzle with the solution nulled out unless the
 -- caller is the Verteller or the round has already been revealed — the
 -- first time "Verteller ziet de oplossing, anderen niet" is enforced by the

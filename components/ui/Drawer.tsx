@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import type { ReactNode } from "react";
+import { useDialog } from "@/lib/a11y/useDialog";
 
 /**
  * Slide-in sibling to Modal: same escape-key/backdrop-close contract, but
@@ -23,6 +24,8 @@ export function Drawer({
   className?: string;
 }) {
   const [entered, setEntered] = useState(false);
+  const dialogRef = useDialog<HTMLDivElement>();
+  const titleId = useId();
 
   useEffect(() => {
     const raf = requestAnimationFrame(() => setEntered(true));
@@ -54,11 +57,19 @@ export function Drawer({
       }}
     >
       <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
         className={`flex h-full w-full max-w-[420px] flex-col border-l border-white/10 bg-bg-secondary shadow-2xl shadow-black/60 transition-transform duration-200 ease-out ${className}`}
         style={{ transform: entered ? "translateX(0)" : "translateX(100%)" }}
       >
         <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
-          <p className="relative font-mono text-xs uppercase tracking-widest text-text-secondary before:absolute before:-left-2 before:-top-2 before:h-3 before:w-8 before:-rotate-3 before:bg-accent/25 before:content-['']">
+          <p
+            id={titleId}
+            className="relative font-mono text-xs uppercase tracking-widest text-text-secondary before:absolute before:-left-2 before:-top-2 before:h-3 before:w-8 before:-rotate-3 before:bg-accent/25 before:content-['']"
+          >
             <span className="relative">{title}</span>
           </p>
           <button

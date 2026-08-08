@@ -54,10 +54,15 @@ export function QuestionForm({
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Stel een ja/nee-vraag..."
+        aria-label="Ja/nee-vraag"
         maxLength={140}
         className="w-full rounded-md border border-white/10 bg-bg-primary px-3 py-2.5 font-mono text-sm text-text-primary placeholder:text-text-secondary/60 focus:border-accent-muted"
       />
-      {error && <p className="font-mono text-xs text-danger">{error}</p>}
+      {error && (
+        <p role="alert" className="font-mono text-xs text-danger">
+          {error}
+        </p>
+      )}
       <Button type="submit" className="w-full" disabled={isSubmitting || !text.trim()}>
         Vragen
       </Button>

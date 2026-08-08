@@ -48,10 +48,15 @@ export function ChatForm({
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Overleg met je medespelers..."
+        aria-label="Chatbericht"
         maxLength={300}
         className="w-full rounded-md border border-white/10 bg-bg-primary px-3 py-2.5 font-mono text-sm text-text-primary placeholder:text-text-secondary/60 focus:border-accent-muted"
       />
-      {error && <p className="font-mono text-xs text-danger">{error}</p>}
+      {error && (
+        <p role="alert" className="font-mono text-xs text-danger">
+          {error}
+        </p>
+      )}
       <Button type="submit" variant="secondary" className="w-full" disabled={isSubmitting || !text.trim()}>
         Versturen
       </Button>

@@ -46,6 +46,10 @@ export type Database = {
         Args: { room_id_input: string; claiming_player_id: string };
         Returns: void;
       };
+      claim_narrator: {
+        Args: { room_id_input: string; new_narrator_id: string };
+        Returns: void;
+      };
       get_room_puzzle: {
         Args: { room_id_input: string };
         Returns: Puzzle[];

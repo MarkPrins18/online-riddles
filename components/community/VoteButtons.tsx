@@ -57,8 +57,9 @@ export function VoteButtons({
           disabled={isVoting}
           onClick={() => vote(1)}
           aria-label="Stem voor"
+          aria-pressed={myVote === 1}
         >
-          ▲
+          {myVote === 1 ? "▲" : "△"}
         </Button>
         <span className="min-w-[2ch] text-center text-text-primary">{score}</span>
         <Button
@@ -68,8 +69,9 @@ export function VoteButtons({
           disabled={isVoting}
           onClick={() => vote(-1)}
           aria-label="Stem tegen"
+          aria-pressed={myVote === -1}
         >
-          ▼
+          {myVote === -1 ? "▼" : "▽"}
         </Button>
       </div>
       {error && <p className="font-mono text-xs text-danger">{error}</p>}

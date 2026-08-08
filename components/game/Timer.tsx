@@ -38,8 +38,11 @@ export function Timer({
 
   return (
     <span
-      className={`font-mono text-sm tabular-nums ${isUrgent ? "text-danger" : "text-text-secondary"}`}
+      className={`font-mono text-sm tabular-nums ${isUrgent ? "font-bold text-danger" : "text-text-secondary"}`}
     >
+      {/* Urgency isn't color-only: the bold weight above and this prefix
+          both carry the signal for users who can't perceive the color change. */}
+      {isUrgent && !isUp && "⚠ "}
       {isUp ? "Tijd om" : formatDuration(remainingSeconds)}
     </span>
   );

@@ -8,27 +8,26 @@ import { setNarrator } from "@/lib/supabase/players";
 import { Button } from "@/components/ui/Button";
 
 /**
- * Host-only escape hatch: if the Verteller goes AFK or disconnects
- * mid-round, the round would otherwise be stuck forever (nobody else can
- * answer questions or review guesses). Collapsed by default since it's
- * rarely needed. One button per candidate rather than a <select>, so a
- * long name wraps instead of getting clipped in the narrow sidebar.
+ * Host-only manual escape hatch — e.g. the Verteller is technically still
+ * online but AFK/unresponsive, or the host wants to hand the role off for
+ * some other reason. Genuine disconnects are handled automatically instead
+ * (see GamePlayClient's narrator-offline effect and
+ * lib/game/membership.ts: pickNarratorTakeoverElector /
+ * pickRandomOnlineCandidate), so this always starts collapsed — it's not
+ * the tool for that case anymore. One button per candidate rather than a
+ * <select>, so a long name wraps instead of getting clipped in the narrow
+ * sidebar.
  */
 export function NarratorTakeoverControl({
   supabase,
   roomId,
   players,
   currentNarratorId,
-  narratorOnline = true,
 }: {
   supabase: SupabaseClient<Database>;
   roomId: string;
   players: Player[];
   currentNarratorId: string | null;
-  /** When false (Presence reports the Verteller disconnected), this opens
-   * itself by default instead of staying collapsed — the whole point of
-   * detecting it is that the host shouldn't have to remember to check. */
-  narratorOnline?: boolean;
 }) {
   const [savingId, setSavingId] = useState<string | null>(null);
 
@@ -42,14 +41,11 @@ export function NarratorTakeoverControl({
   }
 
   return (
-    <details className="mt-4 border-t border-white/5 pt-4" open={!narratorOnline || undefined}>
+    <details className="mt-4 border-t border-white/5 pt-4">
       <summary className="cursor-pointer font-mono text-xs uppercase tracking-widest text-text-secondary">
         Verteller afwezig?
       </summary>
       <div className="mt-3 flex flex-col gap-2">
-        {!narratorOnline && (
-          <p className="font-mono text-xs text-danger">Verteller lijkt offline.</p>
-        )}
         {candidates.map((player) => (
           <Button
             key={player.id}

@@ -50,7 +50,7 @@ export function PlayersStrip({
           </span>
         )}
       </span>
-      <span className="font-mono text-xs text-text-secondary">
+      <span className="hidden font-mono text-xs text-text-secondary sm:inline">
         {players.length} {players.length === 1 ? "speler" : "spelers"}
       </span>
     </button>

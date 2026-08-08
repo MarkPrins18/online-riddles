@@ -5,10 +5,14 @@ import { useRouter } from "next/navigation";
 import { useGameState } from "@/lib/game/useGameState";
 import { getStoredPlayerId } from "@/lib/session";
 import { getRandomPuzzle } from "@/lib/supabase/puzzles";
-import { setNarrator } from "@/lib/supabase/players";
+import { setNarrator, claimNarrator } from "@/lib/supabase/players";
 import { setRoomPuzzle, advanceRoomRound, updateRoomStatus } from "@/lib/supabase/rooms";
 import { pickNextNarrator, isNarrator } from "@/lib/game/roles";
-import { createKickHandler } from "@/lib/game/membership";
+import {
+  createKickHandler,
+  pickNarratorTakeoverElector,
+  pickRandomOnlineCandidate,
+} from "@/lib/game/membership";
 import {
   nextRoundNumber,
   hasMoreRounds,
@@ -50,6 +54,11 @@ import { PlayersDrawer } from "./PlayersDrawer";
 import { PlayersStrip } from "./PlayersStrip";
 import { SolutionReveal } from "./SolutionReveal";
 import { Timer } from "./Timer";
+
+// How long the Verteller must be continuously offline (per Presence) before
+// the game reassigns the role automatically — long enough that a closed
+// laptop lid or a brief refresh doesn't trigger a handoff nobody wanted.
+const NARRATOR_OFFLINE_TIMEOUT_MS = 2 * 60 * 1000;
 
 export function GamePlayClient({ code }: { code: string }) {
   const [playerId] = useState(() => getStoredPlayerId(code));
@@ -146,6 +155,46 @@ export function GamePlayClient({ code }: { code: string }) {
     // per round).
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.room, playerId, now]);
+
+  // Tracks how long the Verteller has been continuously absent from
+  // Presence — Presence itself only reports "online or not right now", so
+  // this is the only place that remembers *since when*.
+  const narratorOfflineSinceRef = useRef<number | null>(null);
+  useEffect(() => {
+    const narratorId = state.room?.narrator_id ?? null;
+    const isOnline = !narratorId || state.onlinePlayerIds.has(narratorId);
+    if (isOnline) {
+      narratorOfflineSinceRef.current = null;
+    } else if (narratorOfflineSinceRef.current === null) {
+      narratorOfflineSinceRef.current = Date.now();
+    }
+  }, [state.room?.narrator_id, state.onlinePlayerIds]);
+
+  // Once the Verteller has been offline past NARRATOR_OFFLINE_TIMEOUT_MS,
+  // automatically hands the role to a random online player — no banner, no
+  // manual choice (see lib/game/membership.ts: pickNarratorTakeoverElector
+  // picks the one client that acts, so concurrent clients don't race each
+  // other; pickRandomOnlineCandidate picks who they hand it to).
+  const narratorTakeoverAttemptedRef = useRef<string | null>(null);
+  useEffect(() => {
+    const room = state.room;
+    const narratorId = room?.narrator_id ?? null;
+    const offlineSince = narratorOfflineSinceRef.current;
+    if (!room || !narratorId || offlineSince === null) return;
+    if (now - offlineSince < NARRATOR_OFFLINE_TIMEOUT_MS) return;
+
+    const episodeKey = `${narratorId}:${offlineSince}`;
+    if (narratorTakeoverAttemptedRef.current === episodeKey) return;
+
+    const elector = pickNarratorTakeoverElector(state.players, state.onlinePlayerIds, narratorId);
+    if (!elector || elector.id !== playerId) return;
+
+    const candidate = pickRandomOnlineCandidate(state.players, state.onlinePlayerIds, narratorId);
+    if (!candidate) return;
+
+    narratorTakeoverAttemptedRef.current = episodeKey;
+    claimNarrator(supabase, room.id, candidate.id);
+  }, [now, state.room, state.players, state.onlinePlayerIds, playerId, supabase]);
 
   if (state.error) {
     return (
@@ -300,15 +349,6 @@ export function GamePlayClient({ code }: { code: string }) {
           onlinePlayerIds={state.onlinePlayerIds}
           playerId={playerId}
         />
-        {isHost && !narrating && !isRevealed && room.narrator_id &&
-          !state.onlinePlayerIds.has(room.narrator_id) && (
-            <div className="flex items-center justify-between gap-3 rounded-md border border-danger/40 bg-danger/5 p-3">
-              <p className="font-mono text-xs text-text-secondary">Verteller lijkt offline.</p>
-              <Button variant="danger" onClick={() => setPlayersOpen(true)}>
-                Open Spelers
-              </Button>
-            </div>
-          )}
       </div>
 
       <div className="desk-layout w-full max-w-[72rem]">
@@ -320,7 +360,7 @@ export function GamePlayClient({ code }: { code: string }) {
             )}
             {isSpectator && <span>Toeschouwer</span>}
             {narrating && !isRevealed && (
-              <span>
+              <span className="hidden sm:inline">
                 {incorrectGuessCount > 0 && <span className="text-danger">{incorrectGuessCount} fout · </span>}
                 {answeredCount} beantwoord
               </span>
@@ -329,7 +369,7 @@ export function GamePlayClient({ code }: { code: string }) {
               <TeamLivesDisplay remaining={room.team_lives_remaining} total={room.team_lives_total} />
             )}
           </div>
-          <div className="flex shrink-0 flex-nowrap items-center gap-2 whitespace-nowrap sm:gap-3">
+          <div className="flex shrink-0 flex-nowrap items-center gap-1.5 whitespace-nowrap sm:gap-3">
             <PlayersStrip players={players} narratorId={room.narrator_id} onOpen={() => setPlayersOpen(true)} />
             {room.round_started_at && (
               <Timer

@@ -1,4 +1,4 @@
-import type { SupabaseClient, RealtimeChannel } from "@supabase/supabase-js";
+import type { SupabaseClient, RealtimeChannel, REALTIME_SUBSCRIBE_STATES } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { Player, PlayerPresence } from "@/types/player";
 import type { Room } from "@/types/room";
@@ -21,6 +21,15 @@ export type RoomChannelHandlers = {
   onChatMessageInsert?: (message: ChatMessage) => void;
   onCaseLogInsert?: (entry: CaseLogEntry) => void;
   onPresenceSync?: (players: PlayerPresence[]) => void;
+  /**
+   * Postgres Changes only pushes events while the socket is actually open —
+   * a silently dropped connection (backgrounded mobile tab, laptop sleep, a
+   * brief network blip) doesn't replay whatever was missed once it
+   * reconnects. Without watching subscribe status, nothing in the app ever
+   * finds out a gap happened, so a caller uses this to detect "SUBSCRIBED
+   * again after having connected before" and resync affected data.
+   */
+  onStatusChange?: (status: REALTIME_SUBSCRIBE_STATES, err?: Error) => void;
 };
 
 export function subscribeToRoom(
@@ -89,7 +98,7 @@ export function subscribeToRoom(
       handlers.onPresenceSync?.(players);
     });
 
-  channel.subscribe();
+  channel.subscribe((status, err) => handlers.onStatusChange?.(status, err));
 
   return channel;
 }

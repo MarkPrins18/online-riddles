@@ -54,6 +54,7 @@ export function PlayersDrawer({
               roomId={roomId}
               players={players}
               currentNarratorId={narratorId}
+              onlinePlayerIds={onlinePlayerIds}
             />
           )}
         </div>

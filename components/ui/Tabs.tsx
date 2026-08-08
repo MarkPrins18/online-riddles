@@ -25,10 +25,15 @@ export function Tabs({
   tabs,
   defaultTab,
   onTabChange,
+  trailing,
 }: {
   tabs: TabDef[];
   defaultTab?: string;
   onTabChange?: (key: string) => void;
+  /** Rendered at the end of the tab bar itself (e.g. a shortcut button) —
+   * for callers that would otherwise need a whole extra row above the tabs
+   * just to fit one button. */
+  trailing?: ReactNode;
 }) {
   const [activeKey, setActiveKey] = useState(defaultTab ?? tabs[0]?.key);
   const active = tabs.find((t) => t.key === activeKey) ?? tabs[0];
@@ -66,6 +71,7 @@ export function Tabs({
             </button>
           );
         })}
+        {trailing && <div className="ml-auto flex items-center pb-1.5 sm:pb-2">{trailing}</div>}
       </div>
       <div className="min-h-0 flex-1 pb-1 pt-3">{active?.content}</div>
     </div>

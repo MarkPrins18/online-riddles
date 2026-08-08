@@ -23,15 +23,21 @@ export function NarratorTakeoverControl({
   roomId,
   players,
   currentNarratorId,
+  onlinePlayerIds,
 }: {
   supabase: SupabaseClient<Database>;
   roomId: string;
   players: Player[];
   currentNarratorId: string | null;
+  /** Switching to an offline player wouldn't fix anything, so the list is
+   * restricted to who Presence currently reports as connected. */
+  onlinePlayerIds?: Set<string>;
 }) {
   const [savingId, setSavingId] = useState<string | null>(null);
 
-  const candidates = players.filter((p) => p.id !== currentNarratorId && !p.is_spectator);
+  const candidates = players.filter(
+    (p) => p.id !== currentNarratorId && !p.is_spectator && (!onlinePlayerIds || onlinePlayerIds.has(p.id))
+  );
   if (candidates.length === 0) return null;
 
   async function handleTransfer(playerId: string) {

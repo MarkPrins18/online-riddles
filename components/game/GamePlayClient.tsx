@@ -446,8 +446,11 @@ export function GamePlayClient({ code }: { code: string }) {
           {/* Overleg shortcut for narrow screens: xl+ has a permanent chat
               column, but below xl it's buried at the bottom of a tab strip
               shared with Postvak/Verhoor/etc. This opens it directly from
-              the vast column instead, for both roles. */}
-          {!isRevealed && (
+              the vast column instead. Raders get it inline in the
+              Stel-een-vraag/Los-de-zaak-op tab bar just below (via `trailing`)
+              so it doesn't cost its own row — narrator and spectator have no
+              such tab bar here, so they keep the standalone row. */}
+          {!isRevealed && (narrating || isSpectator) && (
             <div className="flex justify-end xl:hidden">
               <ChatIconButton
                 onClick={() => {
@@ -490,6 +493,15 @@ export function GamePlayClient({ code }: { code: string }) {
                 </Card>
               ) : (
                 <Tabs
+                  trailing={
+                    <ChatIconButton
+                      onClick={() => {
+                        setChatDrawerOpen(true);
+                        setChatSeenCount(chatMessages.length);
+                      }}
+                      unreadCount={unreadChatCount}
+                    />
+                  }
                   tabs={[
                     {
                       key: "vraag",

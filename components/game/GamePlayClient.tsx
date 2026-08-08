@@ -484,7 +484,7 @@ export function GamePlayClient({ code }: { code: string }) {
               up these split apart again — "Los de zaak op" stays here,
               "Stel een vraag" moves to the "side" column next to Overleg. */}
           {!narrating && !isRevealed && (
-            <div className="xl:hidden">
+            <div className="mt-1 xl:hidden">
               {isSpectator ? (
                 <Card>
                   <p className="font-mono text-sm text-text-secondary">

@@ -16,8 +16,8 @@
     },
     {
       "title": "Stilte op de vaste tijd",
-      "scenario": "In een flatgebouw valt elke avond om kwart voor acht, minutenlang, alle geluid van de buren stil — geen tv, geen stemmen, geen voetstappen — voordat het gewoon weer verdergaat.",
-      "solution": "Een van de bewoners belt op dat tijdstip met haar dove moeder via een gebarentolk op beeldscherm. De hele familie legt uit gewoonte al het huisgeluid stil, zodat de tolk niets van de mimiek mist door omgevingsgeluid — iets wat ze nooit aan de buren hebben uitgelegd.",
+      "scenario": "In een flatgebouw valt elke avond om kwart voor acht, minutenlang, alle geluid van de buren stil, geen tv, geen stemmen, geen voetstappen, voordat het gewoon weer verdergaat.",
+      "solution": "Een van de bewoners belt op dat tijdstip met haar dove moeder via een gebarentolk op beeldscherm. De hele familie legt uit gewoonte al het huisgeluid stil, zodat de tolk niets van de mimiek mist door omgevingsgeluid, iets wat ze nooit aan de buren hebben uitgelegd.",
       "category": "Buren",
       "difficulty": "medium",
       "hint": "Wie heeft baat bij totale stilte, en waarom juist tijdens een beeldgesprek?"
@@ -32,8 +32,8 @@
     },
     {
       "title": "Een handtas, twee keer gevonden",
-      "scenario": "Een vrouw raakt haar handtas kwijt in de trein, meldt dit bij de balie, en hoort dezelfde dag dat hij tweemaal is ingeleverd — door twee verschillende mensen, op twee verschillende stations.",
-      "solution": "Iemand vond de tas, haalde er wat geld uit, en legde de rest uit schuldgevoel op het volgende station weer ergens zichtbaar neer. Een tweede, eerlijke vinder pikte hem daar op en leverde hem alsnog netjes in — vandaar twee meldingen voor één tas.",
+      "scenario": "Een vrouw raakt haar handtas kwijt in de trein, meldt dit bij de balie, en hoort dezelfde dag dat hij tweemaal is ingeleverd, door twee verschillende mensen, op twee verschillende stations.",
+      "solution": "Iemand vond de tas, haalde er wat geld uit, en legde de rest uit schuldgevoel op het volgende station weer ergens zichtbaar neer. Een tweede, eerlijke vinder pikte hem daar op en leverde hem alsnog netjes in. Vandaar twee meldingen voor één tas.",
       "category": "Openbaar vervoer",
       "difficulty": "medium",
       "hint": "Moet elke vinder ook de eerste zijn?"
@@ -41,14 +41,14 @@
     {
       "title": "De meterstand die de verkeerde kant op ging",
       "scenario": "Een man betaalt al jaren trouw zijn energierekening, maar de meterstanden erop dalen soms van maand tot maand in plaats van te stijgen, ook al gebruikt hij nooit minder stroom dan de vorige maand.",
-      "solution": "Zijn slimme meter deelt door een bekabelingsfout af en toe data met die van de buren, die minder verbruiken. De energieleverancier verwerkt bij vergissing soms hún lagere cijfer in plaats van het zijne — iets wat pas opvalt bij een handmatige controle.",
+      "solution": "Zijn slimme meter deelt door een bekabelingsfout af en toe data met die van de buren, die minder verbruiken. De energieleverancier verwerkt bij vergissing soms hún lagere cijfer in plaats van het zijne, iets wat pas opvalt bij een handmatige controle.",
       "category": "Nutsvoorzieningen",
       "difficulty": "hard",
       "hint": "Is dit wel altijd zijn eigen meter die wordt afgelezen?"
     },
     {
       "title": "Een cadeau zonder afzender",
-      "scenario": "Elk jaar op precies dezelfde dag ontvangt een man een klein, ongesigneerd cadeau per post, al sinds zijn twintigste — nooit een kaartje, nooit een poststempel uit dezelfde stad.",
+      "scenario": "Elk jaar op precies dezelfde dag ontvangt een man een klein, ongesigneerd cadeau per post, al sinds zijn twintigste, nooit een kaartje, nooit een poststempel uit dezelfde stad.",
       "solution": "Een oude leraar, die hem ooit uit een moeilijke thuissituatie hielp, stuurt het elk jaar anoniem op zijn verjaardag als bemoediging. Hij vraagt steeds een ander familielid dat op reis is om het onderweg op de bus te doen, zodat de stempel nooit hetzelfde is.",
       "category": "Verjaardag",
       "difficulty": "hard",
@@ -57,14 +57,14 @@
     {
       "title": "De hond die een omweg koos",
       "scenario": "Een blinde vrouw merkt dat haar geleidehond haar al weken een langere, omslachtige route naar de supermarkt laat lopen, terwijl de kortere route al jaren hetzelfde en veilig is.",
-      "solution": "Op de korte route is een oud pand deels ingestort en afgezet met bouwhekken die de hond, getraind om obstakels te vermijden, gewoon zelf omzeilt — zonder dat de vrouw ooit heeft geweten waarom, tot de gemeente het pand uiteindelijk sloopt.",
+      "solution": "Op de korte route is een oud pand deels ingestort en afgezet met bouwhekken die de hond, getraind om obstakels te vermijden, gewoon zelf omzeilt, zonder dat de vrouw ooit heeft geweten waarom, tot de gemeente het pand uiteindelijk sloopt.",
       "category": "Dieren",
       "difficulty": "easy",
-      "hint": "Vertrouw de hond — hij vermijdt iets dat zij niet kan zien."
+      "hint": "Vertrouw de hond. Hij vermijdt iets dat zij niet kan zien."
     },
     {
       "title": "Dezelfde droom, twee keer wakker",
-      "scenario": "Een echtpaar dat al dertig jaar samen slaapt, vertelt onafhankelijk van elkaar exact dezelfde droom te hebben gehad, in dezelfde nacht, met dezelfde details — iets wat ze nooit eerder is overkomen.",
+      "scenario": "Een echtpaar dat al dertig jaar samen slaapt, vertelt onafhankelijk van elkaar exact dezelfde droom te hebben gehad, in dezelfde nacht, met dezelfde details, iets wat ze nooit eerder is overkomen.",
       "solution": "Allebei bleven ze de avond ervoor stiekem naar dezelfde griezelige aflevering van een true-crime-podcast luisteren voor het slapen, elk met een koptelefoon op zodat de ander het niet zou merken, zonder te weten dat de ander precies hetzelfde deed.",
       "category": "Familie",
       "difficulty": "medium",

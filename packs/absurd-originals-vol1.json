@@ -8,7 +8,7 @@
   "puzzles": [
     {
       "title": "De bakker die niemand voedt",
-      "scenario": "Een bakker in een rustig dorp zet elke nacht om precies drie uur zijn oven aan, bakt één enkel brood, en gooit het daarna ongebruikt in de container — al maanden lang, zonder dat hij ooit klanten heeft voor het licht wordt.",
+      "scenario": "Een bakker in een rustig dorp zet elke nacht om precies drie uur zijn oven aan, bakt één enkel brood, en gooit het daarna ongebruikt in de container, al maanden lang, zonder dat hij ooit klanten heeft voor het licht wordt.",
       "solution": "Hij test elke nacht een nieuw recept voor een bakwedstrijd volgende maand en wil niet dat personeel of klanten het resultaat zien voordat de jury het proeft. Het brood van vannacht gaat de container in zodra hij tevreden of ontevreden is over de korst.",
       "category": "Werk",
       "difficulty": "easy",
@@ -17,7 +17,7 @@
     {
       "title": "Een garage die nooit opengaat",
       "scenario": "Een man betaalt maandelijks huur voor een garage die hij nooit opent, terwijl zijn eigen auto buiten in de regen staat en de garage vlak bij zijn huis ligt.",
-      "solution": "In de garage staat het decor van het amateurtoneelstuk waar hij regisseur van is. Hij huurt hem als opslag voor de vereniging en betaalt uit eigen zak, omdat de clubkas leeg is — zijn auto heeft er nooit iets mee te maken gehad.",
+      "solution": "In de garage staat het decor van het amateurtoneelstuk waar hij regisseur van is. Hij huurt hem als opslag voor de vereniging en betaalt uit eigen zak, omdat de clubkas leeg is. Zijn auto heeft er nooit iets mee te maken gehad.",
       "category": "Hobby",
       "difficulty": "medium",
       "hint": "Vraag je af waar zijn auto eigenlijk staat, niet waarom de garage dicht blijft."
@@ -28,12 +28,12 @@
       "solution": "Ze hebben een weddenschap lopen over wie het langst zijn stem kan sparen voor een marathon-voorleesactie in het weekend. Praten met elkaar zou de weddenschap breken, met anderen niet, want die telt niet mee.",
       "category": "Werk",
       "difficulty": "medium",
-      "hint": "De stilte geldt niet voor iedereen — alleen voor elkaar."
+      "hint": "De stilte geldt niet voor iedereen, alleen voor elkaar."
     },
     {
       "title": "Twaalf wekkers voor één ochtend",
       "scenario": "Elke ochtend zet een oude man precies twaalf identieke wekkers naast zijn bed, terwijl hij er zichtbaar maar één per dag nodig heeft om wakker te worden.",
-      "solution": "Hij verzamelt wekkers uit de failliete fabriek waar hij veertig jaar werkte en zet ze elke nacht in een andere volgorde aan om te controleren of ze na al die jaren nog steeds allemaal doen wat ze moeten — een controle die hij nooit heeft losgelaten.",
+      "solution": "Hij verzamelt wekkers uit de failliete fabriek waar hij veertig jaar werkte en zet ze elke nacht in een andere volgorde aan om te controleren of ze na al die jaren nog steeds allemaal doen wat ze moeten, een controle die hij nooit heeft losgelaten.",
       "category": "Gewoonte",
       "difficulty": "easy",
       "hint": "Niet elke wekker hoeft hem wakker te maken om zijn werk te doen."
@@ -41,7 +41,7 @@
     {
       "title": "Een kaart uit een stad die ze niet bezoekt",
       "scenario": "Een vrouw stuurt wekelijks een ansichtkaart naar zichzelf, altijd vanuit dezelfde stad, ook al is ze daar al jaren niet meer geweest.",
-      "solution": "Haar zoon woont in die stad en stuurt de kaarten in haar naam, zodat de postbode — wiens praatjes ze juist erg op prijs stelt — bij aankomst altijd even blijft hangen. De kaart is een excuus voor het gesprek, niet voor het nieuws erop.",
+      "solution": "Haar zoon woont in die stad en stuurt de kaarten in haar naam, zodat de postbode, wiens praatjes ze juist erg op prijs stelt, bij aankomst altijd even blijft hangen. De kaart is een excuus voor het gesprek, niet voor het nieuws erop.",
       "category": "Familie",
       "difficulty": "medium",
       "hint": "Wie schrijft, is niet per se wie ze denkt dat schrijft."
@@ -57,7 +57,7 @@
     {
       "title": "Een plant die elk weekend verdwijnt",
       "scenario": "Een schoolklas krijgt van de conciërge elke maandag een nieuwe plant op de vensterbank, en elke vrijdag is die spoorloos verdwenen, zonder dat er ooit iemand is gezien die hem meeneemt.",
-      "solution": "De conciërge haalt hem vrijdagmiddag zelf op om hem het weekend mee naar huis te nemen voor water en licht — de klaslokalen staan het weekend potdicht in de volle zon. Maandag zet hij een verse of dezelfde plant weer terug.",
+      "solution": "De conciërge haalt hem vrijdagmiddag zelf op om hem het weekend mee naar huis te nemen voor water en licht: de klaslokalen staan het weekend potdicht in de volle zon. Maandag zet hij een verse of dezelfde plant weer terug.",
       "category": "School",
       "difficulty": "easy",
       "hint": "Wie heeft er als enige een sleutel voor elk lokaal?"
@@ -65,7 +65,7 @@
     {
       "title": "Een deurbel voor een lege straat",
       "scenario": "Elke avond om precies negen uur klinkt in de hele straat hetzelfde deurbelgeluid, maar niemand doet ooit open en niemand staat er ooit voor de deur.",
-      "solution": "Een buurtbewoner test al maanden een nieuw slimme-deurbelsysteem. Door een fabrieksfout in de testmodus stuurt zijn eigen bel het geluid naar alle bellen in de straat in plaats van alleen naar die van hemzelf — iets wat de leverancier pas na klachten ontdekt.",
+      "solution": "Een buurtbewoner test al maanden een nieuw slimme-deurbelsysteem. Door een fabrieksfout in de testmodus stuurt zijn eigen bel het geluid naar alle bellen in de straat in plaats van alleen naar die van hemzelf, iets wat de leverancier pas na klachten ontdekt.",
       "category": "Techniek",
       "difficulty": "hard",
       "hint": "Is het geluid van één deurbel, of van een heel systeem?"

@@ -8,7 +8,7 @@
     {
       "matchTitle": "Radiostilte met een bericht erin",
       "title": "Radio Silence with a Message Inside",
-      "scenario": "A space station reports total radio silence to Earth for hours, and yet at the exact moment the silence ends, a message arrives saying: 'we just saw something strange' — with no timestamp of an earlier send.",
+      "scenario": "A space station reports total radio silence to Earth for hours, and yet at the exact moment the silence ends, a message arrives saying: 'we just saw something strange', with no timestamp of an earlier send.",
       "solution": "The crew wrote the message during the silence, but only sent it after a scheduled radio-silence test for antenna maintenance ended. It appeared to originate the moment the connection returned, even though it had been drafted earlier.",
       "hint": "Writing and sending don't have to happen at the same moment."
     },
@@ -16,7 +16,7 @@
       "matchTitle": "Een luik dat zichzelf opende",
       "title": "A Hatch That Opened Itself",
       "scenario": "In an unmanned section of a space station, the log records that an airlock was opened and closed again, even though according to the crew roster no one was nearby at that time.",
-      "solution": "A maintenance robot performed a programmed pressure check that an outdated classification system logged as 'human access' — the system had never learned to distinguish robots from crew.",
+      "solution": "A maintenance robot performed a programmed pressure check that an outdated classification system logged as 'human access'. The system had never learned to distinguish robots from crew.",
       "hint": "Does the log measure who passed through, or what passed through?"
     },
     {
@@ -30,28 +30,28 @@
       "matchTitle": "Eén bemanningslid te veel",
       "title": "One Crew Member Too Many",
       "scenario": "At the final headcount before a long flight, the system counts one more crew member than there are names on the passenger list, and no one aboard recognizes an unfamiliar face.",
-      "solution": "A trainee technician had stayed aboard without formally reporting it, to finish one last repair, and was accidentally not disembarked before departure. The system counted correctly — only the paperwork hadn't been updated.",
+      "solution": "A trainee technician had stayed aboard without formally reporting it, to finish one last repair, and was accidentally not disembarked before departure. The system counted correctly, only the paperwork hadn't been updated.",
       "hint": "Is the system wrong, or the list?"
     },
     {
       "matchTitle": "Een signaal uit een dode zone",
       "title": "A Signal from a Dead Zone",
       "scenario": "Weeks after a probe was officially declared dead, a ground station suddenly receives weak, regular signals again from the same direction.",
-      "solution": "Sunlight on the solar panels still built up just enough charge to periodically trigger a low-power emergency beacon, designed to keep transmitting as long as there's even a little power. The probe itself had long since stopped functioning — only that one system held out longer.",
+      "solution": "Sunlight on the solar panels still built up just enough charge to periodically trigger a low-power emergency beacon, designed to keep transmitting as long as there's even a little power. The probe itself had long since stopped functioning, only that one system held out longer.",
       "hint": "A system can 'live' longer than the rest of the device."
     },
     {
       "matchTitle": "Twee klokken, drie seconden verschil",
       "title": "Two Clocks, Three Seconds Apart",
-      "scenario": "Two identical onboard clocks on the same spacecraft, mounted side by side and connected to the same source, drift three seconds apart after a long flight — no malfunction, no defect, repeatedly confirmed by maintenance.",
-      "solution": "One clock hung closer to the ship's powerful generator and therefore experienced a minutely stronger gravitational field. Due to time dilation, that clock ran a fraction slower — exactly as physics predicts, not a fault but a fact.",
+      "scenario": "Two identical onboard clocks on the same spacecraft, mounted side by side and connected to the same source, drift three seconds apart after a long flight, with no malfunction or defect, repeatedly confirmed by maintenance.",
+      "solution": "One clock hung closer to the ship's powerful generator and therefore experienced a minutely stronger gravitational field. Due to time dilation, that clock ran a fraction slower, exactly as physics predicts: not a fault, but a fact.",
       "hint": "Two clocks in exactly the same spot always stay in sync. These two weren't in exactly the same spot."
     },
     {
       "matchTitle": "Een luik zonder indringer",
       "title": "A Hatch Without an Intruder",
       "scenario": "Crew members find a supply hatch open and part of its contents gone, while the access logs show no one has entered since the last inventory check.",
-      "solution": "Test animals from an onboard biology experiment had escaped through a ventilation duct and dragged the food out of the hatch themselves. The logs correctly recorded no human — because there was no human.",
+      "solution": "Test animals from an onboard biology experiment had escaped through a ventilation duct and dragged the food out of the hatch themselves. The logs correctly recorded no human, because there was no human.",
       "hint": "The logs measure people. Was it a person?"
     },
     {

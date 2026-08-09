@@ -10,7 +10,7 @@
   "HomePage": {
     "coverStamp": "Case file · closed",
     "title": "Online Riddles",
-    "subtitle": "A lateral thinking interrogation. Ask the smartest questions, gather the wildest clues, and crack the case together — or go solo for the glory (and the points).",
+    "subtitle": "A lateral thinking interrogation. Ask the smartest questions, gather the wildest clues, and crack the case together, or go solo for the glory (and the points).",
     "newFile": "New file",
     "existingFile": "Existing file",
     "communityLink": "Browse community riddles →"
@@ -19,22 +19,22 @@
     "trigger": "How to play",
     "close": "Close",
     "ideaTitle": "The idea",
-    "ideaBody": "Each round, one player — the Narrator — knows the solution to a riddle. Everyone else asks yes/no questions and tries to solve the case.",
+    "ideaBody": "Each round, one player, the Narrator, knows the solution to a riddle. Everyone else asks yes/no questions and tries to solve the case.",
     "narratorTitle": "The Narrator",
     "narratorBody": "Answers every question with yes, no, or n/a (not relevant to the solution). Solutions submitted by other players are approved or rejected by the Narrator in the Inbox.",
     "questionsTitle": "Questions & clues",
     "questionsBody": "Every “yes” answer automatically becomes a clue. All questions (including the no's and n/a's) can be reviewed in the Interrogation log.",
     "solveTitle": "Solve the case",
-    "solveBody": "Think you know the answer? Submit a solution. The Narrator sees it first and approves or rejects it — other players only see what you submitted once it's correct.",
+    "solveBody": "Think you know the answer? Submit a solution. The Narrator sees it first and approves or rejects it. Other players only see what you submitted once it's correct.",
     "pointsTitle": "Points",
     "pointsBody": "A harder case earns more points. The player who solves it and the Narrator both get a bonus, as does the round's best question. A wrong guess costs points.",
     "hardcoreTitle": "Hardcore mode",
     "hardcoreBody": "Optional, set by the host: every wrong guess costs the whole team 1 life. At 0 lives, it's game over for the whole session.",
     "corkboardTitle": "Corkboard",
-    "corkboardBody": "A shared board to pin clues and theories and connect them with threads — desktop/tablet only, not available on phones."
+    "corkboardBody": "A shared board to pin clues and theories and connect them with threads. Desktop/tablet only, not available on phones."
   },
   "ClaimHostBanner": {
-    "message": "The host appears offline. You've been here the longest of the rest — take over the role?",
+    "message": "The host appears offline. You've been here the longest of the rest. Take over the role?",
     "claim": "Take over host",
     "claiming": "Working...",
     "error": "Couldn't take over the host role. Please try again."
@@ -95,7 +95,7 @@
     "communityToggle": "Include community packs",
     "communityHint": "Riddles made by other players, separate from the official themes above.",
     "chooseThemeOrPack": "Choose at least one theme or community pack.",
-    "hardcoreToggle": "Hardcore mode — shared team lives",
+    "hardcoreToggle": "Hardcore mode (shared team lives)",
     "hardcoreHint": "Every wrong guess costs the whole team 1 life. At 0 lives, it's game over for the whole session.",
     "teamLivesLabelWithNarrator": "{name} decides: how many lives does the team get?",
     "teamLivesLabel": "How many lives does the team get?",
@@ -187,7 +187,7 @@
     "newest": "Newest",
     "top": "Top",
     "loading": "Loading packs...",
-    "empty": "No published community packs yet — be the first."
+    "empty": "No published community packs yet. Be the first."
   },
   "CommunityPackDetailClient": {
     "loading": "Loading pack...",
@@ -289,18 +289,18 @@
     "label": "Hint"
   },
   "InterrogationLog": {
-    "empty": "No questions asked yet — start the interrogation above."
+    "empty": "No questions asked yet. Start the interrogation above."
   },
   "NarratorInbox": {
     "pendingSolutionsHeading": "Pending solutions",
     "unansweredHeading": "Unanswered questions ({count})",
-    "allAnswered": "Everything answered — take a breather."
+    "allAnswered": "Everything answered, take a breather."
   },
   "ChatDrawer": {
     "title": "Discussion"
   },
   "CluesList": {
-    "empty": "No clues yet — every “yes” answer from the Narrator ends up here.",
+    "empty": "No clues yet. Every “yes” answer from the Narrator ends up here.",
     "error": "Couldn't pin this clue.",
     "pinning": "Working…",
     "pin": "Pin to corkboard"
@@ -336,7 +336,7 @@
     "recapError": "Couldn't build a recap. Please try again.",
     "shareOrDownload": "Share / download",
     "recapImageAlt": "Recap of the game night",
-    "shareTitle": "Online Riddles — case closed"
+    "shareTitle": "Online Riddles: case closed"
   },
   "FinalScoreboard": {
     "caseFileClosed": "Case file closed",
@@ -379,7 +379,7 @@
     "heading": "Next round is about to start!"
   },
   "PlayersStrip": {
-    "ariaLabel": "{count} players — click for scores",
+    "ariaLabel": "{count} players, click for scores",
     "count": "{count, plural, one {# player} other {# players}}"
   },
   "NarratorTakeoverControl": {
@@ -427,9 +427,9 @@
   "RiddleForm": {
     "titleLabel": "Title",
     "titlePlaceholder": "The missing...",
-    "scenarioLabel": "Scenario — what the players see",
+    "scenarioLabel": "Scenario (what the players see)",
     "scenarioPlaceholder": "Describe the situation...",
-    "solutionLabel": "Solution — only visible to the Narrator",
+    "solutionLabel": "Solution (only visible to the Narrator)",
     "solutionPlaceholder": "What actually happened...",
     "categoryLabel": "Category (optional)",
     "noCategoryOption": "No category",

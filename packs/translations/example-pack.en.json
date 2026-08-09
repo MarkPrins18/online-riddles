@@ -9,15 +9,15 @@
       "matchTitle": "De lege kluis",
       "title": "The Empty Vault",
       "scenario": "A jeweler opens his shop in the morning and finds the safe open and empty. There's no forced lock, no alarm triggered, and no camera footage of an intruder. Yet hundreds of thousands of euros in jewelry are missing.",
-      "solution": "The jeweler staged it himself for the insurance: he had quietly sold the jewelry weeks earlier and never changed the safe code since his former business partner, who still had access, had left — so suspicion would point to him instead.",
+      "solution": "The jeweler staged it himself for the insurance: he had quietly sold the jewelry weeks earlier and never changed the safe code since his former business partner, who still had access, had left. That way, suspicion would point to him instead.",
       "hint": "Think about who else knew the code, and why."
     },
     {
       "matchTitle": "Het natte voetspoor",
       "title": "The Wet Footprint",
       "scenario": "A detective finds a single wet footprint in the middle of an otherwise bone-dry, locked room where a body has been found. There's been no rain, and no other traces lead in or out.",
-      "solution": "The footprint came from an ice cube used as the murder weapon (a blow to the head), which then simply melted, leaving no physical weapon to find — only the damp mark it left behind.",
-      "hint": "The weapon is still there — it's just no longer solid."
+      "solution": "The footprint came from an ice cube used as the murder weapon (a blow to the head), which then simply melted, leaving no physical weapon to find. Only the damp mark it left behind.",
+      "hint": "The weapon is still there. It's just no longer solid."
     }
   ]
 }

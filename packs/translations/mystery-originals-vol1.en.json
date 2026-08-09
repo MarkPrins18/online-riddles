@@ -15,8 +15,8 @@
     {
       "matchTitle": "Stilte op de vaste tijd",
       "title": "Silence at a Fixed Time",
-      "scenario": "In an apartment building, every evening at a quarter to eight, all sound from the neighbors falls silent for several minutes — no TV, no voices, no footsteps — before continuing as normal.",
-      "solution": "One of the residents calls her deaf mother at that time via a sign-language interpreter on video. The whole family silences all household noise out of habit, so the interpreter doesn't miss any of the lip movements due to background noise — something they've never explained to the neighbors.",
+      "scenario": "In an apartment building, every evening at a quarter to eight, all sound from the neighbors falls silent for several minutes, no TV, no voices, no footsteps, before continuing as normal.",
+      "solution": "One of the residents calls her deaf mother at that time via a sign-language interpreter on video. The whole family silences all household noise out of habit, so the interpreter doesn't miss any of the lip movements due to background noise, something they've never explained to the neighbors.",
       "hint": "Who benefits from total silence, and why specifically during a video call?"
     },
     {
@@ -29,21 +29,21 @@
     {
       "matchTitle": "Een handtas, twee keer gevonden",
       "title": "A Handbag, Found Twice",
-      "scenario": "A woman loses her handbag on the train, reports it at the desk, and hears the same day that it has been handed in twice — by two different people, at two different stations.",
-      "solution": "Someone found the bag, took some money out of it, and out of guilt left the rest visibly at the next station. A second, honest finder picked it up there and properly handed it in — hence two reports for one bag.",
+      "scenario": "A woman loses her handbag on the train, reports it at the desk, and hears the same day that it has been handed in twice, by two different people, at two different stations.",
+      "solution": "Someone found the bag, took some money out of it, and out of guilt left the rest visibly at the next station. A second, honest finder picked it up there and properly handed it in. Hence two reports for one bag.",
       "hint": "Does every finder also have to be the first one?"
     },
     {
       "matchTitle": "De meterstand die de verkeerde kant op ging",
       "title": "The Meter Reading That Went the Wrong Way",
       "scenario": "A man has faithfully paid his energy bill for years, but the meter readings on it sometimes drop from month to month instead of rising, even though he never uses less power than the previous month.",
-      "solution": "His smart meter occasionally shares data with the neighbors' meter due to a wiring fault, and they use less power. The energy supplier mistakenly processes their lower figure instead of his sometimes — something that only comes to light during a manual inspection.",
+      "solution": "His smart meter occasionally shares data with the neighbors' meter due to a wiring fault, and they use less power. The energy supplier mistakenly processes their lower figure instead of his sometimes, something that only comes to light during a manual inspection.",
       "hint": "Is it really always his own meter being read?"
     },
     {
       "matchTitle": "Een cadeau zonder afzender",
       "title": "A Gift Without a Sender",
-      "scenario": "Every year, on the exact same day, a man receives a small, unsigned gift by mail, ever since he turned twenty — never a card, never a postmark from the same city.",
+      "scenario": "Every year, on the exact same day, a man receives a small, unsigned gift by mail, ever since he turned twenty, never a card, never a postmark from the same city.",
       "solution": "An old teacher, who once helped him through a difficult home situation, sends it anonymously every year on his birthday as encouragement. He always asks a different traveling family member to mail it along the way, so the postmark is never the same.",
       "hint": "The postmark changes, the intention doesn't."
     },
@@ -51,13 +51,13 @@
       "matchTitle": "De hond die een omweg koos",
       "title": "The Dog That Chose a Detour",
       "scenario": "A blind woman notices that her guide dog has been leading her on a longer, roundabout route to the supermarket for weeks, even though the shorter route has been the same and safe for years.",
-      "solution": "On the short route, an old building has partially collapsed and been cordoned off with construction fencing, which the dog, trained to avoid obstacles, simply routes around on its own — without the woman ever knowing why, until the city finally demolishes the building.",
-      "hint": "Trust the dog — he's avoiding something she can't see."
+      "solution": "On the short route, an old building has partially collapsed and been cordoned off with construction fencing, which the dog, trained to avoid obstacles, simply routes around on its own, without the woman ever knowing why, until the city finally demolishes the building.",
+      "hint": "Trust the dog. He's avoiding something she can't see."
     },
     {
       "matchTitle": "Dezelfde droom, twee keer wakker",
       "title": "The Same Dream, Waking Twice",
-      "scenario": "A couple who has slept together for thirty years independently describe having had the exact same dream, on the same night, with the same details — something that has never happened to them before.",
+      "scenario": "A couple who has slept together for thirty years independently describe having had the exact same dream, on the same night, with the same details, something that has never happened to them before.",
       "solution": "Both of them had secretly kept listening to the same spooky episode of a true-crime podcast before bed the night before, each wearing headphones so the other wouldn't notice, without knowing the other was doing exactly the same thing.",
       "hint": "What did they both hear right before falling asleep, without knowing about each other?"
     }

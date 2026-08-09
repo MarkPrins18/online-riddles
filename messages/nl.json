@@ -10,7 +10,7 @@
   "HomePage": {
     "coverStamp": "Zaak-dossier · gesloten",
     "title": "Online Riddles",
-    "subtitle": "Een lateral thinking verhoor. Stel de slimste vragen, verzamel de gekste aanwijzingen, en kraak de zaak samen — of ga solo voor de eer (en de punten).",
+    "subtitle": "Een lateral thinking verhoor. Stel de slimste vragen, verzamel de gekste aanwijzingen en kraak de zaak samen, of ga solo voor de eer (en de punten).",
     "newFile": "Nieuw dossier",
     "existingFile": "Bestaand dossier",
     "communityLink": "Bekijk raadsels van de community →"
@@ -19,22 +19,22 @@
     "trigger": "Spelregels",
     "close": "Sluiten",
     "ideaTitle": "Het idee",
-    "ideaBody": "Elke ronde kent één speler — de Verteller — de oplossing van een raadsel. De rest stelt ja/nee-vragen en probeert de zaak op te lossen.",
+    "ideaBody": "Elke ronde kent één speler, de Verteller, de oplossing van een raadsel. De rest stelt ja/nee-vragen en probeert de zaak op te lossen.",
     "narratorTitle": "De Verteller",
     "narratorBody": "Beantwoordt elke vraag met ja, nee, of n.v.t. (niet relevant voor de oplossing). Ingediende oplossingen van andere spelers keurt de Verteller goed of fout in het Postvak.",
     "questionsTitle": "Vragen & aanwijzingen",
     "questionsBody": "Elk “ja”-antwoord wordt automatisch een aanwijzing. Alle vragen (ook de nee's en n.v.t.'s) staan terug te lezen bij Verhoor.",
     "solveTitle": "Los de zaak op",
-    "solveBody": "Denk je het antwoord te weten? Dien een oplossing in. De Verteller ziet 'm als eerste en keurt 'm goed of fout — andere spelers zien pas wat je had ingediend als het klopt.",
+    "solveBody": "Denk je het antwoord te weten? Dien een oplossing in. De Verteller ziet 'm als eerste en keurt 'm goed of fout. Andere spelers zien pas wat je had ingediend als het klopt.",
     "pointsTitle": "Punten",
     "pointsBody": "Een moeilijkere zaak levert meer punten op. De speler die oplost én de Verteller krijgen allebei een bonus, net als de beste vraag van de ronde. Een foute gok kost punten.",
     "hardcoreTitle": "Hardcore modus",
     "hardcoreBody": "Optioneel, door de host in te stellen: elke foute gok kost het hele team 1 leven. Op 0 levens is het game over voor de hele sessie.",
     "corkboardTitle": "Prikbord",
-    "corkboardBody": "Een gedeeld bord om aanwijzingen en theorieën op vast te pinnen en met draadjes te verbinden — alleen op een groter scherm (desktop/tablet), niet op de telefoon."
+    "corkboardBody": "Een gedeeld bord om aanwijzingen en theorieën op vast te pinnen en met draadjes te verbinden. Alleen op een groter scherm (desktop/tablet), niet op de telefoon."
   },
   "ClaimHostBanner": {
-    "message": "De host lijkt offline. Jij bent het langst aanwezig van de rest — neem de rol over?",
+    "message": "De host lijkt offline. Jij bent het langst aanwezig van de rest. Neem de rol over?",
     "claim": "Neem host over",
     "claiming": "Bezig...",
     "error": "Kon de host-rol niet overnemen. Probeer het opnieuw."
@@ -95,7 +95,7 @@
     "communityToggle": "Community packs meespelen",
     "communityHint": "Raadsels gemaakt door andere spelers, los van de officiële thema's hierboven.",
     "chooseThemeOrPack": "Kies minstens één thema of community pack.",
-    "hardcoreToggle": "Hardcore modus — gedeelde team-levens",
+    "hardcoreToggle": "Hardcore modus (gedeelde team-levens)",
     "hardcoreHint": "Elke foute gok kost het hele team 1 leven. Op 0 levens is het game over voor de hele sessie.",
     "teamLivesLabelWithNarrator": "{name} bepaalt: hoeveel levens krijgt het team?",
     "teamLivesLabel": "Hoeveel levens krijgt het team?",
@@ -187,7 +187,7 @@
     "newest": "Nieuwste",
     "top": "Populairste",
     "loading": "Packs laden...",
-    "empty": "Nog geen gepubliceerde community-packs — wees de eerste."
+    "empty": "Nog geen gepubliceerde community-packs. Wees de eerste."
   },
   "CommunityPackDetailClient": {
     "loading": "Pack laden...",
@@ -289,18 +289,18 @@
     "label": "Hint"
   },
   "InterrogationLog": {
-    "empty": "Nog geen vragen gesteld — begin het verhoor hierboven."
+    "empty": "Nog geen vragen gesteld. Begin het verhoor hierboven."
   },
   "NarratorInbox": {
     "pendingSolutionsHeading": "Openstaande oplossingen",
     "unansweredHeading": "Onbeantwoorde vragen ({count})",
-    "allAnswered": "Alles beantwoord — even bijkomen."
+    "allAnswered": "Alles beantwoord, even bijkomen."
   },
   "ChatDrawer": {
     "title": "Overleg"
   },
   "CluesList": {
-    "empty": "Nog geen aanwijzingen — elk “ja”-antwoord van de Verteller komt hier terecht.",
+    "empty": "Nog geen aanwijzingen. Elk “ja”-antwoord van de Verteller komt hier terecht.",
     "error": "Kon deze aanwijzing niet vastprikken.",
     "pinning": "Bezig…",
     "pin": "Speld op prikbord"
@@ -336,7 +336,7 @@
     "recapError": "Kon geen samenvatting maken. Probeer het opnieuw.",
     "shareOrDownload": "Delen / downloaden",
     "recapImageAlt": "Samenvatting van de speelavond",
-    "shareTitle": "Online Riddles — zaak gesloten"
+    "shareTitle": "Online Riddles: zaak gesloten"
   },
   "FinalScoreboard": {
     "caseFileClosed": "Zaak-dossier gesloten",
@@ -379,7 +379,7 @@
     "heading": "Volgende ronde gaat beginnen!"
   },
   "PlayersStrip": {
-    "ariaLabel": "{count} spelers — klik voor scores",
+    "ariaLabel": "{count} spelers, klik voor scores",
     "count": "{count, plural, one {# speler} other {# spelers}}"
   },
   "NarratorTakeoverControl": {
@@ -427,9 +427,9 @@
   "RiddleForm": {
     "titleLabel": "Titel",
     "titlePlaceholder": "De verdwenen...",
-    "scenarioLabel": "Scenario — wat de spelers te zien krijgen",
+    "scenarioLabel": "Scenario (wat de spelers te zien krijgen)",
     "scenarioPlaceholder": "Beschrijf de situatie...",
-    "solutionLabel": "Oplossing — alleen zichtbaar voor de Verteller",
+    "solutionLabel": "Oplossing (alleen zichtbaar voor de Verteller)",
     "solutionPlaceholder": "Wat er werkelijk is gebeurd...",
     "categoryLabel": "Categorie (optioneel)",
     "noCategoryOption": "Geen categorie",

@@ -9,7 +9,7 @@
     {
       "title": "De lege kluis",
       "scenario": "Een juwelier opent 's ochtends zijn zaak en vindt de kluis open en leeg. Er is geen slot geforceerd, geen alarm afgegaan en geen camerabeeld van een indringer. Toch mist er voor honderdduizenden euro's aan sieraden.",
-      "solution": "De juwelier heeft het zelf in scène gezet voor de verzekering: hij had de sieraden al weken eerder stilletjes verkocht en de kluiscode nooit gewijzigd sinds zijn ex-compagnon, die nog steeds toegang had, was vertrokken — zodat de verdenking naar hem zou wijzen.",
+      "solution": "De juwelier heeft het zelf in scène gezet voor de verzekering: hij had de sieraden al weken eerder stilletjes verkocht en de kluiscode nooit gewijzigd sinds zijn ex-compagnon, die nog steeds toegang had, was vertrokken. Zo zou de verdenking naar hem wijzen.",
       "category": "Verzekeringsfraude",
       "difficulty": "medium",
       "hint": "Denk aan wie er nog meer de code kende, en waarom."
@@ -17,10 +17,10 @@
     {
       "title": "Het natte voetspoor",
       "scenario": "Een rechercheur vindt een enkel nat voetspoor midden in een verder kurkdroge, afgesloten kamer waar een lichaam is aangetroffen. Er is geen regen geweest en geen andere sporen leiden naar binnen of buiten.",
-      "solution": "Het voetspoor kwam van een ijsblokje dat als moordwapen werd gebruikt (een klap tegen het hoofd) en vervolgens gewoon smolt, waardoor er geen fysiek wapen te vinden was — alleen de vochtplek die het achterliet.",
+      "solution": "Het voetspoor kwam van een ijsblokje dat als moordwapen werd gebruikt (een klap tegen het hoofd) en vervolgens gewoon smolt, waardoor er geen fysiek wapen te vinden was. Alleen de vochtplek die het achterliet.",
       "category": "Moordwapen",
       "difficulty": "hard",
-      "hint": "Het wapen is er nog steeds — het is alleen niet meer vast."
+      "hint": "Het wapen is er nog steeds. Het is alleen niet meer vast."
     }
   ]
 }

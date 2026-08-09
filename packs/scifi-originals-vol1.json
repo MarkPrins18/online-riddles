@@ -8,7 +8,7 @@
   "puzzles": [
     {
       "title": "Radiostilte met een bericht erin",
-      "scenario": "Een ruimtestation meldt urenlang totale radiostilte naar de aarde, en toch komt op het exacte moment dat de stilte eindigt een bericht binnen dat zegt: 'we hebben net iets vreemds gezien' — zonder tijdstempel van eerder verzenden.",
+      "scenario": "Een ruimtestation meldt urenlang totale radiostilte naar de aarde, en toch komt op het exacte moment dat de stilte eindigt een bericht binnen dat zegt: 'we hebben net iets vreemds gezien', zonder tijdstempel van eerder verzenden.",
       "solution": "De bemanning schreef het bericht tijdens de stilte, maar stuurde het pas na afloop van een geplande radiostilte-test voor onderhoud aan de antenne. Het leek te ontstaan op het moment dat de verbinding terugkwam, terwijl het al eerder was opgesteld.",
       "category": "Communicatie",
       "difficulty": "easy",
@@ -17,7 +17,7 @@
     {
       "title": "Een luik dat zichzelf opende",
       "scenario": "Op een onbemand deel van een ruimtestation registreert het logboek dat een airlock is geopend en weer gesloten, terwijl volgens de bemanningslijst niemand op dat moment in de buurt was.",
-      "solution": "Een onderhoudsrobot voerde een geprogrammeerde drukcontrole uit die door een verouderd classificatiesysteem als 'menselijke toegang' werd gelogd — het systeem had nooit geleerd robots van bemanning te onderscheiden.",
+      "solution": "Een onderhoudsrobot voerde een geprogrammeerde drukcontrole uit die door een verouderd classificatiesysteem als 'menselijke toegang' werd gelogd. Het systeem had nooit geleerd robots van bemanning te onderscheiden.",
       "category": "Techniek",
       "difficulty": "medium",
       "hint": "Meet het logboek wie er langskwam, of wat er langskwam?"
@@ -33,7 +33,7 @@
     {
       "title": "Eén bemanningslid te veel",
       "scenario": "Bij de laatste hoofdtelling voor een lange vlucht telt het systeem één bemanningslid meer dan er namen op de passagierslijst staan, en niemand aan boord herkent een onbekend gezicht.",
-      "solution": "Een stagiair-technicus was zonder dit formeel te melden aan boord gebleven om een laatste reparatie af te ronden, en werd per ongeluk niet van het schip gehaald voor vertrek. Het systeem telde correct — alleen de papieren waren niet bijgewerkt.",
+      "solution": "Een stagiair-technicus was zonder dit formeel te melden aan boord gebleven om een laatste reparatie af te ronden, en werd per ongeluk niet van het schip gehaald voor vertrek. Het systeem telde correct, alleen de papieren waren niet bijgewerkt.",
       "category": "Bemanning",
       "difficulty": "easy",
       "hint": "Is het systeem fout, of de lijst?"
@@ -41,15 +41,15 @@
     {
       "title": "Een signaal uit een dode zone",
       "scenario": "Een grondstation ontvangt weken nadat een verkenningssonde definitief dood is verklaard, plots opnieuw zwakke, regelmatige signalen uit dezelfde richting.",
-      "solution": "Zonlicht op de zonnepanelen bouwde nog altijd genoeg lading op om periodiek een laagenergie-noodbaken te activeren, ontworpen om te blijven zenden zolang er ook maar een beetje stroom is. De sonde zelf functioneerde allang niet meer — alleen dat ene systeem hield het langer vol.",
+      "solution": "Zonlicht op de zonnepanelen bouwde nog altijd genoeg lading op om periodiek een laagenergie-noodbaken te activeren, ontworpen om te blijven zenden zolang er ook maar een beetje stroom is. De sonde zelf functioneerde allang niet meer, alleen dat ene systeem hield het langer vol.",
       "category": "Techniek",
       "difficulty": "hard",
       "hint": "Een systeem kan langer 'leven' dan de rest van het toestel."
     },
     {
       "title": "Twee klokken, drie seconden verschil",
-      "scenario": "Twee identieke boordklokken op hetzelfde ruimteschip, naast elkaar gemonteerd en op dezelfde bron aangesloten, lopen na een lange vlucht drie seconden uit elkaar — geen storing, geen defect, herhaald bevestigd door onderhoud.",
-      "solution": "Eén klok hing dichter bij de krachtige generator van het schip en ondervond daardoor een minuscuul sterker zwaartekrachtveld. Door tijdsdilatatie liep die klok een fractie langzamer — precies zoals de natuurkunde voorspelt, geen fout maar een feit.",
+      "scenario": "Twee identieke boordklokken op hetzelfde ruimteschip, naast elkaar gemonteerd en op dezelfde bron aangesloten, lopen na een lange vlucht drie seconden uit elkaar, zonder storing of defect, herhaald bevestigd door onderhoud.",
+      "solution": "Eén klok hing dichter bij de krachtige generator van het schip en ondervond daardoor een minuscuul sterker zwaartekrachtveld. Door tijdsdilatatie liep die klok een fractie langzamer, precies zoals de natuurkunde voorspelt: geen fout, maar een feit.",
       "category": "Techniek",
       "difficulty": "hard",
       "hint": "Twee klokken op exact dezelfde plek lopen altijd gelijk. Deze twee hingen niet op exact dezelfde plek."
@@ -57,7 +57,7 @@
     {
       "title": "Een luik zonder indringer",
       "scenario": "Bemanningsleden vinden een voorraadluik open en de inhoud deels verdwenen, terwijl de toegangslogs laten zien dat er niemand is binnengeweest sinds de laatste inventarisatie.",
-      "solution": "Testdieren van een biologie-experiment aan boord waren via een ventilatiekoker ontsnapt en hadden zelf voedsel uit het luik weggesleept. De logs registreerden terecht geen mens — er was ook geen mens.",
+      "solution": "Testdieren van een biologie-experiment aan boord waren via een ventilatiekoker ontsnapt en hadden zelf voedsel uit het luik weggesleept. De logs registreerden terecht geen mens: er was ook geen mens.",
       "category": "Voorraad",
       "difficulty": "medium",
       "hint": "De logs meten mensen. Was het wel een mens?"

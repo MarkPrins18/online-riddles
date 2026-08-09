@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, IBM_Plex_Mono } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getTranslations } from "next-intl/server";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import "./globals.css";
 
@@ -16,15 +18,18 @@ const plexMono = IBM_Plex_Mono({
   weight: ["400", "500", "600"],
 });
 
-export const metadata: Metadata = {
-  title: "Online Riddles",
-  description:
-    "Een lateral thinking puzzelspel voor groepen. Stel ja/nee-vragen, verzamel aanwijzingen en ontrafel het mysterie.",
-  icons: {
-    icon: "/icons/192",
-    apple: "/icons/180",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("RootLayout");
+
+  return {
+    title: t("title"),
+    description: t("description"),
+    icons: {
+      icon: "/icons/192",
+      apple: "/icons/180",
+    },
+  };
+}
 
 // Declares this as a deliberately dark-themed page, so browsers with
 // automatic "force dark" page inversion (common on Windows/Android) don't
@@ -37,25 +42,30 @@ export const viewport: Viewport = {
   themeColor: "#241a10",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const t = await getTranslations("RootLayout");
+
   return (
     <html
-      lang="nl"
+      lang={locale}
       className={`${fraunces.variable} ${plexMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-bg-primary text-text-primary">
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:text-bg-primary"
-        >
-          Naar hoofdinhoud
-        </a>
-        {children}
-        <ServiceWorkerRegister />
+        <NextIntlClientProvider>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:text-bg-primary"
+          >
+            {t("skipToContent")}
+          </a>
+          {children}
+          <ServiceWorkerRegister />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

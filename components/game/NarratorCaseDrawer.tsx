@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { Guess } from "@/types/guess";
 import type { Question } from "@/types/question";
 import { Drawer } from "@/components/ui/Drawer";
@@ -33,8 +34,10 @@ export function NarratorCaseDrawer({
   isSkipping: boolean;
   skipError: string | null;
 }) {
+  const t = useTranslations("NarratorCaseDrawer");
+
   return (
-    <Drawer title="Zaak & oplossing" onClose={onClose}>
+    <Drawer title={t("title")} onClose={onClose}>
       <div className="flex flex-col gap-4">
         <div>
           <p className="mb-2 font-mono text-xs uppercase tracking-widest text-text-secondary">

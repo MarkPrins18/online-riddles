@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { listCommunityPacks, type StoryPackWithScore } from "@/lib/supabase/communityPacks";
 import { getProfiles } from "@/lib/supabase/profiles";
@@ -13,13 +14,15 @@ export function CommunityBrowseClient() {
   const [packs, setPacks] = useState<StoryPackWithScore[] | null>(null);
   const [authorNames, setAuthorNames] = useState<Map<string, string>>(new Map());
   const [sortMode, setSortMode] = useState<SortMode>("new");
+  const t = useTranslations("CommunityBrowseClient");
+  const locale = useLocale();
 
   useEffect(() => {
     let cancelled = false;
 
     async function load() {
       const supabase = createClient();
-      const data = await listCommunityPacks(supabase);
+      const data = await listCommunityPacks(supabase, locale);
       if (cancelled) return;
       setPacks(data);
 
@@ -34,7 +37,7 @@ export function CommunityBrowseClient() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [locale]);
 
   const sortedPacks = useMemo(() => {
     if (!packs) return null;
@@ -47,10 +50,8 @@ export function CommunityBrowseClient() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="font-serif text-3xl italic text-text-primary">Community-packs</h1>
-        <p className="mt-1 font-mono text-sm text-text-secondary">
-          Door spelers gemaakt, door spelers gestemd.
-        </p>
+        <h1 className="font-serif text-3xl italic text-text-primary">{t("heading")}</h1>
+        <p className="mt-1 font-mono text-sm text-text-secondary">{t("subtitle")}</p>
       </div>
 
       <div className="flex gap-2">
@@ -59,23 +60,21 @@ export function CommunityBrowseClient() {
           variant={sortMode === "new" ? "secondary" : "ghost"}
           onClick={() => setSortMode("new")}
         >
-          Nieuwste
+          {t("newest")}
         </Button>
         <Button
           type="button"
           variant={sortMode === "top" ? "secondary" : "ghost"}
           onClick={() => setSortMode("top")}
         >
-          Populairste
+          {t("top")}
         </Button>
       </div>
 
       {sortedPacks === null ? (
-        <p className="font-mono text-sm text-text-secondary">Packs laden...</p>
+        <p className="font-mono text-sm text-text-secondary">{t("loading")}</p>
       ) : sortedPacks.length === 0 ? (
-        <p className="font-mono text-sm text-text-secondary">
-          Nog geen gepubliceerde community-packs — wees de eerste.
-        </p>
+        <p className="font-mono text-sm text-text-secondary">{t("empty")}</p>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
           {sortedPacks.map((pack) => (

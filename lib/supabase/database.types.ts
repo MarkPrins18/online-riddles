@@ -1,6 +1,16 @@
 import type { Room, RoomStatus } from "@/types/room";
 import type { Player } from "@/types/player";
-import type { Puzzle, PuzzleDifficulty, PublishedPuzzle, StoryPack, Category } from "@/types/puzzle";
+import type {
+  Puzzle,
+  PuzzleDifficulty,
+  PublishedPuzzle,
+  StoryPack,
+  Category,
+  PuzzleTranslation,
+  CategoryTranslation,
+  StoryPackTranslation,
+  TranslationStatus,
+} from "@/types/puzzle";
 import type { Question, QuestionAnswer } from "@/types/question";
 import type { Guess } from "@/types/guess";
 import type { ChatMessage } from "@/types/chatMessage";
@@ -26,7 +36,6 @@ type ViewShape<Row> = {
 export type Database = {
   public: {
     Views: {
-      published_puzzles: ViewShape<PublishedPuzzle>;
       puzzle_vote_totals: ViewShape<PuzzleVoteTotals>;
     };
     Functions: {
@@ -51,8 +60,12 @@ export type Database = {
         Returns: void;
       };
       get_room_puzzle: {
-        Args: { room_id_input: string };
+        Args: { room_id_input: string; locale_input?: string };
         Returns: Puzzle[];
+      };
+      get_published_puzzles: {
+        Args: { locale_input: string };
+        Returns: PublishedPuzzle[];
       };
     };
     Enums: Record<string, never>;
@@ -68,22 +81,57 @@ export type Database = {
         Partial<Player> & { room_id: string; name: string },
         Partial<Player>
       >;
+      // `name` moved to `story_pack_translations` below — the Row shape
+      // stays `StoryPack` (name included) since every read joins in the
+      // requested locale, same story as `puzzles`/`categories` below.
       story_packs: TableShape<
         StoryPack,
-        Partial<StoryPack> & { slug: string; name: string; theme: string },
-        Partial<StoryPack>
+        { slug: string; theme: string; is_published?: boolean; created_by?: string | null; is_community?: boolean },
+        Partial<{ theme: string; is_published: boolean }>
       >;
+      story_pack_translations: TableShape<
+        StoryPackTranslation,
+        { pack_id: string; locale: string; name: string; status?: TranslationStatus },
+        Partial<Omit<StoryPackTranslation, "pack_id" | "locale">>
+      >;
+      // `puzzles` itself is now locale-agnostic (no title/scenario/solution/
+      // hint) — those live in `puzzle_translations` below. The Row shape
+      // stays `Puzzle` (title etc. included) because every read goes
+      // through get_published_puzzles/get_room_puzzle, which already join
+      // in the right locale — the client never selects the bare table.
       puzzles: TableShape<
         Puzzle,
-        Partial<Omit<Puzzle, "category">> & {
+        {
           pack_id: string;
+          category_id?: string | null;
+          difficulty: PuzzleDifficulty;
+          created_by?: string | null;
+          is_community?: boolean;
+        },
+        Partial<{ category_id: string | null; difficulty: PuzzleDifficulty; is_community: boolean }>
+      >;
+      puzzle_translations: TableShape<
+        PuzzleTranslation,
+        {
+          puzzle_id: string;
+          locale: string;
           title: string;
           scenario: string;
           solution: string;
+          hint?: string | null;
+          status?: TranslationStatus;
         },
-        Partial<Omit<Puzzle, "category">>
+        Partial<Omit<PuzzleTranslation, "puzzle_id" | "locale">>
       >;
-      categories: TableShape<Category, Partial<Category> & { name: string }, Partial<Category>>;
+      // Same story as `puzzles` above: `name` moved to
+      // `category_translations`, the Row shape stays `Category` since every
+      // read joins in the requested locale.
+      categories: TableShape<Category, Record<string, never>, Record<string, never>>;
+      category_translations: TableShape<
+        CategoryTranslation,
+        { category_id: string; locale: string; name: string; status?: TranslationStatus },
+        Partial<Omit<CategoryTranslation, "category_id" | "locale">>
+      >;
       questions: TableShape<
         Question,
         Partial<Question> & {

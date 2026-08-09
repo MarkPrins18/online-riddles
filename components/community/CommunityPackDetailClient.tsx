@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { ensureAnonymousSession } from "@/lib/supabase/authSession";
 import { getOwnPack } from "@/lib/supabase/communityPacks";
@@ -18,6 +19,8 @@ export function CommunityPackDetailClient({ packId }: { packId: string }) {
   const [totals, setTotals] = useState<Map<string, PuzzleVoteTotals>>(new Map());
   const [myVotes, setMyVotes] = useState<Map<string, VoteValue>>(new Map());
   const [authorNames, setAuthorNames] = useState<Map<string, string>>(new Map());
+  const t = useTranslations("CommunityPackDetailClient");
+  const locale = useLocale();
 
   useEffect(() => {
     let cancelled = false;
@@ -26,8 +29,8 @@ export function CommunityPackDetailClient({ packId }: { packId: string }) {
       const supabase = createClient();
       const userId = await ensureAnonymousSession(supabase);
       const [packRow, puzzleRows] = await Promise.all([
-        getOwnPack(supabase, packId),
-        listPuzzlesForPack(supabase, packId),
+        getOwnPack(supabase, packId, locale),
+        listPuzzlesForPack(supabase, packId, locale),
       ]);
       if (cancelled) return;
       setPack(packRow);
@@ -50,14 +53,14 @@ export function CommunityPackDetailClient({ packId }: { packId: string }) {
     return () => {
       cancelled = true;
     };
-  }, [packId]);
+  }, [packId, locale]);
 
   if (pack === undefined) {
-    return <p className="font-mono text-sm text-text-secondary">Pack laden...</p>;
+    return <p className="font-mono text-sm text-text-secondary">{t("loading")}</p>;
   }
 
   if (pack === null) {
-    return <p className="font-mono text-sm text-text-secondary">Deze pack bestaat niet (meer).</p>;
+    return <p className="font-mono text-sm text-text-secondary">{t("notFound")}</p>;
   }
 
   const sortedPuzzles = [...puzzles].sort(
@@ -74,7 +77,7 @@ export function CommunityPackDetailClient({ packId }: { packId: string }) {
       </div>
 
       {sortedPuzzles.length === 0 ? (
-        <p className="font-mono text-sm text-text-secondary">Dit pack heeft nog geen raadsels.</p>
+        <p className="font-mono text-sm text-text-secondary">{t("noPuzzles")}</p>
       ) : (
         <div className="flex flex-col gap-4">
           {sortedPuzzles.map((puzzle) => (

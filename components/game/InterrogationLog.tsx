@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { Question } from "@/types/question";
@@ -28,12 +29,11 @@ export function InterrogationLog({
   showHint?: boolean;
 }) {
   const revealedHint = showHint && hint ? hint : null;
+  const t = useTranslations("InterrogationLog");
 
   if (questions.length === 0 && !revealedHint) {
     return (
-      <p className="font-mono text-sm text-text-secondary">
-        Nog geen vragen gesteld — begin het verhoor hierboven.
-      </p>
+      <p className="font-mono text-sm text-text-secondary">{t("empty")}</p>
     );
   }
 

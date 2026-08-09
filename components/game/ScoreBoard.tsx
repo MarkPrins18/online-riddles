@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import type { Player } from "@/types/player";
 import { Badge } from "@/components/ui/Badge";
 import { medalForRank } from "@/lib/game/ranking";
@@ -12,6 +13,7 @@ export function ScoreBoard({
   onlinePlayerIds?: Set<string>;
 }) {
   const ranked = [...players].sort((a, b) => b.score - a.score);
+  const t = useTranslations("PlayerList");
 
   return (
     <ul className="flex flex-col divide-y divide-white/5">
@@ -28,19 +30,19 @@ export function ScoreBoard({
                 }`}
               >
                 <span className="sr-only">
-                  {onlinePlayerIds.has(player.id) ? "Online" : "Offline"}
+                  {onlinePlayerIds.has(player.id) ? t("online") : t("offline")}
                 </span>
               </span>
             )}
             <span className="truncate font-mono text-sm text-text-primary">{player.name}</span>
             {player.is_narrator && (
               <Badge tone="accent" className="shrink-0">
-                Verteller
+                {t("narratorBadge")}
               </Badge>
             )}
             {player.is_spectator && (
               <Badge tone="neutral" className="shrink-0">
-                Toeschouwer
+                {t("spectatorBadge")}
               </Badge>
             )}
           </div>
@@ -50,7 +52,7 @@ export function ScoreBoard({
               <button
                 type="button"
                 onClick={() => onKick(player.id)}
-                aria-label={`Verwijder ${player.name}`}
+                aria-label={t("removeAriaLabel", { name: player.name })}
                 className="font-mono text-xs text-text-secondary hover:text-danger"
               >
                 ✕

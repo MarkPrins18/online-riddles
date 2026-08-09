@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { Guess } from "@/types/guess";
@@ -49,6 +50,7 @@ export function NarratorGuessControls({
   // resolved (which would pay out the team bonus twice).
   const [reviewingId, setReviewingId] = useState<string | null>(null);
   const narratorName = players.find((p) => p.id === narratorId)?.name ?? null;
+  const t = useTranslations("NarratorGuessControls");
 
   async function handleIncorrect(guess: Guess) {
     setReviewingId(guess.id);
@@ -116,9 +118,7 @@ export function NarratorGuessControls({
 
   if (pending.length === 0) {
     return (
-      <p className="font-mono text-sm text-text-secondary">
-        Nog geen oplossingen ingediend. Dit zie alleen jij als Verteller.
-      </p>
+      <p className="font-mono text-sm text-text-secondary">{t("noPending")}</p>
     );
   }
 
@@ -139,14 +139,14 @@ export function NarratorGuessControls({
               onClick={() => handleCorrect(guess)}
               disabled={reviewingId !== null}
             >
-              Correct
+              {t("correct")}
             </Button>
             <Button
               variant="danger"
               onClick={() => handleIncorrect(guess)}
               disabled={reviewingId !== null}
             >
-              Incorrect
+              {t("incorrect")}
             </Button>
           </div>
         </li>

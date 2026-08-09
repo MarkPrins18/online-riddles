@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import { getSessionRecap, type SessionRecap } from "@/lib/game/recap";
@@ -19,6 +20,7 @@ export function SessionRecapPanel({
   bare?: boolean;
 }) {
   const [recap, setRecap] = useState<SessionRecap | null>(null);
+  const t = useTranslations("SessionRecapPanel");
 
   useEffect(() => {
     let cancelled = false;
@@ -38,33 +40,39 @@ export function SessionRecapPanel({
 
   const content = (
     <>
-      <p className="mb-4 font-mono text-xs uppercase tracking-widest text-accent">
-        Hoogtepunten van de avond
-      </p>
+      <p className="mb-4 font-mono text-xs uppercase tracking-widest text-accent">{t("heading")}</p>
       <ul className="flex flex-col gap-3 font-mono text-sm leading-relaxed text-text-primary">
         {recap.mvpNarrator && (
           <li>
-            MVP Verteller: <span className="text-accent">{recap.mvpNarrator.name}</span> (
-            {recap.mvpNarrator.solvedCount}x opgelost)
+            {t("mvpNarrator", {
+              name: recap.mvpNarrator.name,
+              count: recap.mvpNarrator.solvedCount,
+            })}
           </li>
         )}
         {recap.fastestSolve && (
           <li>
-            Snelste oplossing: <span className="text-accent">{recap.fastestSolve.solverName}</span>{" "}
-            loste &ldquo;{recap.fastestSolve.puzzleTitle}&rdquo; op in{" "}
-            {recap.fastestSolve.questionsAsked} vragen
+            {t("fastestSolve", {
+              name: recap.fastestSolve.solverName,
+              title: recap.fastestSolve.puzzleTitle,
+              count: recap.fastestSolve.questionsAsked,
+            })}
           </li>
         )}
         {recap.bestQuestions.length > 0 && (
           <li>
-            Beste vra{recap.bestQuestions.length === 1 ? "ag" : "gen"} van de avond:{" "}
-            {recap.bestQuestions.map((q) => `"${q.text}" (${q.playerName})`).join(", ")}
+            {t("bestQuestions", {
+              count: recap.bestQuestions.length,
+              list: recap.bestQuestions.map((q) => `"${q.text}" (${q.playerName})`).join(", "),
+            })}
           </li>
         )}
         {recap.mostWrongGuesses && (
           <li>
-            Wall of shame: <span className="text-danger">{recap.mostWrongGuesses.playerName}</span>{" "}
-            gokte {recap.mostWrongGuesses.count}x mis
+            {t("wallOfShame", {
+              name: recap.mostWrongGuesses.playerName,
+              count: recap.mostWrongGuesses.count,
+            })}
           </li>
         )}
       </ul>

@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import type { ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { useDialog } from "@/lib/a11y/useDialog";
 
 /**
@@ -26,6 +27,7 @@ export function Drawer({
   const [entered, setEntered] = useState(false);
   const dialogRef = useDialog<HTMLDivElement>();
   const titleId = useId();
+  const t = useTranslations("Common");
 
   useEffect(() => {
     const raf = requestAnimationFrame(() => setEntered(true));
@@ -75,7 +77,7 @@ export function Drawer({
           <button
             type="button"
             onClick={close}
-            aria-label="Sluiten"
+            aria-label={t("close")}
             className="rounded p-1 text-text-secondary transition-colors hover:text-text-primary"
           >
             ✕

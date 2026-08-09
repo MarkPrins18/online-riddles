@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { Player } from "@/types/player";
@@ -25,19 +26,16 @@ export function GameOverScreen({
   onNewGame: () => void;
 }) {
   const ranked = [...players].sort((a, b) => b.score - a.score);
+  const t = useTranslations("GameOverScreen");
 
   return (
     <div
       className="redact-reveal rounded-lg border border-danger/40 bg-bg-secondary p-8 shadow-lg shadow-danger/10 sm:p-10"
       style={{ animation: "reveal-in 420ms cubic-bezier(0.16, 1, 0.3, 1)" }}
     >
-      <p className="font-mono text-xs uppercase tracking-widest text-danger">Game over</p>
-      <h2 className="mt-3 font-serif text-3xl text-text-primary">
-        De zaak blijft voor altijd onopgelost
-      </h2>
-      <p className="mt-2 font-mono text-sm text-text-secondary">
-        Het team is door de levens heen.
-      </p>
+      <p className="font-mono text-xs uppercase tracking-widest text-danger">{t("gameOver")}</p>
+      <h2 className="mt-3 font-serif text-3xl text-text-primary">{t("heading")}</h2>
+      <p className="mt-2 font-mono text-sm text-text-secondary">{t("subtitle")}</p>
 
       <ul className="mt-6 flex flex-col divide-y divide-white/5">
         {ranked.map((player, index) => (
@@ -58,7 +56,7 @@ export function GameOverScreen({
 
       {isHost && (
         <Button variant="secondary" className="mt-3 w-full" onClick={onNewGame}>
-          Nieuw spel starten
+          {t("newGame")}
         </Button>
       )}
     </div>

@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { Question } from "@/types/question";
@@ -21,12 +22,11 @@ export function NarratorArchive({
 }) {
   const answered = [...questions.filter((q) => q.answer !== null)].reverse();
   const resolvedGuesses = [...guesses.filter((g) => g.status !== "pending")].reverse();
+  const t = useTranslations("NarratorArchive");
 
   if (answered.length === 0 && resolvedGuesses.length === 0) {
     return (
-      <p className="font-mono text-sm text-text-secondary">
-        Nog geen beantwoorde vragen of beoordeelde oplossingen.
-      </p>
+      <p className="font-mono text-sm text-text-secondary">{t("empty")}</p>
     );
   }
 
@@ -35,7 +35,7 @@ export function NarratorArchive({
       {resolvedGuesses.length > 0 && (
         <div>
           <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary">
-            Oplossingen
+            {t("solutionsHeading")}
           </p>
           <ul className="flex flex-col gap-3">
             {resolvedGuesses.map((guess) => (
@@ -48,7 +48,7 @@ export function NarratorArchive({
                   <p className="font-mono text-xs text-text-secondary">— {guess.player_name}</p>
                 </div>
                 <Badge tone={guess.status === "correct" ? "accent" : "danger"}>
-                  {guess.status === "correct" ? "Correct" : "Incorrect"}
+                  {guess.status === "correct" ? t("correct") : t("incorrect")}
                 </Badge>
               </li>
             ))}
@@ -59,7 +59,7 @@ export function NarratorArchive({
       {answered.length > 0 && (
         <div>
           <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary">
-            Vragen
+            {t("questionsHeading")}
           </p>
           <div className="flex flex-col gap-3">
             {answered.map((question) => (

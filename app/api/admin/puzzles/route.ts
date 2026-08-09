@@ -46,6 +46,9 @@ export async function GET(request: NextRequest) {
   }
 
   const admin = createAdminClient();
-  const packs = await listPacksWithPuzzleCounts(admin);
+  // Admin tooling, not a player-facing page — no UI locale to read here, so
+  // this always shows the Dutch name regardless of which locales the pack
+  // has been translated into.
+  const packs = await listPacksWithPuzzleCounts(admin, "nl");
   return Response.json({ packs });
 }

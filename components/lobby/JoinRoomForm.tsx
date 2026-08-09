@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { ensureAnonymousSession } from "@/lib/supabase/authSession";
 import { getRoomByCode } from "@/lib/supabase/rooms";
@@ -22,6 +23,7 @@ export function JoinRoomForm({
   const [code, setCode] = useState(presetCode ?? "");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("JoinRoomForm");
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -35,7 +37,7 @@ export function JoinRoomForm({
       const userId = await ensureAnonymousSession(supabase);
       const room = await getRoomByCode(supabase, code.trim());
       if (!room) {
-        setError("Geen kamer gevonden met die code.");
+        setError(t("noRoomFound"));
         setIsSubmitting(false);
         return;
       }
@@ -49,7 +51,7 @@ export function JoinRoomForm({
         router.push(`/room/${room.code}`);
       }
     } catch (err) {
-      setError(getErrorMessage(err, "Kon niet bij de kamer aansluiten. Probeer het opnieuw."));
+      setError(getErrorMessage(err, t("error")));
       setIsSubmitting(false);
     }
   }
@@ -57,26 +59,26 @@ export function JoinRoomForm({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3">
       <label htmlFor="join-name" className="font-mono text-xs uppercase tracking-widest text-text-secondary">
-        Jouw naam
+        {t("nameLabel")}
       </label>
       <input
         id="join-name"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        placeholder="Rechercheur..."
+        placeholder={t("namePlaceholder")}
         maxLength={24}
         className="rounded-md border border-white/10 bg-bg-primary px-3 py-2.5 font-mono text-sm text-text-primary placeholder:text-text-secondary/60 focus:border-accent-muted"
       />
       {!presetCode && (
         <>
           <label htmlFor="join-code" className="font-mono text-xs uppercase tracking-widest text-text-secondary">
-            Roomcode
+            {t("codeLabel")}
           </label>
           <input
             id="join-code"
             value={code}
             onChange={(e) => setCode(e.target.value.toUpperCase())}
-            placeholder="XXXXXX"
+            placeholder={t("codePlaceholder")}
             maxLength={6}
             className="rounded-md border border-white/10 bg-bg-primary px-3 py-2.5 font-mono text-sm uppercase tracking-[0.3em] text-text-primary placeholder:tracking-normal placeholder:text-text-secondary/60 focus:border-accent-muted"
           />
@@ -84,7 +86,7 @@ export function JoinRoomForm({
       )}
       {error && <p className="font-mono text-xs text-danger">{error}</p>}
       <Button type="submit" variant="secondary" disabled={isSubmitting || !name.trim() || !code.trim()}>
-        {isSubmitting ? "Aansluiten..." : "Kamer joinen"}
+        {isSubmitting ? t("submitting") : t("submit")}
       </Button>
     </form>
   );

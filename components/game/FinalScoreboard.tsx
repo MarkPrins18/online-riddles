@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { Player } from "@/types/player";
@@ -23,6 +24,7 @@ export function FinalScoreboard({
 }) {
   const ranked = [...players].sort((a, b) => b.score - a.score);
   const winner = ranked[0];
+  const t = useTranslations("FinalScoreboard");
 
   return (
     <div
@@ -30,12 +32,12 @@ export function FinalScoreboard({
       style={{ animation: "reveal-in 420ms cubic-bezier(0.16, 1, 0.3, 1)" }}
     >
       <p className="font-mono text-xs uppercase tracking-widest text-accent">
-        Zaak-dossier gesloten
+        {t("caseFileClosed")}
       </p>
-      <h2 className="mt-3 font-serif text-3xl text-text-primary">Het spel zit erop</h2>
+      <h2 className="mt-3 font-serif text-3xl text-text-primary">{t("gameOver")}</h2>
       {winner && (
         <p className="mt-2 font-mono text-sm text-accent">
-          Winnaar: {winner.name} met {winner.score} punten
+          {t("winner", { name: winner.name, score: winner.score })}
         </p>
       )}
 
@@ -59,10 +61,10 @@ export function FinalScoreboard({
       {isHost && (
         <div className="mt-3 flex flex-col gap-3 sm:flex-row">
           <Button className="w-full" onClick={onPlayAnotherRound}>
-            Nog een ronde spelen
+            {t("playAnotherRound")}
           </Button>
           <Button variant="secondary" className="w-full" onClick={onNewGame}>
-            Nieuw spel starten
+            {t("newGame")}
           </Button>
         </div>
       )}

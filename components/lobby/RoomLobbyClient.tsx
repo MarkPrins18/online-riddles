@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { useGameState } from "@/lib/game/useGameState";
 import { getStoredPlayerId } from "@/lib/session";
 import { resolveNarrator, type NarratorSelection } from "@/lib/game/roles";
@@ -10,6 +11,7 @@ import { createKickHandler } from "@/lib/game/membership";
 import { Card } from "@/components/ui/Card";
 import { HowToPlayButton } from "@/components/HowToPlayButton";
 import { ClaimHostBanner } from "@/components/ClaimHostBanner";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { RoomCodeDisplay } from "./RoomCodeDisplay";
 import { PlayerList } from "./PlayerList";
 import { JoinRoomForm } from "./JoinRoomForm";
@@ -20,7 +22,8 @@ import { LeaveRoomButton } from "./LeaveRoomButton";
 
 export function RoomLobbyClient({ code }: { code: string }) {
   const [playerId, setPlayerId] = useState(() => getStoredPlayerId(code));
-  const { state, supabase } = useGameState(code, playerId);
+  const locale = useLocale();
+  const { state, supabase } = useGameState(code, playerId, locale);
   const router = useRouter();
   const [narratorSelection, setNarratorSelection] = useState<NarratorSelection>({
     mode: "auto",
@@ -33,6 +36,7 @@ export function RoomLobbyClient({ code }: { code: string }) {
     hardcoreMode: false,
     teamLives: 5,
   });
+  const t = useTranslations("RoomLobbyClient");
 
   useEffect(() => {
     if (state.room?.status === "playing" || state.room?.status === "revealed") {
@@ -43,14 +47,14 @@ export function RoomLobbyClient({ code }: { code: string }) {
   if (state.error) {
     return (
       <p className="font-mono text-sm text-danger">
-        Er ging iets mis: {state.error}
+        {t("errorPrefix", { error: state.error })}
       </p>
     );
   }
 
   if (!state.room) {
     return (
-      <p className="font-mono text-sm text-text-secondary">Kamer laden...</p>
+      <p className="font-mono text-sm text-text-secondary">{t("loadingRoom")}</p>
     );
   }
 
@@ -59,6 +63,9 @@ export function RoomLobbyClient({ code }: { code: string }) {
 
   return (
     <div className="flex w-full max-w-md flex-col gap-6">
+      <div className="flex justify-end">
+        <LanguageSwitcher />
+      </div>
       <RoomCodeDisplay code={state.room.code} />
       <HowToPlayButton className="self-center" />
 
@@ -73,7 +80,7 @@ export function RoomLobbyClient({ code }: { code: string }) {
 
       <Card>
         <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary">
-          Spelers ({state.players.length})
+          {t("playersHeading", { count: state.players.length })}
         </p>
         <PlayerList
           players={state.players}
@@ -87,7 +94,7 @@ export function RoomLobbyClient({ code }: { code: string }) {
           <>
             <Card>
               <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary">
-                Instellingen
+                {t("settingsHeading")}
               </p>
               <RoomSettingsForm
                 supabase={supabase}
@@ -111,17 +118,18 @@ export function RoomLobbyClient({ code }: { code: string }) {
               narratorSelection={narratorSelection}
               playedPuzzleIds={state.room.played_puzzle_ids}
               roomSettings={roomSettings}
+              locale={locale}
             />
           </>
         ) : (
           <p className="text-center font-mono text-sm text-text-secondary">
-            Wacht tot de host het spel start...
+            {t("waitingForHost")}
           </p>
         )
       ) : (
         <Card>
           <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary">
-            Doe mee
+            {t("joinHeading")}
           </p>
           <JoinRoomForm presetCode={code} onJoined={setPlayerId} />
         </Card>

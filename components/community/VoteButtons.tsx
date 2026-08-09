@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { ensureAnonymousSession } from "@/lib/supabase/authSession";
 import { castVote, retractVote } from "@/lib/supabase/votes";
@@ -21,6 +22,7 @@ export function VoteButtons({
   const [myVote, setMyVote] = useState(initialMyVote);
   const [isVoting, setIsVoting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("VoteButtons");
 
   async function vote(value: VoteValue) {
     if (isVoting) return;
@@ -41,7 +43,7 @@ export function VoteButtons({
         setMyVote(value);
       }
     } catch (err) {
-      setError(getErrorMessage(err, "Stem is niet gelukt. Probeer het opnieuw."));
+      setError(getErrorMessage(err, t("error")));
     } finally {
       setIsVoting(false);
     }
@@ -56,7 +58,7 @@ export function VoteButtons({
           iconOnly
           disabled={isVoting}
           onClick={() => vote(1)}
-          aria-label="Stem voor"
+          aria-label={t("upvoteAriaLabel")}
           aria-pressed={myVote === 1}
         >
           {myVote === 1 ? "▲" : "△"}
@@ -68,7 +70,7 @@ export function VoteButtons({
           iconOnly
           disabled={isVoting}
           onClick={() => vote(-1)}
-          aria-label="Stem tegen"
+          aria-label={t("downvoteAriaLabel")}
           aria-pressed={myVote === -1}
         >
           {myVote === -1 ? "▼" : "▽"}

@@ -12,6 +12,8 @@ export type PuzzlePackPayload = {
     name: string;
     theme: string;
     published?: boolean;
+    /** Language every puzzle below is written in. Defaults to Dutch. */
+    locale?: string;
   };
   puzzles: Array<{
     title: string;
@@ -51,6 +53,9 @@ export function validatePuzzlePackPayload(input: unknown): PuzzlePackPayload {
     }
     if (pack.published !== undefined && typeof pack.published !== "boolean") {
       errors.push("`pack.published` moet true/false zijn als het is opgegeven.");
+    }
+    if (pack.locale !== undefined && typeof pack.locale !== "string") {
+      errors.push("`pack.locale` moet een string zijn als het is opgegeven (bijv. 'nl' of 'en').");
     }
   }
 
@@ -111,13 +116,14 @@ export async function importPuzzlePack(
   supabase: SupabaseClient<Database>,
   payload: PuzzlePackPayload
 ): Promise<ImportResult> {
+  const locale = payload.pack.locale ?? "nl";
   const pack = await upsertPack(supabase, {
     slug: payload.pack.slug,
     name: payload.pack.name,
     theme: payload.pack.theme,
     isPublished: payload.pack.published ?? false,
+    locale,
   });
-
   const puzzleInputs: NewPuzzleInput[] = payload.puzzles.map((p) => ({
     title: p.title,
     scenario: p.scenario,
@@ -125,6 +131,7 @@ export async function importPuzzlePack(
     category: p.category ?? payload.pack.theme,
     difficulty: p.difficulty as PuzzleDifficulty,
     hint: p.hint ?? null,
+    locale,
   }));
 
   const inserted = await insertPuzzles(supabase, pack.id, puzzleInputs);

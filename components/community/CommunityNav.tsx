@@ -2,13 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const LINKS = [
-  { href: "/", label: "Spelen" },
-  { href: "/community", label: "Community packs" },
-  { href: "/community/mijn", label: "Mijn packs" },
-  { href: "/community/nieuw", label: "Raadsel insturen" },
-];
+import { useTranslations } from "next-intl";
 
 // "/" and "/community" need an exact match — startsWith would make both of
 // them (mis)fire as active on every route, since every path starts with
@@ -23,6 +17,14 @@ const EXACT_MATCH_HREFS = new Set(["/", "/community"]);
  */
 export function CommunityNav() {
   const pathname = usePathname();
+  const t = useTranslations("CommunityNav");
+
+  const LINKS = [
+    { href: "/", label: t("play") },
+    { href: "/community", label: t("communityPacks") },
+    { href: "/community/mijn", label: t("myPacks") },
+    { href: "/community/nieuw", label: t("submitRiddle") },
+  ];
 
   return (
     <nav className="flex gap-1 border-b border-white/10">

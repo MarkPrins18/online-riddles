@@ -14,7 +14,7 @@ import type { Room } from "@/types/room";
 import { REALTIME_SUBSCRIBE_STATES, type RealtimeChannel } from "@supabase/supabase-js";
 import { gameReducer, initialGameState } from "./reducer";
 
-export function useGameState(roomCode: string, playerId: string | null = null) {
+export function useGameState(roomCode: string, playerId: string | null = null, locale: string = "nl") {
   const [state, dispatch] = useReducer(gameReducer, initialGameState);
   const [supabase] = useState(() => createClient());
   const currentPuzzleIdRef = useRef<string | null>(null);
@@ -36,7 +36,7 @@ export function useGameState(roomCode: string, playerId: string | null = null) {
 
         const players = await getPlayersInRoom(supabase, room.id);
         const puzzle = room.current_puzzle_id
-          ? await getRoomPuzzle(supabase, room.id)
+          ? await getRoomPuzzle(supabase, room.id, locale)
           : null;
         const questions = room.current_puzzle_id
           ? await getQuestionsForPuzzle(supabase, room.id, room.current_puzzle_id)
@@ -76,7 +76,7 @@ export function useGameState(roomCode: string, playerId: string | null = null) {
           currentPuzzleIdRef.current = freshRoom.current_puzzle_id;
           Promise.all([
             getPlayersInRoom(supabase, freshRoom.id),
-            freshRoom.current_puzzle_id ? getRoomPuzzle(supabase, freshRoom.id) : null,
+            freshRoom.current_puzzle_id ? getRoomPuzzle(supabase, freshRoom.id, locale) : null,
             freshRoom.current_puzzle_id
               ? getQuestionsForPuzzle(supabase, freshRoom.id, freshRoom.current_puzzle_id)
               : [],
@@ -120,7 +120,7 @@ export function useGameState(roomCode: string, playerId: string | null = null) {
           if (updated.current_puzzle_id && updated.current_puzzle_id !== currentPuzzleIdRef.current) {
             currentPuzzleIdRef.current = updated.current_puzzle_id;
             Promise.all([
-              getRoomPuzzle(supabase, updated.id),
+              getRoomPuzzle(supabase, updated.id, locale),
               getQuestionsForPuzzle(supabase, updated.id, updated.current_puzzle_id),
               getGuessesForPuzzle(supabase, updated.id, updated.current_puzzle_id),
             ])
@@ -219,7 +219,7 @@ export function useGameState(roomCode: string, playerId: string | null = null) {
       trackedPlayerIdRef.current = null;
       hasConnectedOnceRef.current = false;
     };
-  }, [roomCode, supabase]);
+  }, [roomCode, supabase, locale]);
 
   // Announces this client's presence once its own player row is known —
   // playerId can arrive after the channel does (e.g. joining a room from

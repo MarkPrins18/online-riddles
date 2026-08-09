@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { ensureAnonymousSession } from "@/lib/supabase/authSession";
 import { listOwnPacks, setOwnPackPublished } from "@/lib/supabase/communityPacks";
@@ -20,13 +21,15 @@ export function CommunityMineClient() {
   const [puzzles, setPuzzles] = useState<Puzzle[]>([]);
   const [totals, setTotals] = useState<Map<string, PuzzleVoteTotals>>(new Map());
   const [editingPuzzleId, setEditingPuzzleId] = useState<string | null>(null);
+  const t = useTranslations("CommunityMineClient");
+  const locale = useLocale();
 
   async function reload() {
     const supabase = createClient();
     const userId = await ensureAnonymousSession(supabase);
     const [ownPacks, ownPuzzles] = await Promise.all([
-      listOwnPacks(supabase, userId),
-      listOwnPuzzles(supabase, userId),
+      listOwnPacks(supabase, userId, locale),
+      listOwnPuzzles(supabase, userId, locale),
     ]);
     setPacks(ownPacks);
     setPuzzles(ownPuzzles);
@@ -44,7 +47,11 @@ export function CommunityMineClient() {
     return () => {
       cancelled = true;
     };
-  }, []);
+    // reload() closes over `locale` directly and is redefined every render;
+    // including it here would just make this effect re-run every render
+    // for no behavioral difference beyond the locale actually changing.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locale]);
 
   async function togglePublish(pack: StoryPack) {
     const supabase = createClient();
@@ -61,22 +68,20 @@ export function CommunityMineClient() {
   }
 
   if (isLoading) {
-    return <p className="font-mono text-sm text-text-secondary">Even laden...</p>;
+    return <p className="font-mono text-sm text-text-secondary">{t("loading")}</p>;
   }
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between gap-4">
-        <h1 className="font-serif text-3xl italic text-text-primary">Mijn packs</h1>
+        <h1 className="font-serif text-3xl italic text-text-primary">{t("heading")}</h1>
         <Link href="/community/nieuw">
-          <Button>Raadsel insturen</Button>
+          <Button>{t("submitButton")}</Button>
         </Link>
       </div>
 
       {packs.length === 0 ? (
-        <p className="font-mono text-sm text-text-secondary">
-          Je hebt nog geen packs. Stuur je eerste raadsel in om er een aan te maken.
-        </p>
+        <p className="font-mono text-sm text-text-secondary">{t("noPacksYet")}</p>
       ) : (
         <div className="flex flex-col gap-4">
           {packs.map((pack) => {
@@ -91,12 +96,12 @@ export function CommunityMineClient() {
                     </Badge>
                   </div>
                   <Button variant={pack.is_published ? "secondary" : "primary"} onClick={() => togglePublish(pack)}>
-                    {pack.is_published ? "Depubliceren" : "Publiceren"}
+                    {pack.is_published ? t("unpublish") : t("publish")}
                   </Button>
                 </div>
 
                 {packPuzzles.length === 0 ? (
-                  <p className="font-mono text-xs text-text-secondary">Nog geen raadsels.</p>
+                  <p className="font-mono text-xs text-text-secondary">{t("noPuzzlesYet")}</p>
                 ) : (
                   <ul className="flex flex-col gap-3">
                     {packPuzzles.map((puzzle) => (
@@ -118,13 +123,13 @@ export function CommunityMineClient() {
                             <span className="text-text-primary">{puzzle.title}</span>
                             <span className="flex items-center gap-3">
                               <span className="text-text-secondary">
-                                score: {totals.get(puzzle.id)?.score ?? 0}
+                                {t("scoreLabel", { score: totals.get(puzzle.id)?.score ?? 0 })}
                               </span>
                               <Button variant="ghost" onClick={() => setEditingPuzzleId(puzzle.id)}>
-                                Bewerken
+                                {t("edit")}
                               </Button>
                               <Button variant="ghost" onClick={() => removePuzzle(puzzle.id)}>
-                                Verwijderen
+                                {t("delete")}
                               </Button>
                             </span>
                           </div>

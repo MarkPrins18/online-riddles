@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 function formatDuration(totalSeconds: number): string {
   const clamped = Math.max(0, Math.floor(totalSeconds));
   const mins = Math.floor(clamped / 60).toString().padStart(2, "0");
@@ -23,6 +25,7 @@ export function Timer({
   durationSeconds?: number | null;
 }) {
   const elapsedSeconds = (now - new Date(startedAt).getTime()) / 1000;
+  const t = useTranslations("Timer");
 
   if (durationSeconds == null) {
     return (
@@ -43,7 +46,7 @@ export function Timer({
       {/* Urgency isn't color-only: the bold weight above and this prefix
           both carry the signal for users who can't perceive the color change. */}
       {isUrgent && !isUp && "⚠ "}
-      {isUp ? "Tijd om" : formatDuration(remainingSeconds)}
+      {isUp ? t("timeUp") : formatDuration(remainingSeconds)}
     </span>
   );
 }

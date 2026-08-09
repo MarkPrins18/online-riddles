@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { Player } from "@/types/player";
@@ -32,6 +33,7 @@ export function ClaimHostBanner({
 }) {
   const [isClaiming, setIsClaiming] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("ClaimHostBanner");
 
   const successor = pickNextHost(players, onlinePlayerIds, hostId);
   if (!playerId || successor?.id !== playerId) return null;
@@ -42,7 +44,7 @@ export function ClaimHostBanner({
     try {
       await claimHost(supabase, roomId, playerId!);
     } catch (err) {
-      setError(getErrorMessage(err, "Kon de host-rol niet overnemen. Probeer het opnieuw."));
+      setError(getErrorMessage(err, t("error")));
     } finally {
       setIsClaiming(false);
     }
@@ -50,11 +52,9 @@ export function ClaimHostBanner({
 
   return (
     <div className="flex flex-col gap-2 rounded-md border border-danger/40 bg-danger/5 p-3">
-      <p className="font-mono text-xs text-text-secondary">
-        De host lijkt offline. Jij bent het langst aanwezig van de rest — neem de rol over?
-      </p>
+      <p className="font-mono text-xs text-text-secondary">{t("message")}</p>
       <Button variant="danger" onClick={handleClaim} disabled={isClaiming} className="w-full">
-        {isClaiming ? "Bezig..." : "Neem host over"}
+        {isClaiming ? t("claiming") : t("claim")}
       </Button>
       {error && <p className="font-mono text-xs text-danger">{error}</p>}
     </div>

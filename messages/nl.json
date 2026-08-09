@@ -1,0 +1,445 @@
+{
+  "Common": {
+    "close": "Sluiten"
+  },
+  "RootLayout": {
+    "title": "Online Riddles",
+    "description": "Een lateral thinking puzzelspel voor groepen. Stel ja/nee-vragen, verzamel aanwijzingen en ontrafel het mysterie.",
+    "skipToContent": "Naar hoofdinhoud"
+  },
+  "HomePage": {
+    "coverStamp": "Zaak-dossier · gesloten",
+    "title": "Online Riddles",
+    "subtitle": "Een lateral thinking verhoor. Stel de slimste vragen, verzamel de gekste aanwijzingen, en kraak de zaak samen — of ga solo voor de eer (en de punten).",
+    "newFile": "Nieuw dossier",
+    "existingFile": "Bestaand dossier",
+    "communityLink": "Bekijk raadsels van de community →"
+  },
+  "HowToPlay": {
+    "trigger": "Spelregels",
+    "close": "Sluiten",
+    "ideaTitle": "Het idee",
+    "ideaBody": "Elke ronde kent één speler — de Verteller — de oplossing van een raadsel. De rest stelt ja/nee-vragen en probeert de zaak op te lossen.",
+    "narratorTitle": "De Verteller",
+    "narratorBody": "Beantwoordt elke vraag met ja, nee, of n.v.t. (niet relevant voor de oplossing). Ingediende oplossingen van andere spelers keurt de Verteller goed of fout in het Postvak.",
+    "questionsTitle": "Vragen & aanwijzingen",
+    "questionsBody": "Elk “ja”-antwoord wordt automatisch een aanwijzing. Alle vragen (ook de nee's en n.v.t.'s) staan terug te lezen bij Verhoor.",
+    "solveTitle": "Los de zaak op",
+    "solveBody": "Denk je het antwoord te weten? Dien een oplossing in. De Verteller ziet 'm als eerste en keurt 'm goed of fout — andere spelers zien pas wat je had ingediend als het klopt.",
+    "pointsTitle": "Punten",
+    "pointsBody": "Een moeilijkere zaak levert meer punten op. De speler die oplost én de Verteller krijgen allebei een bonus, net als de beste vraag van de ronde. Een foute gok kost punten.",
+    "hardcoreTitle": "Hardcore modus",
+    "hardcoreBody": "Optioneel, door de host in te stellen: elke foute gok kost het hele team 1 leven. Op 0 levens is het game over voor de hele sessie.",
+    "corkboardTitle": "Prikbord",
+    "corkboardBody": "Een gedeeld bord om aanwijzingen en theorieën op vast te pinnen en met draadjes te verbinden — alleen op een groter scherm (desktop/tablet), niet op de telefoon."
+  },
+  "ClaimHostBanner": {
+    "message": "De host lijkt offline. Jij bent het langst aanwezig van de rest — neem de rol over?",
+    "claim": "Neem host over",
+    "claiming": "Bezig...",
+    "error": "Kon de host-rol niet overnemen. Probeer het opnieuw."
+  },
+  "RoomCodeDisplay": {
+    "ariaLabel": "Kopieer roomcode",
+    "label": "Roomcode",
+    "copied": "Gekopieerd",
+    "copyPrompt": "Klik om te kopiëren"
+  },
+  "LeaveRoomButton": {
+    "leaving": "Verlaten...",
+    "leave": "Kamer verlaten"
+  },
+  "NarratorPicker": {
+    "legend": "Wie is de Verteller?",
+    "autoRotate": "Roteer automatisch"
+  },
+  "CreateRoomForm": {
+    "nameLabel": "Jouw naam",
+    "namePlaceholder": "Rechercheur...",
+    "submitting": "Kamer aanmaken...",
+    "submit": "Nieuwe kamer starten",
+    "error": "Kon geen kamer aanmaken. Probeer het opnieuw."
+  },
+  "JoinRoomForm": {
+    "nameLabel": "Jouw naam",
+    "namePlaceholder": "Rechercheur...",
+    "codeLabel": "Roomcode",
+    "codePlaceholder": "XXXXXX",
+    "noRoomFound": "Geen kamer gevonden met die code.",
+    "submitting": "Aansluiten...",
+    "submit": "Kamer joinen",
+    "error": "Kon niet bij de kamer aansluiten. Probeer het opnieuw."
+  },
+  "StartGameButton": {
+    "starting": "Zaak wordt geopend...",
+    "waitingForPlayers": "Wacht op meer spelers...",
+    "chooseThemeOrPack": "Kies minstens één thema of community pack...",
+    "start": "Start het spel",
+    "error": "Kon het spel niet starten. Probeer het opnieuw."
+  },
+  "RoomSettingsForm": {
+    "durationLabel": "Tijd per ronde",
+    "duration5": "5 minuten",
+    "duration10": "10 minuten",
+    "duration15": "15 minuten",
+    "duration20": "20 minuten",
+    "durationNone": "Geen limiet",
+    "roundCountLabel": "Aantal rondes",
+    "roundCountOption": "{count} rondes",
+    "themesLegend": "Thema's",
+    "themesLoading": "Thema's laden...",
+    "themesEmpty": "Nog geen gepubliceerde puzzels beschikbaar.",
+    "communityLegend": "Community",
+    "communityLoading": "Community laden...",
+    "communityEmpty": "Nog geen gepubliceerde community-packs.",
+    "communityToggle": "Community packs meespelen",
+    "communityHint": "Raadsels gemaakt door andere spelers, los van de officiële thema's hierboven.",
+    "chooseThemeOrPack": "Kies minstens één thema of community pack.",
+    "hardcoreToggle": "Hardcore modus — gedeelde team-levens",
+    "hardcoreHint": "Elke foute gok kost het hele team 1 leven. Op 0 levens is het game over voor de hele sessie.",
+    "teamLivesLabelWithNarrator": "{name} bepaalt: hoeveel levens krijgt het team?",
+    "teamLivesLabel": "Hoeveel levens krijgt het team?",
+    "teamLivesOption": "{count} levens"
+  },
+  "RoomLobbyClient": {
+    "errorPrefix": "Er ging iets mis: {error}",
+    "loadingRoom": "Kamer laden...",
+    "playersHeading": "Spelers ({count})",
+    "settingsHeading": "Instellingen",
+    "waitingForHost": "Wacht tot de host het spel start...",
+    "joinHeading": "Doe mee"
+  },
+  "PlayerList": {
+    "empty": "Nog niemand aanwezig.",
+    "online": "Online",
+    "offline": "Offline",
+    "narratorBadge": "Verteller",
+    "hostBadge": "Host",
+    "spectatorBadge": "Toeschouwer",
+    "removeAriaLabel": "Verwijder {name}"
+  },
+  "Difficulty": {
+    "easy": "Makkelijk",
+    "medium": "Gemiddeld",
+    "hard": "Moeilijk"
+  },
+  "SetNameForm": {
+    "heading": "Word maker",
+    "subtitle": "Kies een naam waaronder je raadsels en packs verschijnen.",
+    "nameLabel": "Naam als maker",
+    "namePlaceholder": "Rechercheur...",
+    "saving": "Opslaan...",
+    "submit": "Doorgaan",
+    "error": "Kon je naam niet opslaan. Probeer het opnieuw."
+  },
+  "RiddleCard": {
+    "by": "door {name}"
+  },
+  "PackForm": {
+    "nameLabel": "Naam van je pack",
+    "namePlaceholder": "Mijn eerste zaken",
+    "themeLabel": "Thema",
+    "newThemeOption": "+ Nieuw thema...",
+    "customThemePlaceholder": "Crime, Sci-Fi, Absurd...",
+    "submitting": "Pack aanmaken...",
+    "submit": "Pack aanmaken",
+    "error": "Kon geen pack aanmaken. Probeer het opnieuw."
+  },
+  "CommunityNewClient": {
+    "loading": "Even laden...",
+    "heading": "Raadsel insturen",
+    "packHeading": "Pack",
+    "newPackButton": "Nieuw pack",
+    "cancel": "Annuleren",
+    "addedNoticePrefix": "“{title}” is toegevoegd. Vergeet niet je pack te publiceren via",
+    "myPacksLink": "Mijn packs"
+  },
+  "CommunityMineClient": {
+    "loading": "Even laden...",
+    "heading": "Mijn packs",
+    "submitButton": "Raadsel insturen",
+    "noPacksYet": "Je hebt nog geen packs. Stuur je eerste raadsel in om er een aan te maken.",
+    "unpublish": "Depubliceren",
+    "publish": "Publiceren",
+    "noPuzzlesYet": "Nog geen raadsels.",
+    "edit": "Bewerken",
+    "delete": "Verwijderen",
+    "scoreLabel": "score: {score}"
+  },
+  "CommunityNav": {
+    "play": "Spelen",
+    "communityPacks": "Community packs",
+    "myPacks": "Mijn packs",
+    "submitRiddle": "Raadsel insturen"
+  },
+  "FavoriteButton": {
+    "addAriaLabel": "Voeg toe aan favorieten",
+    "removeAriaLabel": "Verwijder uit favorieten",
+    "error": "Favoriet opslaan is niet gelukt. Probeer het opnieuw."
+  },
+  "PackCard": {
+    "by": "door {name}",
+    "unpublished": "Nog niet gepubliceerd"
+  },
+  "CommunityBrowseClient": {
+    "heading": "Community-packs",
+    "subtitle": "Door spelers gemaakt, door spelers gestemd.",
+    "newest": "Nieuwste",
+    "top": "Populairste",
+    "loading": "Packs laden...",
+    "empty": "Nog geen gepubliceerde community-packs — wees de eerste."
+  },
+  "CommunityPackDetailClient": {
+    "loading": "Pack laden...",
+    "notFound": "Deze pack bestaat niet (meer).",
+    "noPuzzles": "Dit pack heeft nog geen raadsels."
+  },
+  "VoteButtons": {
+    "upvoteAriaLabel": "Stem voor",
+    "downvoteAriaLabel": "Stem tegen",
+    "error": "Stem is niet gelukt. Probeer het opnieuw."
+  },
+  "GuessForm": {
+    "placeholder": "Wat denk jij dat het antwoord is?",
+    "ariaLabel": "Jouw oplossing",
+    "submit": "Oplossen",
+    "error": "Kon je oplossing niet versturen. Probeer het opnieuw."
+  },
+  "QuestionForm": {
+    "placeholder": "Stel een ja/nee-vraag...",
+    "ariaLabel": "Ja/nee-vraag",
+    "submit": "Vragen",
+    "error": "Kon je vraag niet versturen. Probeer het opnieuw."
+  },
+  "ChatForm": {
+    "placeholder": "Overleg met je medespelers...",
+    "ariaLabel": "Chatbericht",
+    "submit": "Versturen",
+    "error": "Kon je bericht niet versturen. Probeer het opnieuw."
+  },
+  "MyGuessFeedback": {
+    "latestGuess": "Jouw laatste theorie: “{text}”",
+    "pending": "Wacht op de Verteller",
+    "incorrect": "Niet helemaal"
+  },
+  "TeamLivesDisplay": {
+    "ariaLabel": "{remaining} van {total} levens over"
+  },
+  "NarratorGuessControls": {
+    "noPending": "Nog geen oplossingen ingediend. Dit zie alleen jij als Verteller.",
+    "correct": "Correct",
+    "incorrect": "Incorrect"
+  },
+  "Timer": {
+    "timeUp": "Tijd om"
+  },
+  "ConnectorDot": {
+    "title": "Sleep om te verbinden"
+  },
+  "BoardNote": {
+    "deleteAriaLabel": "Briefje verwijderen"
+  },
+  "CorkboardOverlay": {
+    "title": "Prikbord",
+    "addNote": "+ Briefje",
+    "pinQuestion": "+ Vraag vastprikken",
+    "close": "Sluiten",
+    "notePlaceholder": "Schrijf een theorie...",
+    "pin": "Plakken",
+    "instructions": "Sleep vanaf het rode puntje op een kaartje naar een ander kaartje om ze te verbinden. Klik op een draadje om het weer te verwijderen.",
+    "deleteConnectionTitle": "Klik om dit draadje te verwijderen",
+    "addConnectionError": "Kon geen draadje trekken.",
+    "duplicateConnectionError": "Deze twee kaartjes zijn al verbonden.",
+    "moveItemError": "Kon het briefje niet verplaatsen.",
+    "deleteItemError": "Kon dit niet verwijderen.",
+    "deleteConnectionError": "Kon dit draadje niet verwijderen.",
+    "addNoteError": "Kon je briefje niet plakken.",
+    "pinQuestionError": "Kon deze vraag niet vastprikken."
+  },
+  "CaseLog": {
+    "heading": "Zaken-archief",
+    "caseLabel": "Zaak {round} · {difficulty}",
+    "solvedBy": "opgelost door {name} ({count} vragen)",
+    "unsolved": "onopgelost"
+  },
+  "CorkboardButton": {
+    "label": "Prikbord"
+  },
+  "SessionRecapPanel": {
+    "heading": "Hoogtepunten van de avond",
+    "mvpNarrator": "MVP Verteller: {name} ({count}x opgelost)",
+    "fastestSolve": "Snelste oplossing: {name} loste “{title}” op in {count} vragen",
+    "bestQuestions": "{count, plural, one {Beste vraag} other {Beste vragen}} van de avond: {list}",
+    "wallOfShame": "Wall of shame: {name} gokte {count}x mis"
+  },
+  "ChatPanel": {
+    "heading": "Overleg",
+    "narratorNotice": "Als Verteller kun je het overleg meelezen, maar niet meedoen."
+  },
+  "BoardQuestionCard": {
+    "deleteAriaLabel": "Kaartje verwijderen",
+    "questionLabel": "Vraag",
+    "notFound": "Vraag niet gevonden.",
+    "answerYes": "Ja",
+    "answerNo": "Nee",
+    "answerIrrelevant": "Niet relevant",
+    "answerCustom": "Zie antwoord"
+  },
+  "HintCard": {
+    "label": "Hint"
+  },
+  "InterrogationLog": {
+    "empty": "Nog geen vragen gesteld — begin het verhoor hierboven."
+  },
+  "NarratorInbox": {
+    "pendingSolutionsHeading": "Openstaande oplossingen",
+    "unansweredHeading": "Onbeantwoorde vragen ({count})",
+    "allAnswered": "Alles beantwoord — even bijkomen."
+  },
+  "ChatDrawer": {
+    "title": "Overleg"
+  },
+  "CluesList": {
+    "empty": "Nog geen aanwijzingen — elk “ja”-antwoord van de Verteller komt hier terecht.",
+    "error": "Kon deze aanwijzing niet vastprikken.",
+    "pinning": "Bezig…",
+    "pin": "Speld op prikbord"
+  },
+  "NarratorArchive": {
+    "empty": "Nog geen beantwoorde vragen of beoordeelde oplossingen.",
+    "solutionsHeading": "Oplossingen",
+    "questionsHeading": "Vragen",
+    "correct": "Correct",
+    "incorrect": "Incorrect"
+  },
+  "NarratorTensionPanel": {
+    "onlyForYou": "Alleen voor jou",
+    "wrongGuesses": "{count, plural, one {# foute gok} other {# foute gokken}}",
+    "questionsAnswered": "{count} vragen beantwoord",
+    "skipping": "Bezig...",
+    "skip": "Sla deze zaak over"
+  },
+  "NarratorCaseDrawer": {
+    "title": "Zaak & oplossing"
+  },
+  "SolutionReveal": {
+    "caseClosed": "Zaak gesloten",
+    "solvedBy": "Opgelost door {name}",
+    "nobodySolved": "Niemand loste deze zaak op",
+    "ratePrompt": "Was dit een goede zaak?"
+  },
+  "ShareRecapButton": {
+    "share": "Deel de avond",
+    "close": "Sluiten",
+    "generating": "Samenvatting maken...",
+    "generateError": "Kon geen afbeelding genereren.",
+    "recapError": "Kon geen samenvatting maken. Probeer het opnieuw.",
+    "shareOrDownload": "Delen / downloaden",
+    "recapImageAlt": "Samenvatting van de speelavond",
+    "shareTitle": "Online Riddles — zaak gesloten"
+  },
+  "FinalScoreboard": {
+    "caseFileClosed": "Zaak-dossier gesloten",
+    "gameOver": "Het spel zit erop",
+    "winner": "Winnaar: {name} met {score} punten",
+    "playAnotherRound": "Nog een ronde spelen",
+    "newGame": "Nieuw spel starten"
+  },
+  "GameOverScreen": {
+    "gameOver": "Game over",
+    "heading": "De zaak blijft voor altijd onopgelost",
+    "subtitle": "Het team is door de levens heen.",
+    "newGame": "Nieuw spel starten"
+  },
+  "QuestionCard": {
+    "answerYes": "Ja",
+    "answerNo": "Nee",
+    "answerIrrelevant": "N.v.t.",
+    "bestQuestionAriaLabel": "Topvraag",
+    "bestQuestionToggleOn": "Beste vraag (klik om te wissen)",
+    "bestQuestionToggleOff": "Markeer als beste vraag",
+    "answerHeading": "Antwoord",
+    "quickYes": "Ja",
+    "quickNo": "Nee",
+    "quickIrrelevant": "N.v.t.",
+    "customAnswer": "Eigen antwoord",
+    "customPlaceholder": "Typ een genuanceerd antwoord...",
+    "customAriaLabel": "Genuanceerd antwoord",
+    "submit": "Versturen"
+  },
+  "ChatThread": {
+    "empty": "Nog niemand heeft iets gezegd. Overleg gerust met je medespelers.",
+    "narratorBadge": "Verteller"
+  },
+  "ChatIconButton": {
+    "openWithUnread": "{count, plural, one {Open overleg, # ongelezen bericht} other {Open overleg, # ongelezen berichten}}",
+    "open": "Open overleg"
+  },
+  "NextRoundCountdown": {
+    "heading": "Volgende ronde gaat beginnen!"
+  },
+  "PlayersStrip": {
+    "ariaLabel": "{count} spelers — klik voor scores",
+    "count": "{count, plural, one {# speler} other {# spelers}}"
+  },
+  "NarratorTakeoverControl": {
+    "summary": "Verteller afwezig?",
+    "switching": "Bezig...",
+    "switchTo": "Wissel naar {name}",
+    "note": "Huidige vragen en gokken blijven staan."
+  },
+  "PlayersDrawer": {
+    "title": "Spelers"
+  },
+  "GamePlayClient": {
+    "errorPrefix": "Er ging iets mis: {error}",
+    "loadingCase": "Zaak laden...",
+    "roundLabel": "Ronde {round}",
+    "youAreNarrator": "Jij bent de Verteller",
+    "spectator": "Toeschouwer",
+    "wrongCount": "{count} fout",
+    "answeredCountLabel": "{count} beantwoord",
+    "caseDossierLabel": "Zaak-dossier",
+    "caseAndSolution": "Zaak & oplossing",
+    "spectatorWaiting": "Je kijkt mee tot de volgende zaak begint...",
+    "askQuestionTab": "Stel een vraag",
+    "solveTab": "Los de zaak op",
+    "solveCaseLabel": "Los de zaak op.",
+    "inboxTab": "Postvak",
+    "archiveTab": "Archief",
+    "caseClosedLabel": "Zaak gesloten.",
+    "cluesTab": "Aanwijzingen",
+    "interrogationTab": "Verhoor",
+    "nextNarratorLabel": "{name} wordt de nieuwe Verteller.",
+    "notEnoughPlayers": "Niet genoeg spelers voor een nieuwe ronde.",
+    "nextCase": "Volgende zaak",
+    "skipConfirm": "Deze zaak overslaan? Alle vragen en gokken hiervoor gaan verloren.",
+    "nextCaseError": "Kon geen nieuwe zaak starten. Probeer het opnieuw.",
+    "skipPuzzleError": "Kon geen andere zaak ophalen. Probeer het opnieuw."
+  },
+  "NarratorBriefingScreen": {
+    "newCase": "Nieuwe zaak",
+    "onlyForYou": "Alleen voor jou",
+    "start": "Aan de slag",
+    "skipping": "Bezig...",
+    "skip": "Sla deze zaak over"
+  },
+  "RiddleForm": {
+    "titleLabel": "Titel",
+    "titlePlaceholder": "De verdwenen...",
+    "scenarioLabel": "Scenario — wat de spelers te zien krijgen",
+    "scenarioPlaceholder": "Beschrijf de situatie...",
+    "solutionLabel": "Oplossing — alleen zichtbaar voor de Verteller",
+    "solutionPlaceholder": "Wat er werkelijk is gebeurd...",
+    "categoryLabel": "Categorie (optioneel)",
+    "noCategoryOption": "Geen categorie",
+    "difficultyLabel": "Moeilijkheid",
+    "hintLabel": "Hint (optioneel)",
+    "hintPlaceholder": "Een klein duwtje in de goede richting...",
+    "saving": "Opslaan...",
+    "saveChanges": "Wijzigingen opslaan",
+    "addRiddle": "Raadsel toevoegen",
+    "cancel": "Annuleren",
+    "error": "Kon het raadsel niet opslaan. Probeer het opnieuw."
+  }
+}

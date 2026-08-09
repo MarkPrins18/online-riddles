@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
 
 /** Opens the Overleg drawer — styled like the secondary buttons around it, with an unread count instead of a label since it sits in a tight row. */
@@ -12,17 +13,15 @@ export function ChatIconButton({
   unreadCount: number;
   className?: string;
 }) {
+  const t = useTranslations("ChatIconButton");
+
   return (
     <Button
       type="button"
       variant="secondary"
       iconOnly
       onClick={onClick}
-      aria-label={
-        unreadCount > 0
-          ? `Open overleg, ${unreadCount} ongelezen ${unreadCount === 1 ? "bericht" : "berichten"}`
-          : "Open overleg"
-      }
+      aria-label={unreadCount > 0 ? t("openWithUnread", { count: unreadCount }) : t("open")}
       className={`relative ${className}`}
     >
       <svg

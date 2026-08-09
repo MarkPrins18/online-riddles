@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithIntl } from "@/lib/i18n/testUtils";
 import { GuessForm } from "./GuessForm";
 import { submitGuess } from "@/lib/supabase/guesses";
 
@@ -12,7 +13,7 @@ vi.mock("@/lib/supabase/guesses", () => ({
 const mockedSubmitGuess = vi.mocked(submitGuess);
 
 function renderForm() {
-  return render(
+  return renderWithIntl(
     <GuessForm
       supabase={{} as never}
       roomId="room1"
@@ -30,13 +31,13 @@ beforeEach(() => {
 describe("GuessForm", () => {
   it("disables submit until there is non-whitespace text", async () => {
     renderForm();
-    const submit = screen.getByRole("button", { name: "Oplossen" });
+    const submit = screen.getByRole("button", { name: "Solve" });
     expect(submit).toBeDisabled();
 
-    await userEvent.type(screen.getByPlaceholderText("Wat denk jij dat het antwoord is?"), "   ");
+    await userEvent.type(screen.getByPlaceholderText("What do you think the answer is?"), "   ");
     expect(submit).toBeDisabled();
 
-    await userEvent.type(screen.getByPlaceholderText("Wat denk jij dat het antwoord is?"), "Het was de butler");
+    await userEvent.type(screen.getByPlaceholderText("What do you think the answer is?"), "Het was de butler");
     expect(submit).toBeEnabled();
   });
 
@@ -53,9 +54,9 @@ describe("GuessForm", () => {
     });
     renderForm();
 
-    const input = screen.getByPlaceholderText("Wat denk jij dat het antwoord is?");
+    const input = screen.getByPlaceholderText("What do you think the answer is?");
     await userEvent.type(input, "  De butler  ");
-    await userEvent.click(screen.getByRole("button", { name: "Oplossen" }));
+    await userEvent.click(screen.getByRole("button", { name: "Solve" }));
 
     await waitFor(() => {
       expect(mockedSubmitGuess).toHaveBeenCalledWith(
@@ -76,9 +77,9 @@ describe("GuessForm", () => {
     mockedSubmitGuess.mockRejectedValue(new Error("network down"));
     renderForm();
 
-    const input = screen.getByPlaceholderText("Wat denk jij dat het antwoord is?");
+    const input = screen.getByPlaceholderText("What do you think the answer is?");
     await userEvent.type(input, "De butler");
-    await userEvent.click(screen.getByRole("button", { name: "Oplossen" }));
+    await userEvent.click(screen.getByRole("button", { name: "Solve" }));
 
     expect(await screen.findByText("network down")).toBeInTheDocument();
     expect(input).toHaveValue("De butler");

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { Player } from "@/types/player";
@@ -43,8 +44,10 @@ export function PlayersDrawer({
   onKick?: (playerId: string) => void;
   onClose: () => void;
 }) {
+  const t = useTranslations("PlayersDrawer");
+
   return (
-    <Drawer title="Spelers" onClose={onClose}>
+    <Drawer title={t("title")} onClose={onClose}>
       <div className="flex flex-col gap-6">
         <div>
           <ScoreBoard players={players} onKick={onKick} onlinePlayerIds={onlinePlayerIds} />

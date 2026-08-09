@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import type { Guess } from "@/types/guess";
 import type { Question } from "@/types/question";
 import { Button } from "@/components/ui/Button";
@@ -25,19 +26,20 @@ export function NarratorTensionPanel({
 }) {
   const incorrectGuesses = [...guesses].filter((g) => g.status === "incorrect").reverse();
   const answeredCount = questions.filter((q) => q.answer !== null).length;
+  const t = useTranslations("NarratorTensionPanel");
 
   return (
     <div className="relative rounded-lg border border-white/10 bg-bg-primary/40 p-4">
       <p className="mb-2 font-mono text-xs uppercase tracking-widest text-text-secondary before:mr-2 before:inline-block before:h-3 before:w-6 before:-translate-y-px before:-rotate-3 before:bg-accent/25 before:content-['']">
-        Alleen voor jou
+        {t("onlyForYou")}
       </p>
       <p className="font-serif text-base leading-relaxed text-text-primary/90">{solution}</p>
       <p className="mt-4 border-t border-white/5 pt-4 font-mono text-xs text-text-secondary">
         <span className={incorrectGuesses.length > 0 ? "text-danger" : undefined}>
-          {incorrectGuesses.length} foute {incorrectGuesses.length === 1 ? "gok" : "gokken"}
+          {t("wrongGuesses", { count: incorrectGuesses.length })}
         </span>
         {" · "}
-        {answeredCount} vragen beantwoord
+        {t("questionsAnswered", { count: answeredCount })}
       </p>
       {incorrectGuesses.length > 0 && (
         <ul className="mt-3 flex max-h-40 flex-col gap-1.5 overflow-y-auto">
@@ -50,7 +52,7 @@ export function NarratorTensionPanel({
       )}
       <div className="mt-4 border-t border-white/5 pt-4">
         <Button variant="ghost" className="w-full" onClick={onSkip} disabled={isSkipping}>
-          {isSkipping ? "Bezig..." : "Sla deze zaak over"}
+          {isSkipping ? t("skipping") : t("skip")}
         </Button>
         {skipError && <p className="mt-2 font-mono text-xs text-danger">{skipError}</p>}
       </div>

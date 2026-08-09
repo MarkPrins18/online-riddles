@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { Player } from "@/types/player";
@@ -24,6 +25,7 @@ export function LeaveRoomButton({
 }) {
   const router = useRouter();
   const [isLeaving, setIsLeaving] = useState(false);
+  const t = useTranslations("LeaveRoomButton");
 
   async function handleLeave() {
     setIsLeaving(true);
@@ -34,7 +36,7 @@ export function LeaveRoomButton({
 
   return (
     <Button variant="ghost" className="w-full" onClick={handleLeave} disabled={isLeaving}>
-      {isLeaving ? "Verlaten..." : "Kamer verlaten"}
+      {isLeaving ? t("leaving") : t("leave")}
     </Button>
   );
 }

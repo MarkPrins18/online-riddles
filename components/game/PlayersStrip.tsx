@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import type { Player } from "@/types/player";
 
 const MAX_VISIBLE = 4;
@@ -22,13 +23,14 @@ export function PlayersStrip({
 }) {
   const visible = players.slice(0, MAX_VISIBLE);
   const overflow = players.length - visible.length;
+  const t = useTranslations("PlayersStrip");
 
   return (
     <button
       type="button"
       onClick={onOpen}
       className="flex items-center gap-1.5 rounded-sm px-1 py-1 transition-opacity hover:opacity-80"
-      aria-label={`${players.length} spelers — klik voor scores`}
+      aria-label={t("ariaLabel", { count: players.length })}
     >
       <span className="flex -space-x-1.5">
         {visible.map((player) => (
@@ -51,7 +53,7 @@ export function PlayersStrip({
         )}
       </span>
       <span className="hidden font-mono text-xs text-text-secondary sm:inline">
-        {players.length} {players.length === 1 ? "speler" : "spelers"}
+        {t("count", { count: players.length })}
       </span>
     </button>
   );

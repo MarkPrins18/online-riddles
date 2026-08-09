@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import type { ChatMessage } from "@/types/chatMessage";
 import { Badge } from "@/components/ui/Badge";
 
@@ -8,11 +9,11 @@ export function ChatThread({
   messages: ChatMessage[];
   narratorId: string | null;
 }) {
+  const t = useTranslations("ChatThread");
+
   if (messages.length === 0) {
     return (
-      <p className="font-mono text-sm text-text-secondary">
-        Nog niemand heeft iets gezegd. Overleg gerust met je medespelers.
-      </p>
+      <p className="font-mono text-sm text-text-secondary">{t("empty")}</p>
     );
   }
 
@@ -24,7 +25,7 @@ export function ChatThread({
             {message.player_name}
             {message.player_id === narratorId && (
               <Badge tone="accent" className="ml-1 align-middle">
-                Verteller
+                {t("narratorBadge")}
               </Badge>
             )}
             :

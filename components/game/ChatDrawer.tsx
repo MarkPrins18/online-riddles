@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { ChatMessage } from "@/types/chatMessage";
@@ -31,8 +32,10 @@ export function ChatDrawer({
   narratorId: string | null;
   onClose: () => void;
 }) {
+  const t = useTranslations("ChatDrawer");
+
   return (
-    <Drawer title="Overleg" onClose={onClose} className="max-w-[480px]">
+    <Drawer title={t("title")} onClose={onClose} className="max-w-[480px]">
       <ChatPanel
         supabase={supabase}
         roomId={roomId}

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
+import { useTranslations } from "next-intl";
 
 type Side = "left" | "right" | "top" | "bottom";
 
@@ -50,10 +51,12 @@ export function ConnectorDot({
   side: Side;
   onPointerDown: (e: ReactPointerEvent<HTMLDivElement>) => void;
 }) {
+  const t = useTranslations("ConnectorDot");
+
   return (
     <div
       onPointerDown={onPointerDown}
-      title="Sleep om te verbinden"
+      title={t("title")}
       className={`absolute h-4 w-4 cursor-crosshair rounded-full border-2 border-white/60 bg-[#c0392b] ${SIDE_CLASSES[side]}`}
     />
   );

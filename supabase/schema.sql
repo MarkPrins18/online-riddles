@@ -80,35 +80,177 @@ create trigger set_spectator_on_join
   for each row execute function set_spectator_on_join();
 
 -- A story pack groups puzzles under one theme (Crime, Sci-Fi, Absurd, ...)
--- and can be released independently via is_published.
+-- and can be released independently via is_published. `theme` stays a
+-- plain column (see normalize_pack_theme below — it's community-writable
+-- free text, not a curated vocabulary, so it isn't split per-language like
+-- `name` is). `slug` is the locale-agnostic identifier used for upserts —
+-- it deliberately never moves to a translation table.
 create table if not exists story_packs (
   id uuid primary key default gen_random_uuid(),
   slug text unique not null,
-  name text not null,
   theme text not null,
   is_published boolean not null default false,
   created_at timestamptz not null default now()
 );
 
--- A fixed, curated vocabulary for puzzle categories (Fraude, Techniek, ...)
--- instead of a free-text field — keeps community submissions from drifting
--- into near-duplicate labels ("Fraude" vs "fraude" vs "Bedrog"). Only admins
--- (service-role key or an /admin account) may add new categories; everyone
--- else picks from the existing list.
+-- A published_puzzles view from a previous run of this script still selects
+-- columns the migrations below remove (name on story_packs/categories,
+-- title/scenario/... on puzzles), which blocks dropping them ("cannot drop
+-- column ... because other objects depend on it"). Drop it before any of
+-- that happens; get_published_puzzles further down replaces it with a
+-- locale-aware function (a plain view can't take a locale parameter).
+drop view if exists published_puzzles;
+
+-- === i18n: story pack display names are locale-agnostic on story_packs
+-- itself; the name lives in story_pack_translations (one row per language,
+-- including Dutch — no language is special-cased as "the base"). Mirrors
+-- the puzzles/categories split above.
+do $$
+begin
+  if exists (
+    select 1 from information_schema.columns
+    where table_name = 'story_packs' and column_name = 'name'
+  ) then
+    create table if not exists story_pack_translations (
+      pack_id uuid not null references story_packs (id) on delete cascade,
+      locale text not null,
+      name text not null,
+      status text not null default 'reviewed' check (status in ('machine', 'reviewed')),
+      created_at timestamptz not null default now(),
+      primary key (pack_id, locale)
+    );
+
+    insert into story_pack_translations (pack_id, locale, name, status)
+    select id, 'nl', name, 'reviewed' from story_packs
+    on conflict (pack_id, locale) do nothing;
+
+    alter table story_packs drop column name;
+  end if;
+end $$;
+
+create table if not exists story_pack_translations (
+  pack_id uuid not null references story_packs (id) on delete cascade,
+  locale text not null,
+  name text not null,
+  -- 'machine': auto-translated, not yet vetted by a human. 'reviewed':
+  -- confirmed correct (every hand-authored Dutch pack name is 'reviewed'
+  -- from the start — see the seed data and createOwnPack/upsertPack).
+  status text not null default 'machine' check (status in ('machine', 'reviewed')),
+  created_at timestamptz not null default now(),
+  primary key (pack_id, locale)
+);
+
+-- === i18n: categories are locale-agnostic; their display name lives in
+-- category_translations (one row per language, including Dutch — no
+-- language is special-cased as "the base"). Keeps community submissions
+-- from drifting into near-duplicate labels ("Fraude" vs "fraude" vs
+-- "Bedrog") per language. Only admins (service-role key or an /admin
+-- account) may add new categories; everyone else picks from the existing
+-- list via listCategories.
 create table if not exists categories (
   id uuid primary key default gen_random_uuid(),
-  name text unique not null,
   created_at timestamptz not null default now()
 );
 
-insert into categories (name) values
-  ('Werk'), ('Hobby'), ('Gewoonte'), ('Familie'), ('Horeca'), ('School'),
-  ('Techniek'), ('Interne diefstal'), ('Vervalsing'), ('Vals spoor'),
-  ('Fraude'), ('Beveiligingsfraude'), ('Smokkel'), ('Post'), ('Buren'),
-  ('Openbaar vervoer'), ('Nutsvoorzieningen'), ('Verjaardag'), ('Dieren'),
-  ('Communicatie'), ('Astronomie'), ('Bemanning'), ('Voorraad'),
-  ('Klassiek raadsel'), ('Verzekeringsfraude'), ('Moordwapen')
-on conflict (name) do nothing;
+-- Upgrade path: a database that still has the old `categories.name` column
+-- gets it backfilled into category_translations as the Dutch row, then the
+-- column is dropped. Safe to re-run — once `name` is gone this is a no-op.
+do $$
+begin
+  if exists (
+    select 1 from information_schema.columns
+    where table_name = 'categories' and column_name = 'name'
+  ) then
+    -- Table below doesn't exist yet on a pre-i18n database; create it first
+    -- so the insert has somewhere to land. (The `create table if not
+    -- exists category_translations` further down would otherwise run too
+    -- late — this block executes before it.)
+    create table if not exists category_translations (
+      category_id uuid not null references categories (id) on delete cascade,
+      locale text not null,
+      name text not null,
+      status text not null default 'reviewed' check (status in ('machine', 'reviewed')),
+      created_at timestamptz not null default now(),
+      primary key (category_id, locale)
+    );
+
+    insert into category_translations (category_id, locale, name, status)
+    select id, 'nl', name, 'reviewed' from categories
+    on conflict (category_id, locale) do nothing;
+
+    alter table categories drop constraint if exists categories_name_key;
+    alter table categories drop column name;
+  end if;
+end $$;
+
+create table if not exists category_translations (
+  category_id uuid not null references categories (id) on delete cascade,
+  locale text not null,
+  name text not null,
+  -- 'machine': auto-translated, not yet vetted by a human. 'reviewed':
+  -- confirmed correct (every hand-authored Dutch category is 'reviewed'
+  -- from the start — see the seed loop below).
+  status text not null default 'machine' check (status in ('machine', 'reviewed')),
+  created_at timestamptz not null default now(),
+  primary key (category_id, locale)
+);
+
+-- A given name can only exist once per language (the old global-unique
+-- `categories.name` constraint, now scoped per locale instead).
+create unique index if not exists category_translations_locale_name_unique
+  on category_translations (locale, lower(name));
+
+-- Seeds the curated Dutch category vocabulary. Loops instead of a single
+-- multi-row insert because each category needs its own `categories` row
+-- created first — idempotent via the "does this Dutch name already exist"
+-- check, since there's no single-statement ON CONFLICT target spanning two
+-- tables.
+do $$
+declare
+  cat_name text;
+  new_category_id uuid;
+begin
+  foreach cat_name in array array[
+    'Werk', 'Hobby', 'Gewoonte', 'Familie', 'Horeca', 'School',
+    'Techniek', 'Interne diefstal', 'Vervalsing', 'Vals spoor',
+    'Fraude', 'Beveiligingsfraude', 'Smokkel', 'Post', 'Buren',
+    'Openbaar vervoer', 'Nutsvoorzieningen', 'Verjaardag', 'Dieren',
+    'Communicatie', 'Astronomie', 'Bemanning', 'Voorraad',
+    'Klassiek raadsel', 'Verzekeringsfraude', 'Moordwapen'
+  ]
+  loop
+    if not exists (
+      select 1 from category_translations
+      where locale = 'nl' and lower(name) = lower(cat_name)
+    ) then
+      insert into categories default values returning id into new_category_id;
+      insert into category_translations (category_id, locale, name, status)
+      values (new_category_id, 'nl', cat_name, 'reviewed');
+    end if;
+  end loop;
+end $$;
+
+-- English names for the same curated categories, matched to their existing
+-- category_id via the Dutch name above (not a second seed loop — every one
+-- of these categories already exists by now, this only adds its English row).
+insert into category_translations (category_id, locale, name, status)
+select ct_nl.category_id, 'en', v.name_en, 'machine'
+from (values
+  ('Werk', 'Work'), ('Hobby', 'Hobby'), ('Gewoonte', 'Habit'),
+  ('Familie', 'Family'), ('Horeca', 'Hospitality'), ('School', 'School'),
+  ('Techniek', 'Technology'), ('Interne diefstal', 'Internal Theft'),
+  ('Vervalsing', 'Forgery'), ('Vals spoor', 'False Trail'),
+  ('Fraude', 'Fraud'), ('Beveiligingsfraude', 'Security Fraud'),
+  ('Smokkel', 'Smuggling'), ('Post', 'Mail'), ('Buren', 'Neighbors'),
+  ('Openbaar vervoer', 'Public Transport'), ('Nutsvoorzieningen', 'Utilities'),
+  ('Verjaardag', 'Birthday'), ('Dieren', 'Animals'),
+  ('Communicatie', 'Communication'), ('Astronomie', 'Astronomy'),
+  ('Bemanning', 'Crew'), ('Voorraad', 'Supplies'),
+  ('Klassiek raadsel', 'Classic Riddle'), ('Verzekeringsfraude', 'Insurance Fraud'),
+  ('Moordwapen', 'Murder Weapon')
+) as v(name_nl, name_en)
+join category_translations ct_nl on ct_nl.locale = 'nl' and lower(ct_nl.name) = lower(v.name_nl)
+on conflict (category_id, locale) do nothing;
 
 -- Same anti-drift idea as `categories` above, but for story_packs.theme
 -- ("Crime" vs "crime" vs "SciFi") — unlike categories this is NOT
@@ -116,7 +258,10 @@ on conflict (name) do nothing;
 -- theme themselves (see PackForm.tsx's "+ Nieuw thema" flow), so anyone may
 -- insert. `story_packs.theme` stays a plain text column (see
 -- normalize_pack_theme below) — this table is purely a canonicalization
--- ledger, not a foreign key every reader has to join through.
+-- ledger, not a foreign key every reader has to join through. Not (yet)
+-- split into per-language translations — themes are community-authored
+-- free text, not a curated vocabulary like categories, so translating them
+-- automatically isn't a clean fit; deferred.
 create table if not exists themes (
   id uuid primary key default gen_random_uuid(),
   name text not null,
@@ -156,32 +301,23 @@ create trigger normalize_pack_theme_trigger
   before insert or update of theme on story_packs
   for each row execute function normalize_pack_theme();
 
+-- === i18n: puzzles are locale-agnostic; their text lives in
+-- puzzle_translations (one row per language, including Dutch — no language
+-- is special-cased as "the base"). This mirrors the categories split above.
 create table if not exists puzzles (
   id uuid primary key default gen_random_uuid(),
   pack_id uuid not null references story_packs (id) on delete cascade,
-  title text not null,
-  scenario text not null,
-  solution text not null,
   category_id uuid references categories (id) on delete set null,
   difficulty text not null default 'medium' check (difficulty in ('easy', 'medium', 'hard')),
-  hint text,
-  created_at timestamptz not null default now(),
-  unique (pack_id, title)
+  created_at timestamptz not null default now()
 );
 
 -- Upgrade path for a database that already has puzzles with the old
 -- free-text `category` column: add category_id, backfill it by matching
--- the old text against the new categories table, then drop the old column.
--- Safe to re-run — once `category` is gone this whole block is a no-op.
--- (`create table if not exists` above doesn't add columns to a table that
--- already existed, hence the explicit `add column if not exists` here.)
+-- the old text against the categories table (via its Dutch translation, now
+-- that categories.name has moved), then drop the old column. Safe to
+-- re-run — once `category` is gone this whole block is a no-op.
 alter table puzzles add column if not exists category_id uuid references categories (id) on delete set null;
-
--- A published_puzzles view from a previous run of this script still
--- selects the old `category` column, which blocks dropping it below
--- ("cannot drop column ... because other objects depend on it"). Drop it
--- here; the create-or-replace further down recreates it against category_id.
-drop view if exists published_puzzles;
 
 do $$
 begin
@@ -190,13 +326,73 @@ begin
     where table_name = 'puzzles' and column_name = 'category'
   ) then
     update puzzles p
-    set category_id = c.id
-    from categories c
-    where p.category_id is null and p.category = c.name;
+    set category_id = ct.category_id
+    from category_translations ct
+    where p.category_id is null and ct.locale = 'nl' and p.category = ct.name;
 
     alter table puzzles drop column category;
   end if;
 end $$;
+
+-- Upgrade path: a database that still has puzzles.title/scenario/solution/
+-- hint gets them backfilled into puzzle_translations as the Dutch row
+-- (status 'reviewed' — this is existing, human-written content, not a
+-- machine draft), then the columns are dropped. Safe to re-run — once
+-- `title` is gone this is a no-op.
+do $$
+begin
+  if exists (
+    select 1 from information_schema.columns
+    where table_name = 'puzzles' and column_name = 'title'
+  ) then
+    -- Table below doesn't exist yet on a pre-i18n database; create it first
+    -- so the insert has somewhere to land (the `create table if not exists
+    -- puzzle_translations` further down runs too late for this block).
+    create table if not exists puzzle_translations (
+      puzzle_id uuid not null references puzzles (id) on delete cascade,
+      locale text not null,
+      title text not null,
+      scenario text not null,
+      solution text not null,
+      hint text,
+      status text not null default 'reviewed' check (status in ('machine', 'reviewed')),
+      created_at timestamptz not null default now(),
+      primary key (puzzle_id, locale)
+    );
+
+    insert into puzzle_translations (puzzle_id, locale, title, scenario, solution, hint, status)
+    select id, 'nl', title, scenario, solution, hint, 'reviewed' from puzzles
+    on conflict (puzzle_id, locale) do nothing;
+
+    alter table puzzles drop constraint if exists puzzles_pack_id_title_key;
+    alter table puzzles drop column title;
+    alter table puzzles drop column scenario;
+    alter table puzzles drop column solution;
+    alter table puzzles drop column hint;
+  end if;
+end $$;
+
+create table if not exists puzzle_translations (
+  puzzle_id uuid not null references puzzles (id) on delete cascade,
+  locale text not null,
+  title text not null,
+  scenario text not null,
+  solution text not null,
+  hint text,
+  -- 'machine': auto-translated, not yet vetted by a human. 'reviewed':
+  -- confirmed correct (every hand-authored Dutch puzzle is 'reviewed' from
+  -- the start — see the seed data and insertPuzzles/createCommunityPuzzle).
+  status text not null default 'machine' check (status in ('machine', 'reviewed')),
+  created_at timestamptz not null default now(),
+  primary key (puzzle_id, locale)
+);
+
+-- Note: there's deliberately no DB-level "unique title per pack per
+-- locale" constraint here (unlike the old `puzzles.unique(pack_id, title)`)
+-- — enforcing that would need pack_id duplicated onto this table just for
+-- the constraint. insertPuzzles instead checks for an existing (pack,
+-- locale, title) combination in application code before inserting, the
+-- same pattern resolveCategoryId already uses for categories.
 
 -- Who's allowed to write puzzle content from the /admin dashboard. A real
 -- (non-anonymous) Supabase Auth account, not the player-facing anonymous
@@ -208,16 +404,47 @@ create table if not exists admins (
   created_at timestamptz not null default now()
 );
 
--- Only puzzles from a published pack are eligible for gameplay. Explicit
--- security_invoker keeps the view bound by the querying role's RLS instead
--- of quietly running as the view owner.
-create or replace view published_puzzles
-  with (security_invoker = true) as
-  select p.id, p.pack_id, p.title, p.scenario, p.solution, p.category_id, c.name as category, p.difficulty, p.hint, p.created_at, sp.theme, p.created_by, p.is_community
+-- Only puzzles from a published pack are eligible for gameplay. A function
+-- (not a view) so it can take a locale — falls back to Dutch wherever the
+-- requested locale has no translation yet, at the SQL level, so an
+-- untranslated puzzle never simply disappears from the pool. No explicit
+-- SECURITY DEFINER, so it runs as SECURITY INVOKER (the default) — bound
+-- by the calling role's own RLS, same reasoning the old view's
+-- `security_invoker = true` had.
+create or replace function get_published_puzzles(locale_input text)
+returns table (
+  id uuid, pack_id uuid, title text, scenario text, solution text,
+  category_id uuid, category text, difficulty text, hint text,
+  created_at timestamptz, theme text, created_by uuid, is_community boolean,
+  locale text
+)
+language sql stable
+as $$
+  select
+    p.id, p.pack_id,
+    coalesce(pt.title, pt_fallback.title) as title,
+    coalesce(pt.scenario, pt_fallback.scenario) as scenario,
+    coalesce(pt.solution, pt_fallback.solution) as solution,
+    p.category_id,
+    coalesce(ct.name, ct_fallback.name) as category,
+    p.difficulty,
+    coalesce(pt.hint, pt_fallback.hint) as hint,
+    p.created_at, sp.theme, p.created_by, p.is_community,
+    -- Which language the returned text actually came from — 'nl' when it
+    -- fell back, locale_input when a direct translation existed. Lets the
+    -- client know it's showing a fallback rather than silently pretending
+    -- everything is translated.
+    case when pt.puzzle_id is not null then locale_input else 'nl' end as locale
   from puzzles p
   join story_packs sp on sp.id = p.pack_id
   left join categories c on c.id = p.category_id
-  where sp.is_published = true;
+  left join puzzle_translations pt on pt.puzzle_id = p.id and pt.locale = locale_input
+  left join puzzle_translations pt_fallback on pt_fallback.puzzle_id = p.id and pt_fallback.locale = 'nl'
+  left join category_translations ct on ct.category_id = c.id and ct.locale = locale_input
+  left join category_translations ct_fallback on ct_fallback.category_id = c.id and ct_fallback.locale = 'nl'
+  where sp.is_published = true
+    and coalesce(pt.title, pt_fallback.title) is not null;
+$$;
 
 create table if not exists questions (
   id uuid primary key default gen_random_uuid(),
@@ -260,6 +487,9 @@ create table if not exists chat_messages (
 -- summarized in the end-of-session recap. Denormalized (puzzle_title,
 -- solver_name, narrator_name as plain text) like questions/guesses already
 -- are, so the log stays readable even if a puzzle or player is later gone.
+-- puzzle_title is captured in whatever language the round was actually
+-- played in — it deliberately does NOT follow later puzzle translations,
+-- since this is a historical record of what happened, not a live view.
 create table if not exists case_log (
   id uuid primary key default gen_random_uuid(),
   room_id uuid not null references rooms (id) on delete cascade,
@@ -539,10 +769,14 @@ $$;
 -- caller is the Verteller or the round has already been revealed — the
 -- first time "Verteller ziet de oplossing, anderen niet" is enforced by the
 -- server instead of the client just choosing not to render it.
-create or replace function get_room_puzzle(room_id_input uuid)
+-- locale_input picks which translation to read; falls back to Dutch at the
+-- SQL level wherever the requested locale has no row yet, same as
+-- get_published_puzzles above.
+create or replace function get_room_puzzle(room_id_input uuid, locale_input text default 'nl')
 returns table (
   id uuid, pack_id uuid, title text, scenario text, solution text,
-  category text, difficulty text, hint text, created_at timestamptz
+  category text, difficulty text, hint text, created_at timestamptz,
+  locale text
 )
 language plpgsql
 security definer
@@ -556,11 +790,21 @@ begin
 
   return query
   select
-    p.id, p.pack_id, p.title, p.scenario,
-    case when can_see_solution then p.solution else null end,
-    c.name, p.difficulty, p.hint, p.created_at
+    p.id, p.pack_id,
+    coalesce(pt.title, pt_fallback.title),
+    coalesce(pt.scenario, pt_fallback.scenario),
+    case when can_see_solution then coalesce(pt.solution, pt_fallback.solution) else null end,
+    coalesce(ct.name, ct_fallback.name),
+    p.difficulty,
+    coalesce(pt.hint, pt_fallback.hint),
+    p.created_at,
+    case when pt.puzzle_id is not null then locale_input else 'nl' end
   from puzzles p
   left join categories c on c.id = p.category_id
+  left join puzzle_translations pt on pt.puzzle_id = p.id and pt.locale = locale_input
+  left join puzzle_translations pt_fallback on pt_fallback.puzzle_id = p.id and pt_fallback.locale = 'nl'
+  left join category_translations ct on ct.category_id = c.id and ct.locale = locale_input
+  left join category_translations ct_fallback on ct_fallback.category_id = c.id and ct_fallback.locale = 'nl'
   join rooms r on r.current_puzzle_id = p.id
   where r.id = room_id_input;
 end;
@@ -797,8 +1041,11 @@ end $$;
 alter table rooms enable row level security;
 alter table players enable row level security;
 alter table story_packs enable row level security;
+alter table story_pack_translations enable row level security;
 alter table puzzles enable row level security;
+alter table puzzle_translations enable row level security;
 alter table categories enable row level security;
+alter table category_translations enable row level security;
 alter table themes enable row level security;
 alter table admins enable row level security;
 alter table questions enable row level security;
@@ -831,10 +1078,16 @@ create policy "leave or be kicked" on players for delete
 
 drop policy if exists "public read story packs" on story_packs;
 create policy "public read story packs" on story_packs for select using (true);
+drop policy if exists "public read story pack translations" on story_pack_translations;
+create policy "public read story pack translations" on story_pack_translations for select using (true);
 drop policy if exists "public read puzzles" on puzzles;
 create policy "public read puzzles" on puzzles for select using (true);
+drop policy if exists "public read puzzle translations" on puzzle_translations;
+create policy "public read puzzle translations" on puzzle_translations for select using (true);
 drop policy if exists "public read categories" on categories;
 create policy "public read categories" on categories for select using (true);
+drop policy if exists "public read category translations" on category_translations;
+create policy "public read category translations" on category_translations for select using (true);
 drop policy if exists "public read themes" on themes;
 create policy "public read themes" on themes for select using (true);
 -- Community pack creators must be able to name a genuinely new theme
@@ -853,12 +1106,24 @@ drop policy if exists "admins write story packs" on story_packs;
 create policy "admins write story packs" on story_packs for all
   using (exists (select 1 from admins where id = auth.uid()))
   with check (exists (select 1 from admins where id = auth.uid()));
+drop policy if exists "admins write story pack translations" on story_pack_translations;
+create policy "admins write story pack translations" on story_pack_translations for all
+  using (exists (select 1 from admins where id = auth.uid()))
+  with check (exists (select 1 from admins where id = auth.uid()));
 drop policy if exists "admins write puzzles" on puzzles;
 create policy "admins write puzzles" on puzzles for all
   using (exists (select 1 from admins where id = auth.uid()))
   with check (exists (select 1 from admins where id = auth.uid()));
+drop policy if exists "admins write puzzle translations" on puzzle_translations;
+create policy "admins write puzzle translations" on puzzle_translations for all
+  using (exists (select 1 from admins where id = auth.uid()))
+  with check (exists (select 1 from admins where id = auth.uid()));
 drop policy if exists "admins write categories" on categories;
 create policy "admins write categories" on categories for all
+  using (exists (select 1 from admins where id = auth.uid()))
+  with check (exists (select 1 from admins where id = auth.uid()));
+drop policy if exists "admins write category translations" on category_translations;
+create policy "admins write category translations" on category_translations for all
   using (exists (select 1 from admins where id = auth.uid()))
   with check (exists (select 1 from admins where id = auth.uid()));
 drop policy if exists "admins write themes" on themes;
@@ -936,34 +1201,93 @@ create policy "creator or host deletes board connections" on board_connections f
 -- Seed a starter pack so the game has something to play immediately.
 -- Add more via `npm run puzzles:import -- packs/your-pack.json` or POST
 -- /api/admin/puzzles (see packs/example-pack.json for the JSON shape).
-insert into story_packs (slug, name, theme, is_published) values
-  ('classics-vol-1', 'Klassiekers Vol. 1', 'Klassiek', true)
+insert into story_packs (slug, theme, is_published) values
+  ('classics-vol-1', 'Klassiek', true)
 on conflict (slug) do nothing;
 
-insert into puzzles (pack_id, title, scenario, solution, category_id, difficulty, hint)
-select sp.id, v.title, v.scenario, v.solution, c.id, v.difficulty, v.hint
+insert into story_pack_translations (pack_id, locale, name, status)
+select sp.id, 'nl', 'Klassiekers Vol. 1', 'reviewed'
 from story_packs sp
-cross join (values
+where sp.slug = 'classics-vol-1'
+on conflict (pack_id, locale) do nothing;
+
+insert into story_pack_translations (pack_id, locale, name, status)
+select sp.id, 'en', 'Classics Vol. 1', 'machine'
+from story_packs sp
+where sp.slug = 'classics-vol-1'
+on conflict (pack_id, locale) do nothing;
+
+-- Idempotent via an explicit existence check (join puzzles -> its Dutch
+-- translation by title) instead of ON CONFLICT — puzzle_translations has no
+-- (pack, title) constraint to conflict on, see the note near its
+-- definition above.
+do $$
+declare
+  v_pack_id uuid;
+  v_category_id uuid;
+  v_puzzle_id uuid;
+  v_row record;
+begin
+  select id into v_pack_id from story_packs where slug = 'classics-vol-1';
+  select category_id into v_category_id
+  from category_translations where locale = 'nl' and name = 'Klassiek raadsel' limit 1;
+
+  for v_row in
+    select * from (values
+      (
+        'De brief zonder postzegel',
+        'Een postbode bezorgt een brief zonder postzegel, en toch krijgt niemand een boete of nabetaling — de brief wordt gewoon netjes afgeleverd.',
+        'De brief zit in een dienstenvelop van de posterijen zelf, intern verstuurd tussen twee postkantoren. Interne post heeft nooit een postzegel nodig gehad.',
+        'easy'::text,
+        'Niet alle post komt van buiten het systeem.'
+      ),
+      (
+        'De man die zijn eigen begrafenis miste',
+        'Op een begrafenis wordt de overledene herdacht en de kist gedragen, terwijl de man zelf kilometers verderop nog leeft en van niets weet.',
+        'Het is de begrafenis van zijn tweelingbroer, die dezelfde voornaam draagt. Een verwarde buurtkrant meldde het overlijden onder de verkeerde naam, en de man zelf hoort er pas later per toeval van.',
+        'medium'::text,
+        'Twee mensen kunnen dezelfde naam dragen — en soms ook hetzelfde gezicht.'
+      )
+    ) as v(title, scenario, solution, difficulty, hint)
+  loop
+    if not exists (
+      select 1 from puzzle_translations pt
+      join puzzles p on p.id = pt.puzzle_id
+      where p.pack_id = v_pack_id and pt.locale = 'nl' and pt.title = v_row.title
+    ) then
+      insert into puzzles (pack_id, category_id, difficulty)
+      values (v_pack_id, v_category_id, v_row.difficulty)
+      returning id into v_puzzle_id;
+
+      insert into puzzle_translations (puzzle_id, locale, title, scenario, solution, hint, status)
+      values (v_puzzle_id, 'nl', v_row.title, v_row.scenario, v_row.solution, v_row.hint, 'reviewed');
+    end if;
+  end loop;
+end $$;
+
+-- English translations of the same two starter puzzles, matched to their
+-- existing puzzle_id via the Dutch title above (not a second seed loop —
+-- both puzzles already exist by now, this only adds their English row).
+insert into puzzle_translations (puzzle_id, locale, title, scenario, solution, hint, status)
+select pt_nl.puzzle_id, 'en', v.title, v.scenario, v.solution, v.hint, 'machine'
+from (values
   (
     'De brief zonder postzegel',
-    'Een postbode bezorgt een brief zonder postzegel, en toch krijgt niemand een boete of nabetaling — de brief wordt gewoon netjes afgeleverd.',
-    'De brief zit in een dienstenvelop van de posterijen zelf, intern verstuurd tussen twee postkantoren. Interne post heeft nooit een postzegel nodig gehad.',
-    'Klassiek raadsel',
-    'easy',
-    'Niet alle post komt van buiten het systeem.'
+    'The letter without a stamp',
+    'A postal worker delivers a letter without a stamp, and yet nobody gets fined or has to pay extra — the letter is simply delivered as normal.',
+    'The letter is in an internal service envelope from the postal service itself, sent between two post offices. Internal mail has never needed a stamp.',
+    'Not all mail comes from outside the system.'
   ),
   (
     'De man die zijn eigen begrafenis miste',
-    'Op een begrafenis wordt de overledene herdacht en de kist gedragen, terwijl de man zelf kilometers verderop nog leeft en van niets weet.',
-    'Het is de begrafenis van zijn tweelingbroer, die dezelfde voornaam draagt. Een verwarde buurtkrant meldde het overlijden onder de verkeerde naam, en de man zelf hoort er pas later per toeval van.',
-    'Klassiek raadsel',
-    'medium',
-    'Twee mensen kunnen dezelfde naam dragen — en soms ook hetzelfde gezicht.'
+    'The man who missed his own funeral',
+    'At a funeral, the deceased is being mourned and the coffin carried, while the man himself is very much alive, miles away, and knows nothing about it.',
+    'It''s the funeral of his identical twin brother, who shares the same first name. A confused local newspaper reported the death under the wrong name, and the man himself only finds out by chance much later.',
+    'Two people can share the same name — and sometimes even the same face.'
   )
-) as v(title, scenario, solution, category, difficulty, hint)
-left join categories c on c.name = v.category
-where sp.slug = 'classics-vol-1'
-on conflict (pack_id, title) do nothing;
+) as v(title_nl, title, scenario, solution, hint)
+join puzzle_translations pt_nl on pt_nl.locale = 'nl' and pt_nl.title = v.title_nl
+on conflict (puzzle_id, locale) do nothing;
 
 -- === Community content: user-submitted puzzles, packs, and voting ==========
 -- Anyone can already play via anonymous auth (see authSession.ts) — the same
@@ -1006,7 +1330,7 @@ create table if not exists pack_favorites (
 );
 
 -- Vote totals per puzzle, for sorting/display. security_invoker so it's
--- bound by the querying role's own RLS, same reasoning as published_puzzles.
+-- bound by the querying role's own RLS, same reasoning as get_published_puzzles.
 create or replace view puzzle_vote_totals
   with (security_invoker = true) as
   select
@@ -1034,18 +1358,23 @@ create trigger rate_limit_puzzle_votes
     'Even rustig met stemmen — probeer over een paar tellen opnieuw.'
   );
 
--- Reuses the same banned_words list as chat moderation, applied only to
--- community puzzle text — curated/admin content (is_community = false) is
--- trusted and skips this check.
-create or replace function enforce_puzzle_moderation()
+-- Reuses the same banned_words list as chat moderation. Puzzle text now
+-- lives on puzzle_translations, not puzzles, so this trigger moved there
+-- too — it looks up whether the parent puzzle is community content (and
+-- therefore untrusted) via puzzle_id, since is_community itself still lives
+-- on puzzles. Curated/admin content (is_community = false) is trusted and
+-- skips this check, same as before.
+create or replace function enforce_puzzle_translation_moderation()
 returns trigger
 language plpgsql
 security definer
 as $$
 declare
   hit text;
+  puzzle_is_community boolean;
 begin
-  if not new.is_community then
+  select is_community into puzzle_is_community from puzzles where id = new.puzzle_id;
+  if not coalesce(puzzle_is_community, false) then
     return new;
   end if;
 
@@ -1064,9 +1393,12 @@ end;
 $$;
 
 drop trigger if exists moderate_puzzles on puzzles;
-create trigger moderate_puzzles
-  before insert or update on puzzles
-  for each row execute function enforce_puzzle_moderation();
+drop function if exists enforce_puzzle_moderation();
+
+drop trigger if exists moderate_puzzle_translations on puzzle_translations;
+create trigger moderate_puzzle_translations
+  before insert or update on puzzle_translations
+  for each row execute function enforce_puzzle_translation_moderation();
 
 alter table profiles enable row level security;
 alter table puzzle_votes enable row level security;
@@ -1107,6 +1439,22 @@ create policy "creators write own community packs" on story_packs for all
   using (created_by = auth.uid() and is_community)
   with check (created_by = auth.uid() and is_community);
 
+-- Mirrors "creators write own community packs" for the translation rows.
+drop policy if exists "creators write own community pack translations" on story_pack_translations;
+create policy "creators write own community pack translations" on story_pack_translations for all
+  using (
+    exists (
+      select 1 from story_packs sp
+      where sp.id = pack_id and sp.created_by = auth.uid() and sp.is_community
+    )
+  )
+  with check (
+    exists (
+      select 1 from story_packs sp
+      where sp.id = pack_id and sp.created_by = auth.uid() and sp.is_community
+    )
+  );
+
 drop policy if exists "creators write own community puzzles" on puzzles;
 create policy "creators write own community puzzles" on puzzles for all
   using (created_by = auth.uid() and is_community)
@@ -1115,5 +1463,24 @@ create policy "creators write own community puzzles" on puzzles for all
     and exists (
       select 1 from story_packs sp
       where sp.id = pack_id and sp.created_by = auth.uid() and sp.is_community
+    )
+  );
+
+-- Mirrors "creators write own community puzzles" for the translation rows:
+-- a creator may write translations for their own community puzzle. Admins
+-- still cover official/curated content via "admins write puzzle
+-- translations" above.
+drop policy if exists "creators write own community puzzle translations" on puzzle_translations;
+create policy "creators write own community puzzle translations" on puzzle_translations for all
+  using (
+    exists (
+      select 1 from puzzles p
+      where p.id = puzzle_id and p.created_by = auth.uid() and p.is_community
+    )
+  )
+  with check (
+    exists (
+      select 1 from puzzles p
+      where p.id = puzzle_id and p.created_by = auth.uid() and p.is_community
     )
   );

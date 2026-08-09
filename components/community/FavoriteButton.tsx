@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { ensureAnonymousSession } from "@/lib/supabase/authSession";
 import { addFavorite, removeFavorite } from "@/lib/supabase/packFavorites";
@@ -24,6 +25,7 @@ export function FavoriteButton({
   const [favorited, setFavorited] = useState(initialFavorited);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("FavoriteButton");
 
   async function toggle(e: React.MouseEvent) {
     e.preventDefault();
@@ -42,7 +44,7 @@ export function FavoriteButton({
         setFavorited(true);
       }
     } catch (err) {
-      setError(getErrorMessage(err, "Favoriet opslaan is niet gelukt. Probeer het opnieuw."));
+      setError(getErrorMessage(err, t("error")));
     } finally {
       setIsSaving(false);
     }
@@ -56,7 +58,7 @@ export function FavoriteButton({
         iconOnly
         disabled={isSaving}
         onClick={toggle}
-        aria-label={favorited ? "Verwijder uit favorieten" : "Voeg toe aan favorieten"}
+        aria-label={favorited ? t("removeAriaLabel") : t("addAriaLabel")}
         className={favorited ? "text-accent" : ""}
       >
         {favorited ? "★" : "☆"}

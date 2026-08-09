@@ -2,6 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "./database.types";
 import type { StoryPack } from "@/types/puzzle";
 import { getVoteTotals } from "./votes";
+import { hydrateStoryPacks } from "./storyPacks";
 
 export type StoryPackWithScore = StoryPack & { score: number };
 
@@ -27,23 +28,31 @@ export async function createOwnPack(
   supabase: Client,
   userId: string,
   name: string,
-  theme: string
+  theme: string,
+  locale: string
 ): Promise<StoryPack> {
-  const { data, error } = await supabase
+  const { data: pack, error } = await supabase
     .from("story_packs")
     .insert({
       slug: slugify(name),
-      name,
       theme,
       is_published: false,
       is_community: true,
       created_by: userId,
     })
-    .select()
+    .select("*")
     .single();
 
   if (error) throw error;
-  return data as StoryPack;
+
+  const { error: translationError } = await supabase
+    .from("story_pack_translations")
+    .insert({ pack_id: pack.id, locale, name, status: "reviewed" });
+
+  if (translationError) throw translationError;
+
+  const hydrated = await hydrateStoryPacks(supabase, [pack], locale);
+  return hydrated[0];
 }
 
 /**
@@ -51,7 +60,7 @@ export async function createOwnPack(
  * the summed vote score of its puzzles, so the caller can offer a
  * "populairste" sort alongside "nieuwste" without extra round trips.
  */
-export async function listCommunityPacks(supabase: Client): Promise<StoryPackWithScore[]> {
+export async function listCommunityPacks(supabase: Client, locale: string): Promise<StoryPackWithScore[]> {
   const { data: packs, error } = await supabase
     .from("story_packs")
     .select("*")
@@ -82,7 +91,8 @@ export async function listCommunityPacks(supabase: Client): Promise<StoryPackWit
     scoreByPack.set(row.pack_id, (scoreByPack.get(row.pack_id) ?? 0) + score);
   }
 
-  return (packs as StoryPack[]).map((pack) => ({
+  const hydrated = await hydrateStoryPacks(supabase, packs, locale);
+  return hydrated.map((pack) => ({
     ...pack,
     score: scoreByPack.get(pack.id) ?? 0,
   }));
@@ -106,7 +116,7 @@ export async function countPublishedCommunityPacks(supabase: Client): Promise<nu
 }
 
 /** The caller's own community packs (published or not), for the "mijn" page. */
-export async function listOwnPacks(supabase: Client, userId: string): Promise<StoryPack[]> {
+export async function listOwnPacks(supabase: Client, userId: string, locale: string): Promise<StoryPack[]> {
   const { data, error } = await supabase
     .from("story_packs")
     .select("*")
@@ -115,30 +125,21 @@ export async function listOwnPacks(supabase: Client, userId: string): Promise<St
     .order("created_at", { ascending: false });
 
   if (error) throw error;
-  return (data ?? []) as StoryPack[];
+  return hydrateStoryPacks(supabase, data ?? [], locale);
 }
 
-export async function getOwnPack(supabase: Client, packId: string): Promise<StoryPack | null> {
-  const { data, error } = await supabase
-    .from("story_packs")
-    .select("*")
-    .eq("id", packId)
-    .maybeSingle();
+export async function getOwnPack(supabase: Client, packId: string, locale: string): Promise<StoryPack | null> {
+  const { data, error } = await supabase.from("story_packs").select("*").eq("id", packId).maybeSingle();
 
   if (error) throw error;
-  return data as StoryPack | null;
+  if (!data) return null;
+  const hydrated = await hydrateStoryPacks(supabase, [data], locale);
+  return hydrated[0] ?? null;
 }
 
 /** RLS only allows the pack's own creator to flip this. */
-export async function setOwnPackPublished(
-  supabase: Client,
-  packId: string,
-  isPublished: boolean
-): Promise<void> {
-  const { error } = await supabase
-    .from("story_packs")
-    .update({ is_published: isPublished })
-    .eq("id", packId);
+export async function setOwnPackPublished(supabase: Client, packId: string, isPublished: boolean): Promise<void> {
+  const { error } = await supabase.from("story_packs").update({ is_published: isPublished }).eq("id", packId);
 
   if (error) throw error;
 }

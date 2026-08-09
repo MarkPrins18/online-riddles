@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { Player } from "@/types/player";
@@ -34,6 +35,7 @@ export function ShareRecapButton({
   const [error, setError] = useState<string | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [imageBlob, setImageBlob] = useState<Blob | null>(null);
+  const t = useTranslations("ShareRecapButton");
 
   // Revokes the previous object URL whenever a new one replaces it (or the
   // component unmounts) — otherwise each generated image leaks.
@@ -50,14 +52,14 @@ export function ShareRecapButton({
     try {
       const recap = await getSessionRecap(supabase, roomId);
       const blob = await generateRecapImage(players, recap);
-      if (!blob) throw new Error("Kon geen afbeelding genereren.");
+      if (!blob) throw new Error(t("generateError"));
       setImageBlob(blob);
       setImageUrl((prev) => {
         if (prev) URL.revokeObjectURL(prev);
         return URL.createObjectURL(blob);
       });
     } catch (err) {
-      setError(getErrorMessage(err, "Kon geen samenvatting maken. Probeer het opnieuw."));
+      setError(getErrorMessage(err, t("recapError")));
     } finally {
       setIsGenerating(false);
     }
@@ -71,7 +73,7 @@ export function ShareRecapButton({
       try {
         await navigator.share({
           files: [file],
-          title: "Online Riddles — zaak gesloten",
+          title: t("shareTitle"),
         });
         return;
       } catch {
@@ -89,35 +91,35 @@ export function ShareRecapButton({
   return (
     <>
       <Button variant="secondary" className="w-full" onClick={handleOpen}>
-        Deel de avond
+        {t("share")}
       </Button>
 
       {open && (
         <Modal onClose={() => setOpen(false)} className="mx-auto w-full max-w-md">
           <div className="flex items-center justify-between gap-3 border-b border-white/5 p-4">
             <p className="font-mono text-sm uppercase tracking-widest text-text-secondary">
-              Zaak gesloten
+              {t("caseClosed")}
             </p>
             <Button variant="ghost" onClick={() => setOpen(false)}>
-              Sluiten
+              {t("close")}
             </Button>
           </div>
           <div className="flex min-h-0 flex-1 flex-col items-center gap-4 overflow-y-auto p-5">
             {isGenerating && (
-              <p className="font-mono text-sm text-text-secondary">Samenvatting maken...</p>
+              <p className="font-mono text-sm text-text-secondary">{t("generating")}</p>
             )}
             {error && <p className="font-mono text-sm text-danger">{error}</p>}
             {imageUrl && (
               // eslint-disable-next-line @next/next/no-img-element -- a generated blob: URL, not an optimizable remote/static asset
               <img
                 src={imageUrl}
-                alt="Samenvatting van de speelavond"
+                alt={t("recapImageAlt")}
                 className="w-full max-w-xs rounded-md border border-white/10"
               />
             )}
             {imageBlob && (
               <Button className="w-full max-w-xs" onClick={handleShare}>
-                Delen / downloaden
+                {t("shareOrDownload")}
               </Button>
             )}
           </div>

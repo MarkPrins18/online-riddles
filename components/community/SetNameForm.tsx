@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { ensureAnonymousSession } from "@/lib/supabase/authSession";
 import { upsertProfile } from "@/lib/supabase/profiles";
@@ -21,6 +22,7 @@ export function SetNameForm({ onDone }: { onDone: (displayName: string) => void 
   const [name, setName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("SetNameForm");
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -34,7 +36,7 @@ export function SetNameForm({ onDone }: { onDone: (displayName: string) => void 
       await upsertProfile(supabase, userId, name.trim());
       onDone(name.trim());
     } catch (err) {
-      setError(getErrorMessage(err, "Kon je naam niet opslaan. Probeer het opnieuw."));
+      setError(getErrorMessage(err, t("error")));
     } finally {
       setIsSubmitting(false);
     }
@@ -42,25 +44,23 @@ export function SetNameForm({ onDone }: { onDone: (displayName: string) => void 
 
   return (
     <Card tone="case">
-      <p className="mb-4 font-mono text-xs uppercase tracking-widest text-accent">Word maker</p>
-      <p className="mb-4 font-mono text-sm text-text-secondary">
-        Kies een naam waaronder je raadsels en packs verschijnen.
-      </p>
+      <p className="mb-4 font-mono text-xs uppercase tracking-widest text-accent">{t("heading")}</p>
+      <p className="mb-4 font-mono text-sm text-text-secondary">{t("subtitle")}</p>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <label htmlFor="creator-name" className={labelClasses}>
-          Naam als maker
+          {t("nameLabel")}
         </label>
         <input
           id="creator-name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Rechercheur..."
+          placeholder={t("namePlaceholder")}
           maxLength={24}
           className={inputClasses}
         />
         {error && <p className="font-mono text-xs text-danger">{error}</p>}
         <Button type="submit" disabled={isSubmitting || !name.trim()}>
-          {isSubmitting ? "Opslaan..." : "Doorgaan"}
+          {isSubmitting ? t("saving") : t("submit")}
         </Button>
       </form>
     </Card>

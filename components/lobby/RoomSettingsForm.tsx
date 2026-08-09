@@ -1,18 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { RoomSettingsInput } from "@/types/room";
 import { getOfficialThemes } from "@/lib/supabase/storyPacks";
 import { countPublishedCommunityPacks } from "@/lib/supabase/communityPacks";
 
-const DURATION_OPTIONS: Array<{ label: string; value: number | null }> = [
-  { label: "5 minuten", value: 300 },
-  { label: "10 minuten", value: 600 },
-  { label: "15 minuten", value: 900 },
-  { label: "20 minuten", value: 1200 },
-  { label: "Geen limiet", value: null },
+type DurationLabelKey = "duration5" | "duration10" | "duration15" | "duration20" | "durationNone";
+
+const DURATION_OPTIONS: Array<{ labelKey: DurationLabelKey; value: number | null }> = [
+  { labelKey: "duration5", value: 300 },
+  { labelKey: "duration10", value: 600 },
+  { labelKey: "duration15", value: 900 },
+  { labelKey: "duration20", value: 1200 },
+  { labelKey: "durationNone", value: null },
 ];
 
 const ROUND_COUNT_OPTIONS = [3, 5, 7, 10];
@@ -31,6 +34,7 @@ export function RoomSettingsForm({
 }) {
   const [officialThemes, setOfficialThemes] = useState<string[] | null>(null);
   const [communityPackCount, setCommunityPackCount] = useState<number | null>(null);
+  const t = useTranslations("RoomSettingsForm");
 
   useEffect(() => {
     let cancelled = false;
@@ -71,7 +75,7 @@ export function RoomSettingsForm({
           htmlFor="round-duration"
           className="mb-1 block font-mono text-xs uppercase tracking-widest text-text-secondary"
         >
-          Tijd per ronde
+          {t("durationLabel")}
         </label>
         <select
           id="round-duration"
@@ -85,8 +89,8 @@ export function RoomSettingsForm({
           className="w-full rounded-md border border-white/10 bg-bg-primary px-3 py-2 font-mono text-sm text-text-primary focus:border-accent-muted"
         >
           {DURATION_OPTIONS.map((option) => (
-            <option key={option.label} value={option.value === null ? "none" : option.value}>
-              {option.label}
+            <option key={option.labelKey} value={option.value === null ? "none" : option.value}>
+              {t(option.labelKey)}
             </option>
           ))}
         </select>
@@ -97,7 +101,7 @@ export function RoomSettingsForm({
           htmlFor="round-count"
           className="mb-1 block font-mono text-xs uppercase tracking-widest text-text-secondary"
         >
-          Aantal rondes
+          {t("roundCountLabel")}
         </label>
         <select
           id="round-count"
@@ -107,7 +111,7 @@ export function RoomSettingsForm({
         >
           {ROUND_COUNT_OPTIONS.map((count) => (
             <option key={count} value={count}>
-              {count} rondes
+              {t("roundCountOption", { count })}
             </option>
           ))}
         </select>
@@ -115,14 +119,12 @@ export function RoomSettingsForm({
 
       <fieldset>
         <legend className="mb-1 font-mono text-xs uppercase tracking-widest text-text-secondary">
-          Thema&rsquo;s
+          {t("themesLegend")}
         </legend>
         {officialThemes === null ? (
-          <p className="font-mono text-xs text-text-secondary">Thema&rsquo;s laden...</p>
+          <p className="font-mono text-xs text-text-secondary">{t("themesLoading")}</p>
         ) : officialThemes.length === 0 ? (
-          <p className="font-mono text-xs text-text-secondary">
-            Nog geen gepubliceerde puzzels beschikbaar.
-          </p>
+          <p className="font-mono text-xs text-text-secondary">{t("themesEmpty")}</p>
         ) : (
           <div className="flex flex-col gap-1.5">
             {officialThemes.map((theme) => (
@@ -142,14 +144,12 @@ export function RoomSettingsForm({
 
       <fieldset className="border-t border-white/5 pt-4">
         <legend className="mb-1 font-mono text-xs uppercase tracking-widest text-text-secondary">
-          Community
+          {t("communityLegend")}
         </legend>
         {communityPackCount === null ? (
-          <p className="font-mono text-xs text-text-secondary">Community laden...</p>
+          <p className="font-mono text-xs text-text-secondary">{t("communityLoading")}</p>
         ) : communityPackCount === 0 ? (
-          <p className="font-mono text-xs text-text-secondary">
-            Nog geen gepubliceerde community-packs.
-          </p>
+          <p className="font-mono text-xs text-text-secondary">{t("communityEmpty")}</p>
         ) : (
           <>
             <label className="flex items-center gap-2 font-mono text-sm text-text-primary">
@@ -159,12 +159,10 @@ export function RoomSettingsForm({
                 checked={value.communityPackIds === null}
                 onChange={(e) => toggleCommunity(e.target.checked)}
               />
-              Community packs meespelen
+              {t("communityToggle")}
               <span className="font-mono text-xs text-text-secondary">({communityPackCount})</span>
             </label>
-            <p className="mt-1 font-mono text-xs text-text-secondary">
-              Raadsels gemaakt door andere spelers, los van de officiële thema&rsquo;s hierboven.
-            </p>
+            <p className="mt-1 font-mono text-xs text-text-secondary">{t("communityHint")}</p>
           </>
         )}
       </fieldset>
@@ -174,9 +172,7 @@ export function RoomSettingsForm({
         officialThemes.length + communityPackCount > 0 &&
         value.packThemeFilter.length === 0 &&
         (value.communityPackIds === null ? communityPackCount === 0 : value.communityPackIds.length === 0) && (
-          <p className="font-mono text-xs text-danger">
-            Kies minstens één thema of community pack.
-          </p>
+          <p className="font-mono text-xs text-danger">{t("chooseThemeOrPack")}</p>
         )}
 
       <div className="border-t border-white/5 pt-4">
@@ -187,12 +183,9 @@ export function RoomSettingsForm({
             checked={value.hardcoreMode}
             onChange={(e) => onChange({ ...value, hardcoreMode: e.target.checked })}
           />
-          Hardcore modus — gedeelde team-levens
+          {t("hardcoreToggle")}
         </label>
-        <p className="mt-1 font-mono text-xs text-text-secondary">
-          Elke foute gok kost het hele team 1 leven. Op 0 levens is het game over voor de
-          hele sessie.
-        </p>
+        <p className="mt-1 font-mono text-xs text-text-secondary">{t("hardcoreHint")}</p>
 
         {value.hardcoreMode && (
           <div className="mt-3">
@@ -201,8 +194,8 @@ export function RoomSettingsForm({
               className="mb-1 block font-mono text-xs uppercase tracking-widest text-text-secondary"
             >
               {narratorPreviewName
-                ? `${narratorPreviewName} bepaalt: hoeveel levens krijgt het team?`
-                : "Hoeveel levens krijgt het team?"}
+                ? t("teamLivesLabelWithNarrator", { name: narratorPreviewName })
+                : t("teamLivesLabel")}
             </label>
             <select
               id="team-lives"
@@ -212,7 +205,7 @@ export function RoomSettingsForm({
             >
               {TEAM_LIVES_OPTIONS.map((count) => (
                 <option key={count} value={count}>
-                  {count} levens
+                  {t("teamLivesOption", { count })}
                 </option>
               ))}
             </select>

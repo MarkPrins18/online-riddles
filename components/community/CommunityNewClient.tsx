@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { ensureAnonymousSession } from "@/lib/supabase/authSession";
 import { getProfile } from "@/lib/supabase/profiles";
@@ -19,11 +20,13 @@ export function CommunityNewClient() {
   const [selectedPackId, setSelectedPackId] = useState<string | null>(null);
   const [showNewPackForm, setShowNewPackForm] = useState(false);
   const [justAdded, setJustAdded] = useState<string | null>(null);
+  const t = useTranslations("CommunityNewClient");
+  const locale = useLocale();
 
   async function loadOwnPacks() {
     const supabase = createClient();
     const userId = await ensureAnonymousSession(supabase);
-    const ownPacks = await listOwnPacks(supabase, userId);
+    const ownPacks = await listOwnPacks(supabase, userId, locale);
     setPacks(ownPacks);
     if (ownPacks.length > 0) setSelectedPackId(ownPacks[0].id);
     else setShowNewPackForm(true);
@@ -44,10 +47,14 @@ export function CommunityNewClient() {
     return () => {
       cancelled = true;
     };
-  }, []);
+    // loadOwnPacks closes over `locale` directly and is redefined every
+    // render; including it here would just make this effect re-run every
+    // render for no behavioral difference beyond the locale actually changing.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locale]);
 
   if (hasName === null) {
-    return <p className="font-mono text-sm text-text-secondary">Even laden...</p>;
+    return <p className="font-mono text-sm text-text-secondary">{t("loading")}</p>;
   }
 
   if (!hasName) {
@@ -63,11 +70,11 @@ export function CommunityNewClient() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="font-serif text-3xl italic text-text-primary">Raadsel insturen</h1>
+      <h1 className="font-serif text-3xl italic text-text-primary">{t("heading")}</h1>
 
       <Card tone="chrome">
         <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary">
-          Pack
+          {t("packHeading")}
         </p>
         {packs.length > 0 && !showNewPackForm && (
           <div className="flex items-center gap-3">
@@ -83,7 +90,7 @@ export function CommunityNewClient() {
               ))}
             </select>
             <Button type="button" variant="ghost" onClick={() => setShowNewPackForm(true)}>
-              Nieuw pack
+              {t("newPackButton")}
             </Button>
           </div>
         )}
@@ -98,7 +105,7 @@ export function CommunityNewClient() {
             />
             {packs.length > 0 && (
               <Button type="button" variant="ghost" onClick={() => setShowNewPackForm(false)}>
-                Annuleren
+                {t("cancel")}
               </Button>
             )}
           </div>
@@ -113,9 +120,9 @@ export function CommunityNewClient() {
           />
           {justAdded && (
             <p className="mt-3 font-mono text-xs text-accent">
-              &ldquo;{justAdded}&rdquo; is toegevoegd. Vergeet niet je pack te publiceren via{" "}
+              {t("addedNoticePrefix", { title: justAdded })}{" "}
               <Link href="/community/mijn" className="underline">
-                Mijn packs
+                {t("myPacksLink")}
               </Link>
               .
             </p>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { Player } from "@/types/player";
@@ -34,6 +35,7 @@ export function NarratorTakeoverControl({
   onlinePlayerIds?: Set<string>;
 }) {
   const [savingId, setSavingId] = useState<string | null>(null);
+  const t = useTranslations("NarratorTakeoverControl");
 
   const candidates = players.filter(
     (p) => p.id !== currentNarratorId && !p.is_spectator && (!onlinePlayerIds || onlinePlayerIds.has(p.id))
@@ -49,7 +51,7 @@ export function NarratorTakeoverControl({
   return (
     <details className="mt-4 border-t border-white/5 pt-4">
       <summary className="cursor-pointer font-mono text-xs uppercase tracking-widest text-text-secondary">
-        Verteller afwezig?
+        {t("summary")}
       </summary>
       <div className="mt-3 flex flex-col gap-2">
         {candidates.map((player) => (
@@ -60,12 +62,10 @@ export function NarratorTakeoverControl({
             onClick={() => handleTransfer(player.id)}
             disabled={savingId !== null}
           >
-            {savingId === player.id ? "Bezig..." : `Wissel naar ${player.name}`}
+            {savingId === player.id ? t("switching") : t("switchTo", { name: player.name })}
           </Button>
         ))}
-        <p className="font-mono text-xs text-text-secondary">
-          Huidige vragen en gokken blijven staan.
-        </p>
+        <p className="font-mono text-xs text-text-secondary">{t("note")}</p>
       </div>
     </details>
   );

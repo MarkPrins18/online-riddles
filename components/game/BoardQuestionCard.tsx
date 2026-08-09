@@ -1,4 +1,5 @@
 import type { PointerEvent as ReactPointerEvent } from "react";
+import { useTranslations } from "next-intl";
 import type { BoardItem } from "@/types/boardItem";
 import type { Question } from "@/types/question";
 import { ConnectorDot, useCardHover } from "./ConnectorDot";
@@ -10,13 +11,6 @@ function rotationFor(id: string): number {
   }
   return (hash % 9) - 4;
 }
-
-const ANSWER_LABEL: Record<string, string> = {
-  yes: "Ja",
-  no: "Nee",
-  irrelevant: "Niet relevant",
-  custom: "Zie antwoord",
-};
 
 export function BoardQuestionCard({
   item,
@@ -39,6 +33,14 @@ export function BoardQuestionCard({
 }) {
   const rotate = rotationFor(item.id);
   const { hoverSide, handlePointerMove, handlePointerLeave } = useCardHover();
+  const t = useTranslations("BoardQuestionCard");
+
+  const ANSWER_LABEL: Record<string, string> = {
+    yes: t("answerYes"),
+    no: t("answerNo"),
+    irrelevant: t("answerIrrelevant"),
+    custom: t("answerCustom"),
+  };
 
   return (
     <div
@@ -58,12 +60,14 @@ export function BoardQuestionCard({
             onDelete();
           }}
           className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 font-mono text-xs text-white/80 hover:bg-black"
-          aria-label="Kaartje verwijderen"
+          aria-label={t("deleteAriaLabel")}
         >
           ×
         </button>
       )}
-      <p className="font-mono text-[11px] uppercase tracking-widest text-black/60">Vraag</p>
+      <p className="font-mono text-[11px] uppercase tracking-widest text-black/60">
+        {t("questionLabel")}
+      </p>
       {question ? (
         <>
           <p className="mt-1 font-serif text-sm font-medium leading-snug">{question.text}</p>
@@ -72,7 +76,7 @@ export function BoardQuestionCard({
           </p>
         </>
       ) : (
-        <p className="mt-1 font-mono text-xs text-black/60">Vraag niet gevonden.</p>
+        <p className="mt-1 font-mono text-xs text-black/60">{t("notFound")}</p>
       )}
       {hoverSide && <ConnectorDot side={hoverSide} onPointerDown={onConnectorPointerDown} />}
     </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { ensureAnonymousSession } from "@/lib/supabase/authSession";
 import { createOwnPack } from "@/lib/supabase/communityPacks";
@@ -24,6 +25,8 @@ export function PackForm({ onCreated }: { onCreated: (pack: StoryPack) => void }
   const [customTheme, setCustomTheme] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("PackForm");
+  const locale = useLocale();
 
   useEffect(() => {
     let cancelled = false;
@@ -47,10 +50,10 @@ export function PackForm({ onCreated }: { onCreated: (pack: StoryPack) => void }
     try {
       const supabase = createClient();
       const userId = await ensureAnonymousSession(supabase);
-      const pack = await createOwnPack(supabase, userId, name.trim(), theme);
+      const pack = await createOwnPack(supabase, userId, name.trim(), theme, locale);
       onCreated(pack);
     } catch (err) {
-      setError(getErrorMessage(err, "Kon geen pack aanmaken. Probeer het opnieuw."));
+      setError(getErrorMessage(err, t("error")));
     } finally {
       setIsSubmitting(false);
     }
@@ -59,18 +62,18 @@ export function PackForm({ onCreated }: { onCreated: (pack: StoryPack) => void }
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3">
       <label htmlFor="pack-name" className={labelClasses}>
-        Naam van je pack
+        {t("nameLabel")}
       </label>
       <input
         id="pack-name"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        placeholder="Mijn eerste zaken"
+        placeholder={t("namePlaceholder")}
         maxLength={60}
         className={inputClasses}
       />
       <label htmlFor="pack-theme" className={labelClasses}>
-        Thema
+        {t("themeLabel")}
       </label>
       <select
         id="pack-theme"
@@ -78,25 +81,25 @@ export function PackForm({ onCreated }: { onCreated: (pack: StoryPack) => void }
         onChange={(e) => setThemeChoice(e.target.value)}
         className={inputClasses}
       >
-        {availableThemes.map((t) => (
-          <option key={t} value={t}>
-            {t}
+        {availableThemes.map((theme) => (
+          <option key={theme} value={theme}>
+            {theme}
           </option>
         ))}
-        <option value={NEW_THEME_VALUE}>+ Nieuw thema...</option>
+        <option value={NEW_THEME_VALUE}>{t("newThemeOption")}</option>
       </select>
       {themeChoice === NEW_THEME_VALUE && (
         <input
           value={customTheme}
           onChange={(e) => setCustomTheme(e.target.value)}
-          placeholder="Crime, Sci-Fi, Absurd..."
+          placeholder={t("customThemePlaceholder")}
           maxLength={40}
           className={inputClasses}
         />
       )}
       {error && <p className="font-mono text-xs text-danger">{error}</p>}
       <Button type="submit" variant="secondary" disabled={isSubmitting || !name.trim() || !theme}>
-        {isSubmitting ? "Pack aanmaken..." : "Pack aanmaken"}
+        {isSubmitting ? t("submitting") : t("submit")}
       </Button>
     </form>
   );

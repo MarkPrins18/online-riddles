@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { Puzzle } from "@/types/puzzle";
@@ -25,6 +26,7 @@ export function SolutionReveal({
   const [voteState, setVoteState] = useState<{ score: number; myVote: VoteValue | null } | null>(
     null
   );
+  const t = useTranslations("SolutionReveal");
 
   useEffect(() => {
     let cancelled = false;
@@ -51,18 +53,18 @@ export function SolutionReveal({
       style={{ animation: "reveal-in 420ms cubic-bezier(0.16, 1, 0.3, 1)" }}
     >
       <p className="font-mono text-xs uppercase tracking-widest text-accent">
-        Zaak gesloten
+        {t("caseClosed")}
       </p>
       <h2 className="mt-2 font-serif text-2xl text-text-primary">{puzzle.title}</h2>
       <p className="mt-1 font-mono text-sm text-accent">
-        {solverName ? `Opgelost door ${solverName}` : "Niemand loste deze zaak op"}
+        {solverName ? t("solvedBy", { name: solverName }) : t("nobodySolved")}
       </p>
       <p className="mt-4 font-serif text-base leading-relaxed text-text-primary/90">
         {puzzle.solution}
       </p>
       {voteState && (
         <div className="mt-4 flex items-center justify-between gap-3 border-t border-white/5 pt-4">
-          <p className="font-mono text-xs text-text-secondary">Was dit een goede zaak?</p>
+          <p className="font-mono text-xs text-text-secondary">{t("ratePrompt")}</p>
           <VoteButtons puzzleId={puzzle.id} score={voteState.score} myVote={voteState.myVote} />
         </div>
       )}

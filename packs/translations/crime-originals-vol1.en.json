@@ -1,0 +1,65 @@
+{
+  "pack": {
+    "slug": "crime-originals-vol1",
+    "locale": "en",
+    "name": "Crime Files Vol. 1 — Originals"
+  },
+  "puzzles": [
+    {
+      "matchTitle": "De nachtelijke bezoeker",
+      "title": "The Nighttime Visitor",
+      "scenario": "The jeweler sighs with relief when he finds his safe closed in the morning. The digital log tells a different story, though: the safe was opened and closed three times that night, even though only the jeweler knows the code.",
+      "solution": "The night watchman, who had gambling debts, had spied on the jeweler for months and learned the code. He opened the safe several times for small, inconspicuous thefts to pay off his creditors, hoping the small losses wouldn't be noticed.",
+      "hint": "The code wasn't the only secret the jeweler should have guarded."
+    },
+    {
+      "matchTitle": "De handtekening van een geest",
+      "title": "The Ghost's Signature",
+      "scenario": "When opening the will of a wealthy widow, the notary discovers something strange. There are two signatures, made weeks apart. But the woman had been completely paralyzed in her right hand for the last month of her life.",
+      "solution": "Her devoted caregiver, who knew she would be disinherited, had spent months practicing the woman's handwriting. After the paralysis, she used her 'talent' to make one final, fraudulent change to the will that made her the main heir.",
+      "hint": "Who had access to her past and could rewrite her future?"
+    },
+    {
+      "matchTitle": "De getuige met het glazen oog",
+      "title": "The Witness with the Glass Eye",
+      "scenario": "A man reports to the police station, clearly in shock after a robbery. Despite the darkness and chaos, his description of the perpetrator is razor-sharp: the faint scar near the temple, the expensive aftershave, the nervous tic in his fingers. Too sharp, perhaps.",
+      "solution": "The 'witness' is the perpetrator. Overwhelmed by adrenaline and paranoia after his crime, he invents a scheme to send the police on a false trail. He gives a perfect description of himself, a detailed self-portrait, hoping the police will search for a phantom while he goes free.",
+      "hint": "His eyes didn't see the robber, but his own reflection."
+    },
+    {
+      "matchTitle": "De lekkage uit het verleden",
+      "title": "The Leak from the Past",
+      "scenario": "An insurance agent handles a claim for significant water damage. Everything seems in order, until he discovers that the 'affected' owner sold the property three months ago to an unsuspecting buyer.",
+      "solution": "The seller had deliberately concealed the water damage when selling. When he noticed the insurance policy was still in his name, he filed a claim for the 'recent' damage. He bet that the new owner wouldn't notice the old damage and he could cash in twice.",
+      "hint": "The money didn't leak from the pipes, but from his greed."
+    },
+    {
+      "matchTitle": "De stilte van de sensor",
+      "title": "The Silence of the Sensor",
+      "scenario": "Burglars break into an office building through a heavily secured door. The alarm never went off. Investigation shows the door sensor had been offline for weeks, without a single fault notification ever being sent.",
+      "solution": "A corrupt technician from the security company had deliberately tampered with the sensor. He used the 'offline' window to steal goods from the warehouse undisturbed at night for his own side business. The burglars unknowingly benefited from his internal operation.",
+      "hint": "The thief wasn't outside, but inside the system."
+    },
+    {
+      "matchTitle": "De dubbele bagage",
+      "title": "The Duplicate Baggage",
+      "scenario": "A baggage handler at the airport frowns. He sees a suitcase with the same tag and the same destination pass by on the belt for the second time. The passenger of that suitcase is already long seated on the plane.",
+      "solution": "A smuggler among the baggage staff knew how the system worked. He printed a duplicate of an existing baggage tag and attached it to a suitcase full of smuggled goods. That way his own suitcase could hitch a ride on a legitimate flight, while the passenger's original suitcase simply went aboard as normal.",
+      "hint": "The tag was real, but the contents were fake."
+    },
+    {
+      "matchTitle": "De spookleverancier",
+      "title": "The Ghost Supplier",
+      "scenario": "A new, ambitious accountant dives into the books and stumbles upon a mystery. A certain supplier has been paid punctually for delivered goods for years, but no one in the company has ever heard of them, let alone seen them.",
+      "solution": "The previous, dishonest accountant had set up a shell company in his mother-in-law's name. For years he paid fake invoices to 'himself'. When he retired, he simply let the automatic payments continue, betting on his successor's inattentiveness.",
+      "hint": "The supplier only existed on paper, and in a bank account."
+    },
+    {
+      "matchTitle": "Het einde van het spoor",
+      "title": "The End of the Trail",
+      "scenario": "After an art heist, sniffer dogs flawlessly follow the thief's scent trail through the city. The trail leads to a busy bus terminal and stops there abruptly. However, no bus or taxi departed around that time.",
+      "solution": "The thief was a master of deception. He wore shoes he had stolen from a homeless man who often slept near the terminal. After the heist, he ran to the terminal and swapped the shoes for his own pair. The dogs followed the homeless man's scent, not the thief's.",
+      "hint": "The dogs followed the right scent, but the wrong man."
+    }
+  ]
+}

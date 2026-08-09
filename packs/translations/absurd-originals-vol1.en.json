@@ -1,0 +1,65 @@
+{
+  "pack": {
+    "slug": "absurd-originals-vol1",
+    "locale": "en",
+    "name": "Strange Cases Vol. 1"
+  },
+  "puzzles": [
+    {
+      "matchTitle": "De bakker die niemand voedt",
+      "title": "The Baker Who Feeds No One",
+      "scenario": "A baker in a quiet village turns on his oven every night at exactly three o'clock, bakes a single loaf of bread, and then throws it away unused — for months now, without ever having customers before it gets light.",
+      "solution": "Every night he tests a new recipe for a baking competition next month and doesn't want staff or customers to see the result before the judges taste it. Tonight's bread goes in the bin as soon as he's satisfied or dissatisfied with the crust.",
+      "hint": "Not every loaf of bread is meant to be sold."
+    },
+    {
+      "matchTitle": "Een garage die nooit opengaat",
+      "title": "A Garage That Never Opens",
+      "scenario": "A man pays monthly rent for a garage he never opens, while his own car sits outside in the rain and the garage is right next to his house.",
+      "solution": "The set for the amateur theater play he directs is stored in the garage. He rents it as storage for the club and pays out of his own pocket, because the club's funds are empty — his car has never had anything to do with it.",
+      "hint": "Wonder where his car actually is, not why the garage stays shut."
+    },
+    {
+      "matchTitle": "Twee collega's zonder woorden",
+      "title": "Two Colleagues Without Words",
+      "scenario": "In an office, two colleagues who sit next to each other never exchange a word and communicate only through notes on each other's screen, while they talk normally with the rest of the department.",
+      "solution": "They have a bet running over who can save their voice longest for a marathon read-aloud event this weekend. Talking to each other would break the bet, talking to others wouldn't, because that doesn't count.",
+      "hint": "The silence doesn't apply to everyone — only to each other."
+    },
+    {
+      "matchTitle": "Twaalf wekkers voor één ochtend",
+      "title": "Twelve Alarm Clocks for One Morning",
+      "scenario": "Every morning, an old man sets exactly twelve identical alarm clocks next to his bed, even though he visibly only needs one per day to wake up.",
+      "solution": "He collects clocks from the bankrupt factory where he worked for forty years and sets them in a different order each night to check whether, after all these years, they all still do what they're supposed to — a check he's never been able to let go of.",
+      "hint": "Not every alarm clock needs to wake him to do its job."
+    },
+    {
+      "matchTitle": "Een kaart uit een stad die ze niet bezoekt",
+      "title": "A Postcard from a City She Doesn't Visit",
+      "scenario": "A woman sends herself a postcard every week, always from the same city, even though she hasn't been there in years.",
+      "solution": "Her son lives in that city and sends the cards in her name, so that the mailman — whose chats she genuinely values — always lingers a moment upon delivery. The card is an excuse for the conversation, not for the news on it.",
+      "hint": "Whoever writes isn't necessarily who she thinks is writing."
+    },
+    {
+      "matchTitle": "Koffie die nooit wordt opgedronken",
+      "title": "Coffee That's Never Finished",
+      "scenario": "In a small café, the same customer orders a cup of coffee every day that he never finishes, and yet he comes back the next day right on time for a new one.",
+      "solution": "The coffee is his way of reserving a table without having to say so. He comes for the fast wifi signal from the shop next door, which just reaches that one table, and the owner turns a blind eye as long as he orders something.",
+      "hint": "What is he actually paying for, if not the coffee?"
+    },
+    {
+      "matchTitle": "Een plant die elk weekend verdwijnt",
+      "title": "A Plant That Disappears Every Weekend",
+      "scenario": "A school class receives a new plant on the windowsill from the janitor every Monday, and every Friday it has vanished without a trace, without anyone ever being seen taking it.",
+      "solution": "The janitor himself picks it up on Friday afternoon to take it home for the weekend for water and light — the classrooms stay shut tight in full sun over the weekend. On Monday he puts a fresh or the same plant back.",
+      "hint": "Who's the only one with a key to every room?"
+    },
+    {
+      "matchTitle": "Een deurbel voor een lege straat",
+      "title": "A Doorbell for an Empty Street",
+      "scenario": "Every evening at exactly nine o'clock, the same doorbell sound rings throughout the entire street, but no one ever answers and no one is ever standing at the door.",
+      "solution": "A neighborhood resident has been testing a new smart doorbell system for months. Due to a factory bug in test mode, his own bell sends the sound to every doorbell in the street instead of just his own — something the supplier only discovers after complaints.",
+      "hint": "Is that the sound of one doorbell, or of an entire system?"
+    }
+  ]
+}

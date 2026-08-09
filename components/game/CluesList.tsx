@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import type { Question } from "@/types/question";
 import { getErrorMessage } from "@/lib/errors";
 
@@ -19,13 +20,11 @@ export function CluesList({
   const clues = questions.filter((q) => q.answer === "yes");
   const [pinningId, setPinningId] = useState<string | null>(null);
   const [pinError, setPinError] = useState<string | null>(null);
+  const t = useTranslations("CluesList");
 
   if (clues.length === 0) {
     return (
-      <p className="font-mono text-sm text-text-secondary">
-        Nog geen aanwijzingen — elk &ldquo;ja&rdquo;-antwoord van de Verteller
-        komt hier terecht.
-      </p>
+      <p className="font-mono text-sm text-text-secondary">{t("empty")}</p>
     );
   }
 
@@ -36,9 +35,7 @@ export function CluesList({
     try {
       await onPinToBoard(questionId);
     } catch (err) {
-      setPinError(
-        getErrorMessage(err, "Kon deze aanwijzing niet vastprikken."),
-      );
+      setPinError(getErrorMessage(err, t("error")));
     }
     setPinningId(null);
   }
@@ -67,7 +64,7 @@ export function CluesList({
                 disabled={pinningId === clue.id}
                 className="hidden font-mono text-[11px] uppercase tracking-widest text-[#3d2609] hover:text-black disabled:opacity-50 xl:inline"
               >
-                {pinningId === clue.id ? "Bezig…" : "Speld op prikbord"}
+                {pinningId === clue.id ? t("pinning") : t("pin")}
               </button>
             )}
           </div>

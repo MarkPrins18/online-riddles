@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import { sendChatMessage } from "@/lib/supabase/chatMessages";
@@ -21,6 +22,7 @@ export function ChatForm({
   const [text, setText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("ChatForm");
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -37,7 +39,7 @@ export function ChatForm({
       });
       setText("");
     } catch (err) {
-      setError(getErrorMessage(err, "Kon je bericht niet versturen. Probeer het opnieuw."));
+      setError(getErrorMessage(err, t("error")));
     }
     setIsSubmitting(false);
   }
@@ -47,8 +49,8 @@ export function ChatForm({
       <input
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Overleg met je medespelers..."
-        aria-label="Chatbericht"
+        placeholder={t("placeholder")}
+        aria-label={t("ariaLabel")}
         maxLength={300}
         className="w-full rounded-md border border-white/10 bg-bg-primary px-3 py-2.5 font-mono text-sm text-text-primary placeholder:text-text-secondary/60 focus:border-accent-muted"
       />
@@ -58,7 +60,7 @@ export function ChatForm({
         </p>
       )}
       <Button type="submit" variant="secondary" className="w-full" disabled={isSubmitting || !text.trim()}>
-        Versturen
+        {t("submit")}
       </Button>
     </form>
   );

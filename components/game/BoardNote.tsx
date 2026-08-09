@@ -1,4 +1,5 @@
 import type { PointerEvent as ReactPointerEvent } from "react";
+import { useTranslations } from "next-intl";
 import type { BoardItem, BoardNoteColor } from "@/types/boardItem";
 import { ConnectorDot, useCardHover } from "./ConnectorDot";
 
@@ -27,6 +28,7 @@ export function BoardNote({
   onDelete: () => void;
 }) {
   const { hoverSide, handlePointerMove, handlePointerLeave } = useCardHover();
+  const t = useTranslations("BoardNote");
 
   return (
     <div
@@ -46,7 +48,7 @@ export function BoardNote({
             onDelete();
           }}
           className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 font-mono text-xs text-white/80 hover:bg-black"
-          aria-label="Briefje verwijderen"
+          aria-label={t("deleteAriaLabel")}
         >
           ×
         </button>

@@ -11,7 +11,7 @@ export type Puzzle = {
   title: string;
   scenario: string;
   solution: string;
-  /** Category name, resolved from category_id — see published_puzzles/get_room_puzzle in schema.sql. */
+  /** Category name, resolved from category_id — see get_published_puzzles/get_room_puzzle in schema.sql. */
   category: string | null;
   category_id: string | null;
   difficulty: PuzzleDifficulty;
@@ -19,6 +19,16 @@ export type Puzzle = {
   created_at: string;
   created_by: string | null;
   is_community: boolean;
+  /**
+   * Which language the title/scenario/solution/hint above actually came
+   * from — may differ from the locale that was requested, when the
+   * requested one has no translation yet and the query fell back to Dutch.
+   * Not present on rows read directly from the `puzzles` table (which no
+   * longer carries text at all) — only on results from
+   * get_published_puzzles/get_room_puzzle, or attached manually where a
+   * specific translation row was fetched (see lib/supabase/communityPuzzles.ts).
+   */
+  locale: string;
 };
 
 /** Row shape of the published_puzzles view — same as Puzzle, plus the pack's theme for filtering. */
@@ -41,4 +51,38 @@ export type StoryPack = {
   created_at: string;
   created_by: string | null;
   is_community: boolean;
+  /** Which language `name` actually came from — see Puzzle["locale"] for the same idea. */
+  locale: string;
+};
+
+export type TranslationStatus = "machine" | "reviewed";
+
+/** Raw row shape of `puzzle_translations` — one language's text for one puzzle. */
+export type PuzzleTranslation = {
+  puzzle_id: string;
+  locale: string;
+  title: string;
+  scenario: string;
+  solution: string;
+  hint: string | null;
+  status: TranslationStatus;
+  created_at: string;
+};
+
+/** Raw row shape of `category_translations` — one language's name for one category. */
+export type CategoryTranslation = {
+  category_id: string;
+  locale: string;
+  name: string;
+  status: TranslationStatus;
+  created_at: string;
+};
+
+/** Raw row shape of `story_pack_translations` — one language's name for one pack. */
+export type StoryPackTranslation = {
+  pack_id: string;
+  locale: string;
+  name: string;
+  status: TranslationStatus;
+  created_at: string;
 };

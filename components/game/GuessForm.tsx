@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import { submitGuess } from "@/lib/supabase/guesses";
@@ -23,6 +24,7 @@ export function GuessForm({
   const [text, setText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("GuessForm");
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -40,7 +42,7 @@ export function GuessForm({
       });
       setText("");
     } catch (err) {
-      setError(getErrorMessage(err, "Kon je oplossing niet versturen. Probeer het opnieuw."));
+      setError(getErrorMessage(err, t("error")));
     }
     setIsSubmitting(false);
   }
@@ -50,8 +52,8 @@ export function GuessForm({
       <input
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Wat denk jij dat het antwoord is?"
-        aria-label="Jouw oplossing"
+        placeholder={t("placeholder")}
+        aria-label={t("ariaLabel")}
         maxLength={280}
         className="w-full rounded-md border border-white/10 bg-bg-primary px-3 py-2.5 font-mono text-sm text-text-primary placeholder:text-text-secondary/60 focus:border-accent-muted"
       />
@@ -61,7 +63,7 @@ export function GuessForm({
         </p>
       )}
       <Button type="submit" variant="secondary" className="w-full" disabled={isSubmitting || !text.trim()}>
-        Oplossen
+        {t("submit")}
       </Button>
     </form>
   );

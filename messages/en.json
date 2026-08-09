@@ -1,0 +1,445 @@
+{
+  "Common": {
+    "close": "Close"
+  },
+  "RootLayout": {
+    "title": "Online Riddles",
+    "description": "A lateral thinking puzzle game for groups. Ask yes/no questions, gather clues, and crack the mystery.",
+    "skipToContent": "Skip to main content"
+  },
+  "HomePage": {
+    "coverStamp": "Case file · closed",
+    "title": "Online Riddles",
+    "subtitle": "A lateral thinking interrogation. Ask the smartest questions, gather the wildest clues, and crack the case together — or go solo for the glory (and the points).",
+    "newFile": "New file",
+    "existingFile": "Existing file",
+    "communityLink": "Browse community riddles →"
+  },
+  "HowToPlay": {
+    "trigger": "How to play",
+    "close": "Close",
+    "ideaTitle": "The idea",
+    "ideaBody": "Each round, one player — the Narrator — knows the solution to a riddle. Everyone else asks yes/no questions and tries to solve the case.",
+    "narratorTitle": "The Narrator",
+    "narratorBody": "Answers every question with yes, no, or n/a (not relevant to the solution). Solutions submitted by other players are approved or rejected by the Narrator in the Inbox.",
+    "questionsTitle": "Questions & clues",
+    "questionsBody": "Every “yes” answer automatically becomes a clue. All questions (including the no's and n/a's) can be reviewed in the Interrogation log.",
+    "solveTitle": "Solve the case",
+    "solveBody": "Think you know the answer? Submit a solution. The Narrator sees it first and approves or rejects it — other players only see what you submitted once it's correct.",
+    "pointsTitle": "Points",
+    "pointsBody": "A harder case earns more points. The player who solves it and the Narrator both get a bonus, as does the round's best question. A wrong guess costs points.",
+    "hardcoreTitle": "Hardcore mode",
+    "hardcoreBody": "Optional, set by the host: every wrong guess costs the whole team 1 life. At 0 lives, it's game over for the whole session.",
+    "corkboardTitle": "Corkboard",
+    "corkboardBody": "A shared board to pin clues and theories and connect them with threads — desktop/tablet only, not available on phones."
+  },
+  "ClaimHostBanner": {
+    "message": "The host appears offline. You've been here the longest of the rest — take over the role?",
+    "claim": "Take over host",
+    "claiming": "Working...",
+    "error": "Couldn't take over the host role. Please try again."
+  },
+  "RoomCodeDisplay": {
+    "ariaLabel": "Copy room code",
+    "label": "Room code",
+    "copied": "Copied",
+    "copyPrompt": "Click to copy"
+  },
+  "LeaveRoomButton": {
+    "leaving": "Leaving...",
+    "leave": "Leave room"
+  },
+  "NarratorPicker": {
+    "legend": "Who is the Narrator?",
+    "autoRotate": "Rotate automatically"
+  },
+  "CreateRoomForm": {
+    "nameLabel": "Your name",
+    "namePlaceholder": "Detective...",
+    "submitting": "Creating room...",
+    "submit": "Start a new room",
+    "error": "Couldn't create a room. Please try again."
+  },
+  "JoinRoomForm": {
+    "nameLabel": "Your name",
+    "namePlaceholder": "Detective...",
+    "codeLabel": "Room code",
+    "codePlaceholder": "XXXXXX",
+    "noRoomFound": "No room found with that code.",
+    "submitting": "Joining...",
+    "submit": "Join room",
+    "error": "Couldn't join the room. Please try again."
+  },
+  "StartGameButton": {
+    "starting": "Opening the case...",
+    "waitingForPlayers": "Waiting for more players...",
+    "chooseThemeOrPack": "Choose at least one theme or community pack...",
+    "start": "Start the game",
+    "error": "Couldn't start the game. Please try again."
+  },
+  "RoomSettingsForm": {
+    "durationLabel": "Time per round",
+    "duration5": "5 minutes",
+    "duration10": "10 minutes",
+    "duration15": "15 minutes",
+    "duration20": "20 minutes",
+    "durationNone": "No limit",
+    "roundCountLabel": "Number of rounds",
+    "roundCountOption": "{count} rounds",
+    "themesLegend": "Themes",
+    "themesLoading": "Loading themes...",
+    "themesEmpty": "No published puzzles available yet.",
+    "communityLegend": "Community",
+    "communityLoading": "Loading community...",
+    "communityEmpty": "No published community packs yet.",
+    "communityToggle": "Include community packs",
+    "communityHint": "Riddles made by other players, separate from the official themes above.",
+    "chooseThemeOrPack": "Choose at least one theme or community pack.",
+    "hardcoreToggle": "Hardcore mode — shared team lives",
+    "hardcoreHint": "Every wrong guess costs the whole team 1 life. At 0 lives, it's game over for the whole session.",
+    "teamLivesLabelWithNarrator": "{name} decides: how many lives does the team get?",
+    "teamLivesLabel": "How many lives does the team get?",
+    "teamLivesOption": "{count} lives"
+  },
+  "RoomLobbyClient": {
+    "errorPrefix": "Something went wrong: {error}",
+    "loadingRoom": "Loading room...",
+    "playersHeading": "Players ({count})",
+    "settingsHeading": "Settings",
+    "waitingForHost": "Waiting for the host to start the game...",
+    "joinHeading": "Join in"
+  },
+  "PlayerList": {
+    "empty": "Nobody here yet.",
+    "online": "Online",
+    "offline": "Offline",
+    "narratorBadge": "Narrator",
+    "hostBadge": "Host",
+    "spectatorBadge": "Spectator",
+    "removeAriaLabel": "Remove {name}"
+  },
+  "Difficulty": {
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard"
+  },
+  "SetNameForm": {
+    "heading": "Become a creator",
+    "subtitle": "Choose a name your riddles and packs will appear under.",
+    "nameLabel": "Creator name",
+    "namePlaceholder": "Detective...",
+    "saving": "Saving...",
+    "submit": "Continue",
+    "error": "Couldn't save your name. Please try again."
+  },
+  "RiddleCard": {
+    "by": "by {name}"
+  },
+  "PackForm": {
+    "nameLabel": "Name of your pack",
+    "namePlaceholder": "My first cases",
+    "themeLabel": "Theme",
+    "newThemeOption": "+ New theme...",
+    "customThemePlaceholder": "Crime, Sci-Fi, Absurd...",
+    "submitting": "Creating pack...",
+    "submit": "Create pack",
+    "error": "Couldn't create a pack. Please try again."
+  },
+  "CommunityNewClient": {
+    "loading": "Loading...",
+    "heading": "Submit a riddle",
+    "packHeading": "Pack",
+    "newPackButton": "New pack",
+    "cancel": "Cancel",
+    "addedNoticePrefix": "“{title}” was added. Don't forget to publish your pack via",
+    "myPacksLink": "My packs"
+  },
+  "CommunityMineClient": {
+    "loading": "Loading...",
+    "heading": "My packs",
+    "submitButton": "Submit a riddle",
+    "noPacksYet": "You don't have any packs yet. Submit your first riddle to create one.",
+    "unpublish": "Unpublish",
+    "publish": "Publish",
+    "noPuzzlesYet": "No riddles yet.",
+    "edit": "Edit",
+    "delete": "Delete",
+    "scoreLabel": "score: {score}"
+  },
+  "CommunityNav": {
+    "play": "Play",
+    "communityPacks": "Community packs",
+    "myPacks": "My packs",
+    "submitRiddle": "Submit a riddle"
+  },
+  "FavoriteButton": {
+    "addAriaLabel": "Add to favorites",
+    "removeAriaLabel": "Remove from favorites",
+    "error": "Couldn't save favorite. Please try again."
+  },
+  "PackCard": {
+    "by": "by {name}",
+    "unpublished": "Not published yet"
+  },
+  "CommunityBrowseClient": {
+    "heading": "Community packs",
+    "subtitle": "Made by players, voted by players.",
+    "newest": "Newest",
+    "top": "Top",
+    "loading": "Loading packs...",
+    "empty": "No published community packs yet — be the first."
+  },
+  "CommunityPackDetailClient": {
+    "loading": "Loading pack...",
+    "notFound": "This pack no longer exists.",
+    "noPuzzles": "This pack doesn't have any riddles yet."
+  },
+  "VoteButtons": {
+    "upvoteAriaLabel": "Vote up",
+    "downvoteAriaLabel": "Vote down",
+    "error": "Vote failed. Please try again."
+  },
+  "GuessForm": {
+    "placeholder": "What do you think the answer is?",
+    "ariaLabel": "Your solution",
+    "submit": "Solve",
+    "error": "Couldn't submit your solution. Please try again."
+  },
+  "QuestionForm": {
+    "placeholder": "Ask a yes/no question...",
+    "ariaLabel": "Yes/no question",
+    "submit": "Ask",
+    "error": "Couldn't send your question. Please try again."
+  },
+  "ChatForm": {
+    "placeholder": "Discuss with your fellow players...",
+    "ariaLabel": "Chat message",
+    "submit": "Send",
+    "error": "Couldn't send your message. Please try again."
+  },
+  "MyGuessFeedback": {
+    "latestGuess": "Your last theory: “{text}”",
+    "pending": "Waiting on the Narrator",
+    "incorrect": "Not quite"
+  },
+  "TeamLivesDisplay": {
+    "ariaLabel": "{remaining} of {total} lives left"
+  },
+  "NarratorGuessControls": {
+    "noPending": "No solutions submitted yet. Only you, as Narrator, see this.",
+    "correct": "Correct",
+    "incorrect": "Incorrect"
+  },
+  "Timer": {
+    "timeUp": "Time's up"
+  },
+  "ConnectorDot": {
+    "title": "Drag to connect"
+  },
+  "BoardNote": {
+    "deleteAriaLabel": "Delete note"
+  },
+  "CorkboardOverlay": {
+    "title": "Corkboard",
+    "addNote": "+ Note",
+    "pinQuestion": "+ Pin a question",
+    "close": "Close",
+    "notePlaceholder": "Write a theory...",
+    "pin": "Pin",
+    "instructions": "Drag from the red dot on a card to another card to connect them. Click a thread to remove it again.",
+    "deleteConnectionTitle": "Click to remove this thread",
+    "addConnectionError": "Couldn't draw a thread.",
+    "duplicateConnectionError": "These two cards are already connected.",
+    "moveItemError": "Couldn't move the note.",
+    "deleteItemError": "Couldn't delete this.",
+    "deleteConnectionError": "Couldn't remove this thread.",
+    "addNoteError": "Couldn't pin your note.",
+    "pinQuestionError": "Couldn't pin this question."
+  },
+  "CaseLog": {
+    "heading": "Case archive",
+    "caseLabel": "Case {round} · {difficulty}",
+    "solvedBy": "solved by {name} ({count} questions)",
+    "unsolved": "unsolved"
+  },
+  "CorkboardButton": {
+    "label": "Corkboard"
+  },
+  "SessionRecapPanel": {
+    "heading": "Highlights of the night",
+    "mvpNarrator": "MVP Narrator: {name} ({count}x solved)",
+    "fastestSolve": "Fastest solve: {name} solved “{title}” in {count} questions",
+    "bestQuestions": "{count, plural, one {Best question} other {Best questions}} of the night: {list}",
+    "wallOfShame": "Wall of shame: {name} guessed wrong {count}x"
+  },
+  "ChatPanel": {
+    "heading": "Discussion",
+    "narratorNotice": "As Narrator you can read the discussion, but not take part."
+  },
+  "BoardQuestionCard": {
+    "deleteAriaLabel": "Delete card",
+    "questionLabel": "Question",
+    "notFound": "Question not found.",
+    "answerYes": "Yes",
+    "answerNo": "No",
+    "answerIrrelevant": "Not relevant",
+    "answerCustom": "See answer"
+  },
+  "HintCard": {
+    "label": "Hint"
+  },
+  "InterrogationLog": {
+    "empty": "No questions asked yet — start the interrogation above."
+  },
+  "NarratorInbox": {
+    "pendingSolutionsHeading": "Pending solutions",
+    "unansweredHeading": "Unanswered questions ({count})",
+    "allAnswered": "Everything answered — take a breather."
+  },
+  "ChatDrawer": {
+    "title": "Discussion"
+  },
+  "CluesList": {
+    "empty": "No clues yet — every “yes” answer from the Narrator ends up here.",
+    "error": "Couldn't pin this clue.",
+    "pinning": "Working…",
+    "pin": "Pin to corkboard"
+  },
+  "NarratorArchive": {
+    "empty": "No answered questions or reviewed solutions yet.",
+    "solutionsHeading": "Solutions",
+    "questionsHeading": "Questions",
+    "correct": "Correct",
+    "incorrect": "Incorrect"
+  },
+  "NarratorTensionPanel": {
+    "onlyForYou": "Only for you",
+    "wrongGuesses": "{count, plural, one {# wrong guess} other {# wrong guesses}}",
+    "questionsAnswered": "{count} questions answered",
+    "skipping": "Working...",
+    "skip": "Skip this case"
+  },
+  "NarratorCaseDrawer": {
+    "title": "Case & solution"
+  },
+  "SolutionReveal": {
+    "caseClosed": "Case closed",
+    "solvedBy": "Solved by {name}",
+    "nobodySolved": "Nobody solved this case",
+    "ratePrompt": "Was this a good case?"
+  },
+  "ShareRecapButton": {
+    "share": "Share the night",
+    "close": "Close",
+    "generating": "Building recap...",
+    "generateError": "Couldn't generate an image.",
+    "recapError": "Couldn't build a recap. Please try again.",
+    "shareOrDownload": "Share / download",
+    "recapImageAlt": "Recap of the game night",
+    "shareTitle": "Online Riddles — case closed"
+  },
+  "FinalScoreboard": {
+    "caseFileClosed": "Case file closed",
+    "gameOver": "The game is over",
+    "winner": "Winner: {name} with {score} points",
+    "playAnotherRound": "Play another round",
+    "newGame": "Start a new game"
+  },
+  "GameOverScreen": {
+    "gameOver": "Game over",
+    "heading": "The case remains unsolved forever",
+    "subtitle": "The team has run out of lives.",
+    "newGame": "Start a new game"
+  },
+  "QuestionCard": {
+    "answerYes": "Yes",
+    "answerNo": "No",
+    "answerIrrelevant": "N/A",
+    "bestQuestionAriaLabel": "Best question",
+    "bestQuestionToggleOn": "Best question (click to clear)",
+    "bestQuestionToggleOff": "Mark as best question",
+    "answerHeading": "Answer",
+    "quickYes": "Yes",
+    "quickNo": "No",
+    "quickIrrelevant": "N/A",
+    "customAnswer": "Custom answer",
+    "customPlaceholder": "Type a nuanced answer...",
+    "customAriaLabel": "Nuanced answer",
+    "submit": "Send"
+  },
+  "ChatThread": {
+    "empty": "Nobody has said anything yet. Feel free to discuss with your fellow players.",
+    "narratorBadge": "Narrator"
+  },
+  "ChatIconButton": {
+    "openWithUnread": "{count, plural, one {Open discussion, # unread message} other {Open discussion, # unread messages}}",
+    "open": "Open discussion"
+  },
+  "NextRoundCountdown": {
+    "heading": "Next round is about to start!"
+  },
+  "PlayersStrip": {
+    "ariaLabel": "{count} players — click for scores",
+    "count": "{count, plural, one {# player} other {# players}}"
+  },
+  "NarratorTakeoverControl": {
+    "summary": "Narrator absent?",
+    "switching": "Working...",
+    "switchTo": "Switch to {name}",
+    "note": "Current questions and guesses stay as they are."
+  },
+  "PlayersDrawer": {
+    "title": "Players"
+  },
+  "GamePlayClient": {
+    "errorPrefix": "Something went wrong: {error}",
+    "loadingCase": "Loading case...",
+    "roundLabel": "Round {round}",
+    "youAreNarrator": "You are the Narrator",
+    "spectator": "Spectator",
+    "wrongCount": "{count} wrong",
+    "answeredCountLabel": "{count} answered",
+    "caseDossierLabel": "Case file",
+    "caseAndSolution": "Case & solution",
+    "spectatorWaiting": "You're watching until the next case begins...",
+    "askQuestionTab": "Ask a question",
+    "solveTab": "Solve the case",
+    "solveCaseLabel": "Solve the case.",
+    "inboxTab": "Inbox",
+    "archiveTab": "Archive",
+    "caseClosedLabel": "Case closed.",
+    "cluesTab": "Clues",
+    "interrogationTab": "Interrogation",
+    "nextNarratorLabel": "{name} becomes the new Narrator.",
+    "notEnoughPlayers": "Not enough players for a new round.",
+    "nextCase": "Next case",
+    "skipConfirm": "Skip this case? All questions and guesses so far will be lost.",
+    "nextCaseError": "Couldn't start a new case. Please try again.",
+    "skipPuzzleError": "Couldn't fetch another case. Please try again."
+  },
+  "NarratorBriefingScreen": {
+    "newCase": "New case",
+    "onlyForYou": "Only for you",
+    "start": "Get started",
+    "skipping": "Working...",
+    "skip": "Skip this case"
+  },
+  "RiddleForm": {
+    "titleLabel": "Title",
+    "titlePlaceholder": "The missing...",
+    "scenarioLabel": "Scenario — what the players see",
+    "scenarioPlaceholder": "Describe the situation...",
+    "solutionLabel": "Solution — only visible to the Narrator",
+    "solutionPlaceholder": "What actually happened...",
+    "categoryLabel": "Category (optional)",
+    "noCategoryOption": "No category",
+    "difficultyLabel": "Difficulty",
+    "hintLabel": "Hint (optional)",
+    "hintPlaceholder": "A small nudge in the right direction...",
+    "saving": "Saving...",
+    "saveChanges": "Save changes",
+    "addRiddle": "Add riddle",
+    "cancel": "Cancel",
+    "error": "Couldn't save the riddle. Please try again."
+  }
+}

@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { Question } from "@/types/question";
@@ -36,12 +37,13 @@ export function NarratorInbox({
   teamLivesRemaining: number | null;
 }) {
   const unanswered = [...questions.filter((q) => q.answer === null)].reverse();
+  const t = useTranslations("NarratorInbox");
 
   return (
     <div className="flex flex-col gap-6">
       <div>
         <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary">
-          Openstaande oplossingen
+          {t("pendingSolutionsHeading")}
         </p>
         <NarratorGuessControls
           supabase={supabase}
@@ -59,10 +61,10 @@ export function NarratorInbox({
 
       <div>
         <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary">
-          Onbeantwoorde vragen ({unanswered.length})
+          {t("unansweredHeading", { count: unanswered.length })}
         </p>
         {unanswered.length === 0 ? (
-          <p className="font-mono text-sm text-text-secondary">Alles beantwoord — even bijkomen.</p>
+          <p className="font-mono text-sm text-text-secondary">{t("allAnswered")}</p>
         ) : (
           <div className="flex flex-col gap-3">
             {unanswered.map((question) => (

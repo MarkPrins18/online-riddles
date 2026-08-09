@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import type { StoryPack } from "@/types/puzzle";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
@@ -12,6 +13,8 @@ export function PackCard({
   authorName?: string;
   score?: number;
 }) {
+  const t = useTranslations("PackCard");
+
   return (
     <Link href={`/community/${pack.id}`}>
       <Card tone="case" className="flex flex-col gap-2 transition-colors hover:border-accent/40">
@@ -21,10 +24,12 @@ export function PackCard({
             <span className="font-mono text-xs text-text-secondary">score: {score}</span>
           )}
         </div>
-        {authorName && <p className="font-mono text-xs text-text-secondary">door {authorName}</p>}
+        {authorName && (
+          <p className="font-mono text-xs text-text-secondary">{t("by", { name: authorName })}</p>
+        )}
         <div className="flex flex-wrap gap-2">
           <Badge tone="accent">{pack.theme}</Badge>
-          {!pack.is_published && <Badge tone="danger">Nog niet gepubliceerd</Badge>}
+          {!pack.is_published && <Badge tone="danger">{t("unpublished")}</Badge>}
         </div>
       </Card>
     </Link>

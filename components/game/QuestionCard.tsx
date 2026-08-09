@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { Question } from "@/types/question";
@@ -11,12 +12,6 @@ import {
   unmarkBestQuestion,
 } from "@/lib/supabase/questions";
 import { Button } from "@/components/ui/Button";
-
-const ANSWER_LABEL: Record<string, string> = {
-  yes: "Ja",
-  no: "Nee",
-  irrelevant: "N.v.t.",
-};
 
 // Flat left-edge color per status — scannable at a glance without reading
 // the text, and (unlike the old rotated "pinned note" look) never tilts
@@ -30,16 +25,22 @@ const STATUS_BORDER: Record<string, string> = {
 };
 
 function AnswerBadge({ answer }: { answer: "yes" | "no" | "irrelevant" }) {
+  const t = useTranslations("QuestionCard");
   const styles: Record<typeof answer, string> = {
     yes: "bg-[#3d2609] text-paper",
     no: "bg-[#5a1e13] text-paper",
     irrelevant: "bg-black/15 text-black/70",
   };
+  const labels: Record<typeof answer, string> = {
+    yes: t("answerYes"),
+    no: t("answerNo"),
+    irrelevant: t("answerIrrelevant"),
+  };
   return (
     <span
       className={`shrink-0 rounded px-2 py-0.5 font-mono text-[11px] font-bold uppercase tracking-widest ${styles[answer]}`}
     >
-      {ANSWER_LABEL[answer]}
+      {labels[answer]}
     </span>
   );
 }
@@ -47,6 +48,7 @@ function AnswerBadge({ answer }: { answer: "yes" | "no" | "irrelevant" }) {
 // Single star affordance for "best question" — same icon for everyone, but
 // only the narrator can toggle it.
 function Star({ isBest, onClick }: { isBest: boolean; onClick?: () => void }) {
+  const t = useTranslations("QuestionCard");
   const className = `shrink-0 rounded text-lg leading-none transition-colors ${
     isBest ? "text-accent-muted" : "text-black/25"
   } ${onClick ? "p-1 hover:text-accent-muted" : ""}`;
@@ -54,7 +56,7 @@ function Star({ isBest, onClick }: { isBest: boolean; onClick?: () => void }) {
   if (!onClick) {
     if (!isBest) return null;
     return (
-      <span className={className} aria-label="Topvraag">
+      <span className={className} aria-label={t("bestQuestionAriaLabel")}>
         ★
       </span>
     );
@@ -65,7 +67,7 @@ function Star({ isBest, onClick }: { isBest: boolean; onClick?: () => void }) {
       type="button"
       onClick={onClick}
       aria-pressed={isBest}
-      aria-label={isBest ? "Beste vraag (klik om te wissen)" : "Markeer als beste vraag"}
+      aria-label={isBest ? t("bestQuestionToggleOn") : t("bestQuestionToggleOff")}
       className={className}
     >
       {isBest ? "★" : "☆"}
@@ -94,6 +96,7 @@ export function QuestionCard({
 }) {
   const [customDraft, setCustomDraft] = useState("");
   const [isWritingCustom, setIsWritingCustom] = useState(false);
+  const t = useTranslations("QuestionCard");
 
   const isAnswered = question.answer !== null;
 
@@ -143,7 +146,9 @@ export function QuestionCard({
 
       {isAnswered && question.answer === "custom" && (
         <div className="mt-3 border-t border-black/10 pt-3">
-          <p className="font-mono text-[11px] uppercase tracking-widest text-black/55">Antwoord</p>
+          <p className="font-mono text-[11px] uppercase tracking-widest text-black/55">
+            {t("answerHeading")}
+          </p>
           <p className="mt-1 font-serif text-base font-medium italic leading-snug">
             {question.custom_response}
           </p>
@@ -154,16 +159,16 @@ export function QuestionCard({
         <div className="mt-3 flex flex-col gap-2 border-t border-black/10 pt-3">
           <div className="flex flex-wrap gap-2">
             <Button variant="primary" onClick={() => handleQuickAnswer("yes")}>
-              Ja
+              {t("quickYes")}
             </Button>
             <Button variant="danger" onClick={() => handleQuickAnswer("no")}>
-              Nee
+              {t("quickNo")}
             </Button>
             <Button variant="secondary" onClick={() => handleQuickAnswer("irrelevant")}>
-              N.v.t.
+              {t("quickIrrelevant")}
             </Button>
             <Button variant="secondary" onClick={() => setIsWritingCustom((v) => !v)}>
-              Eigen antwoord
+              {t("customAnswer")}
             </Button>
           </div>
           {isWritingCustom && (
@@ -171,14 +176,14 @@ export function QuestionCard({
               <input
                 value={customDraft}
                 onChange={(e) => setCustomDraft(e.target.value)}
-                placeholder="Typ een genuanceerd antwoord..."
-                aria-label="Genuanceerd antwoord"
+                placeholder={t("customPlaceholder")}
+                aria-label={t("customAriaLabel")}
                 maxLength={200}
                 autoFocus
                 className="flex-1 rounded-md border border-black/15 bg-white/50 px-3 py-2 font-mono text-sm text-ink placeholder:text-black/40 focus:border-accent-muted"
               />
               <Button type="submit" disabled={!customDraft.trim()}>
-                Versturen
+                {t("submit")}
               </Button>
             </form>
           )}

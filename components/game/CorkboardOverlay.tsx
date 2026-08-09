@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { Question } from "@/types/question";
@@ -101,6 +102,8 @@ export function CorkboardOverlay({
   const [pickingQuestion, setPickingQuestion] = useState(false);
   const [surfaceWidthPx, setSurfaceWidthPx] = useState(800);
   const [surfaceHeightPx, setSurfaceHeightPx] = useState(600);
+
+  const t = useTranslations("CorkboardOverlay");
 
   const surfaceRef = useRef<HTMLDivElement>(null);
   const draggingItemIdRef = useRef<string | null>(null);
@@ -210,9 +213,9 @@ export function CorkboardOverlay({
       if (dropTarget && dropTarget !== fromId && !isAlreadyConnected(fromId, dropTarget)) {
         addConnection(supabase, { roomId, playerId, fromItemId: fromId, toItemId: dropTarget }).catch(
           (err) => {
-            const message = getErrorMessage(err, "Kon geen draadje trekken.");
+            const message = getErrorMessage(err, t("addConnectionError"));
             setActionError(
-              message.includes("duplicate key") ? "Deze twee kaartjes zijn al verbonden." : message
+              message.includes("duplicate key") ? t("duplicateConnectionError") : message
             );
           }
         );
@@ -227,19 +230,19 @@ export function CorkboardOverlay({
     const pos = dragPositions[draggingId];
     if (!pos) return;
     moveBoardItem(supabase, draggingId, pos.x, pos.y).catch((err) =>
-      setActionError(getErrorMessage(err, "Kon het briefje niet verplaatsen."))
+      setActionError(getErrorMessage(err, t("moveItemError")))
     );
   }
 
   function handleDelete(itemId: string) {
     deleteBoardItem(supabase, itemId).catch((err) =>
-      setActionError(getErrorMessage(err, "Kon dit niet verwijderen."))
+      setActionError(getErrorMessage(err, t("deleteItemError")))
     );
   }
 
   function handleDeleteConnection(connectionId: string) {
     deleteConnection(supabase, connectionId).catch((err) =>
-      setActionError(getErrorMessage(err, "Kon dit draadje niet verwijderen."))
+      setActionError(getErrorMessage(err, t("deleteConnectionError")))
     );
   }
 
@@ -259,7 +262,7 @@ export function CorkboardOverlay({
         setAddingNote(false);
         setActionError(null);
       })
-      .catch((err) => setActionError(getErrorMessage(err, "Kon je briefje niet plakken.")));
+      .catch((err) => setActionError(getErrorMessage(err, t("addNoteError"))));
   }
 
   function handlePinQuestion(questionId: string) {
@@ -275,7 +278,7 @@ export function CorkboardOverlay({
         setPickingQuestion(false);
         setActionError(null);
       })
-      .catch((err) => setActionError(getErrorMessage(err, "Kon deze vraag niet vastprikken.")));
+      .catch((err) => setActionError(getErrorMessage(err, t("pinQuestionError"))));
   }
 
   // While dragging a connection, snaps the line's loose end to the hovered
@@ -309,7 +312,7 @@ export function CorkboardOverlay({
   return (
     <Modal onClose={onClose}>
       <div className="flex items-center justify-between gap-3 border-b border-white/5 p-4">
-        <p className="font-mono text-sm uppercase tracking-widest text-text-secondary">Prikbord</p>
+        <p className="font-mono text-sm uppercase tracking-widest text-text-secondary">{t("title")}</p>
         <div className="flex flex-wrap items-center gap-2">
           <Button
             variant="secondary"
@@ -318,7 +321,7 @@ export function CorkboardOverlay({
               setPickingQuestion(false);
             }}
           >
-            + Briefje
+            {t("addNote")}
           </Button>
           <Button
             variant="secondary"
@@ -328,10 +331,10 @@ export function CorkboardOverlay({
             }}
             disabled={unpinnedQuestions.length === 0}
           >
-            + Vraag vastprikken
+            {t("pinQuestion")}
           </Button>
           <Button variant="ghost" onClick={onClose}>
-            Sluiten
+            {t("close")}
           </Button>
         </div>
       </div>
@@ -344,7 +347,7 @@ export function CorkboardOverlay({
             onKeyDown={(e) => {
               if (e.key === "Enter") handleAddNote();
             }}
-            placeholder="Schrijf een theorie..."
+            placeholder={t("notePlaceholder")}
             maxLength={200}
             className="min-w-[200px] flex-1 rounded-md border border-white/10 bg-bg-primary px-3 py-2 font-mono text-sm text-text-primary placeholder:text-text-secondary/60 focus:border-accent-muted"
           />
@@ -363,7 +366,7 @@ export function CorkboardOverlay({
             ))}
           </div>
           <Button onClick={handleAddNote} disabled={!noteDraft.trim()}>
-            Plakken
+            {t("pin")}
           </Button>
         </div>
       )}
@@ -384,8 +387,7 @@ export function CorkboardOverlay({
       )}
 
       <p className="border-b border-white/5 px-4 py-2 font-mono text-xs text-text-secondary">
-        Sleep vanaf het rode puntje op een kaartje naar een ander kaartje om ze te verbinden. Klik op
-        een draadje om het weer te verwijderen.
+        {t("instructions")}
       </p>
 
       {(actionError || state.error) && (
@@ -434,7 +436,7 @@ export function CorkboardOverlay({
                     style={{ pointerEvents: "stroke", cursor: "pointer" }}
                     onClick={() => handleDeleteConnection(conn.id)}
                   >
-                    <title>Klik om dit draadje te verwijderen</title>
+                    <title>{t("deleteConnectionTitle")}</title>
                   </line>
                 )}
               </g>

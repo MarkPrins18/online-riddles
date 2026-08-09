@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Online Riddles",
     short_name: "Riddles",
     description:
-      "Een lateral thinking puzzelspel voor groepen. Stel ja/nee-vragen, verzamel aanwijzingen en ontrafel het mysterie.",
+      "A lateral thinking puzzle game for groups. Ask yes/no questions, gather clues, and crack the mystery.",
     start_url: "/",
     display: "standalone",
     background_color: "#15120e",

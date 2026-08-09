@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { Player } from "@/types/player";
@@ -22,6 +23,7 @@ export function StartGameButton({
   narratorSelection,
   playedPuzzleIds,
   roomSettings,
+  locale,
 }: {
   supabase: SupabaseClient<Database>;
   roomId: string;
@@ -30,10 +32,12 @@ export function StartGameButton({
   narratorSelection: NarratorSelection;
   playedPuzzleIds: string[];
   roomSettings: RoomSettingsInput;
+  locale: string;
 }) {
   const router = useRouter();
   const [isStarting, setIsStarting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("StartGameButton");
 
   const hasCommunitySelection =
     roomSettings.communityPackIds === null || roomSettings.communityPackIds.length > 0;
@@ -53,6 +57,7 @@ export function StartGameButton({
       await updateRoomSettings(supabase, roomId, roomSettings);
       const puzzle = await getRandomPuzzle(
         supabase,
+        locale,
         playedPuzzleIds,
         roomSettings.packThemeFilter,
         roomSettings.communityPackIds,
@@ -62,7 +67,7 @@ export function StartGameButton({
       await setRoomPuzzle(supabase, roomId, puzzle.id, playedPuzzleIds);
       router.push(`/room/${roomCode}/play`);
     } catch (err) {
-      setError(getErrorMessage(err, "Kon het spel niet starten. Probeer het opnieuw."));
+      setError(getErrorMessage(err, t("error")));
       setIsStarting(false);
     }
   }
@@ -75,12 +80,12 @@ export function StartGameButton({
         disabled={isStarting || players.length < 2 || settingsIncomplete}
       >
         {isStarting
-          ? "Zaak wordt geopend..."
+          ? t("starting")
           : players.length < 2
-            ? "Wacht op meer spelers..."
+            ? t("waitingForPlayers")
             : settingsIncomplete
-              ? "Kies minstens één thema of community pack..."
-              : "Start het spel"}
+              ? t("chooseThemeOrPack")
+              : t("start")}
       </Button>
     </div>
   );

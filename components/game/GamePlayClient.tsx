@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { useGameState } from "@/lib/game/useGameState";
 import { getStoredPlayerId } from "@/lib/session";
 import { getRandomPuzzle } from "@/lib/supabase/puzzles";
@@ -62,9 +63,11 @@ const NARRATOR_OFFLINE_TIMEOUT_MS = 2 * 60 * 1000;
 
 export function GamePlayClient({ code }: { code: string }) {
   const [playerId] = useState(() => getStoredPlayerId(code));
-  const { state, supabase } = useGameState(code, playerId);
+  const locale = useLocale();
+  const { state, supabase } = useGameState(code, playerId, locale);
   const router = useRouter();
   const now = useNowTick();
+  const t = useTranslations("GamePlayClient");
   const [nextCaseError, setNextCaseError] = useState<string | null>(null);
   const [isSkippingPuzzle, setIsSkippingPuzzle] = useState(false);
   const [skipPuzzleError, setSkipPuzzleError] = useState<string | null>(null);
@@ -199,14 +202,14 @@ export function GamePlayClient({ code }: { code: string }) {
   if (state.error) {
     return (
       <p className="font-mono text-sm text-danger">
-        Er ging iets mis: {state.error}
+        {t("errorPrefix", { error: state.error })}
       </p>
     );
   }
 
   if (!state.room || !state.puzzle || !playerId) {
     return (
-      <p className="font-mono text-sm text-text-secondary">Zaak laden...</p>
+      <p className="font-mono text-sm text-text-secondary">{t("loadingCase")}</p>
     );
   }
 
@@ -274,6 +277,7 @@ export function GamePlayClient({ code }: { code: string }) {
       const nextRound = nextRoundNumber(currentRoom.round);
       const nextPuzzle = await getRandomPuzzle(
         supabase,
+        locale,
         currentRoom.played_puzzle_ids,
         currentRoom.pack_theme_filter ?? [],
         currentRoom.community_pack_ids,
@@ -283,7 +287,7 @@ export function GamePlayClient({ code }: { code: string }) {
       await setRoomPuzzle(supabase, currentRoom.id, nextPuzzle.id, currentRoom.played_puzzle_ids);
       await advanceRoomRound(supabase, currentRoom.id, nextRound);
     } catch (error) {
-      setNextCaseError(getErrorMessage(error, "Kon geen nieuwe zaak starten. Probeer het opnieuw."));
+      setNextCaseError(getErrorMessage(error, t("nextCaseError")));
     } finally {
       advancingToNextRoundRef.current = false;
     }
@@ -294,7 +298,7 @@ export function GamePlayClient({ code }: { code: string }) {
     if (!currentRoom || isSkippingPuzzle) return;
     if (
       (questions.length > 0 || guesses.length > 0) &&
-      !window.confirm("Deze zaak overslaan? Alle vragen en gokken hiervoor gaan verloren.")
+      !window.confirm(t("skipConfirm"))
     ) {
       return;
     }
@@ -304,6 +308,7 @@ export function GamePlayClient({ code }: { code: string }) {
     try {
       const nextPuzzle = await getRandomPuzzle(
         supabase,
+        locale,
         currentRoom.played_puzzle_ids,
         currentRoom.pack_theme_filter ?? [],
         currentRoom.community_pack_ids,
@@ -314,7 +319,7 @@ export function GamePlayClient({ code }: { code: string }) {
       // briefing dialog that needsBriefing triggers for the fresh puzzle.
       setCaseDrawerOpen(false);
     } catch (error) {
-      setSkipPuzzleError(getErrorMessage(error, "Kon geen andere zaak ophalen. Probeer het opnieuw."));
+      setSkipPuzzleError(getErrorMessage(error, t("skipPuzzleError")));
     } finally {
       setIsSkippingPuzzle(false);
     }
@@ -354,15 +359,17 @@ export function GamePlayClient({ code }: { code: string }) {
       <div className="desk-layout w-full max-w-[72rem]">
         <div className="flex flex-nowrap items-center justify-between gap-2 overflow-x-auto [grid-area:status]">
           <div className="flex shrink-0 flex-nowrap items-center gap-2 whitespace-nowrap font-mono text-sm text-text-secondary sm:gap-3">
-            <span>Ronde {room.round + 1}</span>
+            <span>{t("roundLabel", { round: room.round + 1 })}</span>
             {narrating && (
-              <span className="hidden text-accent sm:inline">Jij bent de Verteller</span>
+              <span className="hidden text-accent sm:inline">{t("youAreNarrator")}</span>
             )}
-            {isSpectator && <span>Toeschouwer</span>}
+            {isSpectator && <span>{t("spectator")}</span>}
             {narrating && !isRevealed && (
               <span className="hidden sm:inline">
-                {incorrectGuessCount > 0 && <span className="text-danger">{incorrectGuessCount} fout · </span>}
-                {answeredCount} beantwoord
+                {incorrectGuessCount > 0 && (
+                  <span className="text-danger">{t("wrongCount", { count: incorrectGuessCount })} · </span>
+                )}
+                {t("answeredCountLabel", { count: answeredCount })}
               </span>
             )}
             {room.hardcore_mode && room.team_lives_remaining !== null && room.team_lives_total !== null && (
@@ -407,7 +414,7 @@ export function GamePlayClient({ code }: { code: string }) {
           <div className={narrating ? "hidden xl:block" : undefined}>
             <div className="relative -rotate-[0.4deg]">
               <span className="absolute -top-3 left-6 -rotate-2 rounded-[2px_8px_2px_8px] border-2 border-accent/60 bg-bg-primary px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-accent">
-                Zaak-dossier
+                {t("caseDossierLabel")}
               </span>
               <Card tone="case" className="!p-4 sm:!p-6">
                 <button
@@ -438,7 +445,7 @@ export function GamePlayClient({ code }: { code: string }) {
                 className="w-full"
                 onClick={() => setCaseDrawerOpen(true)}
               >
-                Zaak &amp; oplossing
+                {t("caseAndSolution")}
               </Button>
             </div>
           )}
@@ -487,9 +494,7 @@ export function GamePlayClient({ code }: { code: string }) {
             <div className="mt-1 xl:hidden">
               {isSpectator ? (
                 <Card>
-                  <p className="font-mono text-sm text-text-secondary">
-                    Je kijkt mee tot de volgende zaak begint...
-                  </p>
+                  <p className="font-mono text-sm text-text-secondary">{t("spectatorWaiting")}</p>
                 </Card>
               ) : (
                 <Tabs
@@ -505,7 +510,7 @@ export function GamePlayClient({ code }: { code: string }) {
                   tabs={[
                     {
                       key: "vraag",
-                      label: "Stel een vraag",
+                      label: t("askQuestionTab"),
                       content: (
                         <Card tone="paper" className="w-full p-4">
                           <QuestionForm
@@ -521,7 +526,7 @@ export function GamePlayClient({ code }: { code: string }) {
                     },
                     {
                       key: "oplossing",
-                      label: "Los de zaak op",
+                      label: t("solveTab"),
                       content: (
                         <Card>
                           <GuessForm
@@ -543,9 +548,7 @@ export function GamePlayClient({ code }: { code: string }) {
 
           {!narrating && !isRevealed && !isSpectator && (
             <Card className="hidden xl:block">
-              <p className="mb-3 font-mono text-xs text-text-secondary">
-                Los de zaak op.
-              </p>
+              <p className="mb-3 font-mono text-xs text-text-secondary">{t("solveCaseLabel")}</p>
               <GuessForm
                 supabase={supabase}
                 roomId={room.id}
@@ -579,10 +582,10 @@ export function GamePlayClient({ code }: { code: string }) {
                 tabs={[
                   {
                     key: "postvak",
-                    label: "Postvak",
+                    label: t("inboxTab"),
                     badge: unansweredCount + pendingGuessCount,
                     content: isRevealed ? (
-                      <p className="font-mono text-sm text-text-secondary">Zaak gesloten.</p>
+                      <p className="font-mono text-sm text-text-secondary">{t("caseClosedLabel")}</p>
                     ) : (
                       <NarratorInbox
                         supabase={supabase}
@@ -600,7 +603,7 @@ export function GamePlayClient({ code }: { code: string }) {
                   },
                   {
                     key: "archief",
-                    label: "Archief",
+                    label: t("archiveTab"),
                     content: (
                       <NarratorArchive
                         supabase={supabase}
@@ -619,7 +622,7 @@ export function GamePlayClient({ code }: { code: string }) {
                 tabs={[
                   {
                     key: "aanwijzingen",
-                    label: "Aanwijzingen",
+                    label: t("cluesTab"),
                     badge: clueCount,
                     content: (
                       <CluesList
@@ -630,7 +633,7 @@ export function GamePlayClient({ code }: { code: string }) {
                   },
                   {
                     key: "verhoor",
-                    label: "Verhoor",
+                    label: t("interrogationTab"),
                     badge: unansweredCount,
                     content: (
                       <InterrogationLog
@@ -656,10 +659,10 @@ export function GamePlayClient({ code }: { code: string }) {
                 tabs={[
                   {
                     key: "postvak",
-                    label: "Postvak",
+                    label: t("inboxTab"),
                     badge: unansweredCount + pendingGuessCount,
                     content: isRevealed ? (
-                      <p className="font-mono text-sm text-text-secondary">Zaak gesloten.</p>
+                      <p className="font-mono text-sm text-text-secondary">{t("caseClosedLabel")}</p>
                     ) : (
                       <NarratorInbox
                         supabase={supabase}
@@ -677,7 +680,7 @@ export function GamePlayClient({ code }: { code: string }) {
                   },
                   {
                     key: "archief",
-                    label: "Archief",
+                    label: t("archiveTab"),
                     content: (
                       <NarratorArchive
                         supabase={supabase}
@@ -696,7 +699,7 @@ export function GamePlayClient({ code }: { code: string }) {
                 tabs={[
                   {
                     key: "aanwijzingen",
-                    label: "Aanwijzingen",
+                    label: t("cluesTab"),
                     badge: clueCount,
                     content: (
                       <CluesList
@@ -707,7 +710,7 @@ export function GamePlayClient({ code }: { code: string }) {
                   },
                   {
                     key: "verhoor",
-                    label: "Verhoor",
+                    label: t("interrogationTab"),
                     badge: unansweredCount,
                     content: (
                       <InterrogationLog
@@ -757,7 +760,7 @@ export function GamePlayClient({ code }: { code: string }) {
           <div className="hidden [grid-area:side] xl:block">
             <Card tone="paper" className="w-full p-4">
               <p className="font-mono text-[11px] uppercase tracking-widest text-black/60">
-                Stel een vraag
+                {t("askQuestionTab")}
               </p>
               <div className="mt-2">
                 <QuestionForm
@@ -778,14 +781,14 @@ export function GamePlayClient({ code }: { code: string }) {
             <Card>
               <p className="mb-3 font-mono text-xs text-text-secondary">
                 {nextNarrator
-                  ? `${nextNarrator.name} wordt de nieuwe Verteller.`
-                  : "Niet genoeg spelers voor een nieuwe ronde."}
+                  ? t("nextNarratorLabel", { name: nextNarrator.name })
+                  : t("notEnoughPlayers")}
               </p>
               {nextCaseError && (
                 <p className="mb-3 font-mono text-xs text-danger">{nextCaseError}</p>
               )}
               <Button className="w-full" onClick={handleNextCase} disabled={!nextNarrator}>
-                Volgende zaak
+                {t("nextCase")}
               </Button>
             </Card>
           </div>

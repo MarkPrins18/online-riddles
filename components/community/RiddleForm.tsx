@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { ensureAnonymousSession } from "@/lib/supabase/authSession";
 import { createCommunityPuzzle, updateOwnPuzzle } from "@/lib/supabase/communityPuzzles";
@@ -14,11 +15,7 @@ const inputClasses =
 const textareaClasses = `${inputClasses} min-h-24 resize-y`;
 const labelClasses = "font-mono text-xs uppercase tracking-widest text-text-secondary";
 
-const DIFFICULTY_OPTIONS: Array<{ value: Puzzle["difficulty"]; label: string }> = [
-  { value: "easy", label: "Makkelijk" },
-  { value: "medium", label: "Gemiddeld" },
-  { value: "hard", label: "Moeilijk" },
-];
+const DIFFICULTY_VALUES: Puzzle["difficulty"][] = ["easy", "medium", "hard"];
 
 export function RiddleForm({
   packId,
@@ -42,12 +39,15 @@ export function RiddleForm({
   const [hint, setHint] = useState(puzzle?.hint ?? "");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("RiddleForm");
+  const tDifficulty = useTranslations("Difficulty");
+  const locale = useLocale();
 
   useEffect(() => {
-    listCategories(createClient())
+    listCategories(createClient(), locale)
       .then(setCategories)
       .catch(() => setCategories([]));
-  }, []);
+  }, [locale]);
 
   const canSubmit = title.trim() && scenario.trim() && solution.trim();
 
@@ -60,7 +60,6 @@ export function RiddleForm({
     try {
       const supabase = createClient();
       const input = {
-        packId,
         title: title.trim(),
         scenario: scenario.trim(),
         solution: solution.trim(),
@@ -70,11 +69,11 @@ export function RiddleForm({
       };
 
       if (isEditing) {
-        const updated = await updateOwnPuzzle(supabase, puzzle.id, input);
+        const updated = await updateOwnPuzzle(supabase, puzzle.id, puzzle.locale, input);
         onSaved(updated);
       } else {
         const userId = await ensureAnonymousSession(supabase);
-        const created = await createCommunityPuzzle(supabase, userId, input);
+        const created = await createCommunityPuzzle(supabase, userId, { ...input, packId, locale });
         setTitle("");
         setScenario("");
         setSolution("");
@@ -83,7 +82,7 @@ export function RiddleForm({
         onSaved(created);
       }
     } catch (err) {
-      setError(getErrorMessage(err, "Kon het raadsel niet opslaan. Probeer het opnieuw."));
+      setError(getErrorMessage(err, t("error")));
     } finally {
       setIsSubmitting(false);
     }
@@ -92,43 +91,43 @@ export function RiddleForm({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3">
       <label htmlFor="riddle-title" className={labelClasses}>
-        Titel
+        {t("titleLabel")}
       </label>
       <input
         id="riddle-title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        placeholder="De verdwenen..."
+        placeholder={t("titlePlaceholder")}
         maxLength={80}
         className={inputClasses}
       />
 
       <label htmlFor="riddle-scenario" className={labelClasses}>
-        Scenario — wat de spelers te zien krijgen
+        {t("scenarioLabel")}
       </label>
       <textarea
         id="riddle-scenario"
         value={scenario}
         onChange={(e) => setScenario(e.target.value)}
-        placeholder="Beschrijf de situatie..."
+        placeholder={t("scenarioPlaceholder")}
         className={textareaClasses}
       />
 
       <label htmlFor="riddle-solution" className={labelClasses}>
-        Oplossing — alleen zichtbaar voor de Verteller
+        {t("solutionLabel")}
       </label>
       <textarea
         id="riddle-solution"
         value={solution}
         onChange={(e) => setSolution(e.target.value)}
-        placeholder="Wat er werkelijk is gebeurd..."
+        placeholder={t("solutionPlaceholder")}
         className={textareaClasses}
       />
 
       <div className="flex gap-3">
         <div className="flex-1">
           <label htmlFor="riddle-category" className={labelClasses}>
-            Categorie (optioneel)
+            {t("categoryLabel")}
           </label>
           <select
             id="riddle-category"
@@ -136,7 +135,7 @@ export function RiddleForm({
             onChange={(e) => setCategoryId(e.target.value)}
             className={`${inputClasses} mt-1 w-full`}
           >
-            <option value="">Geen categorie</option>
+            <option value="">{t("noCategoryOption")}</option>
             {categories.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
@@ -146,7 +145,7 @@ export function RiddleForm({
         </div>
         <div className="w-40">
           <label htmlFor="riddle-difficulty" className={labelClasses}>
-            Moeilijkheid
+            {t("difficultyLabel")}
           </label>
           <select
             id="riddle-difficulty"
@@ -154,9 +153,9 @@ export function RiddleForm({
             onChange={(e) => setDifficulty(e.target.value as Puzzle["difficulty"])}
             className={`${inputClasses} mt-1 w-full`}
           >
-            {DIFFICULTY_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
+            {DIFFICULTY_VALUES.map((value) => (
+              <option key={value} value={value}>
+                {tDifficulty(value)}
               </option>
             ))}
           </select>
@@ -164,13 +163,13 @@ export function RiddleForm({
       </div>
 
       <label htmlFor="riddle-hint" className={labelClasses}>
-        Hint (optioneel)
+        {t("hintLabel")}
       </label>
       <input
         id="riddle-hint"
         value={hint}
         onChange={(e) => setHint(e.target.value)}
-        placeholder="Een klein duwtje in de goede richting..."
+        placeholder={t("hintPlaceholder")}
         maxLength={120}
         className={inputClasses}
       />
@@ -178,15 +177,11 @@ export function RiddleForm({
       {error && <p className="font-mono text-xs text-danger">{error}</p>}
       <div className="flex gap-2">
         <Button type="submit" disabled={isSubmitting || !canSubmit}>
-          {isSubmitting
-            ? "Opslaan..."
-            : isEditing
-              ? "Wijzigingen opslaan"
-              : "Raadsel toevoegen"}
+          {isSubmitting ? t("saving") : isEditing ? t("saveChanges") : t("addRiddle")}
         </Button>
         {onCancel && (
           <Button type="button" variant="ghost" onClick={onCancel}>
-            Annuleren
+            {t("cancel")}
           </Button>
         )}
       </div>

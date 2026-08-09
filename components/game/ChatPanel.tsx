@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { ChatMessage } from "@/types/chatMessage";
@@ -35,6 +36,7 @@ export function ChatPanel({
   className?: string;
 }) {
   const chatScrollRef = useRef<HTMLDivElement>(null);
+  const t = useTranslations("ChatPanel");
 
   // Keep chat pinned to the newest message.
   useEffect(() => {
@@ -44,14 +46,14 @@ export function ChatPanel({
   return (
     <Card className={`flex h-full min-h-0 flex-col ${className}`}>
       <p className="mb-3 shrink-0 font-mono text-xs uppercase tracking-widest text-text-secondary">
-        Overleg
+        {t("heading")}
       </p>
       <div ref={chatScrollRef} className="min-h-0 flex-1 overflow-y-auto pr-1">
         <ChatThread messages={chatMessages} narratorId={narratorId} />
       </div>
       {narrating ? (
         <p className="mt-3 shrink-0 border-t border-white/5 pt-3 font-mono text-xs text-text-secondary">
-          Als Verteller kun je het overleg meelezen, maar niet meedoen.
+          {t("narratorNotice")}
         </p>
       ) : (
         <div className="mt-3 shrink-0 border-t border-white/5 pt-3">

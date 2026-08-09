@@ -1,12 +1,19 @@
 export type PuzzleDifficulty = "easy" | "medium" | "hard";
 
+export type Category = {
+  id: string;
+  name: string;
+};
+
 export type Puzzle = {
   id: string;
   pack_id: string;
   title: string;
   scenario: string;
   solution: string;
+  /** Category name, resolved from category_id — see published_puzzles/get_room_puzzle in schema.sql. */
   category: string | null;
+  category_id: string | null;
   difficulty: PuzzleDifficulty;
   hint: string | null;
   created_at: string;

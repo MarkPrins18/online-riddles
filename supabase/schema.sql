@@ -90,18 +90,113 @@ create table if not exists story_packs (
   created_at timestamptz not null default now()
 );
 
+-- A fixed, curated vocabulary for puzzle categories (Fraude, Techniek, ...)
+-- instead of a free-text field — keeps community submissions from drifting
+-- into near-duplicate labels ("Fraude" vs "fraude" vs "Bedrog"). Only admins
+-- (service-role key or an /admin account) may add new categories; everyone
+-- else picks from the existing list.
+create table if not exists categories (
+  id uuid primary key default gen_random_uuid(),
+  name text unique not null,
+  created_at timestamptz not null default now()
+);
+
+insert into categories (name) values
+  ('Werk'), ('Hobby'), ('Gewoonte'), ('Familie'), ('Horeca'), ('School'),
+  ('Techniek'), ('Interne diefstal'), ('Vervalsing'), ('Vals spoor'),
+  ('Fraude'), ('Beveiligingsfraude'), ('Smokkel'), ('Post'), ('Buren'),
+  ('Openbaar vervoer'), ('Nutsvoorzieningen'), ('Verjaardag'), ('Dieren'),
+  ('Communicatie'), ('Astronomie'), ('Bemanning'), ('Voorraad'),
+  ('Klassiek raadsel'), ('Verzekeringsfraude'), ('Moordwapen')
+on conflict (name) do nothing;
+
+-- Same anti-drift idea as `categories` above, but for story_packs.theme
+-- ("Crime" vs "crime" vs "SciFi") — unlike categories this is NOT
+-- admin-gated: community pack creators must be able to name a genuinely new
+-- theme themselves (see PackForm.tsx's "+ Nieuw thema" flow), so anyone may
+-- insert. `story_packs.theme` stays a plain text column (see
+-- normalize_pack_theme below) — this table is purely a canonicalization
+-- ledger, not a foreign key every reader has to join through.
+create table if not exists themes (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  created_at timestamptz not null default now()
+);
+
+create unique index if not exists themes_name_unique on themes (lower(name));
+
+insert into themes (name)
+select distinct theme from story_packs
+on conflict (lower(name)) do nothing;
+
+-- For every insert/update of story_packs.theme: if a case-insensitive match
+-- already exists in `themes`, silently snap the stored value to that
+-- existing spelling (stops "Sci-Fi" vs "SciFi" from becoming two separate
+-- checkboxes in the room-settings theme list); if it's genuinely new, record
+-- it so future writes can match against it. Applies to every write path
+-- (official import via upsertPack's on-conflict-update, community creation
+-- via createOwnPack) without either needing to know this table exists.
+create or replace function normalize_pack_theme() returns trigger
+language plpgsql as $$
+declare
+  canonical text;
+begin
+  select name into canonical from themes where lower(name) = lower(new.theme);
+  if canonical is not null then
+    new.theme := canonical;
+  else
+    insert into themes (name) values (new.theme);
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists normalize_pack_theme_trigger on story_packs;
+create trigger normalize_pack_theme_trigger
+  before insert or update of theme on story_packs
+  for each row execute function normalize_pack_theme();
+
 create table if not exists puzzles (
   id uuid primary key default gen_random_uuid(),
   pack_id uuid not null references story_packs (id) on delete cascade,
   title text not null,
   scenario text not null,
   solution text not null,
-  category text,
+  category_id uuid references categories (id) on delete set null,
   difficulty text not null default 'medium' check (difficulty in ('easy', 'medium', 'hard')),
   hint text,
   created_at timestamptz not null default now(),
   unique (pack_id, title)
 );
+
+-- Upgrade path for a database that already has puzzles with the old
+-- free-text `category` column: add category_id, backfill it by matching
+-- the old text against the new categories table, then drop the old column.
+-- Safe to re-run — once `category` is gone this whole block is a no-op.
+-- (`create table if not exists` above doesn't add columns to a table that
+-- already existed, hence the explicit `add column if not exists` here.)
+alter table puzzles add column if not exists category_id uuid references categories (id) on delete set null;
+
+-- A published_puzzles view from a previous run of this script still
+-- selects the old `category` column, which blocks dropping it below
+-- ("cannot drop column ... because other objects depend on it"). Drop it
+-- here; the create-or-replace further down recreates it against category_id.
+drop view if exists published_puzzles;
+
+do $$
+begin
+  if exists (
+    select 1 from information_schema.columns
+    where table_name = 'puzzles' and column_name = 'category'
+  ) then
+    update puzzles p
+    set category_id = c.id
+    from categories c
+    where p.category_id is null and p.category = c.name;
+
+    alter table puzzles drop column category;
+  end if;
+end $$;
 
 -- Who's allowed to write puzzle content from the /admin dashboard. A real
 -- (non-anonymous) Supabase Auth account, not the player-facing anonymous
@@ -118,9 +213,10 @@ create table if not exists admins (
 -- of quietly running as the view owner.
 create or replace view published_puzzles
   with (security_invoker = true) as
-  select p.id, p.pack_id, p.title, p.scenario, p.solution, p.category, p.difficulty, p.hint, p.created_at, sp.theme, p.created_by, p.is_community
+  select p.id, p.pack_id, p.title, p.scenario, p.solution, p.category_id, c.name as category, p.difficulty, p.hint, p.created_at, sp.theme, p.created_by, p.is_community
   from puzzles p
   join story_packs sp on sp.id = p.pack_id
+  left join categories c on c.id = p.category_id
   where sp.is_published = true;
 
 create table if not exists questions (
@@ -462,8 +558,9 @@ begin
   select
     p.id, p.pack_id, p.title, p.scenario,
     case when can_see_solution then p.solution else null end,
-    p.category, p.difficulty, p.hint, p.created_at
+    c.name, p.difficulty, p.hint, p.created_at
   from puzzles p
+  left join categories c on c.id = p.category_id
   join rooms r on r.current_puzzle_id = p.id
   where r.id = room_id_input;
 end;
@@ -701,6 +798,8 @@ alter table rooms enable row level security;
 alter table players enable row level security;
 alter table story_packs enable row level security;
 alter table puzzles enable row level security;
+alter table categories enable row level security;
+alter table themes enable row level security;
 alter table admins enable row level security;
 alter table questions enable row level security;
 alter table guesses enable row level security;
@@ -734,6 +833,17 @@ drop policy if exists "public read story packs" on story_packs;
 create policy "public read story packs" on story_packs for select using (true);
 drop policy if exists "public read puzzles" on puzzles;
 create policy "public read puzzles" on puzzles for select using (true);
+drop policy if exists "public read categories" on categories;
+create policy "public read categories" on categories for select using (true);
+drop policy if exists "public read themes" on themes;
+create policy "public read themes" on themes for select using (true);
+-- Community pack creators must be able to name a genuinely new theme
+-- themselves (PackForm.tsx's "+ Nieuw thema" flow), so unlike categories
+-- this can't be admin-only-write — the normalize_pack_theme trigger above
+-- is the only thing that ever writes here for the app, and only via
+-- insert, never update/delete.
+drop policy if exists "anyone inserts themes" on themes;
+create policy "anyone inserts themes" on themes for insert with check (true);
 
 -- Content management: an authenticated admin (see the /admin dashboard)
 -- may write story packs and puzzles directly, same as the service-role
@@ -745,6 +855,14 @@ create policy "admins write story packs" on story_packs for all
   with check (exists (select 1 from admins where id = auth.uid()));
 drop policy if exists "admins write puzzles" on puzzles;
 create policy "admins write puzzles" on puzzles for all
+  using (exists (select 1 from admins where id = auth.uid()))
+  with check (exists (select 1 from admins where id = auth.uid()));
+drop policy if exists "admins write categories" on categories;
+create policy "admins write categories" on categories for all
+  using (exists (select 1 from admins where id = auth.uid()))
+  with check (exists (select 1 from admins where id = auth.uid()));
+drop policy if exists "admins write themes" on themes;
+create policy "admins write themes" on themes for all
   using (exists (select 1 from admins where id = auth.uid()))
   with check (exists (select 1 from admins where id = auth.uid()));
 
@@ -822,27 +940,28 @@ insert into story_packs (slug, name, theme, is_published) values
   ('classics-vol-1', 'Klassiekers Vol. 1', 'Klassiek', true)
 on conflict (slug) do nothing;
 
-insert into puzzles (pack_id, title, scenario, solution, category, difficulty, hint)
-select sp.id, v.title, v.scenario, v.solution, v.category, v.difficulty, v.hint
+insert into puzzles (pack_id, title, scenario, solution, category_id, difficulty, hint)
+select sp.id, v.title, v.scenario, v.solution, c.id, v.difficulty, v.hint
 from story_packs sp
 cross join (values
   (
-    'De man in de lift',
-    'Een man woont op de tiende verdieping. Elke ochtend neemt hij de lift naar beneden. ''s Avonds neemt hij de lift terug, maar stapt uit op de zevende verdieping en loopt de rest te voet — behalve als het regent, dan gaat hij helemaal naar boven met de lift.',
-    'De man is te klein om de knop voor de tiende verdieping te bereiken. Met een paraplu op regenachtige dagen kan hij de hoge knop wel indrukken.',
+    'De brief zonder postzegel',
+    'Een postbode bezorgt een brief zonder postzegel, en toch krijgt niemand een boete of nabetaling — de brief wordt gewoon netjes afgeleverd.',
+    'De brief zit in een dienstenvelop van de posterijen zelf, intern verstuurd tussen twee postkantoren. Interne post heeft nooit een postzegel nodig gehad.',
     'Klassiek raadsel',
-    'medium',
-    'Het heeft iets te maken met zijn lengte.'
+    'easy',
+    'Niet alle post komt van buiten het systeem.'
   ),
   (
-    'Het stille alarm',
-    'Een vrouw wordt wakker van een geluid, doet het licht aan, kijkt naar buiten en belt daarna de politie. De politie arresteert meteen een inbreker verderop in de straat.',
-    'De vrouw woont in een vuurtoren. Toen ze het licht uitzette (niet aanzette) voor het slapen ontstond er verwarring op zee; toen ze het weer aandeed zag ze een boot die daar niet hoorde te zijn, wat op smokkel duidde.',
+    'De man die zijn eigen begrafenis miste',
+    'Op een begrafenis wordt de overledene herdacht en de kist gedragen, terwijl de man zelf kilometers verderop nog leeft en van niets weet.',
+    'Het is de begrafenis van zijn tweelingbroer, die dezelfde voornaam draagt. Een verwarde buurtkrant meldde het overlijden onder de verkeerde naam, en de man zelf hoort er pas later per toeval van.',
     'Klassiek raadsel',
-    'hard',
-    'Denk aan waar zij precies woont.'
+    'medium',
+    'Twee mensen kunnen dezelfde naam dragen — en soms ook hetzelfde gezicht.'
   )
 ) as v(title, scenario, solution, category, difficulty, hint)
+left join categories c on c.name = v.category
 where sp.slug = 'classics-vol-1'
 on conflict (pack_id, title) do nothing;
 

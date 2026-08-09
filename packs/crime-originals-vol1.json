@@ -1,74 +1,74 @@
 {
   "pack": {
     "slug": "crime-originals-vol1",
-    "name": "Crime Files Vol. 2 — Originals",
+    "name": "Crime Files Vol. 1 — Originals",
     "theme": "Crime",
     "published": true
   },
   "puzzles": [
     {
-      "title": "De brand die niemand rook",
-      "scenario": "Bij een fikse pandbrand vindt de brandweer geen enkele rookmelder in het hele gebouw afgegaan — ook niet de drie die een week eerder nog getest en goedgekeurd waren.",
-      "solution": "De eigenaar had ze zelf losgekoppeld voor de verzekeringsfraude, maar vergat dat het beveiligingsbedrijf een apart testlogboek bijhield. De melders 'werkten' perfect op papier — ze stonden alleen uit toen het erop aankwam.",
-      "category": "Fraude",
-      "difficulty": "medium",
-      "hint": "Een melder die niet afgaat, is niet hetzelfde als een melder die kapot is."
-    },
-    {
-      "title": "Twee keer dezelfde vingerafdruk",
-      "scenario": "Op de plaats delict vindt de technische recherche twee identieke vingerafdrukken, op plekken die drie kilometer uit elkaar liggen en een uur na elkaar zijn achtergelaten.",
-      "solution": "De dader droeg dunne handschoenen met een gekopieerde afdruk erop, overgenomen van een glas dat het slachtoffer eerder die avond had gebruikt. Twee plekken, maar één bewust geplante afdruk.",
-      "category": "Forensisch bewijs",
-      "difficulty": "hard",
-      "hint": "Vingerafdrukken kun je dragen, niet alleen achterlaten."
-    },
-    {
-      "title": "De kassa die klopte",
-      "scenario": "Een supermarktfiliaal meldt wekenlang tekorten in de kassa, precies aan het eind van elke zondagdienst — behalve op de ene zondag dat de eigenaar zelf meekeek.",
-      "solution": "De vaste sluiter kende zichzelf via de personeelskorting stelselmatig te veel korting toe en boekte het verschil weg als 'afgeschreven' op oude artikelen. Op de zondag met toezicht liet hij het gewoon achterwege.",
+      "title": "De nachtelijke bezoeker",
+      "scenario": "De juwelier zucht van opluchting als hij zijn kluis 's ochtends gesloten vindt. Het digitale logboek vertelt echter een ander verhaal: de kluis is die nacht drie keer geopend en weer gesloten, terwijl alleen de juwelier de code kent.",
+      "solution": "De nachtwaker, die gokschulden had, had de juwelier maandenlang bespioneerd en de code afgekeken. Hij opende de kluis meerdere keren voor kleine, onopvallende diefstallen om zijn schuldeisers af te betalen, in de hoop dat de kleine verliezen niet zouden opvallen.",
       "category": "Interne diefstal",
       "difficulty": "medium",
-      "hint": "Wie weet wanneer er wordt meegekeken?"
+      "hint": "De code was niet het enige geheim dat de juwelier had moeten bewaken."
     },
     {
-      "title": "Het lijk met de verkeerde jas",
-      "scenario": "Een slachtoffer wordt gevonden in een jas die twee maten te groot is en niet bij de rest van zijn kleding past, terwijl niemand in de directe omgeving die maat draagt.",
-      "solution": "Het slachtoffer had die avond zijn eigen jas uitgeleend aan een dakloze man tegen de kou en kreeg diens jas terug als bedankje. De verwisseling had niets met de moord te maken — puur toeval, tot frustratie van het team.",
-      "category": "Vals spoor",
-      "difficulty": "easy",
-      "hint": "Niet elk vreemd detail hoort bij de zaak."
+      "title": "De handtekening van een geest",
+      "scenario": "Bij het openen van het testament van een rijke weduwe, ontdekt de notaris iets vreemds. Er staan twee handtekeningen, weken na elkaar gezet. Maar de vrouw was de laatste maand van haar leven volledig verlamd aan haar rechterhand.",
+      "solution": "Haar toegewijde verzorgster, die wist dat ze onterfd zou worden, had maandenlang het handschrift van de vrouw geoefend. Na de verlamming gebruikte ze haar 'talent' om een laatste, frauduleuze wijziging in het testament aan te brengen die haar tot hoofderfgenaam maakte.",
+      "category": "Vervalsing",
+      "difficulty": "hard",
+      "hint": "Wie had toegang tot haar verleden en kon haar toekomst herschrijven?"
     },
     {
-      "title": "De brief die zichzelf tegensprak",
-      "scenario": "Een afscheidsbrief naast een vermeende zelfmoord bevat een handtekening die klopt, maar een handschrift dat overduidelijk van iemand anders is.",
-      "solution": "Het slachtoffer dicteerde de brief telefonisch aan haar dochter, die hem voor haar uittypte en liet ondertekenen omdat haar moeder door reuma nauwelijks nog kon schrijven. Geen vervalsing — gewoon hulp.",
+      "title": "De getuige met het glazen oog",
+      "scenario": "Een man meldt zich op het bureau, duidelijk in shock na een overval. Ondanks de duisternis en de chaos, is zijn beschrijving van de dader vlijmscherp: het vage litteken bij de slaap, de dure aftershave, de nerveuze tik met zijn vingers. Te scherp, misschien.",
+      "solution": "De 'getuige' is de dader. Overweldigd door adrenaline en paranoia na zijn daad, verzint hij een list om de politie op een dwaalspoor te brengen. Hij geeft een perfecte beschrijving van zichzelf, een gedetailleerd zelfportret, in de hoop dat de politie op zoek gaat naar een fantoom terwijl hij vrijuit gaat.",
       "category": "Vals spoor",
       "difficulty": "medium",
-      "hint": "Wie hield de pen vast, en waarom niet zijzelf?"
+      "hint": "Zijn ogen zagen niet de overvaller, maar zijn eigen spiegelbeeld."
     },
     {
-      "title": "De auto die twee keer wegreed",
-      "scenario": "Bewakingsbeelden tonen dezelfde auto met hetzelfde kenteken, die binnen tien minuten twee keer over dezelfde straathoek rijdt, in tegengestelde richting, zonder ooit te keren.",
-      "solution": "Het kenteken was gekloond op een tweede, identiek ogende auto die de dader speciaal daarvoor had aangeschaft. Twee auto's, één kenteken, precies getimed voor een dubbel alibi.",
-      "category": "Alibi",
+      "title": "De lekkage uit het verleden",
+      "scenario": "Een verzekeringsagent behandelt een claim voor aanzienlijke waterschade. Alles lijkt in orde, totdat hij ontdekt dat de 'gedupeerde' eigenaar het pand drie maanden geleden heeft verkocht aan een nietsvermoedende koper.",
+      "solution": "De verkoper had de waterschade bewust verzwegen bij de verkoop. Toen hij merkte dat de verzekeringspolis nog op zijn naam stond, diende hij een claim in voor de 'recente' schade. Hij gokte erop dat de nieuwe eigenaar de oude schade niet zou opmerken en hij dubbel kon cashen.",
+      "category": "Fraude",
       "difficulty": "hard",
-      "hint": "Een kenteken zegt iets over de plaat, niet over de auto eronder."
+      "hint": "Het geld stroomde niet uit de leidingen, maar uit zijn hebzucht."
     },
     {
-      "title": "Het slot dat nooit had bestaan",
-      "scenario": "De politie onderzoekt een 'inbraak' bij een juwelier, maar de deur blijkt technisch onmogelijk op slot te hebben gezeten — het slot is nooit gemonteerd, ondanks een factuur die het bewijst.",
-      "solution": "De installateur had de rekening wél gestuurd en het slot wél meegenomen, maar het apart doorverkocht en de zaak zo lang mogelijk voor eigen gewin laten openstaan, wetend dat de eigenaar het zelden checkte.",
+      "title": "De stilte van de sensor",
+      "scenario": "Inbrekers breken een kantoorpand binnen via een zwaar beveiligde deur. Het alarm ging nooit af. Uit onderzoek blijkt dat de deursensor al weken offline was, zonder dat er ooit een storingsmelding is verstuurd.",
+      "solution": "Een corrupte monteur van het beveiligingsbedrijf had de sensor opzettelijk gemanipuleerd. Hij gebruikte het 'offline' raamwerk om 's nachts ongestoord goederen uit het magazijn te stelen voor zijn eigen handeltje. De inbrekers profiteerden, zonder het te weten, van zijn interne operatie.",
       "category": "Beveiligingsfraude",
-      "difficulty": "medium",
-      "hint": "Een factuur bewijst een aankoop, geen installatie."
+      "difficulty": "hard",
+      "hint": "De dief zat niet buiten, maar binnen het systeem."
     },
     {
-      "title": "De getuige die twee keer belde",
-      "scenario": "Een anonieme tipgever belt de politie tweemaal over dezelfde overval, met vrijwel identieke bewoordingen, vanaf twee verschillende nummers op twee verschillende dagen.",
-      "solution": "De dader belde zelf, twee keer, in de hoop de aandacht op een verzonnen verdachte te vestigen — eerst met een prepaidtelefoon, en uit angst dat die getraceerd was, de tweede keer met een geleend toestel.",
-      "category": "Vals spoor",
+      "title": "De dubbele bagage",
+      "scenario": "Een bagage-afhandelaar op het vliegveld fronst. Hij ziet een koffer met hetzelfde label en dezelfde bestemming voor de tweede keer op de band voorbijkomen. De passagier van die koffer zit al lang en breed in het vliegtuig.",
+      "solution": "Een smokkelaar binnen het bagagepersoneel had het systeem door. Hij printte een duplicaat van een bestaand bagagelabel en plakte dat op een koffer vol smokkelwaar. Zo kon zijn eigen koffer meeliften op een legitieme vlucht, terwijl de originele koffer van de passagier gewoon aan boord ging.",
+      "category": "Smokkel",
       "difficulty": "hard",
-      "hint": "Wie heeft er baat bij dat de politie een bepaald verhaal gelooft?"
+      "hint": "Het label was echt, maar de inhoud was vals."
+    },
+    {
+      "title": "De spookleverancier",
+      "scenario": "Een nieuwe, ambitieuze boekhouder duikt in de administratie en stuit op een mysterie. Een bepaalde leverancier wordt al jaren stipt betaald voor geleverde goederen, maar niemand in het bedrijf heeft ooit van hen gehoord, laat staan gezien.",
+      "solution": "De vorige, malafide boekhouder had een spookbedrijf opgericht op naam van zijn schoonmoeder. Jarenlang betaalde hij valse facturen aan 'zichzelf'. Toen hij met pensioen ging, liet hij de automatische betalingen gewoon doorlopen, gokkend op de onoplettendheid van zijn opvolger.",
+      "category": "Fraude",
+      "difficulty": "medium",
+      "hint": "De leverancier bestond alleen op papier, en op een bankrekening."
+    },
+    {
+      "title": "Het einde van het spoor",
+      "scenario": "Na een kunstroof volgen speurhonden het geurspoor van de dief feilloos door de stad. Het spoor leidt naar een drukke busterminal en stopt daar abrupt. Er is rond die tijd echter geen bus of taxi vertrokken.",
+      "solution": "De dief was een meester in misleiding. Hij droeg schoenen die hij had gestolen van een dakloze man die vaak bij de terminal sliep. Na de roof, rende hij naar de terminal, en wisselde de schoenen om voor zijn eigen paar. De honden volgden het spoor van de dakloze, niet van de dief.",
+      "category": "Vals spoor",
+      "difficulty": "medium",
+      "hint": "De honden volgden de juiste geur, maar de verkeerde man."
     }
   ]
 }

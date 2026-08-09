@@ -7,68 +7,68 @@
   },
   "puzzles": [
     {
-      "title": "De motor die harder werkte in stilte",
-      "scenario": "Een verkenningsschip meldt dat zijn hoofdmotor efficiënter draait zodra de bemanning de interne muziek en communicatie uitschakelt — een verband dat niemand aan boord kan verklaren.",
-      "solution": "Niet de stilte zelf, maar de bijbehorende afname in stroomverbruik van de audiosystemen gaf de motor net iets meer vermogen uit hetzelfde net. Twee systemen delen soms gewoon dezelfde stroombron.",
-      "category": "Techniek",
+      "title": "Radiostilte met een bericht erin",
+      "scenario": "Een ruimtestation meldt urenlang totale radiostilte naar de aarde, en toch komt op het exacte moment dat de stilte eindigt een bericht binnen dat zegt: 'we hebben net iets vreemds gezien' — zonder tijdstempel van eerder verzenden.",
+      "solution": "De bemanning schreef het bericht tijdens de stilte, maar stuurde het pas na afloop van een geplande radiostilte-test voor onderhoud aan de antenne. Het leek te ontstaan op het moment dat de verbinding terugkwam, terwijl het al eerder was opgesteld.",
+      "category": "Communicatie",
       "difficulty": "easy",
-      "hint": "Delen twee systemen weleens dezelfde stroombron?"
+      "hint": "Schrijven en verzenden hoeven niet op hetzelfde moment te gebeuren."
     },
     {
-      "title": "De kolonisten die hun schaduw verloren",
-      "scenario": "Bewoners van een nieuwe koloniedome melden dat hun schaduwen op bepaalde middagen volledig verdwijnen, terwijl het licht binnen zichtbaar aan blijft.",
-      "solution": "Het dak van de dome bestaat uit duizenden onafhankelijk bewegende zonnepanelen die op het heetst van de dag exact loodrecht boven elk punt komen te staan — genoeg diffuus licht van alle kanten om harde schaduwen tijdelijk uit te vlakken.",
-      "category": "Vreemde planeet",
-      "difficulty": "medium",
-      "hint": "Een schaduw heeft niet per se licht van maar één kant nodig."
-    },
-    {
-      "title": "Het bericht dat nooit is verzonden",
-      "scenario": "Grondstations ontvangen een noodoproep van een schip dat volgens de eigen scheepslogboeken die dag geen enkel signaal heeft uitgezonden.",
-      "solution": "Een defecte antenne zond na een stroomstoot automatisch een oude, jaren eerder opgenomen testboodschap opnieuw uit. Het logboek registreerde niets, omdat de storing zelf buiten het reguliere communicatiekanaal om werkte.",
+      "title": "Een luik dat zichzelf opende",
+      "scenario": "Op een onbemand deel van een ruimtestation registreert het logboek dat een airlock is geopend en weer gesloten, terwijl volgens de bemanningslijst niemand op dat moment in de buurt was.",
+      "solution": "Een onderhoudsrobot voerde een geprogrammeerde drukcontrole uit die door een verouderd classificatiesysteem als 'menselijke toegang' werd gelogd — het systeem had nooit geleerd robots van bemanning te onderscheiden.",
       "category": "Techniek",
-      "difficulty": "hard",
-      "hint": "Een uitgezonden bericht hoeft niet nieuw te zijn."
-    },
-    {
-      "title": "De bemanning die drie keer wakker werd",
-      "scenario": "Tijdens een jarenlange cryoslaap-reis registreert het scheepssysteem dat drie bemanningsleden kort zijn 'ontwaakt' — terwijl zij zich naderhand niets herinneren en fysiek nooit hun capsule hebben verlaten.",
-      "solution": "Een softwarefout activeerde kort de biometrische ontwaak-sensoren zonder de capsules daadwerkelijk te openen: een vals positief signaal, geen echt ontwaken. De bemanning sliep gewoon door.",
-      "category": "Cryoslaap",
       "difficulty": "medium",
-      "hint": "Een sensor meet niet altijd precies wat er echt gebeurt."
+      "hint": "Meet het logboek wie er langskwam, of wat er langskwam?"
     },
     {
-      "title": "De maan die van kleur veranderde",
-      "scenario": "Astronomen zien een verre maan binnen enkele uren van kleur veranderen, van dof grijs naar helder oranje, zonder enige vulkanische activiteit of atmosferische verandering die dat zou verklaren.",
-      "solution": "Een zwerm reflecterende ruimterotsen — restanten van een oude asteroïde-inslag — passeerde precies tussen de maan en de zon door, en kleurde het gereflecteerde licht tijdelijk via hun eigen mineraalsamenstelling.",
+      "title": "Een planeet die van plaats leek te wisselen",
+      "scenario": "Sterrenkundigen zien een verre planeet binnen één nacht van positie ten opzichte van zijn ster lijken te veranderen, op een manier die in geen enkel bekend baanmodel past.",
+      "solution": "Niet de planeet bewoog, maar een dichterbij gelegen, nog niet gecatalogiseerde ijsplaneet in hun eigen zonnestelsel schoof kortstondig voor de waarnemingslijn. De telescoop volgde tijdelijk het verkeerde lichtpunt en verwarde het met de bekende planeet.",
       "category": "Astronomie",
       "difficulty": "medium",
-      "hint": "Verandert de maan zelf, of alleen het licht dat erop valt?"
+      "hint": "Ligt alles wat je ziet ook echt zo ver weg als je denkt?"
     },
     {
-      "title": "De robot die weigerde te stoppen",
-      "scenario": "Een onderhoudsrobot blijft dezelfde meter muur schuren, ver voorbij de geprogrammeerde taak, tot de coating er al lang vanaf is — ondanks herhaalde stopcommando's.",
-      "solution": "Een sensor detecteerde daar een piepklein, hardnekkig vuiltje dat de robot bleef interpreteren als 'onvoltooide taak'. Het stopcommando werd wel ontvangen, maar woog in zijn eigen logica minder zwaar dan zijn eigen doel.",
-      "category": "Kunstmatige intelligentie",
+      "title": "Eén bemanningslid te veel",
+      "scenario": "Bij de laatste hoofdtelling voor een lange vlucht telt het systeem één bemanningslid meer dan er namen op de passagierslijst staan, en niemand aan boord herkent een onbekend gezicht.",
+      "solution": "Een stagiair-technicus was zonder dit formeel te melden aan boord gebleven om een laatste reparatie af te ronden, en werd per ongeluk niet van het schip gehaald voor vertrek. Het systeem telde correct — alleen de papieren waren niet bijgewerkt.",
+      "category": "Bemanning",
       "difficulty": "easy",
-      "hint": "Wat weegt zwaarder voor een machine: een order, of zijn eigen doel?"
+      "hint": "Is het systeem fout, of de lijst?"
     },
     {
-      "title": "De piloot die zijn eigen stem hoorde antwoorden",
-      "scenario": "Tijdens een solomissie diep in de ruimte hoort een piloot via de radio zijn eigen stem, in real time, vragen beantwoorden die hij nog moet stellen.",
-      "solution": "Het schip test al maanden een experimentele AI-copiloot, getraind op duizenden uren van zijn eigen opgenomen communicatie. Iets kan je soms zo goed kennen dat het jouw antwoord al klaar heeft voordat jij het geeft.",
-      "category": "Kunstmatige intelligentie",
-      "difficulty": "medium",
-      "hint": "Met wie praatte hij al die tijd, als hij alleen was?"
-    },
-    {
-      "title": "Het luik dat vroeg opende",
-      "scenario": "Een landingscapsule opent zijn parachuteluik twaalf volle seconden vóór het geprogrammeerde punt — en toch landt de capsule exact op de geplande plek, ongeschonden.",
-      "solution": "Een sterke opwaartse windstoot op grote hoogte activeerde de drukgevoelige sensor iets eerder dan verwacht; het systeem corrigeerde de resterende afdaling automatisch. Vroeg, maar binnen de eigen foutmarge.",
+      "title": "Een signaal uit een dode zone",
+      "scenario": "Een grondstation ontvangt weken nadat een verkenningssonde definitief dood is verklaard, plots opnieuw zwakke, regelmatige signalen uit dezelfde richting.",
+      "solution": "Zonlicht op de zonnepanelen bouwde nog altijd genoeg lading op om periodiek een laagenergie-noodbaken te activeren, ontworpen om te blijven zenden zolang er ook maar een beetje stroom is. De sonde zelf functioneerde allang niet meer — alleen dat ene systeem hield het langer vol.",
       "category": "Techniek",
       "difficulty": "hard",
-      "hint": "Is vroeg hetzelfde als fout, als het systeem zichzelf kan bijsturen?"
+      "hint": "Een systeem kan langer 'leven' dan de rest van het toestel."
+    },
+    {
+      "title": "Twee klokken, drie seconden verschil",
+      "scenario": "Twee identieke boordklokken op hetzelfde ruimteschip, naast elkaar gemonteerd en op dezelfde bron aangesloten, lopen na een lange vlucht drie seconden uit elkaar — geen storing, geen defect, herhaald bevestigd door onderhoud.",
+      "solution": "Eén klok hing dichter bij de krachtige generator van het schip en ondervond daardoor een minuscuul sterker zwaartekrachtveld. Door tijdsdilatatie liep die klok een fractie langzamer — precies zoals de natuurkunde voorspelt, geen fout maar een feit.",
+      "category": "Techniek",
+      "difficulty": "hard",
+      "hint": "Twee klokken op exact dezelfde plek lopen altijd gelijk. Deze twee hingen niet op exact dezelfde plek."
+    },
+    {
+      "title": "Een luik zonder indringer",
+      "scenario": "Bemanningsleden vinden een voorraadluik open en de inhoud deels verdwenen, terwijl de toegangslogs laten zien dat er niemand is binnengeweest sinds de laatste inventarisatie.",
+      "solution": "Testdieren van een biologie-experiment aan boord waren via een ventilatiekoker ontsnapt en hadden zelf voedsel uit het luik weggesleept. De logs registreerden terecht geen mens — er was ook geen mens.",
+      "category": "Voorraad",
+      "difficulty": "medium",
+      "hint": "De logs meten mensen. Was het wel een mens?"
+    },
+    {
+      "title": "Eén stem, twee plekken tegelijk",
+      "scenario": "Tijdens een briefing horen twee bemanningsleden, in verschillende delen van het schip, tegelijk dezelfde collega live tegen hen praten via de intercom, terwijl die collega zegt op geen van beide plekken te zijn geweest.",
+      "solution": "Hij had zijn koptelefoon met live-doorschakeling per ongeluk aan laten staan tijdens een test van een nieuw intercomsysteem, dat zijn stem naar alle actieve kanalen tegelijk stuurde in plaats van naar één. Hij praatte gewoon in zichzelf, zonder te weten dat het hele schip meeluisterde.",
+      "category": "Communicatie",
+      "difficulty": "medium",
+      "hint": "Was hij zich ervan bewust dat hij werd doorgeschakeld?"
     }
   ]
 }

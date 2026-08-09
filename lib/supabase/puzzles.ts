@@ -2,6 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "./database.types";
 import type { Puzzle, PublishedPuzzle, PuzzleDifficulty } from "@/types/puzzle";
 import { getVoteTotals } from "./votes";
+import { resolveCategoryId } from "./categories";
 
 type Client = SupabaseClient<Database>;
 
@@ -108,7 +109,10 @@ export type NewPuzzleInput = {
 
 /**
  * Bulk-imports puzzles into a pack. Idempotent: re-running with the same
- * (pack, title) pairs skips duplicates instead of erroring.
+ * (pack, title) pairs skips duplicates instead of erroring. Category names
+ * are resolved (and created if new) via resolveCategoryId — only safe here
+ * because this runs with the service-role key, which bypasses the RLS that
+ * otherwise keeps `categories` admin-write-only.
  */
 export async function insertPuzzles(
   supabase: Client,
@@ -116,6 +120,13 @@ export async function insertPuzzles(
   puzzles: NewPuzzleInput[]
 ): Promise<number> {
   if (puzzles.length === 0) return 0;
+
+  const categoryIds = new Map<string, string>();
+  for (const p of puzzles) {
+    if (p.category && !categoryIds.has(p.category)) {
+      categoryIds.set(p.category, await resolveCategoryId(supabase, p.category));
+    }
+  }
 
   const { data, error } = await supabase
     .from("puzzles")
@@ -125,7 +136,7 @@ export async function insertPuzzles(
         title: p.title,
         scenario: p.scenario,
         solution: p.solution,
-        category: p.category ?? null,
+        category_id: p.category ? (categoryIds.get(p.category) ?? null) : null,
         difficulty: p.difficulty,
         hint: p.hint ?? null,
       })),

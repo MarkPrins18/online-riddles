@@ -7,68 +7,68 @@
   },
   "puzzles": [
     {
-      "title": "De post die zichzelf vooruit liep",
-      "scenario": "Een man ontvangt een verjaardagskaart twee dagen vóór zijn verjaardag, gedateerd en gestempeld op de dag ná zijn verjaardag.",
-      "solution": "De poststempel van het sorteercentrum liep een dag achter door een niet-omgezette klok na de zomertijdwissel. De kaart was gewoon te vroeg bezorgd — alleen de datum erop klopte niet.",
+      "title": "Eén pakketje, drie keer bezorgd",
+      "scenario": "Een vrouw krijgt in één week driemaal hetzelfde pakketje bezorgd, telkens onbeschadigd, telkens met haar naam correct erop, terwijl ze maar één keer iets heeft besteld.",
+      "solution": "Haar nieuwe buurman gaf per ongeluk hetzelfde huisnummer op bij een abonnementsdienst voor een cadeau aan zijn moeder, die toevallig dezelfde voornaam heeft. De bezorger levert steeds af op het adres dat het systeem aangeeft, niet bij de juiste 'haar'.",
       "category": "Post",
-      "difficulty": "easy",
-      "hint": "Klopt de datum op de stempel, of alleen de dag van bezorgen?"
-    },
-    {
-      "title": "Het huis dat altijd warmer was aan één kant",
-      "scenario": "Bewoners van een nieuwbouwwijk klagen dat hun huis structureel drie graden warmer is aan de linkerkant dan aan de rechterkant, ondanks identieke isolatie volgens de bouwtekening.",
-      "solution": "De aannemer verwisselde bij de helft van de huizen de leidingen van de vloerverwarming met een verkeerde thermostaatgroep, waardoor die kant altijd meestookte op de instelling van de buren.",
-      "category": "Bouw",
       "difficulty": "medium",
-      "hint": "Regelt elk deel van het huis echt zijn eigen temperatuur?"
+      "hint": "Is de naam op het pakje wel voor dezelfde persoon bedoeld?"
     },
     {
-      "title": "De sleutel die op geen enkel slot paste",
-      "scenario": "Een vrouw erft van haar overleden vader een op maat gemaakte sleutel, prachtig afgewerkt — maar hij past op geen enkele deur, kluis of kast in zijn hele huis.",
-      "solution": "De sleutel hoort bij een kluisje op zijn werk, jaren geleden, dat allang is opgeruimd. Hij bewaarde de sleutel puur als aandenken aan die tijd, niet omdat hij nog ergens toegang toe gaf.",
-      "category": "Erfenis",
+      "title": "Stilte op de vaste tijd",
+      "scenario": "In een flatgebouw valt elke avond om kwart voor acht, minutenlang, alle geluid van de buren stil — geen tv, geen stemmen, geen voetstappen — voordat het gewoon weer verdergaat.",
+      "solution": "Een van de bewoners belt op dat tijdstip met haar dove moeder via een gebarentolk op beeldscherm. De hele familie legt uit gewoonte al het huisgeluid stil, zodat de tolk niets van de mimiek mist door omgevingsgeluid — iets wat ze nooit aan de buren hebben uitgelegd.",
+      "category": "Buren",
       "difficulty": "medium",
-      "hint": "Moet een sleutel per se nog ergens bij passen?"
+      "hint": "Wie heeft baat bij totale stilte, en waarom juist tijdens een beeldgesprek?"
     },
     {
-      "title": "De buurman die nooit zijn gordijnen opende",
-      "scenario": "Een gepensioneerde buurman houdt al vijf jaar zijn gordijnen dag en nacht dicht, terwijl de buren zien dat er licht aan blijft en af en toe schaduwen bewegen.",
-      "solution": "Hij kweekt achter die gordijnen, volkomen legaal, zeldzame orchideeën die schade oplopen van direct zonlicht. De bewegende schaduwen zijn hemzelf, druk bezig met water geven en bijsnoeien.",
-      "category": "Hobby",
-      "difficulty": "easy",
-      "hint": "Wat heeft er behoefte aan licht, maar niet aan zonlicht?"
-    },
-    {
-      "title": "Het cijfer dat nooit veranderde",
-      "scenario": "Een leraar merkt dat één leerling voor elke toets, in elk vak, exact een 7,3 haalt — nooit hoger, nooit lager, ongeacht de moeilijkheidsgraad.",
-      "solution": "De leerling gebruikt bewust een vaste strategie: precies genoeg vragen goed beantwoorden voor een ruime voldoende, nooit meer, om onder de radar te blijven voor extra aandacht of hogere verwachtingen.",
-      "category": "School",
-      "difficulty": "medium",
-      "hint": "Is dit toeval, of een doelbewuste keuze?"
-    },
-    {
-      "title": "De plant die 's nachts groeide",
-      "scenario": "Een kamerplant groeit aantoonbaar sneller in het donker dan overdag, wat indruist tegen alles wat de eigenaar over planten dacht te weten.",
-      "solution": "Overdag verdampt de plant vooral water via de bladeren, 's nachts gaat de energie juist naar celgroei — een bekend dag-nachtritme, alleen niet zichtbaar voor wie nooit 's nachts kijkt.",
-      "category": "Natuur",
+      "title": "Een tuin die zichzelf onderhield",
+      "scenario": "Een man komt terug van drie weken vakantie en vindt zijn hele tuin keurig gesnoeid, het gras gemaaid en het onkruid weg, terwijl hij niemand een sleutel of toestemming heeft gegeven.",
+      "solution": "Zijn overleden buurvrouw had, voordat ze stierf, een lopend abonnement bij een tuinbedrijf voor zijn tuin afgesloten als verjaardagscadeau, zonder het hem te vertellen. De facturen gaan naar haar rekening, die haar familie nog niet heeft opgezegd.",
+      "category": "Buren",
       "difficulty": "hard",
-      "hint": "Doet een plant overdag en 's nachts wel hetzelfde soort werk?"
+      "hint": "Wie betaalde hiervoor, als hij het zelf niet was?"
     },
     {
-      "title": "De brief in een taal die niemand kende",
-      "scenario": "Een familie vindt tussen de spullen van hun overleden oma een dagboek, volledig geschreven in een taal die geen van hen herkent, laat staan kan lezen.",
-      "solution": "Oma schreef fonetisch in haar eigen, zelfbedachte code — een mengsel van haar moedertaal en het Nederlands, ontwikkeld tijdens de oorlog om haar dagboek onleesbaar te maken voor wie het zou vinden.",
+      "title": "Een handtas, twee keer gevonden",
+      "scenario": "Een vrouw raakt haar handtas kwijt in de trein, meldt dit bij de balie, en hoort dezelfde dag dat hij tweemaal is ingeleverd — door twee verschillende mensen, op twee verschillende stations.",
+      "solution": "Iemand vond de tas, haalde er wat geld uit, en legde de rest uit schuldgevoel op het volgende station weer ergens zichtbaar neer. Een tweede, eerlijke vinder pikte hem daar op en leverde hem alsnog netjes in — vandaar twee meldingen voor één tas.",
+      "category": "Openbaar vervoer",
+      "difficulty": "medium",
+      "hint": "Moet elke vinder ook de eerste zijn?"
+    },
+    {
+      "title": "De meterstand die de verkeerde kant op ging",
+      "scenario": "Een man betaalt al jaren trouw zijn energierekening, maar de meterstanden erop dalen soms van maand tot maand in plaats van te stijgen, ook al gebruikt hij nooit minder stroom dan de vorige maand.",
+      "solution": "Zijn slimme meter deelt door een bekabelingsfout af en toe data met die van de buren, die minder verbruiken. De energieleverancier verwerkt bij vergissing soms hún lagere cijfer in plaats van het zijne — iets wat pas opvalt bij een handmatige controle.",
+      "category": "Nutsvoorzieningen",
+      "difficulty": "hard",
+      "hint": "Is dit wel altijd zijn eigen meter die wordt afgelezen?"
+    },
+    {
+      "title": "Een cadeau zonder afzender",
+      "scenario": "Elk jaar op precies dezelfde dag ontvangt een man een klein, ongesigneerd cadeau per post, al sinds zijn twintigste — nooit een kaartje, nooit een poststempel uit dezelfde stad.",
+      "solution": "Een oude leraar, die hem ooit uit een moeilijke thuissituatie hielp, stuurt het elk jaar anoniem op zijn verjaardag als bemoediging. Hij vraagt steeds een ander familielid dat op reis is om het onderweg op de bus te doen, zodat de stempel nooit hetzelfde is.",
+      "category": "Verjaardag",
+      "difficulty": "hard",
+      "hint": "De stempel verandert, de bedoeling niet."
+    },
+    {
+      "title": "De hond die een omweg koos",
+      "scenario": "Een blinde vrouw merkt dat haar geleidehond haar al weken een langere, omslachtige route naar de supermarkt laat lopen, terwijl de kortere route al jaren hetzelfde en veilig is.",
+      "solution": "Op de korte route is een oud pand deels ingestort en afgezet met bouwhekken die de hond, getraind om obstakels te vermijden, gewoon zelf omzeilt — zonder dat de vrouw ooit heeft geweten waarom, tot de gemeente het pand uiteindelijk sloopt.",
+      "category": "Dieren",
+      "difficulty": "easy",
+      "hint": "Vertrouw de hond — hij vermijdt iets dat zij niet kan zien."
+    },
+    {
+      "title": "Dezelfde droom, twee keer wakker",
+      "scenario": "Een echtpaar dat al dertig jaar samen slaapt, vertelt onafhankelijk van elkaar exact dezelfde droom te hebben gehad, in dezelfde nacht, met dezelfde details — iets wat ze nooit eerder is overkomen.",
+      "solution": "Allebei bleven ze de avond ervoor stiekem naar dezelfde griezelige aflevering van een true-crime-podcast luisteren voor het slapen, elk met een koptelefoon op zodat de ander het niet zou merken, zonder te weten dat de ander precies hetzelfde deed.",
       "category": "Familie",
-      "difficulty": "hard",
-      "hint": "Is dit een bestaande taal, of een uitvinding van één persoon?"
-    },
-    {
-      "title": "Het pakket dat zichzelf betaalde",
-      "scenario": "Een webshopeigenaar ziet een bestelling binnenkomen die volledig is afgerekend, verzonden en bevestigd — zonder dat er ooit een klant is ingelogd of een account is aangemaakt.",
-      "solution": "Een terugkerende klant had 'opnieuw bestellen met één klik' jaren geleden geactiveerd via een browserextensie, die per ongeluk opnieuw werd getriggerd door een verlopen cookie-herinnering.",
-      "category": "E-commerce",
       "difficulty": "medium",
-      "hint": "Moet iemand echt opnieuw inloggen om iets te bestellen?"
+      "hint": "Wat hoorden ze allebei vlak voor het slapen, zonder het van elkaar te weten?"
     }
   ]
 }

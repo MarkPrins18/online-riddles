@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { ensureAnonymousSession } from "@/lib/supabase/authSession";
 import { createCommunityPuzzle, updateOwnPuzzle } from "@/lib/supabase/communityPuzzles";
+import { listCategories } from "@/lib/supabase/categories";
 import { getErrorMessage } from "@/lib/errors";
-import type { Puzzle } from "@/types/puzzle";
+import type { Category, Puzzle } from "@/types/puzzle";
 import { Button } from "@/components/ui/Button";
 
 const inputClasses =
@@ -35,11 +36,18 @@ export function RiddleForm({
   const [title, setTitle] = useState(puzzle?.title ?? "");
   const [scenario, setScenario] = useState(puzzle?.scenario ?? "");
   const [solution, setSolution] = useState(puzzle?.solution ?? "");
-  const [category, setCategory] = useState(puzzle?.category ?? "");
+  const [categoryId, setCategoryId] = useState(puzzle?.category_id ?? "");
+  const [categories, setCategories] = useState<Category[]>([]);
   const [difficulty, setDifficulty] = useState<Puzzle["difficulty"]>(puzzle?.difficulty ?? "medium");
   const [hint, setHint] = useState(puzzle?.hint ?? "");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    listCategories(createClient())
+      .then(setCategories)
+      .catch(() => setCategories([]));
+  }, []);
 
   const canSubmit = title.trim() && scenario.trim() && solution.trim();
 
@@ -56,7 +64,7 @@ export function RiddleForm({
         title: title.trim(),
         scenario: scenario.trim(),
         solution: solution.trim(),
-        category: category.trim() || null,
+        categoryId: categoryId || null,
         difficulty,
         hint: hint.trim() || null,
       };
@@ -70,7 +78,7 @@ export function RiddleForm({
         setTitle("");
         setScenario("");
         setSolution("");
-        setCategory("");
+        setCategoryId("");
         setHint("");
         onSaved(created);
       }
@@ -122,14 +130,19 @@ export function RiddleForm({
           <label htmlFor="riddle-category" className={labelClasses}>
             Categorie (optioneel)
           </label>
-          <input
+          <select
             id="riddle-category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            placeholder="Moordwapen, fraude..."
-            maxLength={40}
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
             className={`${inputClasses} mt-1 w-full`}
-          />
+          >
+            <option value="">Geen categorie</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="w-40">
           <label htmlFor="riddle-difficulty" className={labelClasses}>

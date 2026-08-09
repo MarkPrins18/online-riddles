@@ -1,6 +1,6 @@
 import type { Room, RoomStatus } from "@/types/room";
 import type { Player } from "@/types/player";
-import type { Puzzle, PuzzleDifficulty, PublishedPuzzle, StoryPack } from "@/types/puzzle";
+import type { Puzzle, PuzzleDifficulty, PublishedPuzzle, StoryPack, Category } from "@/types/puzzle";
 import type { Question, QuestionAnswer } from "@/types/question";
 import type { Guess } from "@/types/guess";
 import type { ChatMessage } from "@/types/chatMessage";
@@ -75,14 +75,15 @@ export type Database = {
       >;
       puzzles: TableShape<
         Puzzle,
-        Partial<Puzzle> & {
+        Partial<Omit<Puzzle, "category">> & {
           pack_id: string;
           title: string;
           scenario: string;
           solution: string;
         },
-        Partial<Puzzle>
+        Partial<Omit<Puzzle, "category">>
       >;
+      categories: TableShape<Category, Partial<Category> & { name: string }, Partial<Category>>;
       questions: TableShape<
         Question,
         Partial<Question> & {

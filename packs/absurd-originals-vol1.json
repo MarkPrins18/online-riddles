@@ -7,68 +7,68 @@
   },
   "puzzles": [
     {
-      "title": "De file die nergens heen ging",
-      "scenario": "Elke vrijdagavond ontstaat er een urenlange file op een doodlopende weg die nergens toe leidt — en toch rijdt niemand geïrriteerd weg, ondanks het uitzicht op helemaal niets.",
-      "solution": "Het is de vaste stek van een populaire foodtruck die alleen daar mag staan. De 'file' is een geduldige rij auto's die wacht tot er een plek vrijkomt, geen verkeer dat ergens anders naartoe moet.",
-      "category": "Verkeer",
+      "title": "De bakker die niemand voedt",
+      "scenario": "Een bakker in een rustig dorp zet elke nacht om precies drie uur zijn oven aan, bakt één enkel brood, en gooit het daarna ongebruikt in de container — al maanden lang, zonder dat hij ooit klanten heeft voor het licht wordt.",
+      "solution": "Hij test elke nacht een nieuw recept voor een bakwedstrijd volgende maand en wil niet dat personeel of klanten het resultaat zien voordat de jury het proeft. Het brood van vannacht gaat de container in zodra hij tevreden of ontevreden is over de korst.",
+      "category": "Werk",
       "difficulty": "easy",
-      "hint": "Moet een file altijd van ergens naar ergens gaan?"
+      "hint": "Niet elk brood is bedoeld om verkocht te worden."
     },
     {
-      "title": "Het zwembad zonder water",
-      "scenario": "Op het heetste weekend van het jaar staat er een lange rij mensen in badkleding te wachten voor een openbaar zwembad dat, zichtbaar voor iedereen, helemaal geen water bevat.",
-      "solution": "Het bad wordt die dag gebruikt voor een openluchtfilmvertoning: de bodem ligt vol kussens en dekens, en de 'zwemmers' komen voor de film, niet om te zwemmen. Niemand vindt het gek — de flyer hing overal.",
-      "category": "Evenement",
+      "title": "Een garage die nooit opengaat",
+      "scenario": "Een man betaalt maandelijks huur voor een garage die hij nooit opent, terwijl zijn eigen auto buiten in de regen staat en de garage vlak bij zijn huis ligt.",
+      "solution": "In de garage staat het decor van het amateurtoneelstuk waar hij regisseur van is. Hij huurt hem als opslag voor de vereniging en betaalt uit eigen zak, omdat de clubkas leeg is — zijn auto heeft er nooit iets mee te maken gehad.",
+      "category": "Hobby",
+      "difficulty": "medium",
+      "hint": "Vraag je af waar zijn auto eigenlijk staat, niet waarom de garage dicht blijft."
+    },
+    {
+      "title": "Twee collega's zonder woorden",
+      "scenario": "Op een kantoor wisselen twee collega's die naast elkaar zitten nooit een woord en communiceren alleen via briefjes op elkaars scherm, terwijl ze met de rest van de afdeling gewoon praten.",
+      "solution": "Ze hebben een weddenschap lopen over wie het langst zijn stem kan sparen voor een marathon-voorleesactie in het weekend. Praten met elkaar zou de weddenschap breken, met anderen niet, want die telt niet mee.",
+      "category": "Werk",
+      "difficulty": "medium",
+      "hint": "De stilte geldt niet voor iedereen — alleen voor elkaar."
+    },
+    {
+      "title": "Twaalf wekkers voor één ochtend",
+      "scenario": "Elke ochtend zet een oude man precies twaalf identieke wekkers naast zijn bed, terwijl hij er zichtbaar maar één per dag nodig heeft om wakker te worden.",
+      "solution": "Hij verzamelt wekkers uit de failliete fabriek waar hij veertig jaar werkte en zet ze elke nacht in een andere volgorde aan om te controleren of ze na al die jaren nog steeds allemaal doen wat ze moeten — een controle die hij nooit heeft losgelaten.",
+      "category": "Gewoonte",
       "difficulty": "easy",
-      "hint": "Waar zijn badkleren nog meer geschikt voor dan zwemmen?"
+      "hint": "Niet elke wekker hoeft hem wakker te maken om zijn werk te doen."
     },
     {
-      "title": "De rekening voor een maaltijd die nooit kwam",
-      "scenario": "Een restaurant stuurt een gast maandelijks een rekening voor een diner, terwijl die gast er al twee jaar niet meer is geweest — en de gast betaalt telkens zonder te klagen.",
-      "solution": "Het is geen rekening maar een abonnement op een vaste reserveringsplek: de gast betaalt voor het recht om altijd, zonder wachttijd, een tafel te krijgen op zijn favoriete tijdstip — of hij nou komt of niet.",
-      "category": "Abonnement",
+      "title": "Een kaart uit een stad die ze niet bezoekt",
+      "scenario": "Een vrouw stuurt wekelijks een ansichtkaart naar zichzelf, altijd vanuit dezelfde stad, ook al is ze daar al jaren niet meer geweest.",
+      "solution": "Haar zoon woont in die stad en stuurt de kaarten in haar naam, zodat de postbode — wiens praatjes ze juist erg op prijs stelt — bij aankomst altijd even blijft hangen. De kaart is een excuus voor het gesprek, niet voor het nieuws erop.",
+      "category": "Familie",
       "difficulty": "medium",
-      "hint": "Betaalt hij voor een maaltijd, of voor iets dat erop lijkt?"
+      "hint": "Wie schrijft, is niet per se wie ze denkt dat schrijft."
     },
     {
-      "title": "De klok die iedereen negeerde",
-      "scenario": "Op het dorpsplein hangt een enorme klok die structureel een kwartier voorloopt. Niemand in het dorp corrigeert dit ooit, en toch komt niemand ooit te laat.",
-      "solution": "Het hele dorp weet het en rekent er collectief mee — de klok is hun gedeelde buffer, niet hun echte tijdmeting. Iedereen leest hem stilzwijgend als 'een kwartier voor nu'.",
-      "category": "Traditie",
+      "title": "Koffie die nooit wordt opgedronken",
+      "scenario": "In een klein café bestelt dezelfde klant elke dag een kop koffie die hij nooit opdrinkt, en toch komt hij de volgende dag precies op tijd weer terug voor een nieuwe.",
+      "solution": "De koffie is zijn manier om een tafel te reserveren zonder dat te hoeven zeggen. Hij komt voor het snelle wifi-signaal van de zaak ernaast, dat net tot bij dat ene tafeltje reikt, en de eigenaar laat het oogluikend toe zolang hij iets bestelt.",
+      "category": "Horeca",
+      "difficulty": "medium",
+      "hint": "Waarvoor betaalt hij eigenlijk, als het niet de koffie is?"
+    },
+    {
+      "title": "Een plant die elk weekend verdwijnt",
+      "scenario": "Een schoolklas krijgt van de conciërge elke maandag een nieuwe plant op de vensterbank, en elke vrijdag is die spoorloos verdwenen, zonder dat er ooit iemand is gezien die hem meeneemt.",
+      "solution": "De conciërge haalt hem vrijdagmiddag zelf op om hem het weekend mee naar huis te nemen voor water en licht — de klaslokalen staan het weekend potdicht in de volle zon. Maandag zet hij een verse of dezelfde plant weer terug.",
+      "category": "School",
       "difficulty": "easy",
-      "hint": "Moet iedereen dezelfde klok op dezelfde manier lezen?"
+      "hint": "Wie heeft er als enige een sleutel voor elk lokaal?"
     },
     {
-      "title": "De hond die alleen op dinsdag blafte",
-      "scenario": "Een verder muisstille hond blaft uitsluitend op dinsdagmiddag, precies tussen twee en drie uur, al maanden achter elkaar, zonder aanwijsbare aanleiding in de buurt.",
-      "solution": "Op dat tijdstip komt wekelijks een vuilniswagen voorbij met een hoogfrequente pieptoon die alleen de hond kan horen — voor mensen onhoorbaar, voor hem duidelijk en blijkbaar precies irritant genoeg.",
-      "category": "Dieren",
-      "difficulty": "medium",
-      "hint": "Wat gebeurt er buiten dat een mens misschien niet opmerkt?"
-    },
-    {
-      "title": "De brievenbus die nooit leeg was",
-      "scenario": "Een man leegt zijn brievenbus elke ochtend volledig, en toch zit hij elke avond weer stampvol — met exact dezelfde reclamefolder, telkens opnieuw.",
-      "solution": "Zijn overbuurman gebruikt zijn bus per ongeluk als opslag voor overtollige folders die hijzelf niet meer kwijt kan bij zijn eigen, te kleine bus — zonder ooit te beseffen dat het niet zijn eigen bus is.",
-      "category": "Buren",
-      "difficulty": "easy",
-      "hint": "Komt deze reclame per se van buiten?"
-    },
-    {
-      "title": "Het orkest dat nooit hetzelfde stuk speelde",
-      "scenario": "Een straatmuzikant-orkestje speelt elke dag een compleet ander stuk, zonder ooit te repeteren, zonder bladmuziek, en zonder ooit een fout te maken die de anderen niet meteen oppikken.",
-      "solution": "Het zijn stuk voor stuk gepensioneerde sessiemuzikanten die decennia samen speelden in een groot orkest. Ze kennen elkaars spel zo goed dat improviseren voor hen aanvoelt als vast repertoire, ook al is elk stuk nieuw.",
-      "category": "Muziek",
-      "difficulty": "medium",
-      "hint": "Moet je iets ingestudeerd hebben om het feilloos te spelen?"
-    },
-    {
-      "title": "De taxi die altijd te vroeg kwam",
-      "scenario": "Een vrouw bestelt elke ochtend een taxi via een vaste app, en die staat zonder uitzondering al twee minuten vóór ze op 'bestel' drukt voor haar deur.",
-      "solution": "Haar buurman bestelt elke ochtend op exact hetzelfde tijdstip een taxi van dezelfde aanbieder voor zichzelf. Zij ziet steeds zíjn taxi voorrijden, seconden voordat haar eigen, andere taxi echt aankomt.",
-      "category": "Vervoer",
-      "difficulty": "medium",
-      "hint": "Is de taxi die ze ziet wel per se de hare?"
+      "title": "Een deurbel voor een lege straat",
+      "scenario": "Elke avond om precies negen uur klinkt in de hele straat hetzelfde deurbelgeluid, maar niemand doet ooit open en niemand staat er ooit voor de deur.",
+      "solution": "Een buurtbewoner test al maanden een nieuw slimme-deurbelsysteem. Door een fabrieksfout in de testmodus stuurt zijn eigen bel het geluid naar alle bellen in de straat in plaats van alleen naar die van hemzelf — iets wat de leverancier pas na klachten ontdekt.",
+      "category": "Techniek",
+      "difficulty": "hard",
+      "hint": "Is het geluid van één deurbel, of van een heel systeem?"
     }
   ]
 }

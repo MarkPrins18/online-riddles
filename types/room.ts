@@ -16,6 +16,7 @@ export type Room = {
   hardcore_mode: boolean;
   team_lives_total: number | null;
   team_lives_remaining: number | null;
+  saboteur_mode: boolean;
   host_id: string;
   created_at: string;
   revealed_at: string | null;
@@ -29,4 +30,5 @@ export type RoomSettingsInput = {
   communityPackIds: string[] | null;
   hardcoreMode: boolean;
   teamLives: number;
+  saboteurMode: boolean;
 };

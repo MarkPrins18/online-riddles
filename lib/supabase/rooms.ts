@@ -98,6 +98,7 @@ export async function updateRoomSettings(
       hardcore_mode: settings.hardcoreMode,
       team_lives_total: settings.hardcoreMode ? settings.teamLives : null,
       team_lives_remaining: settings.hardcoreMode ? settings.teamLives : null,
+      saboteur_mode: settings.saboteurMode,
     })
     .eq("id", roomId);
 

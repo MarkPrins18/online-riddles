@@ -49,3 +49,31 @@ export const BEST_QUESTION_BONUS = 15;
 export function calculateBestQuestionBonus(): number {
   return BEST_QUESTION_BONUS;
 }
+
+// Saboteur mode's accusation vote: scaled close to WRONG_GUESS_PENALTY
+// rather than BEST_QUESTION_BONUS's small nudge, so a vote actually feels
+// like a risk instead of a free guess.
+export const ACCUSATION_CORRECT_BONUS = 30;
+export const ACCUSATION_WRONG_PENALTY = 20;
+
+export function calculateAccusationCorrectBonus(): number {
+  return ACCUSATION_CORRECT_BONUS;
+}
+
+export function calculateAccusationWrongPenalty(): number {
+  return ACCUSATION_WRONG_PENALTY;
+}
+
+/**
+ * The saboteur's own outcome-based reward: biggest when the puzzle goes
+ * unsolved *and* nobody correctly accused them (a clean sabotage), down to
+ * nothing when the puzzle is solved *and* they're caught. Deliberately
+ * lopsided toward "unsolved" over "undetected" — sabotage that actually
+ * worked matters more than merely staying hidden.
+ */
+export function calculateSaboteurBonus(wasSolved: boolean, wasIdentified: boolean): number {
+  if (wasIdentified) {
+    return wasSolved ? 0 : 75;
+  }
+  return wasSolved ? 40 : 150;
+}

@@ -25,6 +25,7 @@ create table if not exists rooms (
   hardcore_mode boolean not null default false,
   team_lives_total int,
   team_lives_remaining int,
+  saboteur_mode boolean not null default false,
   host_id uuid not null,
   created_at timestamptz not null default now(),
   revealed_at timestamptz
@@ -483,6 +484,24 @@ create table if not exists chat_messages (
   created_at timestamptz not null default now()
 );
 
+-- Fast reactions on a chat message — any emoji the sender's own
+-- keyboard/picker gives them (like WhatsApp), not a fixed set. The app
+-- layer (lib/game/emoji.ts) already rejects anything that isn't a single
+-- emoji cluster before it gets here; this check is just a generous length
+-- backstop against that being bypassed (e.g. a direct API call), long
+-- enough for even multi-codepoint ZWJ sequences (family emoji etc.). One
+-- row per player+message+emoji; toggling a reaction off is a delete, not a
+-- status flip, so counts stay a simple `count(*)`.
+create table if not exists chat_message_reactions (
+  id uuid primary key default gen_random_uuid(),
+  room_id uuid not null references rooms (id) on delete cascade,
+  message_id uuid not null references chat_messages (id) on delete cascade,
+  player_id uuid not null references players (id) on delete cascade,
+  emoji text not null check (char_length(emoji) between 1 and 16),
+  created_at timestamptz not null default now(),
+  unique (message_id, player_id, emoji)
+);
+
 -- One row per concluded round — the "zaken-archief" shown live in-game and
 -- summarized in the end-of-session recap. Denormalized (puzzle_title,
 -- solver_name, narrator_name as plain text) like questions/guesses already
@@ -502,6 +521,41 @@ create table if not exists case_log (
   questions_asked int not null default 0,
   created_at timestamptz not null default now(),
   unique (room_id, round)
+);
+
+-- Saboteur mode: one hidden rader per round secretly knows the solution and
+-- tries to mislead the others while still looking like a normal player.
+-- `saboteur_id` can NOT live on `rooms` or `players` — both of those tables
+-- are publicly readable (see "public read rooms"/"public read players"
+-- below), so any column added there would be visible to every player,
+-- defeating the entire point. This table exists specifically so RLS can
+-- restrict a single row (not a single column — Postgres RLS has no notion
+-- of "hide this column") to only the saboteur themselves, until the round's
+-- accusation vote closes and `revealed` flips to true.
+create table if not exists round_secrets (
+  id uuid primary key default gen_random_uuid(),
+  room_id uuid not null references rooms (id) on delete cascade,
+  round int not null,
+  saboteur_id uuid not null references players (id) on delete cascade,
+  revealed boolean not null default false,
+  created_at timestamptz not null default now(),
+  unique (room_id, round)
+);
+
+-- One vote per player per round for "who do you think the saboteur is?" —
+-- cast during the post-reveal accusation window. Hidden the same way as
+-- round_secrets (own vote only) until that round's secret is revealed, so
+-- votes can't influence each other while the window is still open. A
+-- player may change their mind before the window closes (upsert on the
+-- unique constraint), so this is a currently-held vote, not a vote log.
+create table if not exists round_accusations (
+  id uuid primary key default gen_random_uuid(),
+  room_id uuid not null references rooms (id) on delete cascade,
+  round int not null,
+  voter_id uuid not null references players (id) on delete cascade,
+  target_id uuid not null references players (id) on delete cascade,
+  created_at timestamptz not null default now(),
+  unique (room_id, round, voter_id)
 );
 
 -- Prikbord (corkboard): one shared, drag-anywhere board per room. board_items
@@ -765,6 +819,83 @@ begin
 end;
 $$;
 
+-- Closes a round's saboteur-mode accusation vote: tallies every cast vote,
+-- awards each voter a small personal bonus/penalty for guessing right or
+-- wrong, awards the saboteur their outcome-based bonus (bigger if the
+-- puzzle went unsolved, wiped out if both solved and correctly accused),
+-- and finally flips `revealed` so round_secrets/round_accusations become
+-- readable to everyone. Runs as security definer specifically because it
+-- needs to read round_secrets/round_accusations rows nobody but their own
+-- owner could normally see — that's the whole point of doing this
+-- server-side instead of the host client reading-then-writing in two steps.
+-- Safe to call more than once (e.g. a retried request): the `not revealed`
+-- guard makes every later call after the first a no-op.
+create or replace function close_accusation_vote(room_id_input uuid, round_input int)
+returns void
+language plpgsql
+security definer
+as $$
+declare
+  saboteur uuid;
+  was_solved boolean;
+  accused uuid;
+  voter record;
+begin
+  if not is_room_host(room_id_input) then
+    raise exception 'Only the host can close the accusation vote';
+  end if;
+
+  select saboteur_id into saboteur
+  from round_secrets
+  where room_id = room_id_input and round = round_input and not revealed;
+
+  if saboteur is null then
+    return;
+  end if;
+
+  select exists (
+    select 1 from case_log
+    where room_id = room_id_input and round = round_input and outcome = 'solved'
+  ) into was_solved;
+
+  -- The accused player is whoever has strictly the most votes; a tie for
+  -- first place (including "nobody voted") means nobody was identified.
+  with tally as (
+    select target_id, count(*) as votes
+    from round_accusations
+    where room_id = room_id_input and round = round_input
+    group by target_id
+  ),
+  ranked as (
+    select target_id, votes, rank() over (order by votes desc) as position
+    from tally
+  )
+  select target_id into accused
+  from ranked
+  where position = 1 and (select count(*) from ranked where position = 1) = 1;
+
+  for voter in
+    select voter_id, target_id from round_accusations
+    where room_id = room_id_input and round = round_input
+  loop
+    if voter.target_id = saboteur then
+      perform increment_player_score(voter.voter_id, 30, room_id_input);
+    else
+      perform increment_player_score(voter.voter_id, -20, room_id_input);
+    end if;
+  end loop;
+
+  if accused = saboteur then
+    perform increment_player_score(saboteur, case when was_solved then 0 else 75 end, room_id_input);
+  else
+    perform increment_player_score(saboteur, case when was_solved then 40 else 150 end, room_id_input);
+  end if;
+
+  update round_secrets set revealed = true
+  where room_id = room_id_input and round = round_input;
+end;
+$$;
+
 -- Returns the room's current puzzle with the solution nulled out unless the
 -- caller is the Verteller or the round has already been revealed — the
 -- first time "Verteller ziet de oplossing, anderen niet" is enforced by the
@@ -850,6 +981,14 @@ create trigger rate_limit_chat_messages
   for each row execute function enforce_rate_limit(
     8, 10, 'player_id', 'created_at',
     'Even rustig met chatten — probeer over een paar tellen opnieuw.'
+  );
+
+drop trigger if exists rate_limit_chat_message_reactions on chat_message_reactions;
+create trigger rate_limit_chat_message_reactions
+  before insert on chat_message_reactions
+  for each row execute function enforce_rate_limit(
+    30, 10, 'player_id', 'created_at',
+    'Even rustig met reageren — probeer over een paar tellen opnieuw.'
   );
 
 drop trigger if exists rate_limit_questions on questions;
@@ -976,6 +1115,7 @@ select cron.schedule('cleanup-stale-rooms', '0 * * * *', $$select cleanup_stale_
 alter table players replica identity full;
 alter table board_items replica identity full;
 alter table board_connections replica identity full;
+alter table chat_message_reactions replica identity full;
 
 -- Realtime: broadcast changes on these tables to subscribed clients.
 -- `alter publication add table` errors if the table is already a member, so
@@ -1014,9 +1154,27 @@ begin
   end if;
   if not exists (
     select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'chat_message_reactions'
+  ) then
+    alter publication supabase_realtime add table chat_message_reactions;
+  end if;
+  if not exists (
+    select 1 from pg_publication_tables
     where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'case_log'
   ) then
     alter publication supabase_realtime add table case_log;
+  end if;
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'round_secrets'
+  ) then
+    alter publication supabase_realtime add table round_secrets;
+  end if;
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'round_accusations'
+  ) then
+    alter publication supabase_realtime add table round_accusations;
   end if;
   if not exists (
     select 1 from pg_publication_tables
@@ -1051,6 +1209,9 @@ alter table admins enable row level security;
 alter table questions enable row level security;
 alter table guesses enable row level security;
 alter table chat_messages enable row level security;
+alter table chat_message_reactions enable row level security;
+alter table round_secrets enable row level security;
+alter table round_accusations enable row level security;
 alter table case_log enable row level security;
 alter table board_items enable row level security;
 alter table board_connections enable row level security;
@@ -1165,6 +1326,43 @@ drop policy if exists "public read chat messages" on chat_messages;
 create policy "public read chat messages" on chat_messages for select using (true);
 drop policy if exists "chat as self" on chat_messages;
 create policy "chat as self" on chat_messages for insert with check (is_own_player(player_id));
+
+drop policy if exists "public read chat message reactions" on chat_message_reactions;
+create policy "public read chat message reactions" on chat_message_reactions for select using (true);
+drop policy if exists "react as self" on chat_message_reactions;
+create policy "react as self" on chat_message_reactions for insert with check (is_own_player(player_id));
+drop policy if exists "remove own reaction" on chat_message_reactions;
+create policy "remove own reaction" on chat_message_reactions for delete using (is_own_player(player_id));
+
+-- Only the saboteur can read their own secret; everyone can once the host
+-- closes that round's accusation vote (see close_accusation_vote below,
+-- which is the only thing that ever flips `revealed`).
+drop policy if exists "saboteur reads own secret" on round_secrets;
+create policy "saboteur reads own secret" on round_secrets for select
+  using (is_own_player(saboteur_id) or revealed);
+drop policy if exists "host assigns saboteur" on round_secrets;
+create policy "host assigns saboteur" on round_secrets for insert with check (is_room_host(room_id));
+
+-- Same "own row, or everyone once revealed" shape as round_secrets, so a
+-- vote can't be seen (and can't sway anyone else) while the window is
+-- still open. Voters may change their mind before the window closes
+-- (upsert), and everyone in the room may vote, including the saboteur.
+drop policy if exists "player reads own or revealed accusation" on round_accusations;
+create policy "player reads own or revealed accusation" on round_accusations for select
+  using (
+    is_own_player(voter_id)
+    or exists (
+      select 1 from round_secrets rs
+      where rs.room_id = round_accusations.room_id
+        and rs.round = round_accusations.round
+        and rs.revealed
+    )
+  );
+drop policy if exists "vote as self" on round_accusations;
+create policy "vote as self" on round_accusations for insert with check (is_own_player(voter_id));
+drop policy if exists "change own vote" on round_accusations;
+create policy "change own vote" on round_accusations for update
+  using (is_own_player(voter_id)) with check (is_own_player(voter_id));
 
 drop policy if exists "public read case log" on case_log;
 create policy "public read case log" on case_log for select using (true);

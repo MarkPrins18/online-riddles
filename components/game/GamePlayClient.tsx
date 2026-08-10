@@ -8,7 +8,13 @@ import { getStoredPlayerId } from "@/lib/session";
 import { getRandomPuzzle } from "@/lib/supabase/puzzles";
 import { setNarrator, claimNarrator } from "@/lib/supabase/players";
 import { setRoomPuzzle, advanceRoomRound, updateRoomStatus } from "@/lib/supabase/rooms";
-import { pickNextNarrator, isNarrator } from "@/lib/game/roles";
+import { assignSaboteur, closeAccusationVote } from "@/lib/supabase/roundSecrets";
+import { pickNextNarrator, isNarrator, pickSaboteur, canAssignSaboteur } from "@/lib/game/roles";
+import {
+  isAccusationTimeUp,
+  nextRoundCountdownAnchor,
+  secondsUntilAccusationCloses,
+} from "@/lib/game/accusation";
 import {
   createKickHandler,
   pickNarratorTakeoverElector,
@@ -24,6 +30,8 @@ import {
 import { getLastYesAt, shouldShowHint } from "@/lib/game/hint";
 import { targetDifficultyForRound } from "@/lib/game/difficulty";
 import { useNowTick } from "@/lib/game/useNowTick";
+import { computeRemainingSeconds } from "@/lib/game/timer";
+import { useGameSoundEffects } from "@/lib/game/useGameSoundEffects";
 import { getErrorMessage } from "@/lib/errors";
 import { logCaseOutcome } from "@/lib/supabase/caseLog";
 import { pinQuestion } from "@/lib/supabase/board";
@@ -38,6 +46,9 @@ import { ChatPanel } from "./ChatPanel";
 import { ChatDrawer } from "./ChatDrawer";
 import { NarratorCaseDrawer } from "./NarratorCaseDrawer";
 import { NarratorBriefingScreen } from "./NarratorBriefingScreen";
+import { SaboteurBriefingScreen } from "./SaboteurBriefingScreen";
+import { AccusationPanel } from "./AccusationPanel";
+import { AccusationReveal } from "./AccusationReveal";
 import { ChatIconButton } from "./ChatIconButton";
 import { ClaimHostBanner } from "@/components/ClaimHostBanner";
 import { GuessForm } from "./GuessForm";
@@ -54,6 +65,7 @@ import { TeamLivesDisplay } from "./TeamLivesDisplay";
 import { PlayersDrawer } from "./PlayersDrawer";
 import { PlayersStrip } from "./PlayersStrip";
 import { SolutionReveal } from "./SolutionReveal";
+import { SoundToggleButton } from "./SoundToggleButton";
 import { Timer } from "./Timer";
 
 // How long the Verteller must be continuously offline (per Presence) before
@@ -82,6 +94,11 @@ export function GamePlayClient({ code }: { code: string }) {
   // rather than a boolean: a mid-round narrator handoff still needs its
   // own briefing even though the puzzle itself didn't change state.
   const [briefingSeenPuzzleId, setBriefingSeenPuzzleId] = useState<string | undefined>(undefined);
+  // Same "required first read" pattern as briefingSeenPuzzleId, for the
+  // saboteur's own private briefing.
+  const [saboteurBriefingSeenPuzzleId, setSaboteurBriefingSeenPuzzleId] = useState<
+    string | undefined
+  >(undefined);
   // Drives the "Overleg" tab's unread badge on narrow screens (chat has its
   // own permanent column from xl up, so no badge is needed there).
   const [chatSeenCount, setChatSeenCount] = useState(() => state.chatMessages.length);
@@ -141,6 +158,23 @@ export function GamePlayClient({ code }: { code: string }) {
     updateRoomStatus(supabase, room.id, "revealed");
   }, [state.room, state.puzzle, state.players, state.questions, playerId, now, supabase]);
 
+  // Closes a saboteur round's accusation vote once its window has run out —
+  // tallying, scoring, and revealing all happen server-side (see
+  // close_accusation_vote), this just triggers it once.
+  const accusationCloseHandledForRoundRef = useRef<number | null>(null);
+  useEffect(() => {
+    const room = state.room;
+    const secret = state.roundSecret;
+    if (!room || room.status !== "revealed" || !room.saboteur_mode) return;
+    if (!secret || secret.revealed) return;
+    if (playerId !== room.host_id) return;
+    if (accusationCloseHandledForRoundRef.current === room.round) return;
+    if (!isAccusationTimeUp(room.revealed_at, now)) return;
+
+    accusationCloseHandledForRoundRef.current = room.round;
+    closeAccusationVote(supabase, room.id, room.round);
+  }, [state.room, state.roundSecret, playerId, now, supabase]);
+
   const autoAdvanceHandledForRoundRef = useRef<number | null>(null);
   useEffect(() => {
     const room = state.room;
@@ -148,7 +182,9 @@ export function GamePlayClient({ code }: { code: string }) {
     if (!hasMoreRounds(room.round, room.max_rounds)) return;
     if (playerId !== room.host_id) return;
     if (autoAdvanceHandledForRoundRef.current === room.round) return;
-    if (!isNextRoundTimeUp(room.revealed_at, now)) return;
+    const saboteurRoundApplies = state.roundSecret !== null && room.saboteur_mode;
+    const anchor = nextRoundCountdownAnchor(room.revealed_at, saboteurRoundApplies);
+    if (!isNextRoundTimeUp(anchor, now)) return;
 
     autoAdvanceHandledForRoundRef.current = room.round;
     handleNextCase();
@@ -157,7 +193,7 @@ export function GamePlayClient({ code }: { code: string }) {
     // behavioral difference (the ref guard above already makes it idempotent
     // per round).
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.room, playerId, now]);
+  }, [state.room, state.roundSecret, playerId, now]);
 
   // Tracks how long the Verteller has been continuously absent from
   // Presence — Presence itself only reports "online or not right now", so
@@ -198,6 +234,27 @@ export function GamePlayClient({ code }: { code: string }) {
     narratorTakeoverAttemptedRef.current = episodeKey;
     claimNarrator(supabase, room.id, candidate.id);
   }, [now, state.room, state.players, state.onlinePlayerIds, playerId, supabase]);
+
+  // Computed ahead of the early returns below (hooks can't be conditional):
+  // sound cues for the hint appearing, the player's own guess resolving,
+  // and the final countdown seconds.
+  const soundLastYesAt = getLastYesAt(state.questions, state.room?.round_started_at ?? null);
+  const soundShowHint =
+    state.room?.status === "playing" && shouldShowHint(soundLastYesAt, now);
+  const myGuesses = state.guesses.filter((g) => g.player_id === playerId);
+  const myLatestGuess = myGuesses[myGuesses.length - 1] ?? null;
+  const soundRemainingSeconds =
+    state.room?.status === "playing" &&
+    state.room.round_started_at &&
+    state.room.round_duration_seconds != null
+      ? computeRemainingSeconds(state.room.round_started_at, state.room.round_duration_seconds, now)
+      : null;
+  useGameSoundEffects({
+    showHint: soundShowHint,
+    myLatestGuessId: myLatestGuess?.id ?? null,
+    myLatestGuessStatus: myLatestGuess?.status ?? null,
+    remainingSeconds: soundRemainingSeconds,
+  });
 
   if (state.error) {
     return (
@@ -243,6 +300,19 @@ export function GamePlayClient({ code }: { code: string }) {
   const needsBriefing = narrating && !isRevealed && puzzle.id !== briefingSeenPuzzleId;
   const solver = guesses.find((g) => g.status === "correct");
   const nextNarrator = pickNextNarrator(players, room.narrator_id);
+
+  // roundSecret is already scoped to room.round by useGameState (reset on
+  // every round change) — non-null here means either "you're this round's
+  // saboteur" (pre-reveal) or "the accusation vote for this round has
+  // closed" (post-reveal, visible to everyone).
+  const roundSecret = state.roundSecret;
+  const isSaboteur = roundSecret?.saboteur_id === playerId;
+  const needsSaboteurBriefing = isSaboteur && !isRevealed && puzzle.id !== saboteurBriefingSeenPuzzleId;
+  const accusationApplies = roundSecret !== null && room.saboteur_mode;
+  const accusationOpen = accusationApplies && isRevealed && !roundSecret.revealed;
+  const accusationSecondsLeft = accusationOpen
+    ? secondsUntilAccusationCloses(room.revealed_at, now)
+    : null;
   const lastYesAt = getLastYesAt(questions, room.round_started_at);
   const showHint = !isRevealed && shouldShowHint(lastYesAt, now);
 
@@ -286,6 +356,17 @@ export function GamePlayClient({ code }: { code: string }) {
       await setNarrator(supabase, currentRoom.id, narrator.id);
       await setRoomPuzzle(supabase, currentRoom.id, nextPuzzle.id, currentRoom.played_puzzle_ids);
       await advanceRoomRound(supabase, currentRoom.id, nextRound);
+
+      if (currentRoom.saboteur_mode && canAssignSaboteur(state.players)) {
+        const saboteur = pickSaboteur(state.players, narrator.id);
+        if (saboteur) {
+          await assignSaboteur(supabase, {
+            roomId: currentRoom.id,
+            round: nextRound,
+            saboteurId: saboteur.id,
+          });
+        }
+      }
     } catch (error) {
       setNextCaseError(getErrorMessage(error, t("nextCaseError")));
     } finally {
@@ -345,6 +426,18 @@ export function GamePlayClient({ code }: { code: string }) {
         </div>
       )}
 
+      {needsSaboteurBriefing && (
+        // No xl:hidden gate here — unlike the Verteller, the saboteur has
+        // no persistent inline solution surface at any width, so this is
+        // the only place they ever see it.
+        <Dialog>
+          <SaboteurBriefingScreen
+            solution={puzzle.solution}
+            onAcknowledge={() => setSaboteurBriefingSeenPuzzleId(puzzle.id)}
+          />
+        </Dialog>
+      )}
+
       <div className="mb-4 flex w-full max-w-[72rem] flex-col gap-3">
         <ClaimHostBanner
           supabase={supabase}
@@ -385,6 +478,7 @@ export function GamePlayClient({ code }: { code: string }) {
                 durationSeconds={room.round_duration_seconds}
               />
             )}
+            <SoundToggleButton />
             {/* Prikbord is a freeform drag-and-connect canvas with
                 fixed-width cards (180-200px) — deliberately desktop-only.
                 Below xl those cards eat most of the screen width and the
@@ -484,6 +578,35 @@ export function GamePlayClient({ code }: { code: string }) {
 
           {isRevealed && (
             <SolutionReveal supabase={supabase} puzzle={puzzle} solverName={solver?.player_name} />
+          )}
+
+          {accusationApplies && roundSecret && (
+            <>
+              {!roundSecret.revealed ? (
+                <AccusationPanel
+                  supabase={supabase}
+                  roomId={room.id}
+                  round={room.round}
+                  playerId={playerId}
+                  players={players}
+                  narratorId={room.narrator_id}
+                  narrating={narrating}
+                  isSpectator={isSpectator}
+                  myVote={state.roundAccusations.find((a) => a.voter_id === playerId)}
+                  secondsLeft={accusationSecondsLeft}
+                />
+              ) : (
+                <AccusationReveal
+                  players={players}
+                  saboteurId={roundSecret.saboteur_id}
+                  accusations={state.roundAccusations}
+                  playerId={playerId}
+                  wasSolved={
+                    state.caseLog.find((entry) => entry.round === room.round)?.outcome === "solved"
+                  }
+                />
+              )}
+            </>
           )}
 
           {/* Below xl: one tab pair instead of two stacked cards, so
@@ -747,6 +870,7 @@ export function GamePlayClient({ code }: { code: string }) {
             playerId={playerId}
             playerName={currentPlayer?.name ?? ""}
             chatMessages={chatMessages}
+            chatReactions={state.chatReactions}
             narrating={narrating}
             narratorId={room.narrator_id}
             className="xl:min-h-0 xl:flex-1"
@@ -796,7 +920,11 @@ export function GamePlayClient({ code }: { code: string }) {
       </div>
 
       {isRevealed && hasMoreRounds(room.round, room.max_rounds) && room.revealed_at && (
-        <NextRoundCountdown seconds={secondsUntilNextRound(room.revealed_at, now) ?? 0} />
+        <NextRoundCountdown
+          seconds={
+            secondsUntilNextRound(nextRoundCountdownAnchor(room.revealed_at, accusationApplies), now) ?? 0
+          }
+        />
       )}
 
       {isRevealed && !hasMoreRounds(room.round, room.max_rounds) && (
@@ -859,6 +987,7 @@ export function GamePlayClient({ code }: { code: string }) {
           playerId={playerId}
           playerName={currentPlayer?.name ?? ""}
           chatMessages={chatMessages}
+          chatReactions={state.chatReactions}
           narrating={narrating}
           narratorId={room.narrator_id}
           onClose={() => {

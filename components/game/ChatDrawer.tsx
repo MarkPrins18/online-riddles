@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { ChatMessage } from "@/types/chatMessage";
+import type { ChatMessageReaction } from "@/types/chatMessageReaction";
 import { Drawer } from "@/components/ui/Drawer";
 import { ChatPanel } from "./ChatPanel";
 
@@ -19,6 +20,7 @@ export function ChatDrawer({
   playerId,
   playerName,
   chatMessages,
+  chatReactions,
   narrating,
   narratorId,
   onClose,
@@ -28,6 +30,7 @@ export function ChatDrawer({
   playerId: string;
   playerName: string;
   chatMessages: ChatMessage[];
+  chatReactions: ChatMessageReaction[];
   narrating: boolean;
   narratorId: string | null;
   onClose: () => void;
@@ -42,6 +45,7 @@ export function ChatDrawer({
         playerId={playerId}
         playerName={playerName}
         chatMessages={chatMessages}
+        chatReactions={chatReactions}
         narrating={narrating}
         narratorId={narratorId}
         className="h-full"

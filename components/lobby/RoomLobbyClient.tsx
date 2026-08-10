@@ -35,6 +35,7 @@ export function RoomLobbyClient({ code }: { code: string }) {
     communityPackIds: null,
     hardcoreMode: false,
     teamLives: 5,
+    saboteurMode: false,
   });
   const t = useTranslations("RoomLobbyClient");
 
@@ -101,6 +102,7 @@ export function RoomLobbyClient({ code }: { code: string }) {
                 value={roomSettings}
                 onChange={setRoomSettings}
                 narratorPreviewName={narratorPreview?.name}
+                playerCount={state.players.length}
               />
             </Card>
             <Card>

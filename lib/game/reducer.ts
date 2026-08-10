@@ -4,7 +4,10 @@ import type { Puzzle } from "@/types/puzzle";
 import type { Question } from "@/types/question";
 import type { Guess } from "@/types/guess";
 import type { ChatMessage } from "@/types/chatMessage";
+import type { ChatMessageReaction } from "@/types/chatMessageReaction";
 import type { CaseLogEntry } from "@/types/caseLog";
+import type { RoundSecret } from "@/types/roundSecret";
+import type { RoundAccusation } from "@/types/roundAccusation";
 
 export type GameState = {
   room: Room | null;
@@ -13,7 +16,14 @@ export type GameState = {
   questions: Question[];
   guesses: Guess[];
   chatMessages: ChatMessage[];
+  chatReactions: ChatMessageReaction[];
   caseLog: CaseLogEntry[];
+  // Non-null only for the current player if they're this round's saboteur,
+  // or for everyone once the accusation vote has closed (see
+  // round_secrets' RLS policy) — reset to null whenever the round changes.
+  roundSecret: RoundSecret | null;
+  // Same "own vote, or everyone once revealed" visibility as roundSecret.
+  roundAccusations: RoundAccusation[];
   // Player ids currently tracked as present on the room's realtime channel
   // (see lib/realtime/room-channel.ts) — reflects actual connection state,
   // not anything persisted in the database.
@@ -28,7 +38,10 @@ export const initialGameState: GameState = {
   questions: [],
   guesses: [],
   chatMessages: [],
+  chatReactions: [],
   caseLog: [],
+  roundSecret: null,
+  roundAccusations: [],
   onlinePlayerIds: new Set(),
   error: null,
 };
@@ -47,7 +60,13 @@ export type GameAction =
   | { type: "GUESS_SUBMITTED"; payload: Guess }
   | { type: "GUESS_UPDATED"; payload: Guess }
   | { type: "CHAT_MESSAGE_SENT"; payload: ChatMessage }
+  | { type: "CHAT_REACTION_ADDED"; payload: ChatMessageReaction }
+  | { type: "CHAT_REACTION_REMOVED"; payload: { reactionId: string } }
   | { type: "CASE_LOGGED"; payload: CaseLogEntry }
+  | { type: "ROUND_SECRET_LOADED"; payload: RoundSecret | null }
+  | { type: "ROUND_SECRET_RECEIVED"; payload: RoundSecret }
+  | { type: "ROUND_ACCUSATIONS_RELOADED"; payload: RoundAccusation[] }
+  | { type: "ROUND_ACCUSATION_RECEIVED"; payload: RoundAccusation }
   | { type: "PRESENCE_SYNCED"; payload: Set<string> }
   | { type: "ERROR"; payload: string };
 
@@ -117,10 +136,41 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
     case "CHAT_MESSAGE_SENT":
       return { ...state, chatMessages: [...state.chatMessages, action.payload] };
 
+    case "CHAT_REACTION_ADDED": {
+      const exists = state.chatReactions.some((r) => r.id === action.payload.id);
+      if (exists) return state;
+      return { ...state, chatReactions: [...state.chatReactions, action.payload] };
+    }
+
+    case "CHAT_REACTION_REMOVED":
+      return {
+        ...state,
+        chatReactions: state.chatReactions.filter((r) => r.id !== action.payload.reactionId),
+      };
+
     case "CASE_LOGGED": {
       const exists = state.caseLog.some((entry) => entry.id === action.payload.id);
       if (exists) return state;
       return { ...state, caseLog: [...state.caseLog, action.payload] };
+    }
+
+    case "ROUND_SECRET_LOADED":
+      return { ...state, roundSecret: action.payload };
+
+    case "ROUND_SECRET_RECEIVED":
+      return { ...state, roundSecret: action.payload };
+
+    case "ROUND_ACCUSATIONS_RELOADED":
+      return { ...state, roundAccusations: action.payload };
+
+    case "ROUND_ACCUSATION_RECEIVED": {
+      const exists = state.roundAccusations.some((a) => a.id === action.payload.id);
+      return {
+        ...state,
+        roundAccusations: exists
+          ? state.roundAccusations.map((a) => (a.id === action.payload.id ? action.payload : a))
+          : [...state.roundAccusations, action.payload],
+      };
     }
 
     case "PRESENCE_SYNCED":

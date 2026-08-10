@@ -7,6 +7,7 @@ import type { Database } from "@/lib/supabase/database.types";
 import type { RoomSettingsInput } from "@/types/room";
 import { getOfficialThemes } from "@/lib/supabase/storyPacks";
 import { countPublishedCommunityPacks } from "@/lib/supabase/communityPacks";
+import { MIN_PLAYERS_FOR_SABOTEUR_MODE } from "@/lib/game/roles";
 
 type DurationLabelKey = "duration5" | "duration10" | "duration15" | "duration20" | "durationNone";
 
@@ -26,11 +27,13 @@ export function RoomSettingsForm({
   value,
   onChange,
   narratorPreviewName,
+  playerCount,
 }: {
   supabase: SupabaseClient<Database>;
   value: RoomSettingsInput;
   onChange: (value: RoomSettingsInput) => void;
   narratorPreviewName?: string;
+  playerCount?: number;
 }) {
   const [officialThemes, setOfficialThemes] = useState<string[] | null>(null);
   const [communityPackCount, setCommunityPackCount] = useState<number | null>(null);
@@ -211,6 +214,26 @@ export function RoomSettingsForm({
             </select>
           </div>
         )}
+      </div>
+
+      <div className="border-t border-white/5 pt-4">
+        <label className="flex items-center gap-2 font-mono text-sm text-text-primary">
+          <input
+            type="checkbox"
+            className="accent-accent"
+            checked={value.saboteurMode}
+            onChange={(e) => onChange({ ...value, saboteurMode: e.target.checked })}
+          />
+          {t("saboteurToggle")}
+        </label>
+        <p className="mt-1 font-mono text-xs text-text-secondary">{t("saboteurHint")}</p>
+        {value.saboteurMode &&
+          playerCount !== undefined &&
+          playerCount < MIN_PLAYERS_FOR_SABOTEUR_MODE && (
+            <p className="mt-1 font-mono text-xs text-danger">
+              {t("saboteurNeedsMorePlayers", { count: MIN_PLAYERS_FOR_SABOTEUR_MODE })}
+            </p>
+          )}
       </div>
     </div>
   );

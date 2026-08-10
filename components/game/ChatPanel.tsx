@@ -5,6 +5,11 @@ import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { ChatMessage } from "@/types/chatMessage";
+import type { ChatMessageReaction } from "@/types/chatMessageReaction";
+import {
+  addChatMessageReaction,
+  removeChatMessageReaction,
+} from "@/lib/supabase/chatMessageReactions";
 import { Card } from "@/components/ui/Card";
 import { ChatForm } from "./ChatForm";
 import { ChatThread } from "./ChatThread";
@@ -22,6 +27,7 @@ export function ChatPanel({
   playerId,
   playerName,
   chatMessages,
+  chatReactions,
   narrating,
   narratorId,
   className = "",
@@ -31,6 +37,7 @@ export function ChatPanel({
   playerId: string;
   playerName: string;
   chatMessages: ChatMessage[];
+  chatReactions: ChatMessageReaction[];
   narrating: boolean;
   narratorId: string | null;
   className?: string;
@@ -43,13 +50,30 @@ export function ChatPanel({
     chatScrollRef.current?.scrollTo({ top: chatScrollRef.current.scrollHeight });
   }, [chatMessages.length]);
 
+  async function handleToggleReaction(messageId: string, emoji: string) {
+    const existing = chatReactions.find(
+      (r) => r.message_id === messageId && r.player_id === playerId && r.emoji === emoji
+    );
+    if (existing) {
+      await removeChatMessageReaction(supabase, { messageId, playerId, emoji });
+    } else {
+      await addChatMessageReaction(supabase, { roomId, messageId, playerId, emoji });
+    }
+  }
+
   return (
     <Card className={`flex h-full min-h-0 flex-col ${className}`}>
       <p className="mb-3 shrink-0 font-mono text-xs uppercase tracking-widest text-text-secondary">
         {t("heading")}
       </p>
       <div ref={chatScrollRef} className="min-h-0 flex-1 overflow-y-auto pr-1">
-        <ChatThread messages={chatMessages} narratorId={narratorId} />
+        <ChatThread
+          messages={chatMessages}
+          narratorId={narratorId}
+          chatReactions={chatReactions}
+          playerId={playerId}
+          onToggleReaction={handleToggleReaction}
+        />
       </div>
       {narrating ? (
         <p className="mt-3 shrink-0 border-t border-white/5 pt-3 font-mono text-xs text-text-secondary">

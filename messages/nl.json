@@ -99,7 +99,10 @@
     "hardcoreHint": "Elke foute gok kost het hele team 1 leven. Op 0 levens is het game over voor de hele sessie.",
     "teamLivesLabelWithNarrator": "{name} bepaalt: hoeveel levens krijgt het team?",
     "teamLivesLabel": "Hoeveel levens krijgt het team?",
-    "teamLivesOption": "{count} levens"
+    "teamLivesOption": "{count} levens",
+    "saboteurToggle": "Saboteur-modus",
+    "saboteurHint": "Elke ronde kent één rader stiekem de oplossing en probeert het team op het verkeerde spoor te zetten. Na de onthulling stemt iedereen op wie ze verdenken.",
+    "saboteurNeedsMorePlayers": "Nog niet genoeg spelers (minimaal {count})."
   },
   "RoomLobbyClient": {
     "errorPrefix": "Er ging iets mis: {error}",
@@ -371,6 +374,20 @@
     "empty": "Nog niemand heeft iets gezegd. Overleg gerust met je medespelers.",
     "narratorBadge": "Verteller"
   },
+  "ChatMessageReactions": {
+    "addLabel": "Reageer met {emoji}",
+    "removeLabel": "Verwijder je {emoji}-reactie",
+    "openPicker": "Voeg een reactie toe",
+    "morePicker": "Meer emoji",
+    "customLabel": "Eigen emoji",
+    "customPlaceholder": "emoji",
+    "customSubmit": "Stuur",
+    "invalidEmoji": "Dat is geen (enkele) emoji.",
+    "categorySmileys": "Smileys",
+    "categoryGestures": "Gebaren",
+    "categoryHearts": "Hartjes",
+    "categoryFun": "Overig"
+  },
   "ChatIconButton": {
     "openWithUnread": "{count, plural, one {Open overleg, # ongelezen bericht} other {Open overleg, # ongelezen berichten}}",
     "open": "Open overleg"
@@ -417,12 +434,44 @@
     "nextCaseError": "Kon geen nieuwe zaak starten. Probeer het opnieuw.",
     "skipPuzzleError": "Kon geen andere zaak ophalen. Probeer het opnieuw."
   },
+  "SoundToggleButton": {
+    "muteLabel": "Geluid dempen",
+    "unmuteLabel": "Geluid aanzetten"
+  },
   "NarratorBriefingScreen": {
     "newCase": "Nieuwe zaak",
     "onlyForYou": "Alleen voor jou",
     "start": "Aan de slag",
     "skipping": "Bezig...",
     "skip": "Sla deze zaak over"
+  },
+  "SaboteurBriefingScreen": {
+    "label": "Geheime rol",
+    "heading": "Jij bent de saboteur",
+    "instructions": "Jij kent de oplossing, maar doe gewoon mee als rader. Stel vragen, gok mee, chat mee — gebruik je kennis stiekem om de anderen op het verkeerde spoor te zetten zonder dat ze het doorhebben.",
+    "solutionLabel": "De oplossing",
+    "start": "Begrepen"
+  },
+  "AccusationPanel": {
+    "heading": "Wie was de saboteur?",
+    "secondsLeft": "{seconds}s",
+    "instructions": "Stem op wie jij denkt dat de saboteur was. Je mag van gedachten veranderen zolang het venster nog open is.",
+    "youVotedFor": "Jij stemde op {name}.",
+    "narratorDoesNotVote": "Als verteller stem je niet mee.",
+    "spectatorDoesNotVote": "Als toeschouwer stem je niet mee.",
+    "error": "Kon je stem niet opslaan. Probeer het opnieuw."
+  },
+  "AccusationReveal": {
+    "counting": "De stemmen worden geteld...",
+    "heading": "Uitslag",
+    "correctlyAccused": "Het team wees {name} aan — en dat klopte!",
+    "wrongfullyAccused": "Het team wees {name} aan — mis!",
+    "noConsensus": "Er was geen duidelijke meerderheid.",
+    "actualSaboteur": "De echte saboteur was: {name}.",
+    "nearMiss": "Op een haar na goed geraden.",
+    "saboteurOutcome": "Jij was de saboteur: {points} punten.",
+    "yourVoteCorrect": "Jouw stem klopte: +{points} punten.",
+    "yourVoteWrong": "Jouw stem klopte niet: -{points} punten."
   },
   "RiddleForm": {
     "titleLabel": "Titel",

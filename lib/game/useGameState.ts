@@ -7,10 +7,14 @@ import { getRoomPuzzle } from "@/lib/supabase/puzzles";
 import { getQuestionsForPuzzle } from "@/lib/supabase/questions";
 import { getGuessesForPuzzle } from "@/lib/supabase/guesses";
 import { getChatMessages } from "@/lib/supabase/chatMessages";
+import { getChatMessageReactions } from "@/lib/supabase/chatMessageReactions";
 import { getCaseLogForRoom } from "@/lib/supabase/caseLog";
+import { getRoundSecret } from "@/lib/supabase/roundSecrets";
+import { getRoundAccusations } from "@/lib/supabase/roundAccusations";
 import { subscribeToRoom, unsubscribeFromRoom, trackPresence } from "@/lib/realtime/room-channel";
 import { getErrorMessage } from "@/lib/errors";
 import type { Room } from "@/types/room";
+import type { RoundSecret } from "@/types/roundSecret";
 import { REALTIME_SUBSCRIBE_STATES, type RealtimeChannel } from "@supabase/supabase-js";
 import { gameReducer, initialGameState } from "./reducer";
 
@@ -18,6 +22,7 @@ export function useGameState(roomCode: string, playerId: string | null = null, l
   const [state, dispatch] = useReducer(gameReducer, initialGameState);
   const [supabase] = useState(() => createClient());
   const currentPuzzleIdRef = useRef<string | null>(null);
+  const currentRoundRef = useRef<number | null>(null);
   const channelRef = useRef<RealtimeChannel | null>(null);
   const trackedPlayerIdRef = useRef<string | null>(null);
   // Set once the channel has reached SUBSCRIBED for the first time — after
@@ -45,11 +50,19 @@ export function useGameState(roomCode: string, playerId: string | null = null, l
           ? await getGuessesForPuzzle(supabase, room.id, room.current_puzzle_id)
           : [];
         const chatMessages = await getChatMessages(supabase, room.id);
+        const chatReactions = await getChatMessageReactions(supabase, room.id);
         const caseLog = await getCaseLogForRoom(supabase, room.id);
+        const roundSecret = room.current_puzzle_id
+          ? await getRoundSecret(supabase, room.id, room.round)
+          : null;
+        const roundAccusations = room.current_puzzle_id
+          ? await getRoundAccusations(supabase, room.id, room.round)
+          : [];
 
         if (cancelled) return;
 
         currentPuzzleIdRef.current = room.current_puzzle_id;
+        currentRoundRef.current = room.round;
 
         dispatch({
           type: "HYDRATE",
@@ -60,7 +73,10 @@ export function useGameState(roomCode: string, playerId: string | null = null, l
             questions,
             guesses,
             chatMessages,
+            chatReactions,
             caseLog,
+            roundSecret,
+            roundAccusations,
           },
         });
 
@@ -74,6 +90,7 @@ export function useGameState(roomCode: string, playerId: string | null = null, l
         // got lost, not only questions.
         function resyncRoom(freshRoom: Room) {
           currentPuzzleIdRef.current = freshRoom.current_puzzle_id;
+          currentRoundRef.current = freshRoom.round;
           Promise.all([
             getPlayersInRoom(supabase, freshRoom.id),
             freshRoom.current_puzzle_id ? getRoomPuzzle(supabase, freshRoom.id, locale) : null,
@@ -84,22 +101,44 @@ export function useGameState(roomCode: string, playerId: string | null = null, l
               ? getGuessesForPuzzle(supabase, freshRoom.id, freshRoom.current_puzzle_id)
               : [],
             getChatMessages(supabase, freshRoom.id),
+            getChatMessageReactions(supabase, freshRoom.id),
             getCaseLogForRoom(supabase, freshRoom.id),
+            freshRoom.current_puzzle_id
+              ? getRoundSecret(supabase, freshRoom.id, freshRoom.round)
+              : null,
+            freshRoom.current_puzzle_id
+              ? getRoundAccusations(supabase, freshRoom.id, freshRoom.round)
+              : [],
           ])
-            .then(([freshPlayers, freshPuzzle, freshQuestions, freshGuesses, freshChatMessages, freshCaseLog]) => {
-              dispatch({
-                type: "HYDRATE",
-                payload: {
-                  room: freshRoom,
-                  players: freshPlayers,
-                  puzzle: freshPuzzle ?? undefined,
-                  questions: freshQuestions,
-                  guesses: freshGuesses,
-                  chatMessages: freshChatMessages,
-                  caseLog: freshCaseLog,
-                },
-              });
-            })
+            .then(
+              ([
+                freshPlayers,
+                freshPuzzle,
+                freshQuestions,
+                freshGuesses,
+                freshChatMessages,
+                freshChatReactions,
+                freshCaseLog,
+                freshRoundSecret,
+                freshRoundAccusations,
+              ]) => {
+                dispatch({
+                  type: "HYDRATE",
+                  payload: {
+                    room: freshRoom,
+                    players: freshPlayers,
+                    puzzle: freshPuzzle ?? undefined,
+                    questions: freshQuestions,
+                    guesses: freshGuesses,
+                    chatMessages: freshChatMessages,
+                    chatReactions: freshChatReactions,
+                    caseLog: freshCaseLog,
+                    roundSecret: freshRoundSecret,
+                    roundAccusations: freshRoundAccusations,
+                  },
+                });
+              }
+            )
             .catch((error) => {
               dispatch({
                 type: "ERROR",
@@ -119,15 +158,20 @@ export function useGameState(roomCode: string, playerId: string | null = null, l
           // the current round instead of a stale, accumulated one.
           if (updated.current_puzzle_id && updated.current_puzzle_id !== currentPuzzleIdRef.current) {
             currentPuzzleIdRef.current = updated.current_puzzle_id;
+            currentRoundRef.current = updated.round;
             Promise.all([
               getRoomPuzzle(supabase, updated.id, locale),
               getQuestionsForPuzzle(supabase, updated.id, updated.current_puzzle_id),
               getGuessesForPuzzle(supabase, updated.id, updated.current_puzzle_id),
+              getRoundSecret(supabase, updated.id, updated.round),
+              getRoundAccusations(supabase, updated.id, updated.round),
             ])
-              .then(([newPuzzle, newQuestions, newGuesses]) => {
+              .then(([newPuzzle, newQuestions, newGuesses, newRoundSecret, newRoundAccusations]) => {
                 if (newPuzzle) dispatch({ type: "PUZZLE_LOADED", payload: newPuzzle });
                 dispatch({ type: "QUESTIONS_RELOADED", payload: newQuestions });
                 dispatch({ type: "GUESSES_RELOADED", payload: newGuesses });
+                dispatch({ type: "ROUND_SECRET_LOADED", payload: newRoundSecret });
+                dispatch({ type: "ROUND_ACCUSATIONS_RELOADED", payload: newRoundAccusations });
               })
               .catch((error) => {
                 dispatch({
@@ -136,6 +180,27 @@ export function useGameState(roomCode: string, playerId: string | null = null, l
                 });
               });
           }
+        }
+
+        // Once a round's accusation vote closes (revealed flips true, via
+        // close_accusation_vote), every player's individual vote becomes
+        // newly visible under RLS — but Realtime never retroactively
+        // delivers rows that only just became visible, so this refetches
+        // them explicitly instead of waiting for events that will never
+        // come.
+        function handleRoundSecretUpdate(secret: RoundSecret) {
+          dispatch({ type: "ROUND_SECRET_RECEIVED", payload: secret });
+          if (!secret.revealed) return;
+          getRoundAccusations(supabase, secret.room_id, secret.round)
+            .then((accusations) => {
+              dispatch({ type: "ROUND_ACCUSATIONS_RELOADED", payload: accusations });
+            })
+            .catch((error) => {
+              dispatch({
+                type: "ERROR",
+                payload: getErrorMessage(error, "Kon de stemmen niet laden."),
+              });
+            });
         }
 
         // Safety net #1: a realtime WebSocket connection can silently drop
@@ -189,7 +254,18 @@ export function useGameState(roomCode: string, playerId: string | null = null, l
           onGuessInsert: (guess) => dispatch({ type: "GUESS_SUBMITTED", payload: guess }),
           onGuessUpdate: (guess) => dispatch({ type: "GUESS_UPDATED", payload: guess }),
           onChatMessageInsert: (message) => dispatch({ type: "CHAT_MESSAGE_SENT", payload: message }),
+          onChatReactionInsert: (reaction) =>
+            dispatch({ type: "CHAT_REACTION_ADDED", payload: reaction }),
+          onChatReactionDelete: (reactionId) =>
+            dispatch({ type: "CHAT_REACTION_REMOVED", payload: { reactionId } }),
           onCaseLogInsert: (entry) => dispatch({ type: "CASE_LOGGED", payload: entry }),
+          onRoundSecretInsert: (secret) =>
+            dispatch({ type: "ROUND_SECRET_RECEIVED", payload: secret }),
+          onRoundSecretUpdate: handleRoundSecretUpdate,
+          onRoundAccusationInsert: (accusation) =>
+            dispatch({ type: "ROUND_ACCUSATION_RECEIVED", payload: accusation }),
+          onRoundAccusationUpdate: (accusation) =>
+            dispatch({ type: "ROUND_ACCUSATION_RECEIVED", payload: accusation }),
           onPresenceSync: (players) =>
             dispatch({ type: "PRESENCE_SYNCED", payload: new Set(players.map((p) => p.player_id)) }),
           onStatusChange: handleStatusChange,

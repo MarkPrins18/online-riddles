@@ -10,7 +10,8 @@ import type { RoomSettingsInput } from "@/types/room";
 import { getRandomPuzzle } from "@/lib/supabase/puzzles";
 import { setNarrator } from "@/lib/supabase/players";
 import { setRoomPuzzle, updateRoomSettings } from "@/lib/supabase/rooms";
-import { resolveNarrator, type NarratorSelection } from "@/lib/game/roles";
+import { assignSaboteur } from "@/lib/supabase/roundSecrets";
+import { resolveNarrator, canAssignSaboteur, pickSaboteur, type NarratorSelection } from "@/lib/game/roles";
 import { targetDifficultyForRound } from "@/lib/game/difficulty";
 import { getErrorMessage } from "@/lib/errors";
 import { Button } from "@/components/ui/Button";
@@ -65,6 +66,14 @@ export function StartGameButton({
       );
       await setNarrator(supabase, roomId, narrator.id);
       await setRoomPuzzle(supabase, roomId, puzzle.id, playedPuzzleIds);
+
+      if (roomSettings.saboteurMode && canAssignSaboteur(players)) {
+        const saboteur = pickSaboteur(players, narrator.id);
+        if (saboteur) {
+          await assignSaboteur(supabase, { roomId, round: 0, saboteurId: saboteur.id });
+        }
+      }
+
       router.push(`/room/${roomCode}/play`);
     } catch (err) {
       setError(getErrorMessage(err, t("error")));

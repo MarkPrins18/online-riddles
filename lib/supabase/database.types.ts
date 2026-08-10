@@ -14,7 +14,10 @@ import type {
 import type { Question, QuestionAnswer } from "@/types/question";
 import type { Guess } from "@/types/guess";
 import type { ChatMessage } from "@/types/chatMessage";
+import type { ChatMessageReaction } from "@/types/chatMessageReaction";
 import type { CaseLogEntry } from "@/types/caseLog";
+import type { RoundSecret } from "@/types/roundSecret";
+import type { RoundAccusation } from "@/types/roundAccusation";
 import type { BoardItem, BoardItemKind, BoardNoteColor } from "@/types/boardItem";
 import type { BoardConnection } from "@/types/boardConnection";
 import type { Profile } from "@/types/profile";
@@ -57,6 +60,10 @@ export type Database = {
       };
       claim_narrator: {
         Args: { room_id_input: string; new_narrator_id: string };
+        Returns: void;
+      };
+      close_accusation_vote: {
+        Args: { room_id_input: string; round_input: number };
         Returns: void;
       };
       get_room_puzzle: {
@@ -165,6 +172,16 @@ export type Database = {
         },
         Partial<ChatMessage>
       >;
+      chat_message_reactions: TableShape<
+        ChatMessageReaction,
+        Partial<ChatMessageReaction> & {
+          room_id: string;
+          message_id: string;
+          player_id: string;
+          emoji: string;
+        },
+        Partial<ChatMessageReaction>
+      >;
       case_log: TableShape<
         CaseLogEntry,
         Partial<CaseLogEntry> & {
@@ -175,6 +192,21 @@ export type Database = {
           outcome: string;
         },
         Partial<CaseLogEntry>
+      >;
+      round_secrets: TableShape<
+        RoundSecret,
+        Partial<RoundSecret> & { room_id: string; round: number; saboteur_id: string },
+        Partial<RoundSecret>
+      >;
+      round_accusations: TableShape<
+        RoundAccusation,
+        Partial<RoundAccusation> & {
+          room_id: string;
+          round: number;
+          voter_id: string;
+          target_id: string;
+        },
+        Partial<RoundAccusation>
       >;
       board_items: TableShape<
         BoardItem,

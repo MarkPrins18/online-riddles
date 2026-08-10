@@ -48,3 +48,28 @@ export function isNarrator(player: Player, narratorId: string | null): boolean {
 export function canAskQuestions(player: Player, narratorId: string | null): boolean {
   return !isNarrator(player, narratorId);
 }
+
+// Below this many total (non-spectator) players there's only one possible
+// rader left once the narrator is excluded — "secretly" assigning them as
+// saboteur wouldn't be a secret at all, so saboteur mode simply doesn't run
+// that round.
+export const MIN_PLAYERS_FOR_SABOTEUR_MODE = 4;
+
+export function canAssignSaboteur(players: Player[]): boolean {
+  return players.filter((p) => !p.is_spectator).length >= MIN_PLAYERS_FOR_SABOTEUR_MODE;
+}
+
+/**
+ * Picks a random rader (not the narrator, not a spectator) to secretly be
+ * this round's saboteur. `randomFn` is injectable so tests can pin the
+ * "random" pick instead of asserting on Math.random output.
+ */
+export function pickSaboteur(
+  players: Player[],
+  narratorId: string | null,
+  randomFn: () => number = Math.random
+): Player | null {
+  const eligible = players.filter((p) => !p.is_spectator && p.id !== narratorId);
+  if (eligible.length === 0) return null;
+  return eligible[Math.floor(randomFn() * eligible.length)];
+}

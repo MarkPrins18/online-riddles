@@ -1,13 +1,21 @@
 import { useTranslations } from "next-intl";
 import type { ChatMessage } from "@/types/chatMessage";
-import { Badge } from "@/components/ui/Badge";
+import type { ChatMessageReaction } from "@/types/chatMessageReaction";
+import { summarizeReactions } from "@/lib/game/chatReactions";
+import { ChatMessageRow } from "./ChatMessageRow";
 
 export function ChatThread({
   messages,
   narratorId,
+  chatReactions,
+  playerId,
+  onToggleReaction,
 }: {
   messages: ChatMessage[];
   narratorId: string | null;
+  chatReactions: ChatMessageReaction[];
+  playerId: string;
+  onToggleReaction: (messageId: string, emoji: string) => Promise<void>;
 }) {
   const t = useTranslations("ChatThread");
 
@@ -20,18 +28,13 @@ export function ChatThread({
   return (
     <ul className="flex flex-col gap-2" role="log" aria-live="polite">
       {messages.map((message) => (
-        <li key={message.id} className="flex items-baseline gap-2">
-          <span className="font-mono text-xs text-text-secondary">
-            {message.player_name}
-            {message.player_id === narratorId && (
-              <Badge tone="accent" className="ml-1 align-middle">
-                {t("narratorBadge")}
-              </Badge>
-            )}
-            :
-          </span>
-          <span className="font-mono text-sm text-text-primary">{message.text}</span>
-        </li>
+        <ChatMessageRow
+          key={message.id}
+          message={message}
+          narratorId={narratorId}
+          summaries={summarizeReactions(chatReactions, message.id, playerId)}
+          onToggleReaction={(emoji) => onToggleReaction(message.id, emoji)}
+        />
       ))}
     </ul>
   );

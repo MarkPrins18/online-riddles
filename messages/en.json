@@ -99,7 +99,10 @@
     "hardcoreHint": "Every wrong guess costs the whole team 1 life. At 0 lives, it's game over for the whole session.",
     "teamLivesLabelWithNarrator": "{name} decides: how many lives does the team get?",
     "teamLivesLabel": "How many lives does the team get?",
-    "teamLivesOption": "{count} lives"
+    "teamLivesOption": "{count} lives",
+    "saboteurToggle": "Saboteur mode",
+    "saboteurHint": "Each round, one rader secretly knows the solution and tries to steer the team wrong. After the reveal, everyone votes on who they suspect.",
+    "saboteurNeedsMorePlayers": "Not enough players yet (minimum {count})."
   },
   "RoomLobbyClient": {
     "errorPrefix": "Something went wrong: {error}",
@@ -371,6 +374,20 @@
     "empty": "Nobody has said anything yet. Feel free to discuss with your fellow players.",
     "narratorBadge": "Narrator"
   },
+  "ChatMessageReactions": {
+    "addLabel": "React with {emoji}",
+    "removeLabel": "Remove your {emoji} reaction",
+    "openPicker": "Add a reaction",
+    "morePicker": "More emoji",
+    "customLabel": "Custom emoji",
+    "customPlaceholder": "emoji",
+    "customSubmit": "Send",
+    "invalidEmoji": "That's not a single emoji.",
+    "categorySmileys": "Smileys",
+    "categoryGestures": "Gestures",
+    "categoryHearts": "Hearts",
+    "categoryFun": "More"
+  },
   "ChatIconButton": {
     "openWithUnread": "{count, plural, one {Open discussion, # unread message} other {Open discussion, # unread messages}}",
     "open": "Open discussion"
@@ -417,12 +434,44 @@
     "nextCaseError": "Couldn't start a new case. Please try again.",
     "skipPuzzleError": "Couldn't fetch another case. Please try again."
   },
+  "SoundToggleButton": {
+    "muteLabel": "Mute sound",
+    "unmuteLabel": "Unmute sound"
+  },
   "NarratorBriefingScreen": {
     "newCase": "New case",
     "onlyForYou": "Only for you",
     "start": "Get started",
     "skipping": "Working...",
     "skip": "Skip this case"
+  },
+  "SaboteurBriefingScreen": {
+    "label": "Secret role",
+    "heading": "You are the saboteur",
+    "instructions": "You know the solution, but just play along as a rader. Ask questions, guess, chat — secretly use your knowledge to steer the others wrong without them noticing.",
+    "solutionLabel": "The solution",
+    "start": "Got it"
+  },
+  "AccusationPanel": {
+    "heading": "Who was the saboteur?",
+    "secondsLeft": "{seconds}s",
+    "instructions": "Vote for who you think was the saboteur. You can change your mind while the window is still open.",
+    "youVotedFor": "You voted for {name}.",
+    "narratorDoesNotVote": "As the narrator, you don't vote.",
+    "spectatorDoesNotVote": "As a spectator, you don't vote.",
+    "error": "Couldn't save your vote. Please try again."
+  },
+  "AccusationReveal": {
+    "counting": "Counting the votes...",
+    "heading": "Result",
+    "correctlyAccused": "The team pointed at {name} — and they were right!",
+    "wrongfullyAccused": "The team pointed at {name} — wrong!",
+    "noConsensus": "There was no clear majority.",
+    "actualSaboteur": "The actual saboteur was: {name}.",
+    "nearMiss": "Guessed correctly by a hair.",
+    "saboteurOutcome": "You were the saboteur: {points} points.",
+    "yourVoteCorrect": "Your vote was right: +{points} points.",
+    "yourVoteWrong": "Your vote was wrong: -{points} points."
   },
   "RiddleForm": {
     "titleLabel": "Title",

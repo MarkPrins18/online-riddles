@@ -218,7 +218,7 @@
     "error": "Kon je vraag niet versturen. Probeer het opnieuw."
   },
   "ChatForm": {
-    "placeholder": "Overleg met je medespelers...",
+    "placeholder": "Deel een theorie met het team...",
     "ariaLabel": "Chatbericht",
     "submit": "Versturen",
     "error": "Kon je bericht niet versturen. Probeer het opnieuw."
@@ -384,7 +384,7 @@
     "submit": "Versturen"
   },
   "ChatThread": {
-    "empty": "Nog niemand heeft iets gezegd. Overleg gerust met je medespelers.",
+    "empty": "Nog niemand heeft iets gezegd. Deel de eerste theorie.",
     "narratorBadge": "Verteller"
   },
   "ChatMessageReactions": {

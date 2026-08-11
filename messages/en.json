@@ -218,7 +218,7 @@
     "error": "Couldn't send your question. Please try again."
   },
   "ChatForm": {
-    "placeholder": "Discuss with your fellow players...",
+    "placeholder": "Share a theory with the team...",
     "ariaLabel": "Chat message",
     "submit": "Send",
     "error": "Couldn't send your message. Please try again."
@@ -384,7 +384,7 @@
     "submit": "Send"
   },
   "ChatThread": {
-    "empty": "Nobody has said anything yet. Feel free to discuss with your fellow players.",
+    "empty": "Nobody's said anything yet. Share the first theory.",
     "narratorBadge": "Narrator"
   },
   "ChatMessageReactions": {

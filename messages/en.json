@@ -7,6 +7,11 @@
     "description": "A lateral thinking puzzle game for groups. Ask yes/no questions, gather clues, and crack the mystery.",
     "skipToContent": "Skip to main content"
   },
+  "ErrorBoundary": {
+    "title": "Something went wrong",
+    "description": "This page hit an unexpected error. Try again — if it keeps happening, reload the page.",
+    "retry": "Try again"
+  },
   "HomePage": {
     "coverStamp": "Case file · closed",
     "title": "Online Riddles",

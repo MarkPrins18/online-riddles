@@ -55,6 +55,26 @@ See [`packs/example-pack.json`](packs/example-pack.json) for the JSON
 shape. `GET /api/admin/puzzles` (same header) lists packs with their
 puzzle counts and publish state.
 
+## Monitoring & error tracking
+
+Server and client errors are always logged as structured JSON (via Next's
+`instrumentation.ts`/`instrumentation-client.ts` hooks), so any hosting
+platform that captures stdout/stderr (Vercel, Fly, ...) already gives you
+searchable error logs with no setup.
+
+To also get alerting, stack traces, and a dashboard, add a
+[Sentry](https://sentry.io) project and set:
+
+```bash
+SENTRY_DSN=...              # server-side
+NEXT_PUBLIC_SENTRY_DSN=...  # client-side
+```
+
+Leave both empty and the app runs exactly as before — Sentry is a no-op
+until a DSN is configured. See `.env.example` for the full list of env
+vars, and `app/error.tsx`/`app/global-error.tsx` for the user-facing
+fallback UI shown when a page crashes.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

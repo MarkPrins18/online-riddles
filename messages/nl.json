@@ -7,6 +7,11 @@
     "description": "Een lateral thinking puzzelspel voor groepen. Stel ja/nee-vragen, verzamel aanwijzingen en ontrafel het mysterie.",
     "skipToContent": "Naar hoofdinhoud"
   },
+  "ErrorBoundary": {
+    "title": "Er is iets misgegaan",
+    "description": "Deze pagina is onverwacht vastgelopen. Probeer het opnieuw — als het blijft gebeuren, herlaad dan de pagina.",
+    "retry": "Probeer opnieuw"
+  },
   "HomePage": {
     "coverStamp": "Zaak-dossier · gesloten",
     "title": "Online Riddles",

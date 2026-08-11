@@ -6,6 +6,12 @@ import type { Hint } from "@/types/hint";
 
 const VISIBLE_MS = 6000;
 
+// How fresh a hint has to be to still trigger the snackbar. Without this, a
+// page refresh (or returning to the tab after a while) re-mounts this
+// component with a blank seenIdRef, so the room's most recent hint — even
+// one from minutes/hours ago — would look "new" and pop the snackbar again.
+const MAX_HINT_AGE_MS = 15_000;
+
 /**
  * A transient attention-grabber for a freshly sent hint — the hint itself
  * already lives permanently in the InterrogationLog (see HintCard there);
@@ -20,7 +26,12 @@ export function HintSnackbar({ latestHint }: { latestHint: Hint | null }) {
   const latestHintId = latestHint?.id ?? null;
 
   useEffect(() => {
-    if (!latestHint || latestHint.id === seenIdRef.current) return;
+    if (
+      !latestHint ||
+      latestHint.id === seenIdRef.current ||
+      Date.now() - new Date(latestHint.created_at).getTime() > MAX_HINT_AGE_MS
+    )
+      return;
     seenIdRef.current = latestHint.id;
     setVisibleHint(latestHint);
     const timer = setTimeout(() => setVisibleHint(null), VISIBLE_MS);

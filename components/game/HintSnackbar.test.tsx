@@ -29,6 +29,7 @@ function makeHint(overrides: Partial<Hint> = {}): Hint {
 describe("HintSnackbar", () => {
   beforeEach(() => {
     vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-01-01T00:00:00.000Z"));
   });
 
   afterEach(() => {
@@ -70,5 +71,17 @@ describe("HintSnackbar", () => {
 
     rerender(withIntl(<HintSnackbar latestHint={makeHint({ id: "hint-2", text: "Tel de stoelen." })} />));
     expect(screen.getByText("Tel de stoelen.")).toBeInTheDocument();
+  });
+
+  it("does not surface a stale hint on mount, e.g. after a page refresh long after it was sent", () => {
+    const oldHint = makeHint({ created_at: "2025-12-31T23:00:00.000Z" }); // an hour old
+    renderWithIntl(<HintSnackbar latestHint={oldHint} />);
+    expect(screen.queryByText("Kijk naar de klok.")).not.toBeInTheDocument();
+  });
+
+  it("still shows a hint on mount if it was sent moments ago", () => {
+    const freshHint = makeHint({ created_at: "2025-12-31T23:59:58.000Z" }); // 2s old
+    renderWithIntl(<HintSnackbar latestHint={freshHint} />);
+    expect(screen.getByText("Kijk naar de klok.")).toBeInTheDocument();
   });
 });

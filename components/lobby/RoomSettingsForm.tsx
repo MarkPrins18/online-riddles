@@ -178,63 +178,70 @@ export function RoomSettingsForm({
           <p className="font-mono text-xs text-danger">{t("chooseThemeOrPack")}</p>
         )}
 
-      <div className="border-t border-white/5 pt-4">
-        <label className="flex items-center gap-2 font-mono text-sm text-text-primary">
-          <input
-            type="checkbox"
-            className="accent-accent"
-            checked={value.hardcoreMode}
-            onChange={(e) => onChange({ ...value, hardcoreMode: e.target.checked })}
-          />
-          {t("hardcoreToggle")}
-        </label>
-        <p className="mt-1 font-mono text-xs text-text-secondary">{t("hardcoreHint")}</p>
-
-        {value.hardcoreMode && (
-          <div className="mt-3">
-            <label
-              htmlFor="team-lives"
-              className="mb-1 block font-mono text-xs uppercase tracking-widest text-text-secondary"
-            >
-              {narratorPreviewName
-                ? t("teamLivesLabelWithNarrator", { name: narratorPreviewName })
-                : t("teamLivesLabel")}
+      <fieldset className="border-t border-white/5 pt-4">
+        <legend className="mb-2 font-mono text-xs uppercase tracking-widest text-text-secondary">
+          {t("modesLegend")}
+        </legend>
+        <div className="flex flex-col divide-y divide-white/5 rounded-md border border-white/10">
+          <div className="p-3">
+            <label className="flex items-center gap-2 font-mono text-sm text-text-primary">
+              <input
+                type="checkbox"
+                className="accent-accent"
+                checked={value.hardcoreMode}
+                onChange={(e) => onChange({ ...value, hardcoreMode: e.target.checked })}
+              />
+              {t("hardcoreToggle")}
             </label>
-            <select
-              id="team-lives"
-              value={value.teamLives}
-              onChange={(e) => onChange({ ...value, teamLives: Number(e.target.value) })}
-              className="w-full rounded-md border border-white/10 bg-bg-primary px-3 py-2 font-mono text-sm text-text-primary focus:border-accent-muted"
-            >
-              {TEAM_LIVES_OPTIONS.map((count) => (
-                <option key={count} value={count}>
-                  {t("teamLivesOption", { count })}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
-      </div>
+            <p className="mt-1 font-mono text-xs text-text-secondary">{t("hardcoreHint")}</p>
 
-      <div className="border-t border-white/5 pt-4">
-        <label className="flex items-center gap-2 font-mono text-sm text-text-primary">
-          <input
-            type="checkbox"
-            className="accent-accent"
-            checked={value.saboteurMode}
-            onChange={(e) => onChange({ ...value, saboteurMode: e.target.checked })}
-          />
-          {t("saboteurToggle")}
-        </label>
-        <p className="mt-1 font-mono text-xs text-text-secondary">{t("saboteurHint")}</p>
-        {value.saboteurMode &&
-          playerCount !== undefined &&
-          playerCount < MIN_PLAYERS_FOR_SABOTEUR_MODE && (
-            <p className="mt-1 font-mono text-xs text-danger">
-              {t("saboteurNeedsMorePlayers", { count: MIN_PLAYERS_FOR_SABOTEUR_MODE })}
-            </p>
-          )}
-      </div>
+            {value.hardcoreMode && (
+              <div className="mt-3">
+                <label
+                  htmlFor="team-lives"
+                  className="mb-1 block font-mono text-xs uppercase tracking-widest text-text-secondary"
+                >
+                  {narratorPreviewName
+                    ? t("teamLivesLabelWithNarrator", { name: narratorPreviewName })
+                    : t("teamLivesLabel")}
+                </label>
+                <select
+                  id="team-lives"
+                  value={value.teamLives}
+                  onChange={(e) => onChange({ ...value, teamLives: Number(e.target.value) })}
+                  className="w-full rounded-md border border-white/10 bg-bg-primary px-3 py-2 font-mono text-sm text-text-primary focus:border-accent-muted"
+                >
+                  {TEAM_LIVES_OPTIONS.map((count) => (
+                    <option key={count} value={count}>
+                      {t("teamLivesOption", { count })}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
+
+          <div className="p-3">
+            <label className="flex items-center gap-2 font-mono text-sm text-text-primary">
+              <input
+                type="checkbox"
+                className="accent-accent"
+                checked={value.saboteurMode}
+                onChange={(e) => onChange({ ...value, saboteurMode: e.target.checked })}
+              />
+              {t("saboteurToggle")}
+            </label>
+            <p className="mt-1 font-mono text-xs text-text-secondary">{t("saboteurHint")}</p>
+            {value.saboteurMode &&
+              playerCount !== undefined &&
+              playerCount < MIN_PLAYERS_FOR_SABOTEUR_MODE && (
+                <p className="mt-1 font-mono text-xs text-danger">
+                  {t("saboteurNeedsMorePlayers", { count: MIN_PLAYERS_FOR_SABOTEUR_MODE })}
+                </p>
+              )}
+          </div>
+        </div>
+      </fieldset>
     </div>
   );
 }

@@ -178,6 +178,71 @@
     "myPacks": "Mijn packs",
     "submitRiddle": "Raadsel insturen"
   },
+  "AccountModal": {
+    "title": "Account",
+    "loading": "Even laden...",
+    "explainer": "Optioneel: koppel een account zodat je packs en raadsels niet verloren gaan als je browsersessie verdwijnt.",
+    "tabMagicLink": "Code per e-mail",
+    "tabPassword": "Wachtwoord",
+    "signedInAs": "Ingelogd als {email}",
+    "signOut": "Uitloggen",
+    "signingOut": "Uitloggen...",
+    "signOutError": "Uitloggen is niet gelukt. Probeer het opnieuw.",
+    "pendingConfirmation": "Bijna klaar — check je e-mail en klik op de bevestigingslink om je account te activeren.",
+    "close": "Sluiten"
+  },
+  "PasswordTab": {
+    "upgradeIntro": "Voeg een e-mail en wachtwoord toe aan je huidige sessie.",
+    "loginIntro": "Log in op een account dat je al hebt.",
+    "switchToLogin": "Heb je al een account? Inloggen",
+    "switchToUpgrade": "Nog geen account? Account maken",
+    "emailLabel": "E-mailadres",
+    "emailPlaceholder": "jij@voorbeeld.nl",
+    "passwordLabel": "Wachtwoord",
+    "passwordPlaceholder": "Minstens 6 tekens",
+    "orphanWarning": "Let op: niet-opgeslagen raadsels uit deze browser blijven niet gekoppeld aan het account waarop je inlogt.",
+    "saving": "Bezig...",
+    "submitUpgrade": "Account maken",
+    "submitLogin": "Inloggen"
+  },
+  "MagicLinkTab": {
+    "intro": "Log in of maak een account met een code die we naar je e-mail sturen — geen wachtwoord nodig.",
+    "emailLabel": "E-mailadres",
+    "emailPlaceholder": "jij@voorbeeld.nl",
+    "requestCode": "Stuur code",
+    "sending": "Versturen...",
+    "codeSentIntro": "We hebben een code gestuurd naar {email}.",
+    "codeLabel": "Code",
+    "codePlaceholder": "123456",
+    "verify": "Bevestigen",
+    "verifying": "Bevestigen...",
+    "back": "Ander e-mailadres",
+    "resendCode": "Nieuwe code aanvragen",
+    "resendCooldown": "Nieuwe code over {seconds}s"
+  },
+  "AccountButton": {
+    "trigger": "Account",
+    "signOut": "Uitloggen",
+    "signingOut": "Uitloggen...",
+    "signOutError": "Uitloggen is niet gelukt. Probeer het opnieuw."
+  },
+  "AccountNudgeBanner": {
+    "body": "Je packs en raadsels zijn nu gekoppeld aan deze browser. Koppel een gratis account zodat je ze niet kwijtraakt.",
+    "cta": "Account koppelen",
+    "dismissAriaLabel": "Niet meer tonen"
+  },
+  "AccountErrors": {
+    "email_exists": "Dit e-mailadres heeft al een account.",
+    "user_already_exists": "Dit e-mailadres heeft al een account.",
+    "invalid_credentials": "E-mailadres of wachtwoord klopt niet.",
+    "otp_expired": "Deze code klopt niet (meer). Vraag een nieuwe aan.",
+    "over_email_send_rate_limit": "Te veel e-mails aangevraagd. Probeer het over een uur opnieuw.",
+    "over_request_rate_limit": "Te veel pogingen. Probeer het straks opnieuw.",
+    "weak_password": "Kies een sterker wachtwoord (minstens 6 tekens).",
+    "email_address_invalid": "Dit e-mailadres lijkt niet geldig.",
+    "same_password": "Dit is al je huidige wachtwoord.",
+    "generic": "Er ging iets mis. Probeer het opnieuw."
+  },
   "FavoriteButton": {
     "addAriaLabel": "Voeg toe aan favorieten",
     "removeAriaLabel": "Verwijder uit favorieten",

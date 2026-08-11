@@ -838,6 +838,35 @@ begin
 end;
 $$;
 
+-- Lets a player who lost their session (new device, cleared storage, a
+-- different browser) regain their existing row — same score/role — without
+-- introducing a second secret alongside the room code: the caller must
+-- already know the room code (to resolve room_id_input at all) and the
+-- exact name the row was joined under. Not self-claim-only like claim_host,
+-- because the caller isn't a room member yet in this session — that's the
+-- whole problem being solved. Same "client decides, trust the group" model
+-- as claim_host/claim_narrator (see those for why Presence can't gate this
+-- server-side); the name check exists purely so a bare room_id + guessed
+-- player_id can't silently hijack an unrelated player's row.
+create or replace function reclaim_player(room_id_input uuid, target_player_id uuid, name_input text)
+returns void
+language plpgsql
+security definer
+as $$
+begin
+  if not exists (
+    select 1 from players
+    where id = target_player_id
+      and room_id = room_id_input
+      and lower(name) = lower(name_input)
+  ) then
+    raise exception 'Player not found in this room';
+  end if;
+
+  update players set user_id = auth.uid() where id = target_player_id;
+end;
+$$;
+
 -- Closes a round's saboteur-mode accusation vote: tallies every cast vote,
 -- awards each voter a small personal bonus/penalty for guessing right or
 -- wrong, awards the saboteur their outcome-based bonus (bigger if the

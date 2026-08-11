@@ -63,6 +63,10 @@ export type Database = {
         Args: { room_id_input: string; new_narrator_id: string };
         Returns: void;
       };
+      reclaim_player: {
+        Args: { room_id_input: string; target_player_id: string; name_input: string };
+        Returns: void;
+      };
       close_accusation_vote: {
         Args: { room_id_input: string; round_input: number };
         Returns: void;

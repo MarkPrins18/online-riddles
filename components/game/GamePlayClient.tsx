@@ -134,6 +134,16 @@ export function GamePlayClient({ code }: { code: string }) {
     }
   }, [state.room?.status, code, router]);
 
+  // No stored player id for this room on this device (new device, cleared
+  // storage, private window) — without this, the loading guard below never
+  // clears and the player is stuck on a spinner forever. The lobby has the
+  // join/reclaim form that gets them back in.
+  useEffect(() => {
+    if (!playerId) {
+      router.push(`/room/${code}`);
+    }
+  }, [playerId, code, router]);
+
   const timeUpHandledForRoundRef = useRef<number | null>(null);
   useEffect(() => {
     const room = state.room;

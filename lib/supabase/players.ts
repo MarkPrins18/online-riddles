@@ -30,6 +30,53 @@ export async function joinRoom(
   return data as Player;
 }
 
+/**
+ * Looks up an existing player in the room by exact name (case-insensitive),
+ * so a rejoining player who lost their session (new device, cleared
+ * storage) can be offered their old row back instead of starting over at
+ * score 0. Returns null on no match or on more than one match — with
+ * duplicate names, guessing which row to offer back would risk handing
+ * someone a stranger's identity.
+ */
+export async function findReclaimablePlayer(
+  supabase: Client,
+  roomId: string,
+  name: string
+): Promise<Player | null> {
+  const { data, error } = await supabase
+    .from("players")
+    .select("*")
+    .eq("room_id", roomId)
+    .ilike("name", name.trim());
+
+  if (error) throw error;
+  if (!data || data.length !== 1) return null;
+  return data[0] as Player;
+}
+
+/**
+ * Re-attaches the caller's current session to an existing player row (see
+ * findReclaimablePlayer) instead of creating a new one — preserves score,
+ * role, everything. Enforced server-side (see reclaim_player in
+ * schema.sql): the room code plus the exact name the row was joined under
+ * is treated as sufficient proof, same "client decides, trust the group"
+ * model as claimHost/claimNarrator below.
+ */
+export async function reclaimPlayer(
+  supabase: Client,
+  roomId: string,
+  playerId: string,
+  name: string
+): Promise<void> {
+  const { error } = await supabase.rpc("reclaim_player", {
+    room_id_input: roomId,
+    target_player_id: playerId,
+    name_input: name,
+  });
+
+  if (error) throw error;
+}
+
 export async function getPlayersInRoom(
   supabase: Client,
   roomId: string

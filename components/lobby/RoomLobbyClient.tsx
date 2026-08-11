@@ -20,6 +20,8 @@ import { NarratorPicker } from "./NarratorPicker";
 import { RoomSettingsForm } from "./RoomSettingsForm";
 import { LeaveRoomButton } from "./LeaveRoomButton";
 
+const CARD_TITLE_CLASS = "mb-3 font-mono text-base font-bold uppercase tracking-widest text-text-primary";
+
 export function RoomLobbyClient({ code }: { code: string }) {
   const [playerId, setPlayerId] = useState(() => getStoredPlayerId(code));
   const locale = useLocale();
@@ -80,7 +82,7 @@ export function RoomLobbyClient({ code }: { code: string }) {
       />
 
       <Card>
-        <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary">
+        <p className={CARD_TITLE_CLASS}>
           {t("playersHeading", { count: state.players.length })}
         </p>
         <PlayerList
@@ -94,7 +96,7 @@ export function RoomLobbyClient({ code }: { code: string }) {
         isHost ? (
           <>
             <Card>
-              <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary">
+              <p className={CARD_TITLE_CLASS}>
                 {t("settingsHeading")}
               </p>
               <RoomSettingsForm
@@ -130,7 +132,7 @@ export function RoomLobbyClient({ code }: { code: string }) {
         )
       ) : (
         <Card>
-          <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary">
+          <p className={CARD_TITLE_CLASS}>
             {t("joinHeading")}
           </p>
           <JoinRoomForm presetCode={code} onJoined={setPlayerId} />

@@ -78,6 +78,8 @@
     "error": "Couldn't start the game. Please try again."
   },
   "RoomSettingsForm": {
+    "roundsLegend": "Time & rounds",
+    "puzzlesLegend": "Puzzles",
     "durationLabel": "Time per round",
     "duration5": "5 minutes",
     "duration10": "10 minutes",

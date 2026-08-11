@@ -71,7 +71,7 @@ export function RoomSettingsForm({
     onChange({ ...value, communityPackIds: enabled ? null : [] });
   }
 
-  const groupLegendClass = "mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary";
+  const groupLegendClass = "mb-3 font-mono text-sm font-semibold uppercase tracking-widest text-text-primary";
   const fieldLegendClass = "mb-1 font-mono text-xs uppercase tracking-widest text-text-secondary";
 
   return (

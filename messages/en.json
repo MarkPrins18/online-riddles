@@ -384,8 +384,7 @@
     "submit": "Send"
   },
   "ChatThread": {
-    "empty": "Nobody's said anything yet. Share the first theory.",
-    "narratorBadge": "Narrator"
+    "empty": "Nobody's said anything yet. Share the first theory."
   },
   "ChatMessageReactions": {
     "addLabel": "React with {emoji}",

@@ -22,7 +22,6 @@ export function ChatDrawer({
   chatMessages,
   chatReactions,
   narrating,
-  narratorId,
   onClose,
 }: {
   supabase: SupabaseClient<Database>;
@@ -32,7 +31,6 @@ export function ChatDrawer({
   chatMessages: ChatMessage[];
   chatReactions: ChatMessageReaction[];
   narrating: boolean;
-  narratorId: string | null;
   onClose: () => void;
 }) {
   const t = useTranslations("ChatDrawer");
@@ -47,7 +45,6 @@ export function ChatDrawer({
         chatMessages={chatMessages}
         chatReactions={chatReactions}
         narrating={narrating}
-        narratorId={narratorId}
         className="h-full"
       />
     </Drawer>

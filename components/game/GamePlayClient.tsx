@@ -869,7 +869,6 @@ export function GamePlayClient({ code }: { code: string }) {
             chatMessages={chatMessages}
             chatReactions={state.chatReactions}
             narrating={narrating}
-            narratorId={room.narrator_id}
             className="xl:min-h-0 xl:flex-1"
           />
         </div>
@@ -988,7 +987,6 @@ export function GamePlayClient({ code }: { code: string }) {
           chatMessages={chatMessages}
           chatReactions={state.chatReactions}
           narrating={narrating}
-          narratorId={room.narrator_id}
           onClose={() => {
             setChatDrawerOpen(false);
             setChatSeenCount(chatMessages.length);

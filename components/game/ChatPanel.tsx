@@ -29,7 +29,6 @@ export function ChatPanel({
   chatMessages,
   chatReactions,
   narrating,
-  narratorId,
   className = "",
 }: {
   supabase: SupabaseClient<Database>;
@@ -39,7 +38,6 @@ export function ChatPanel({
   chatMessages: ChatMessage[];
   chatReactions: ChatMessageReaction[];
   narrating: boolean;
-  narratorId: string | null;
   className?: string;
 }) {
   const chatScrollRef = useRef<HTMLDivElement>(null);
@@ -69,7 +67,6 @@ export function ChatPanel({
       <div ref={chatScrollRef} className="min-h-0 flex-1 overflow-y-auto pr-1">
         <ChatThread
           messages={chatMessages}
-          narratorId={narratorId}
           chatReactions={chatReactions}
           playerId={playerId}
           onToggleReaction={handleToggleReaction}

@@ -384,8 +384,7 @@
     "submit": "Versturen"
   },
   "ChatThread": {
-    "empty": "Nog niemand heeft iets gezegd. Deel de eerste theorie.",
-    "narratorBadge": "Verteller"
+    "empty": "Nog niemand heeft iets gezegd. Deel de eerste theorie."
   },
   "ChatMessageReactions": {
     "addLabel": "Reageer met {emoji}",

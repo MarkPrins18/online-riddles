@@ -446,10 +446,6 @@
     "nextCaseError": "Couldn't start a new case. Please try again.",
     "skipPuzzleError": "Couldn't fetch another case. Please try again."
   },
-  "SoundToggleButton": {
-    "muteLabel": "Mute sound",
-    "unmuteLabel": "Unmute sound"
-  },
   "NarratorBriefingScreen": {
     "newCase": "New case",
     "onlyForYou": "Only for you",

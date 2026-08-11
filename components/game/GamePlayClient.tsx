@@ -29,8 +29,6 @@ import {
 } from "@/lib/game/rounds";
 import { targetDifficultyForRound } from "@/lib/game/difficulty";
 import { useNowTick } from "@/lib/game/useNowTick";
-import { computeRemainingSeconds } from "@/lib/game/timer";
-import { useGameSoundEffects } from "@/lib/game/useGameSoundEffects";
 import { getErrorMessage } from "@/lib/errors";
 import { logCaseOutcome } from "@/lib/supabase/caseLog";
 import { pinQuestion } from "@/lib/supabase/board";
@@ -65,7 +63,6 @@ import { TeamLivesDisplay } from "./TeamLivesDisplay";
 import { PlayersDrawer } from "./PlayersDrawer";
 import { PlayersStrip } from "./PlayersStrip";
 import { SolutionReveal } from "./SolutionReveal";
-import { SoundToggleButton } from "./SoundToggleButton";
 import { Timer } from "./Timer";
 
 // How long the Verteller must be continuously offline (per Presence) before
@@ -234,25 +231,6 @@ export function GamePlayClient({ code }: { code: string }) {
     narratorTakeoverAttemptedRef.current = episodeKey;
     claimNarrator(supabase, room.id, candidate.id);
   }, [now, state.room, state.players, state.onlinePlayerIds, playerId, supabase]);
-
-  // Computed ahead of the early returns below (hooks can't be conditional):
-  // sound cues for a new hint arriving, the player's own guess resolving,
-  // and the final countdown seconds.
-  const latestHintId = state.hints[state.hints.length - 1]?.id ?? null;
-  const myGuesses = state.guesses.filter((g) => g.player_id === playerId);
-  const myLatestGuess = myGuesses[myGuesses.length - 1] ?? null;
-  const soundRemainingSeconds =
-    state.room?.status === "playing" &&
-    state.room.round_started_at &&
-    state.room.round_duration_seconds != null
-      ? computeRemainingSeconds(state.room.round_started_at, state.room.round_duration_seconds, now)
-      : null;
-  useGameSoundEffects({
-    latestHintId,
-    myLatestGuessId: myLatestGuess?.id ?? null,
-    myLatestGuessStatus: myLatestGuess?.status ?? null,
-    remainingSeconds: soundRemainingSeconds,
-  });
 
   if (state.error) {
     return (
@@ -473,7 +451,6 @@ export function GamePlayClient({ code }: { code: string }) {
                 durationSeconds={room.round_duration_seconds}
               />
             )}
-            <SoundToggleButton />
             {/* Prikbord is a freeform drag-and-connect canvas with
                 fixed-width cards (180-200px) — deliberately desktop-only.
                 Below xl those cards eat most of the screen width and the

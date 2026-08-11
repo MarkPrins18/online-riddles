@@ -446,10 +446,6 @@
     "nextCaseError": "Kon geen nieuwe zaak starten. Probeer het opnieuw.",
     "skipPuzzleError": "Kon geen andere zaak ophalen. Probeer het opnieuw."
   },
-  "SoundToggleButton": {
-    "muteLabel": "Geluid dempen",
-    "unmuteLabel": "Geluid aanzetten"
-  },
   "NarratorBriefingScreen": {
     "newCase": "Nieuwe zaak",
     "onlyForYou": "Alleen voor jou",

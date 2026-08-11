@@ -71,117 +71,126 @@ export function RoomSettingsForm({
     onChange({ ...value, communityPackIds: enabled ? null : [] });
   }
 
+  const groupLegendClass = "mb-3 font-mono text-sm font-semibold uppercase tracking-widest text-text-primary";
+
   return (
-    <div className="flex flex-col gap-4">
-      <div>
-        <label
-          htmlFor="round-duration"
-          className="mb-1 block font-mono text-xs uppercase tracking-widest text-text-secondary"
-        >
-          {t("durationLabel")}
-        </label>
-        <select
-          id="round-duration"
-          value={value.roundDurationSeconds === null ? "none" : value.roundDurationSeconds}
-          onChange={(e) =>
-            onChange({
-              ...value,
-              roundDurationSeconds: e.target.value === "none" ? null : Number(e.target.value),
-            })
-          }
-          className="w-full rounded-md border border-white/10 bg-bg-primary px-3 py-2 font-mono text-sm text-text-primary focus:border-accent-muted"
-        >
-          {DURATION_OPTIONS.map((option) => (
-            <option key={option.labelKey} value={option.value === null ? "none" : option.value}>
-              {t(option.labelKey)}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label
-          htmlFor="round-count"
-          className="mb-1 block font-mono text-xs uppercase tracking-widest text-text-secondary"
-        >
-          {t("roundCountLabel")}
-        </label>
-        <select
-          id="round-count"
-          value={value.maxRounds}
-          onChange={(e) => onChange({ ...value, maxRounds: Number(e.target.value) })}
-          className="w-full rounded-md border border-white/10 bg-bg-primary px-3 py-2 font-mono text-sm text-text-primary focus:border-accent-muted"
-        >
-          {ROUND_COUNT_OPTIONS.map((count) => (
-            <option key={count} value={count}>
-              {t("roundCountOption", { count })}
-            </option>
-          ))}
-        </select>
-      </div>
-
+    <div className="flex flex-col gap-6">
       <fieldset>
-        <legend className="mb-1 font-mono text-xs uppercase tracking-widest text-text-secondary">
-          {t("themesLegend")}
-        </legend>
-        {officialThemes === null ? (
-          <p className="font-mono text-xs text-text-secondary">{t("themesLoading")}</p>
-        ) : officialThemes.length === 0 ? (
-          <p className="font-mono text-xs text-text-secondary">{t("themesEmpty")}</p>
-        ) : (
-          <div className="flex flex-col gap-1.5">
-            {officialThemes.map((theme) => (
-              <label key={theme} className="flex items-center gap-2 font-mono text-sm text-text-primary">
+        <legend className={groupLegendClass}>{t("roundsLegend")}</legend>
+        <div className="flex flex-col gap-3">
+          <div>
+            <label
+              htmlFor="round-duration"
+              className="mb-1 block font-mono text-xs uppercase tracking-widest text-text-secondary"
+            >
+              {t("durationLabel")}
+            </label>
+            <select
+              id="round-duration"
+              value={value.roundDurationSeconds === null ? "none" : value.roundDurationSeconds}
+              onChange={(e) =>
+                onChange({
+                  ...value,
+                  roundDurationSeconds: e.target.value === "none" ? null : Number(e.target.value),
+                })
+              }
+              className="w-full rounded-md border border-white/10 bg-bg-primary px-3 py-2 font-mono text-sm text-text-primary focus:border-accent-muted"
+            >
+              {DURATION_OPTIONS.map((option) => (
+                <option key={option.labelKey} value={option.value === null ? "none" : option.value}>
+                  {t(option.labelKey)}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label
+              htmlFor="round-count"
+              className="mb-1 block font-mono text-xs uppercase tracking-widest text-text-secondary"
+            >
+              {t("roundCountLabel")}
+            </label>
+            <select
+              id="round-count"
+              value={value.maxRounds}
+              onChange={(e) => onChange({ ...value, maxRounds: Number(e.target.value) })}
+              className="w-full rounded-md border border-white/10 bg-bg-primary px-3 py-2 font-mono text-sm text-text-primary focus:border-accent-muted"
+            >
+              {ROUND_COUNT_OPTIONS.map((count) => (
+                <option key={count} value={count}>
+                  {t("roundCountOption", { count })}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset className="border-t border-white/5 pt-4">
+        <legend className={groupLegendClass}>{t("puzzlesLegend")}</legend>
+
+        <fieldset>
+          <legend className="mb-1 font-mono text-xs uppercase tracking-widest text-text-secondary">
+            {t("themesLegend")}
+          </legend>
+          {officialThemes === null ? (
+            <p className="font-mono text-xs text-text-secondary">{t("themesLoading")}</p>
+          ) : officialThemes.length === 0 ? (
+            <p className="font-mono text-xs text-text-secondary">{t("themesEmpty")}</p>
+          ) : (
+            <div className="flex flex-col gap-1.5">
+              {officialThemes.map((theme) => (
+                <label key={theme} className="flex items-center gap-2 font-mono text-sm text-text-primary">
+                  <input
+                    type="checkbox"
+                    className="accent-accent"
+                    checked={value.packThemeFilter.includes(theme)}
+                    onChange={() => toggleTheme(theme)}
+                  />
+                  {theme}
+                </label>
+              ))}
+            </div>
+          )}
+        </fieldset>
+
+        <fieldset className="mt-3 border-t border-white/5 pt-3">
+          <legend className="mb-1 font-mono text-xs uppercase tracking-widest text-text-secondary">
+            {t("communityLegend")}
+          </legend>
+          {communityPackCount === null ? (
+            <p className="font-mono text-xs text-text-secondary">{t("communityLoading")}</p>
+          ) : communityPackCount === 0 ? (
+            <p className="font-mono text-xs text-text-secondary">{t("communityEmpty")}</p>
+          ) : (
+            <>
+              <label className="flex items-center gap-2 font-mono text-sm text-text-primary">
                 <input
                   type="checkbox"
                   className="accent-accent"
-                  checked={value.packThemeFilter.includes(theme)}
-                  onChange={() => toggleTheme(theme)}
+                  checked={value.communityPackIds === null}
+                  onChange={(e) => toggleCommunity(e.target.checked)}
                 />
-                {theme}
+                {t("communityToggle")}
+                <span className="font-mono text-xs text-text-secondary">({communityPackCount})</span>
               </label>
-            ))}
-          </div>
-        )}
+              <p className="mt-1 font-mono text-xs text-text-secondary">{t("communityHint")}</p>
+            </>
+          )}
+        </fieldset>
+
+        {officialThemes !== null &&
+          communityPackCount !== null &&
+          officialThemes.length + communityPackCount > 0 &&
+          value.packThemeFilter.length === 0 &&
+          (value.communityPackIds === null ? communityPackCount === 0 : value.communityPackIds.length === 0) && (
+            <p className="mt-3 font-mono text-xs text-danger">{t("chooseThemeOrPack")}</p>
+          )}
       </fieldset>
 
       <fieldset className="border-t border-white/5 pt-4">
-        <legend className="mb-1 font-mono text-xs uppercase tracking-widest text-text-secondary">
-          {t("communityLegend")}
-        </legend>
-        {communityPackCount === null ? (
-          <p className="font-mono text-xs text-text-secondary">{t("communityLoading")}</p>
-        ) : communityPackCount === 0 ? (
-          <p className="font-mono text-xs text-text-secondary">{t("communityEmpty")}</p>
-        ) : (
-          <>
-            <label className="flex items-center gap-2 font-mono text-sm text-text-primary">
-              <input
-                type="checkbox"
-                className="accent-accent"
-                checked={value.communityPackIds === null}
-                onChange={(e) => toggleCommunity(e.target.checked)}
-              />
-              {t("communityToggle")}
-              <span className="font-mono text-xs text-text-secondary">({communityPackCount})</span>
-            </label>
-            <p className="mt-1 font-mono text-xs text-text-secondary">{t("communityHint")}</p>
-          </>
-        )}
-      </fieldset>
-
-      {officialThemes !== null &&
-        communityPackCount !== null &&
-        officialThemes.length + communityPackCount > 0 &&
-        value.packThemeFilter.length === 0 &&
-        (value.communityPackIds === null ? communityPackCount === 0 : value.communityPackIds.length === 0) && (
-          <p className="font-mono text-xs text-danger">{t("chooseThemeOrPack")}</p>
-        )}
-
-      <fieldset className="border-t border-white/5 pt-4">
-        <legend className="mb-2 font-mono text-xs uppercase tracking-widest text-text-secondary">
-          {t("modesLegend")}
-        </legend>
+        <legend className={groupLegendClass}>{t("modesLegend")}</legend>
         <div className="flex flex-col divide-y divide-white/5 rounded-md border border-white/10">
           <div className="p-3">
             <label className="flex items-center gap-2 font-mono text-sm text-text-primary">

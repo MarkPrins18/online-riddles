@@ -78,6 +78,8 @@
     "error": "Kon het spel niet starten. Probeer het opnieuw."
   },
   "RoomSettingsForm": {
+    "roundsLegend": "Tijd & rondes",
+    "puzzlesLegend": "Puzzels",
     "durationLabel": "Tijd per ronde",
     "duration5": "5 minuten",
     "duration10": "10 minuten",

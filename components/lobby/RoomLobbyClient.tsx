@@ -96,9 +96,6 @@ export function RoomLobbyClient({ code }: { code: string }) {
         isHost ? (
           <>
             <Card>
-              <p className={CARD_TITLE_CLASS}>
-                {t("settingsHeading")}
-              </p>
               <RoomSettingsForm
                 supabase={supabase}
                 value={roomSettings}

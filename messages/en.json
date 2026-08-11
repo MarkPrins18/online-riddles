@@ -95,6 +95,7 @@
     "communityToggle": "Include community packs",
     "communityHint": "Riddles made by other players, separate from the official themes above.",
     "chooseThemeOrPack": "Choose at least one theme or community pack.",
+    "modesLegend": "Game modes",
     "hardcoreToggle": "Hardcore mode (shared team lives)",
     "hardcoreHint": "Every wrong guess costs the whole team 1 life. At 0 lives, it's game over for the whole session.",
     "teamLivesLabelWithNarrator": "{name} decides: how many lives does the team get?",

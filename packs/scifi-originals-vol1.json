@@ -7,68 +7,68 @@
   },
   "puzzles": [
     {
-      "title": "Radiostilte met een bericht erin",
-      "scenario": "Een ruimtestation meldt urenlang totale radiostilte naar de aarde, en toch komt op het exacte moment dat de stilte eindigt een bericht binnen dat zegt: 'we hebben net iets vreemds gezien', zonder tijdstempel van eerder verzenden.",
-      "solution": "De bemanning schreef het bericht tijdens de stilte, maar stuurde het pas na afloop van een geplande radiostilte-test voor onderhoud aan de antenne. Het leek te ontstaan op het moment dat de verbinding terugkwam, terwijl het al eerder was opgesteld.",
+      "title": "Drie seconden ruis, aan het begin van elk bericht",
+      "scenario": "Elk bericht dat een ruimtestation naar de aarde stuurt, begint met exact drie seconden ruis, ongeacht wie het opneemt of vanuit welke ruimte aan boord.",
+      "solution": "De communicatieofficier tikt uit gewoonte altijd twee keer op de microfoon voor hij begint te praten, een tic uit zijn tijd bij een grondstation waar dat nodig was om de zender te wekken. Op het station is dat allang niet meer nodig, maar de gewoonte zit er zo ingesleten in dat niemand er nog naar vraagt.",
       "category": "Communicatie",
       "difficulty": "easy",
-      "hint": "Schrijven en verzenden hoeven niet op hetzelfde moment te gebeuren."
+      "hint": "Ligt het probleem bij de zender, de ontvanger, of bij wie op de knop drukt?"
     },
     {
-      "title": "Een luik dat zichzelf opende",
-      "scenario": "Op een onbemand deel van een ruimtestation registreert het logboek dat een airlock is geopend en weer gesloten, terwijl volgens de bemanningslijst niemand op dat moment in de buurt was.",
-      "solution": "Een onderhoudsrobot voerde een geprogrammeerde drukcontrole uit die door een verouderd classificatiesysteem als 'menselijke toegang' werd gelogd. Het systeem had nooit geleerd robots van bemanning te onderscheiden.",
+      "title": "Koffie die elke week een beetje kouder wordt",
+      "scenario": "Het koffiezetapparaat op een ruimtestation zet de koffie iedere week een fractie kouder, geleidelijk aan, terwijl het apparaat zelf geen storing meldt en de verwarmingselementen bij controle prima werken.",
+      "solution": "Sinds de ingebruikname van een nieuwe onderzoeksmodule trekt het station op piekmomenten meer stroom, en het koffiezetapparaat deelt een stroomkring met die module. Een steeds kleinere spanningsmarge is precies genoeg om het verwarmingselement iets minder hard te laten werken, week na week, tot een technicus het uiteindelijk niet bij het apparaat maar bij het stroombudget zoekt.",
       "category": "Techniek",
       "difficulty": "medium",
-      "hint": "Meet het logboek wie er langskwam, of wat er langskwam?"
+      "hint": "Is het probleem van het apparaat zelf, of van wat het apparaat moet delen met de rest van het station?"
     },
     {
-      "title": "Een planeet die van plaats leek te wisselen",
-      "scenario": "Sterrenkundigen zien een verre planeet binnen één nacht van positie ten opzichte van zijn ster lijken te veranderen, op een manier die in geen enkel bekend baanmodel past.",
-      "solution": "Niet de planeet bewoog, maar een dichterbij gelegen, nog niet gecatalogiseerde ijsplaneet in hun eigen zonnestelsel schoof kortstondig voor de waarnemingslijn. De telescoop volgde tijdelijk het verkeerde lichtpunt en verwarde het met de bekende planeet.",
+      "title": "Een ster die knippert in een verdacht regelmatig patroon",
+      "scenario": "Sterrenkundigen zien de helderheid van een verre ster in een opvallend regelmatig ritme flikkeren, genoeg om even te hopen op een buitenaards signaal, tot het patroon wordt nagetrokken.",
+      "solution": "Een nieuw onderhoudsrobotje op de steunarm van de telescoop passeert tijdens zijn vaste schoonmaakroute periodiek een deel van de opening, en onderbreekt daarbij vanuit precies die hoek steeds even het sterlicht. Het signaal kwam niet van de ster, maar van het observatorium zelf.",
       "category": "Astronomie",
       "difficulty": "medium",
-      "hint": "Ligt alles wat je ziet ook echt zo ver weg als je denkt?"
+      "hint": "Kijk niet verder de ruimte in, maar dichterbij: staat er iets tussen de telescoop en de ster?"
     },
     {
-      "title": "Eén bemanningslid te veel",
-      "scenario": "Bij de laatste hoofdtelling voor een lange vlucht telt het systeem één bemanningslid meer dan er namen op de passagierslijst staan, en niemand aan boord herkent een onbekend gezicht.",
-      "solution": "Een stagiair-technicus was zonder dit formeel te melden aan boord gebleven om een laatste reparatie af te ronden, en werd per ongeluk niet van het schip gehaald voor vertrek. Het systeem telde correct, alleen de papieren waren niet bijgewerkt.",
+      "title": "Ze antwoordt voor haar naam wordt genoemd",
+      "scenario": "Bij de dagelijkse hoofdtelling aan boord zegt een bemanningslid steevast al 'aanwezig' voor haar naam eigenlijk wordt afgeroepen, twee volle seconden te vroeg, elke dag opnieuw.",
+      "solution": "Ze kent de volgorde van de hoofdtelling na jaren dienst uit haar hoofd en weet precies wanneer haar naam eraan komt. Ze antwoordt gewoon iets te vroeg uit pure gewoonte, niet omdat er iets vreemds aan de hand is.",
       "category": "Bemanning",
       "difficulty": "easy",
-      "hint": "Is het systeem fout, of de lijst?"
+      "hint": "Hoe lang doet ze deze hoofdtelling al, en wat zou dat met haar reactietijd doen?"
     },
     {
-      "title": "Een signaal uit een dode zone",
-      "scenario": "Een grondstation ontvangt weken nadat een verkenningssonde definitief dood is verklaard, plots opnieuw zwakke, regelmatige signalen uit dezelfde richting.",
-      "solution": "Zonlicht op de zonnepanelen bouwde nog altijd genoeg lading op om periodiek een laagenergie-noodbaken te activeren, ontworpen om te blijven zenden zolang er ook maar een beetje stroom is. De sonde zelf functioneerde allang niet meer, alleen dat ene systeem hield het langer vol.",
+      "title": "Een sonde meldt zich, twee jaar later, vanaf de verkeerde plek",
+      "scenario": "Een verkenningssonde werd na een zware zonnestorm als verloren beschouwd toen het contact wegviel. Twee jaar later stuurt hij plots weer feilloze data, maar niet vanaf het traject waarop hij voor het laatst is gevolgd, vanaf een volledig andere, nooit voorspelde koers.",
+      "solution": "De storm beschadigde tijdelijk de primaire navigatiechip, waardoor de sonde twee jaar lang ongecorrigeerd is afgedreven op de noodstroom van zijn reservesystemen. Pas toen de zonnepanelen na al die tijd genoeg lading hadden opgebouwd voor een volledige herstart, kwamen navigatie en communicatie weer online, op een positie die intussen ver van de oude voorspelling lag.",
       "category": "Techniek",
       "difficulty": "hard",
-      "hint": "Een systeem kan langer 'leven' dan de rest van het toestel."
+      "hint": "De sonde loog niet over zijn positie. De oude voorspelling gold gewoon niet meer na de storm."
     },
     {
-      "title": "Twee klokken, drie seconden verschil",
-      "scenario": "Twee identieke boordklokken op hetzelfde ruimteschip, naast elkaar gemonteerd en op dezelfde bron aangesloten, lopen na een lange vlucht drie seconden uit elkaar, zonder storing of defect, herhaald bevestigd door onderhoud.",
-      "solution": "Eén klok hing dichter bij de krachtige generator van het schip en ondervond daardoor een minuscuul sterker zwaartekrachtveld. Door tijdsdilatatie liep die klok een fractie langzamer, precies zoals de natuurkunde voorspelt: geen fout, maar een feit.",
+      "title": "Twee identieke luiken, twee heel verschillende krachten nodig",
+      "scenario": "Aan weerszijden van een ruimtestation zitten twee identieke airlocks, altijd samen onderhouden en getest. Toch kost het opeens duidelijk meer kracht om de ene open te krijgen dan de andere, terwijl monteurs geen enkel mechanisch mankement vinden.",
+      "solution": "De stroeve airlock ligt al maandenlang, door de huidige stand van de baan, voortdurend in fel, ongefilterd zonlicht, terwijl de andere in de schaduw van het station blijft. Het metalen kozijn aan de zonzijde is door de warmte een fractie uitgezet, precies genoeg om extra wrijving te geven, terwijl het kozijn aan de schaduwzijde op temperatuur is gebleven.",
       "category": "Techniek",
       "difficulty": "hard",
-      "hint": "Twee klokken op exact dezelfde plek lopen altijd gelijk. Deze twee hingen niet op exact dezelfde plek."
+      "hint": "Vraag niet wat er stuk is, maar welke kant van het station meer zon krijgt dan de andere."
     },
     {
-      "title": "Een luik zonder indringer",
-      "scenario": "Bemanningsleden vinden een voorraadluik open en de inhoud deels verdwenen, terwijl de toegangslogs laten zien dat er niemand is binnengeweest sinds de laatste inventarisatie.",
-      "solution": "Testdieren van een biologie-experiment aan boord waren via een ventilatiekoker ontsnapt en hadden zelf voedsel uit het luik weggesleept. De logs registreerden terecht geen mens: er was ook geen mens.",
+      "title": "Elke week precies één eiwitreep te weinig",
+      "scenario": "Bij de wekelijkse voorraadtelling in een afgesloten opslagkast mist er steevast precies één eiwitreep, terwijl het slimme slot nooit is geforceerd en maar twee bemanningsleden de toegangscode kennen.",
+      "solution": "Het nieuwste bemanningslid vindt haar rantsoen te krap voor haar trainingsschema en pakt stilletjes wekelijks één extra reep, maar vult de kast de week erna telkens weer aan vanuit haar eigen persoonlijke voorraad, uit gêne om het gewoon te vragen. Op elk afzonderlijk telmoment lijkt er dus precies één te ontbreken, ook al klopt het over twee weken gerekend weer.",
       "category": "Voorraad",
       "difficulty": "medium",
-      "hint": "De logs meten mensen. Was het wel een mens?"
+      "hint": "Is de reep echt weg, of ligt het probleem in wanneer er precies wordt geteld?"
     },
     {
-      "title": "Eén stem, twee plekken tegelijk",
-      "scenario": "Tijdens een briefing horen twee bemanningsleden, in verschillende delen van het schip, tegelijk dezelfde collega live tegen hen praten via de intercom, terwijl die collega zegt op geen van beide plekken te zijn geweest.",
-      "solution": "Hij had zijn koptelefoon met live-doorschakeling per ongeluk aan laten staan tijdens een test van een nieuw intercomsysteem, dat zijn stem naar alle actieve kanalen tegelijk stuurde in plaats van naar één. Hij praatte gewoon in zichzelf, zonder te weten dat het hele schip meeluisterde.",
+      "title": "Berichten voor iemand die niemand aan boord kent",
+      "scenario": "Een bemanningslid krijgt een week lang privéberichten op zijn kajuitterminal die duidelijk voor iemand anders bedoeld zijn, ondertekend met een naam die niemand aan boord herkent, vol details over stationsroddels, tot ze plots stoppen.",
+      "solution": "Een tijdelijke onderhoudsmonteur had voor haar vertrek haar terminal-ID gekoppeld aan een doorstuurregel naar haar grondaccount. Toen die ID later werd hergebruikt voor dit bemanningslid, bleef de oude doorstuurregel per ongeluk actief, tot een beheerder bij een routinecontrole de accountlijst opschoonde.",
       "category": "Communicatie",
       "difficulty": "medium",
-      "hint": "Was hij zich ervan bewust dat hij werd doorgeschakeld?"
+      "hint": "Is deze terminal-ID er altijd al geweest, of heeft hij ooit een andere eigenaar gehad?"
     }
   ]
 }

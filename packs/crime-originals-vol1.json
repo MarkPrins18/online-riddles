@@ -7,68 +7,68 @@
   },
   "puzzles": [
     {
-      "title": "De nachtelijke bezoeker",
-      "scenario": "De juwelier zucht van opluchting als hij zijn kluis 's ochtends gesloten vindt. Het digitale logboek vertelt echter een ander verhaal: de kluis is die nacht drie keer geopend en weer gesloten, terwijl alleen de juwelier de code kent.",
-      "solution": "De nachtwaker, die gokschulden had, had de juwelier maandenlang bespioneerd en de code afgekeken. Hij opende de kluis meerdere keren voor kleine, onopvallende diefstallen om zijn schuldeisers af te betalen, in de hoop dat de kleine verliezen niet zouden opvallen.",
+      "title": "Precies hetzelfde tekort, elke donderdag",
+      "scenario": "Bij een kleine boekwinkel klopt de kassa aan het eind van de dag nooit helemaal, maar alleen op donderdag, en altijd met exact hetzelfde kleine bedrag, terwijl de ochtendtelling die dag steeds gewoon klopt.",
+      "solution": "Een parttime medewerker die alleen op donderdag werkt, trakteert zichzelf steevast op een koffie van het kleine hoekje met versnaperingen zonder die netjes aan te slaan, telkens van plan het later zelf bij te leggen, en telkens vergeten voor de volgende dienst. Het bedrag is te klein om hem ooit te laten denken dat het ertoe doet.",
       "category": "Interne diefstal",
       "difficulty": "medium",
-      "hint": "De code was niet het enige geheim dat de juwelier had moeten bewaken."
+      "hint": "Waarom juist die ene dag, en wie werkt er alleen op die dag?"
     },
     {
-      "title": "De handtekening van een geest",
-      "scenario": "Bij het openen van het testament van een rijke weduwe, ontdekt de notaris iets vreemds. Er staan twee handtekeningen, weken na elkaar gezet. Maar de vrouw was de laatste maand van haar leven volledig verlamd aan haar rechterhand.",
-      "solution": "Haar toegewijde verzorgster, die wist dat ze onterfd zou worden, had maandenlang het handschrift van de vrouw geoefend. Na de verlamming gebruikte ze haar 'talent' om een laatste, frauduleuze wijziging in het testament aan te brengen die haar tot hoofderfgenaam maakte.",
+      "title": "Een handtekening, drie dagen na zijn overlijden",
+      "scenario": "Een goed doel ontvangt al tien jaar ieder jaar dezelfde donatiebrief van een welgestelde schenker, steeds met een identieke, sierlijke handtekening. Dit jaar blijkt de brief drie dagen na zijn bevestigde overlijdensdatum te zijn verstuurd.",
+      "solution": "De schenker liet, wetend dat zijn gezondheid achteruitging, jaren geleden samen met zijn advocaat een hele reeks brieven vooraf ondertekenen en dateren, om automatisch elk jaar te worden verstuurd, ongeacht zijn gezondheid. Zo zou de financiering van het goede doel nooit merkbaar stokken, zelfs niet in het jaar dat hij stierf. De handtekening was echt, alleen jaren ouder dan de postdatum deed vermoeden.",
       "category": "Vervalsing",
       "difficulty": "hard",
-      "hint": "Wie had toegang tot haar verleden en kon haar toekomst herschrijven?"
+      "hint": "Is de handtekening vals, of is alleen het moment van versturen later dan je zou verwachten?"
     },
     {
-      "title": "De getuige met het glazen oog",
-      "scenario": "Een man meldt zich op het bureau, duidelijk in shock na een overval. Ondanks de duisternis en de chaos, is zijn beschrijving van de dader vlijmscherp: het vage litteken bij de slaap, de dure aftershave, de nerveuze tik met zijn vingers. Te scherp, misschien.",
-      "solution": "De 'getuige' is de dader. Overweldigd door adrenaline en paranoia na zijn daad, verzint hij een list om de politie op een dwaalspoor te brengen. Hij geeft een perfecte beschrijving van zichzelf, een gedetailleerd zelfportret, in de hoop dat de politie op zoek gaat naar een fantoom terwijl hij vrijuit gaat.",
+      "title": "Geen slot geforceerd, toch ingebroken",
+      "scenario": "Een inbraakslachtoffer is stellig: de dief moet een sleutel hebben gehad, want er is geen slot geforceerd. Toch bezweert de slotenmaker die het huis vorige maand heeft omgezet, dat hij alleen aan de bewoner zelf een sleutel heeft afgegeven.",
+      "solution": "De tienerzoon van de bewoner had maanden eerder, zonder het te zeggen, zelf een reservesleutel laten bijmaken bij een bouwmarkt en die verloren op een feestje, aan een sleutelhanger met een onvoorzichtig bevestigd labeltje met het huisadres erop. Wie de sleutel oppikte, wist zo precies welke deur hij opende.",
       "category": "Vals spoor",
       "difficulty": "medium",
-      "hint": "Zijn ogen zagen niet de overvaller, maar zijn eigen spiegelbeeld."
+      "hint": "De slotenmaker gaf maar één sleutel af. Is er sindsdien nog een tweede bijgekomen, buiten hem om?"
     },
     {
-      "title": "De lekkage uit het verleden",
-      "scenario": "Een verzekeringsagent behandelt een claim voor aanzienlijke waterschade. Alles lijkt in orde, totdat hij ontdekt dat de 'gedupeerde' eigenaar het pand drie maanden geleden heeft verkocht aan een nietsvermoedende koper.",
-      "solution": "De verkoper had de waterschade bewust verzwegen bij de verkoop. Toen hij merkte dat de verzekeringspolis nog op zijn naam stond, diende hij een claim in voor de 'recente' schade. Hij gokte erop dat de nieuwe eigenaar de oude schade niet zou opmerken en hij dubbel kon cashen.",
+      "title": "Jarenlang dezelfde ronde bedragen voor 'kantoorbenodigdheden'",
+      "scenario": "Een kleine ondernemer wordt verdacht van fiscale fraude nadat controleurs jarenlang verdacht ronde, bijna identieke uitgaven voor 'kantoorbenodigdheden' vinden, terwijl hij zweert het merendeel van die facturen nooit zelf te hebben ingediend.",
+      "solution": "Zijn boekhouder verduisterde al jaren geld bij meerdere kleine klanten tegelijk, door bij elk van hen de post kantoorbenodigdheden maandelijks met een bescheiden, moeilijk opvallend bedrag op te hogen en het verschil via een tussenrekening naar zichzelf door te sluizen. Pas toen een nieuwe controleur meerdere klanten van dezelfde boekhouder naast elkaar legde, viel het identieke patroon over compleet losstaande bedrijven op.",
       "category": "Fraude",
       "difficulty": "hard",
-      "hint": "Het geld stroomde niet uit de leidingen, maar uit zijn hebzucht."
+      "hint": "Kijk niet naar één bedrijf, maar naar wie de boekhouding van meerdere bedrijven tegelijk doet."
     },
     {
-      "title": "De stilte van de sensor",
-      "scenario": "Inbrekers breken een kantoorpand binnen via een zwaar beveiligde deur. Het alarm ging nooit af. Uit onderzoek blijkt dat de deursensor al weken offline was, zonder dat er ooit een storingsmelding is verstuurd.",
-      "solution": "Een corrupte monteur van het beveiligingsbedrijf had de sensor opzettelijk gemanipuleerd. Hij gebruikte het 'offline' raamwerk om 's nachts ongestoord goederen uit het magazijn te stelen voor zijn eigen handeltje. De inbrekers profiteerden, zonder het te weten, van zijn interne operatie.",
+      "title": "Elf minuten herhaalde beelden, elke nacht op een ander moment",
+      "scenario": "De beveiligingscamera's van een magazijn leveren al maanden feilloze nachtbeelden, tot onderzoekers ontdekken dat elke nacht, op een steeds ander tijdstip, elf minuten lang gewoon de beelden van de vorige nacht worden afgespeeld in plaats van live beeld.",
+      "solution": "De nachtwaker bezorgt tijdens de rustige uren van zijn dienst stiekem eten via een bezorgapp en had het systeem maanden geleden zo ingesteld dat het elke keer een schoon fragment van elf minuten herhaalt terwijl hij weg is. Het tijdstip verschilt steeds omdat zijn bezorgopdrachten onvoorspelbaar binnenkomen. Het was nooit bedoeld om diefstal te dekken, alleen zijn bijbaantje, tot een routinecontrole van de metadata het aan het licht bracht.",
       "category": "Beveiligingsfraude",
       "difficulty": "hard",
-      "hint": "De dief zat niet buiten, maar binnen het systeem."
+      "hint": "Is het gat in de bewaking gepland rond een misdaad, of rond iets anders wat de bewaker die avond doet?"
     },
     {
-      "title": "De dubbele bagage",
-      "scenario": "Een bagage-afhandelaar op het vliegveld fronst. Hij ziet een koffer met hetzelfde label en dezelfde bestemming voor de tweede keer op de band voorbijkomen. De passagier van die koffer zit al lang en breed in het vliegtuig.",
-      "solution": "Een smokkelaar binnen het bagagepersoneel had het systeem door. Hij printte een duplicaat van een bestaand bagagelabel en plakte dat op een koffer vol smokkelwaar. Zo kon zijn eigen koffer meeliften op een legitieme vlucht, terwijl de originele koffer van de passagier gewoon aan boord ging.",
+      "title": "Veertig kilo te zwaar, twee jaar lang genegeerd",
+      "scenario": "Een bepaalde vrachtcontainer wordt al twee jaar zonder problemen ingeklaard op dezelfde route, maar weegt bij aankomst steevast veertig kilo meer dan op de vrachtbrief staat, terwijl de zegels nooit sporen van geknoei vertonen en er zichtbaar niets is toegevoegd.",
+      "solution": "De koelinstallatie van de container, speciaal aangepast voor deze route, heeft een valse bodem in het koelmiddelreservoir waarin de exporteur een dicht, houdbaar goed verpakt in een inerte gel smokkelt. Het gewichtsverschil werd twee jaar lang afgedaan als een bekende afwijking van de weegschaal van die ene container, tot een nieuwe controleur genoeg had van die uitleg en de container liet demonteren.",
       "category": "Smokkel",
       "difficulty": "hard",
-      "hint": "Het label was echt, maar de inhoud was vals."
+      "hint": "Zoek niet in de lading zelf, maar in wat er standaard al in de container zit en nooit wordt gecontroleerd."
     },
     {
-      "title": "De spookleverancier",
-      "scenario": "Een nieuwe, ambitieuze boekhouder duikt in de administratie en stuit op een mysterie. Een bepaalde leverancier wordt al jaren stipt betaald voor geleverde goederen, maar niemand in het bedrijf heeft ooit van hen gehoord, laat staan gezien.",
-      "solution": "De vorige, malafide boekhouder had een spookbedrijf opgericht op naam van zijn schoonmoeder. Jarenlang betaalde hij valse facturen aan 'zichzelf'. Toen hij met pensioen ging, liet hij de automatische betalingen gewoon doorlopen, gokkend op de onoplettendheid van zijn opvolger.",
+      "title": "De storting klopt nooit helemaal",
+      "scenario": "Een cafébaas telt en verpakt elke week zelf precies het juiste bedrag aan contant geld voor de bankstorting, maar op zijn rekening komt telkens een bedrag binnen dat naar beneden is afgerond op een heel tientje.",
+      "solution": "De baliemedewerker die zijn storting al jaren verwerkt, steekt bij elke transactie het kleine resterende wisselgeld zelf in eigen zak, ervan uitgaand dat een ondernemer met vaste, regelmatige stortingen een verschil van een paar euro nooit zou opmerken of de moeite van melden waard vindt. Pas na een belastingcontrole, waarbij hij voor het eerst zelf alles nauwkeurig bijhoudt, valt het patroon hem op.",
       "category": "Fraude",
       "difficulty": "medium",
-      "hint": "De leverancier bestond alleen op papier, en op een bankrekening."
+      "hint": "Is het verschil bij hem ontstaan, voordat hij is gaan tellen, of erna, bij wie het geld ontvangt?"
     },
     {
-      "title": "Het einde van het spoor",
-      "scenario": "Na een kunstroof volgen speurhonden het geurspoor van de dief feilloos door de stad. Het spoor leidt naar een drukke busterminal en stopt daar abrupt. Er is rond die tijd echter geen bus of taxi vertrokken.",
-      "solution": "De dief was een meester in misleiding. Hij droeg schoenen die hij had gestolen van een dakloze man die vaak bij de terminal sliep. Na de roof, rende hij naar de terminal, en wisselde de schoenen om voor zijn eigen paar. De honden volgden het spoor van de dakloze, niet van de dief.",
+      "title": "De vluchtauto staat precies waar de camera's niets zien",
+      "scenario": "Na een overval wordt de vluchtauto teruggevonden precies op de plek waar de verkeerscamera's een blinde vlek hebben. Rechercheurs snappen er niets van: elke route naar die plek had minstens één werkende camera moeten passeren, maar geen enkele registreert een overeenkomstig voertuig.",
+      "solution": "De dief reed zijn eigen vluchtauto daar helemaal niet naartoe. Hij huurde via een deelautodienst een identiek model, reed via achterafwegen zonder camera's naar de blinde vlek, en liep het laatste stukje om over te stappen op zijn echte auto, die een tegen contant geld ingehuurde chauffeur, die van niets wist, uren eerder al doodgewoon als 'gewone huurauto-inlevering' had geparkeerd.",
       "category": "Vals spoor",
       "difficulty": "medium",
-      "hint": "De honden volgden de juiste geur, maar de verkeerde man."
+      "hint": "Zoek niet naar de auto die de dief zelf bestuurde op weg naar de blinde vlek. Reed hij daar wel echt naartoe?"
     }
   ]
 }

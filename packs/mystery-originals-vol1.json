@@ -7,68 +7,68 @@
   },
   "puzzles": [
     {
-      "title": "Eén pakketje, drie keer bezorgd",
-      "scenario": "Een vrouw krijgt in één week driemaal hetzelfde pakketje bezorgd, telkens onbeschadigd, telkens met haar naam correct erop, terwijl ze maar één keer iets heeft besteld.",
-      "solution": "Haar nieuwe buurman gaf per ongeluk hetzelfde huisnummer op bij een abonnementsdienst voor een cadeau aan zijn moeder, die toevallig dezelfde voornaam heeft. De bezorger levert steeds af op het adres dat het systeem aangeeft, niet bij de juiste 'haar'.",
+      "title": "Hetzelfde boek, vijf verschillende afzenders",
+      "scenario": "Een man krijgt binnen een jaar vijf keer exact dezelfde roman toegestuurd, telkens tweedehands, telkens door een andere, voor hem onbekende afzender, en telkens zonder begeleidend briefje.",
+      "solution": "Hij noemde die roman maanden eerder terloops in een interview over zijn herstel van een moeilijke periode, als het boek dat hem er doorheen had geholpen. Leden van een online lotgenotengroep die het interview zagen, stuurden hem onafhankelijk van elkaar hun eigen exemplaar, zonder te weten dat anderen hetzelfde deden.",
       "category": "Post",
       "difficulty": "medium",
-      "hint": "Is de naam op het pakje wel voor dezelfde persoon bedoeld?"
+      "hint": "Vraag niet wie de afzenders zijn, maar wat ze toevallig allemaal hebben gelezen of gezien."
     },
     {
-      "title": "Stilte op de vaste tijd",
-      "scenario": "In een flatgebouw valt elke avond om kwart voor acht, minutenlang, alle geluid van de buren stil, geen tv, geen stemmen, geen voetstappen, voordat het gewoon weer verdergaat.",
-      "solution": "Een van de bewoners belt op dat tijdstip met haar dove moeder via een gebarentolk op beeldscherm. De hele familie legt uit gewoonte al het huisgeluid stil, zodat de tolk niets van de mimiek mist door omgevingsgeluid, iets wat ze nooit aan de buren hebben uitgelegd.",
+      "title": "De vuilnisbakken die zichzelf verplaatsten",
+      "scenario": "In een flatgebouw staan elke zondagochtend alle vuilnisbakken al keurig bij de deur van elke bewoner, leeg en schoongespoeld, terwijl niemand toegeeft dat gedaan te hebben en de gemeentelijke ophaaldienst dat zeker niet doet.",
+      "solution": "Een oudere bewoonster, vroeger jarenlang verpleegkundige met een vaste vroege dienst, is al om vijf uur wakker en kan niet stilzitten. Ze zet de bakken zelf buiten, wacht de ophaaldienst op en plaatst ze daarna schoongespoeld voor elke deur terug, zonder dat ooit te vertellen omdat ze het niets bijzonders vindt.",
       "category": "Buren",
       "difficulty": "medium",
-      "hint": "Wie heeft baat bij totale stilte, en waarom juist tijdens een beeldgesprek?"
+      "hint": "Wie in dit gebouw is er altijd als eerste wakker?"
     },
     {
-      "title": "Een tuin die zichzelf onderhield",
-      "scenario": "Een man komt terug van drie weken vakantie en vindt zijn hele tuin keurig gesnoeid, het gras gemaaid en het onkruid weg, terwijl hij niemand een sleutel of toestemming heeft gegeven.",
-      "solution": "Zijn overleden buurvrouw had, voordat ze stierf, een lopend abonnement bij een tuinbedrijf voor zijn tuin afgesloten als verjaardagscadeau, zonder het hem te vertellen. De facturen gaan naar haar rekening, die haar familie nog niet heeft opgezegd.",
+      "title": "Verse bloemen in een leeg appartement",
+      "scenario": "Al een half jaar staat de bovenbuurwoning leeg sinds de vorige huurder naar het buitenland verhuisde, maar op de vensterbank, goed zichtbaar vanaf de straat, staan elke week verse bloemen, terwijl niemand de deur ooit open heeft zien gaan.",
+      "solution": "De makelaar die de woning nog altijd probeert te verkopen, ververst de bloemen voor elke bezichtiging om de plek verkoopklaar te laten ogen. Ze plant haar bezoekjes steeds vlak voor of na de gebruikelijke buurttijden, met de reservesleutel die ze van de vorige eigenaar kreeg.",
       "category": "Buren",
       "difficulty": "hard",
-      "hint": "Wie betaalde hiervoor, als hij het zelf niet was?"
+      "hint": "Wie heeft er baat bij dat een lege woning er niet leeg uitziet?"
     },
     {
-      "title": "Een handtas, twee keer gevonden",
-      "scenario": "Een vrouw raakt haar handtas kwijt in de trein, meldt dit bij de balie, en hoort dezelfde dag dat hij tweemaal is ingeleverd, door twee verschillende mensen, op twee verschillende stations.",
-      "solution": "Iemand vond de tas, haalde er wat geld uit, en legde de rest uit schuldgevoel op het volgende station weer ergens zichtbaar neer. Een tweede, eerlijke vinder pikte hem daar op en leverde hem alsnog netjes in. Vandaar twee meldingen voor één tas.",
+      "title": "De stoel die nooit bezet raakt",
+      "scenario": "In een spitstrein ligt iedere ochtend op precies dezelfde plek een handgeschreven bordje 'gereserveerd', terwijl de conducteur bevestigt dat er nooit officieel iets is gereserveerd en de trein toch overvol zit.",
+      "solution": "Een vaste reiziger maakte deze rit dertig jaar lang samen met zijn vrouw, tot ze vorig jaar overleed. De conducteur, die hen al die jaren kende, legt elke ochtend voor de man aan boord komt het bordje neer, zodat de plek naast hem leeg blijft zonder dat hij ooit hoeft te vragen waarom.",
       "category": "Openbaar vervoer",
       "difficulty": "medium",
-      "hint": "Moet elke vinder ook de eerste zijn?"
+      "hint": "Vraag je niet af wie de plek claimt, maar voor wie hij leeg blijft."
     },
     {
-      "title": "De meterstand die de verkeerde kant op ging",
-      "scenario": "Een man betaalt al jaren trouw zijn energierekening, maar de meterstanden erop dalen soms van maand tot maand in plaats van te stijgen, ook al gebruikt hij nooit minder stroom dan de vorige maand.",
-      "solution": "Zijn slimme meter deelt door een bekabelingsfout af en toe data met die van de buren, die minder verbruiken. De energieleverancier verwerkt bij vergissing soms hún lagere cijfer in plaats van het zijne, iets wat pas opvalt bij een handmatige controle.",
+      "title": "Water dat 's nachts stroomt in een slapend huis",
+      "scenario": "Bij een gezin registreert de watermeter al maanden een flinke piek in verbruik, elke nacht tussen drie en vier uur, terwijl iedereen dan slaapt en een loodgieter geen enkele lekkage in huis kan vinden.",
+      "solution": "Onder het gazon zit een oude, professioneel aangelegde beregeningsinstallatie van de vorige eigenaar, nooit gemeld bij de verkoop. Na een stroomstoring is de timer teruggevallen op zijn oorspronkelijke fabrieksschema en sproeit hij midden in de nacht water over een border die er allang niet meer ligt.",
       "category": "Nutsvoorzieningen",
       "difficulty": "hard",
-      "hint": "Is dit wel altijd zijn eigen meter die wordt afgelezen?"
+      "hint": "Het water verlaat het huis misschien wel, voordat iemand het ooit binnen gebruikt."
     },
     {
-      "title": "Een cadeau zonder afzender",
-      "scenario": "Elk jaar op precies dezelfde dag ontvangt een man een klein, ongesigneerd cadeau per post, al sinds zijn twintigste, nooit een kaartje, nooit een poststempel uit dezelfde stad.",
-      "solution": "Een oude leraar, die hem ooit uit een moeilijke thuissituatie hielp, stuurt het elk jaar anoniem op zijn verjaardag als bemoediging. Hij vraagt steeds een ander familielid dat op reis is om het onderweg op de bus te doen, zodat de stempel nooit hetzelfde is.",
+      "title": "Eén bloem op de ruitenwisser, elk jaar opnieuw",
+      "scenario": "Op haar verjaardag vindt een vrouw al meer dan tien jaar telkens één verse bloem onder de ruitenwisser van haar auto, altijd dezelfde soort, altijd weg voordat iemand anders het kan zien, ook nadat ze drie keer is verhuisd.",
+      "solution": "Haar vader deed dit ieder jaar toen ze nog thuis woonde. Na zijn overlijden zette haar moeder de gewoonte in het geheim voort, kwam via gewone gesprekken telkens haar nieuwe adres te weten, en legt de bloem voor zonsopgang neer op weg naar haar vrijwilligersdienst, zonder ooit de eer op te eisen omdat het altijd zijn gewoonte was.",
       "category": "Verjaardag",
       "difficulty": "hard",
-      "hint": "De stempel verandert, de bedoeling niet."
+      "hint": "Wie zou, jaar na jaar, altijd weten waar ze nu woont?"
     },
     {
-      "title": "De hond die een omweg koos",
-      "scenario": "Een blinde vrouw merkt dat haar geleidehond haar al weken een langere, omslachtige route naar de supermarkt laat lopen, terwijl de kortere route al jaren hetzelfde en veilig is.",
-      "solution": "Op de korte route is een oud pand deels ingestort en afgezet met bouwhekken die de hond, getraind om obstakels te vermijden, gewoon zelf omzeilt, zonder dat de vrouw ooit heeft geweten waarom, tot de gemeente het pand uiteindelijk sloopt.",
+      "title": "De kat die de deur mijdt",
+      "scenario": "Een huiskat die nog nooit buiten is geweest, weigert elke avond rond zes uur in de buurt van de voordeur te komen, terwijl er in de gang niets anders te zien is dan anders.",
+      "solution": "De hond van de benedenburen wordt elke avond om zes uur precies langs die deur uitgelaten. De kat ruikt en hoort het dier door de kier onder de deur, ook al krijgt de eigenaar de hond zelf nooit te zien.",
       "category": "Dieren",
       "difficulty": "easy",
-      "hint": "Vertrouw de hond. Hij vermijdt iets dat zij niet kan zien."
+      "hint": "Wat kan een kat waarnemen dat een mens door een dichte deur niet opmerkt?"
     },
     {
-      "title": "Dezelfde droom, twee keer wakker",
-      "scenario": "Een echtpaar dat al dertig jaar samen slaapt, vertelt onafhankelijk van elkaar exact dezelfde droom te hebben gehad, in dezelfde nacht, met dezelfde details, iets wat ze nooit eerder is overkomen.",
-      "solution": "Allebei bleven ze de avond ervoor stiekem naar dezelfde griezelige aflevering van een true-crime-podcast luisteren voor het slapen, elk met een koptelefoon op zodat de ander het niet zou merken, zonder te weten dat de ander precies hetzelfde deed.",
+      "title": "Twee kinderen bellen op dezelfde avond",
+      "scenario": "Een moeder krijgt op een doordeweekse avond, voor het eerst in maanden, binnen een kwartier een telefoontje van allebei haar kinderen, die in verschillende steden wonen en elkaar die dag niet hebben gesproken.",
+      "solution": "Die ochtend had de moeder, zonder dat te melden, eindelijk een oude familiefoto geüpload naar een gedeeld familiealbum dat ze al maanden aan het digitaliseren was. Beide kinderen kregen rond dezelfde tijd de meldingsapp-notificatie en belden onafhankelijk van elkaar naar aanleiding van dezelfde foto.",
       "category": "Familie",
       "difficulty": "medium",
-      "hint": "Wat hoorden ze allebei vlak voor het slapen, zonder het van elkaar te weten?"
+      "hint": "Is er vandaag iets gebeurd dat beide kinderen tegelijk, maar apart van elkaar, hebben gezien?"
     }
   ]
 }

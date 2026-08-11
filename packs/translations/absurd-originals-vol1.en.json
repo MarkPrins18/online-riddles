@@ -6,60 +6,60 @@
   },
   "puzzles": [
     {
-      "matchTitle": "De bakker die niemand voedt",
-      "title": "The Baker Who Feeds No One",
-      "scenario": "A baker in a quiet village turns on his oven every night at exactly three o'clock, bakes a single loaf of bread, and then throws it away unused, for months now, without ever having customers before it gets light.",
-      "solution": "Every night he tests a new recipe for a baking competition next month and doesn't want staff or customers to see the result before the judges taste it. Tonight's bread goes in the bin as soon as he's satisfied or dissatisfied with the crust.",
-      "hint": "Not every loaf of bread is meant to be sold."
+      "matchTitle": "Vijf minuten dicht, midden op de dag",
+      "title": "Closed for Five Minutes, Right at Noon",
+      "scenario": "Every day at the stroke of noon, a shopkeeper flips his sign to 'closed' for exactly five minutes, then flips it back, while the lights stay on and he never actually leaves the shop.",
+      "solution": "He's simply eating his sandwich behind the counter and hates the idea of customers watching him chew. That's the whole story.",
+      "hint": "What does he need five minutes for, if he doesn't even leave the shop?"
     },
     {
-      "matchTitle": "Een garage die nooit opengaat",
-      "title": "A Garage That Never Opens",
-      "scenario": "A man pays monthly rent for a garage he never opens, while his own car sits outside in the rain and the garage is right next to his house.",
-      "solution": "The set for the amateur theater play he directs is stored in the garage. He rents it as storage for the club and pays out of his own pocket, because the club's funds are empty. His car has never had anything to do with it.",
-      "hint": "Wonder where his car actually is, not why the garage stays shut."
+      "matchTitle": "Een uur per week in een lege opslagbox",
+      "title": "One Hour a Week in an Empty Storage Unit",
+      "scenario": "For a year, a man has rented a storage unit across town where he spends exactly one hour every Sunday, never carrying anything in or out.",
+      "solution": "The unit holds a drum kit he could never play at home without driving the neighbors mad. The storage facility is far enough from houses that no one complains, and packing the kit up and back down each week would eat into his one free hour, so he just leaves it there.",
+      "hint": "What could you do in a locked room that you couldn't do at home, that has nothing to do with belongings?"
     },
     {
-      "matchTitle": "Twee collega's zonder woorden",
-      "title": "Two Colleagues Without Words",
-      "scenario": "In an office, two colleagues who sit next to each other never exchange a word and communicate only through notes on each other's screen, while they talk normally with the rest of the department.",
-      "solution": "They have a bet running over who can save their voice longest for a marathon read-aloud event this weekend. Talking to each other would break the bet, talking to others wouldn't, because that doesn't count.",
-      "hint": "The silence doesn't apply to everyone, only to each other."
+      "matchTitle": "Nooit een vergadering van precies een half uur",
+      "title": "Never a Meeting of Exactly Half an Hour",
+      "scenario": "A project manager schedules every meeting for exactly forty-nine minutes, never thirty, never an hour, and refuses to explain why whenever someone asks.",
+      "solution": "The room-booking system bills by the quarter hour it rounds up to, with a quirk only he ever bothered to work out: forty-nine minutes is the longest a meeting can run without tipping into the pricier bracket. He saves a few euros a week and finds it just a bit too petty to explain to his team.",
+      "hint": "Don't look at the clock in the meeting room — look at the bill that comes after."
     },
     {
-      "matchTitle": "Twaalf wekkers voor één ochtend",
-      "title": "Twelve Alarm Clocks for One Morning",
-      "scenario": "Every morning, an old man sets exactly twelve identical alarm clocks next to his bed, even though he visibly only needs one per day to wake up.",
-      "solution": "He collects clocks from the bankrupt factory where he worked for forty years and sets them in a different order each night to check whether, after all these years, they all still do what they're supposed to, a check he's never been able to let go of.",
-      "hint": "Not every alarm clock needs to wake him to do its job."
+      "matchTitle": "Altijd de neus naar de uitgang",
+      "title": "Always Nose-Out Toward the Exit",
+      "scenario": "A woman always parks her car nose-out toward the exit, in every spot she's ever used, even in a dead-end driveway where no one would ever need to leave in a hurry.",
+      "solution": "Her father spent years as a dispatcher for the ambulance service and drilled into her that a car ready to pull away can save precious seconds in an emergency. The habit stuck long after the reason behind it faded into the background.",
+      "hint": "Think about who taught her to drive, and what that person did for a living."
     },
     {
-      "matchTitle": "Een kaart uit een stad die ze niet bezoekt",
-      "title": "A Postcard from a City She Doesn't Visit",
-      "scenario": "A woman sends herself a postcard every week, always from the same city, even though she hasn't been there in years.",
-      "solution": "Her son lives in that city and sends the cards in her name, so that the mailman, whose chats she genuinely values, always lingers a moment upon delivery. The card is an excuse for the conversation, not for the news on it.",
-      "hint": "Whoever writes isn't necessarily who she thinks is writing."
+      "matchTitle": "Regen, elke dag, al een jaar lang",
+      "title": "Still Raining, Every Day for a Year",
+      "scenario": "For a year, a man has texted his sister the exact same three words every morning at eight: 'still raining,' even though he lives somewhere it barely rains, and she always just replies with a thumbs-up.",
+      "solution": "It started as a bet with a friend who forgot about it long ago, to spend a year sending a completely meaningless message. His sister found it so funny and boring after a few weeks that the thumbs-up became a fixed part of their mornings, and now he mostly keeps sending it for her.",
+      "hint": "Don't ask why he started. Ask why he never stopped."
     },
     {
-      "matchTitle": "Koffie die nooit wordt opgedronken",
-      "title": "Coffee That's Never Finished",
-      "scenario": "In a small café, the same customer orders a cup of coffee every day that he never finishes, and yet he comes back the next day right on time for a new one.",
-      "solution": "The coffee is his way of reserving a table without having to say so. He comes for the fast wifi signal from the shop next door, which just reaches that one table, and the owner turns a blind eye as long as he orders something.",
-      "hint": "What is he actually paying for, if not the coffee?"
+      "matchTitle": "Precies een kwartier wachten op hetzelfde gerecht",
+      "title": "Exactly Fifteen Minutes for the Same Meal",
+      "scenario": "A regular at a small diner orders the same dish every day, but always asks the waiter to bring it exactly fifteen minutes later, never sooner, even though the kitchen is known for being fast.",
+      "solution": "He needs to take his blood-sugar medication precisely on time with his first bite. His own schedule is too unpredictable, but the diner's fifteen minutes never are, so he built his routine around the kitchen's reliability instead of his own.",
+      "hint": "What has to happen for him exactly on time, right before he eats?"
     },
     {
-      "matchTitle": "Een plant die elk weekend verdwijnt",
-      "title": "A Plant That Disappears Every Weekend",
-      "scenario": "A school class receives a new plant on the windowsill from the janitor every Monday, and every Friday it has vanished without a trace, without anyone ever being seen taking it.",
-      "solution": "The janitor himself picks it up on Friday afternoon to take it home for the weekend for water and light: the classrooms stay shut tight in full sun over the weekend. On Monday he puts a fresh or the same plant back.",
-      "hint": "Who's the only one with a key to every room?"
+      "matchTitle": "De gevonden-voorwerpenbak die elke vrijdag leeg is",
+      "title": "The Lost-and-Found Box That's Empty Every Friday",
+      "scenario": "At a school, the lost-and-found box is always overflowing with sweaters and lunchboxes by Thursday, but it's completely empty every Friday afternoon, though no one has ever seen anyone clear it out.",
+      "solution": "A teacher goes through it every Friday during her lunch break as a kind of private game: she tries to match each item to the right student from memory and returns everything to their lockers herself, so the box goes into the weekend empty.",
+      "hint": "Who at the school knows the students well enough to return unlabeled things to the right person?"
     },
     {
-      "matchTitle": "Een deurbel voor een lege straat",
-      "title": "A Doorbell for an Empty Street",
-      "scenario": "Every evening at exactly nine o'clock, the same doorbell sound rings throughout the entire street, but no one ever answers and no one is ever standing at the door.",
-      "solution": "A neighborhood resident has been testing a new smart doorbell system for months. Due to a factory bug in test mode, his own bell sends the sound to every doorbell in the street instead of just his own, something the supplier only discovers after complaints.",
-      "hint": "Is that the sound of one doorbell, or of an entire system?"
+      "matchTitle": "Alle straatlantaarns doven tegelijk, tien seconden lang",
+      "title": "Every Streetlight Dims at Once, for Ten Seconds",
+      "scenario": "In a new housing estate, every evening at a slightly different time, all the smart streetlights dim in unison for exactly ten seconds, and the grid operator insists nothing is wrong with the power supply.",
+      "solution": "The lights are wired into a city pilot program: whenever a sensor at the animal shelter down the road detects a stray near the main road, the lights dim briefly as a silent signal to a volunteer group's app, with no siren and no notice to residents. The timing just varies, because animals don't keep a schedule.",
+      "hint": "The signal isn't meant for residents. Who is it for, and what triggers it?"
     }
   ]
 }

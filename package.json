@@ -10,7 +10,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "puzzles:import": "tsx scripts/import-puzzles.ts",
-    "puzzles:translate": "tsx scripts/translate-puzzles.ts"
+    "puzzles:translate": "tsx scripts/translate-puzzles.ts",
+    "puzzles:delete": "tsx scripts/delete-pack-puzzles.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.3",

@@ -17,13 +17,22 @@ export function HintSnackbar({ latestHint }: { latestHint: Hint | null }) {
   const seenIdRef = useRef<string | null>(null);
   const t = useTranslations("HintSnackbar");
 
+  const latestHintId = latestHint?.id ?? null;
+
   useEffect(() => {
     if (!latestHint || latestHint.id === seenIdRef.current) return;
     seenIdRef.current = latestHint.id;
     setVisibleHint(latestHint);
     const timer = setTimeout(() => setVisibleHint(null), VISIBLE_MS);
     return () => clearTimeout(timer);
-  }, [latestHint]);
+    // Re-run only when the hint's identity (id) actually changes — `latestHint`
+    // is a fresh object/array reference on nearly every realtime update (chat,
+    // presence, timer ticks) even when it's still the same hint. Depending on
+    // the object itself would re-fire this effect on those unrelated renders,
+    // clearing the dismiss timer via cleanup without scheduling a replacement,
+    // so the snackbar would stick around indefinitely for guessers.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [latestHintId]);
 
   if (!visibleHint) return null;
 

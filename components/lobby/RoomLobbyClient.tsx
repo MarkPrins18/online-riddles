@@ -20,7 +20,7 @@ import { NarratorPicker } from "./NarratorPicker";
 import { RoomSettingsForm } from "./RoomSettingsForm";
 import { LeaveRoomButton } from "./LeaveRoomButton";
 
-const CARD_TITLE_CLASS = "mb-3 font-mono text-base font-bold uppercase tracking-widest text-text-primary";
+const CARD_TITLE_CLASS = "mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary";
 
 export function RoomLobbyClient({ code }: { code: string }) {
   const [playerId, setPlayerId] = useState(() => getStoredPlayerId(code));

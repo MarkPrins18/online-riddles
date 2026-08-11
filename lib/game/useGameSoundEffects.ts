@@ -13,26 +13,26 @@ const TICK_THRESHOLD_SECONDS = 10;
 
 /**
  * Fires short sound/haptic cues on the moments players actually feel
- * tension: a hint becoming available, their own guess resolving, and the
- * final countdown seconds. Driven by refs (not state) so a cue plays
+ * tension: a new hint from the Verteller, their own guess resolving, and
+ * the final countdown seconds. Driven by refs (not state) so a cue plays
  * exactly once per transition, not once per render.
  */
 export function useGameSoundEffects({
-  showHint,
+  latestHintId,
   myLatestGuessId,
   myLatestGuessStatus,
   remainingSeconds,
 }: {
-  showHint: boolean;
+  latestHintId: string | null;
   myLatestGuessId: string | null;
   myLatestGuessStatus: GuessStatus | null;
   remainingSeconds: number | null;
 }) {
-  const prevShowHintRef = useRef(showHint);
+  const prevHintIdRef = useRef(latestHintId);
   useEffect(() => {
-    if (showHint && !prevShowHintRef.current) playHintSound();
-    prevShowHintRef.current = showHint;
-  }, [showHint]);
+    if (latestHintId && latestHintId !== prevHintIdRef.current) playHintSound();
+    prevHintIdRef.current = latestHintId;
+  }, [latestHintId]);
 
   // Keyed on id+status (not status alone) so a second wrong guess still
   // cues even though its status string is the same as the first one's.

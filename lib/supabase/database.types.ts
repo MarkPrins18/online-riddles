@@ -23,6 +23,7 @@ import type { BoardConnection } from "@/types/boardConnection";
 import type { Profile } from "@/types/profile";
 import type { PuzzleVote, PuzzleVoteTotals, VoteValue } from "@/types/vote";
 import type { PackFavorite } from "@/types/packFavorite";
+import type { Hint } from "@/types/hint";
 
 type TableShape<Row, Insert, Update> = {
   Row: Row;
@@ -161,6 +162,18 @@ export type Database = {
           text: string;
         },
         Partial<Guess>
+      >;
+      hints: TableShape<
+        Hint,
+        Partial<Hint> & {
+          room_id: string;
+          puzzle_id: string;
+          player_id: string;
+          player_name: string;
+          text: string;
+          round: number;
+        },
+        Partial<Hint>
       >;
       chat_messages: TableShape<
         ChatMessage,

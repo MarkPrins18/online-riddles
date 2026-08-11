@@ -7,11 +7,13 @@ import type { Player } from "@/types/player";
 import type { Puzzle } from "@/types/puzzle";
 import { QuestionCard } from "./QuestionCard";
 import { NarratorGuessControls } from "./NarratorGuessControls";
+import { NarratorHintForm } from "./NarratorHintForm";
 
 /**
  * The Verteller's default tab: everything that needs a decision right now
  * — unanswered questions and pending solutions — surfaced together instead
- * of buried among the already-answered history.
+ * of buried among the already-answered history. Also where they can send a
+ * hint, entirely at their own initiative (see NarratorHintForm).
  */
 export function NarratorInbox({
   supabase,
@@ -22,6 +24,8 @@ export function NarratorInbox({
   guesses,
   players,
   narratorId,
+  playerId,
+  playerName,
   hardcoreMode,
   teamLivesRemaining,
 }: {
@@ -33,6 +37,8 @@ export function NarratorInbox({
   guesses: Guess[];
   players: Player[];
   narratorId: string | null;
+  playerId: string;
+  playerName: string;
   hardcoreMode: boolean;
   teamLivesRemaining: number | null;
 }) {
@@ -41,6 +47,20 @@ export function NarratorInbox({
 
   return (
     <div className="flex flex-col gap-6">
+      <div>
+        <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary">
+          {t("giveHintHeading")}
+        </p>
+        <NarratorHintForm
+          supabase={supabase}
+          roomId={roomId}
+          puzzleId={puzzle.id}
+          round={round}
+          playerId={playerId}
+          playerName={playerName}
+        />
+      </div>
+
       <div>
         <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary">
           {t("pendingSolutionsHeading")}

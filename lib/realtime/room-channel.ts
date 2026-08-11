@@ -5,6 +5,7 @@ import type { Room } from "@/types/room";
 import type { Question } from "@/types/question";
 import type { Guess } from "@/types/guess";
 import type { ChatMessage } from "@/types/chatMessage";
+import type { Hint } from "@/types/hint";
 import type { ChatMessageReaction } from "@/types/chatMessageReaction";
 import type { CaseLogEntry } from "@/types/caseLog";
 import type { RoundSecret } from "@/types/roundSecret";
@@ -21,6 +22,7 @@ export type RoomChannelHandlers = {
   onQuestionUpdate?: (question: Question) => void;
   onGuessInsert?: (guess: Guess) => void;
   onGuessUpdate?: (guess: Guess) => void;
+  onHintInsert?: (hint: Hint) => void;
   onChatMessageInsert?: (message: ChatMessage) => void;
   onChatReactionInsert?: (reaction: ChatMessageReaction) => void;
   onChatReactionDelete?: (reactionId: string) => void;
@@ -97,6 +99,11 @@ export function subscribeToRoom(
       "postgres_changes",
       { event: "UPDATE", schema: "public", table: "guesses", filter: `room_id=eq.${roomId}` },
       (payload) => handlers.onGuessUpdate?.(payload.new as Guess)
+    )
+    .on(
+      "postgres_changes",
+      { event: "INSERT", schema: "public", table: "hints", filter: `room_id=eq.${roomId}` },
+      (payload) => handlers.onHintInsert?.(payload.new as Hint)
     )
     .on(
       "postgres_changes",

@@ -6,6 +6,7 @@ import { getPlayersInRoom } from "@/lib/supabase/players";
 import { getRoomPuzzle } from "@/lib/supabase/puzzles";
 import { getQuestionsForPuzzle } from "@/lib/supabase/questions";
 import { getGuessesForPuzzle } from "@/lib/supabase/guesses";
+import { getHintsForPuzzle } from "@/lib/supabase/hints";
 import { getChatMessages } from "@/lib/supabase/chatMessages";
 import { getChatMessageReactions } from "@/lib/supabase/chatMessageReactions";
 import { getCaseLogForRoom } from "@/lib/supabase/caseLog";
@@ -49,6 +50,9 @@ export function useGameState(roomCode: string, playerId: string | null = null, l
         const guesses = room.current_puzzle_id
           ? await getGuessesForPuzzle(supabase, room.id, room.current_puzzle_id)
           : [];
+        const hints = room.current_puzzle_id
+          ? await getHintsForPuzzle(supabase, room.id, room.current_puzzle_id)
+          : [];
         const chatMessages = await getChatMessages(supabase, room.id);
         const chatReactions = await getChatMessageReactions(supabase, room.id);
         const caseLog = await getCaseLogForRoom(supabase, room.id);
@@ -72,6 +76,7 @@ export function useGameState(roomCode: string, playerId: string | null = null, l
             puzzle: puzzle ?? undefined,
             questions,
             guesses,
+            hints,
             chatMessages,
             chatReactions,
             caseLog,
@@ -100,6 +105,9 @@ export function useGameState(roomCode: string, playerId: string | null = null, l
             freshRoom.current_puzzle_id
               ? getGuessesForPuzzle(supabase, freshRoom.id, freshRoom.current_puzzle_id)
               : [],
+            freshRoom.current_puzzle_id
+              ? getHintsForPuzzle(supabase, freshRoom.id, freshRoom.current_puzzle_id)
+              : [],
             getChatMessages(supabase, freshRoom.id),
             getChatMessageReactions(supabase, freshRoom.id),
             getCaseLogForRoom(supabase, freshRoom.id),
@@ -116,6 +124,7 @@ export function useGameState(roomCode: string, playerId: string | null = null, l
                 freshPuzzle,
                 freshQuestions,
                 freshGuesses,
+                freshHints,
                 freshChatMessages,
                 freshChatReactions,
                 freshCaseLog,
@@ -130,6 +139,7 @@ export function useGameState(roomCode: string, playerId: string | null = null, l
                     puzzle: freshPuzzle ?? undefined,
                     questions: freshQuestions,
                     guesses: freshGuesses,
+                    hints: freshHints,
                     chatMessages: freshChatMessages,
                     chatReactions: freshChatReactions,
                     caseLog: freshCaseLog,
@@ -163,16 +173,20 @@ export function useGameState(roomCode: string, playerId: string | null = null, l
               getRoomPuzzle(supabase, updated.id, locale),
               getQuestionsForPuzzle(supabase, updated.id, updated.current_puzzle_id),
               getGuessesForPuzzle(supabase, updated.id, updated.current_puzzle_id),
+              getHintsForPuzzle(supabase, updated.id, updated.current_puzzle_id),
               getRoundSecret(supabase, updated.id, updated.round),
               getRoundAccusations(supabase, updated.id, updated.round),
             ])
-              .then(([newPuzzle, newQuestions, newGuesses, newRoundSecret, newRoundAccusations]) => {
-                if (newPuzzle) dispatch({ type: "PUZZLE_LOADED", payload: newPuzzle });
-                dispatch({ type: "QUESTIONS_RELOADED", payload: newQuestions });
-                dispatch({ type: "GUESSES_RELOADED", payload: newGuesses });
-                dispatch({ type: "ROUND_SECRET_LOADED", payload: newRoundSecret });
-                dispatch({ type: "ROUND_ACCUSATIONS_RELOADED", payload: newRoundAccusations });
-              })
+              .then(
+                ([newPuzzle, newQuestions, newGuesses, newHints, newRoundSecret, newRoundAccusations]) => {
+                  if (newPuzzle) dispatch({ type: "PUZZLE_LOADED", payload: newPuzzle });
+                  dispatch({ type: "QUESTIONS_RELOADED", payload: newQuestions });
+                  dispatch({ type: "GUESSES_RELOADED", payload: newGuesses });
+                  dispatch({ type: "HINTS_RELOADED", payload: newHints });
+                  dispatch({ type: "ROUND_SECRET_LOADED", payload: newRoundSecret });
+                  dispatch({ type: "ROUND_ACCUSATIONS_RELOADED", payload: newRoundAccusations });
+                }
+              )
               .catch((error) => {
                 dispatch({
                   type: "ERROR",
@@ -253,6 +267,7 @@ export function useGameState(roomCode: string, playerId: string | null = null, l
           onQuestionUpdate: (question) => dispatch({ type: "QUESTION_ANSWERED", payload: question }),
           onGuessInsert: (guess) => dispatch({ type: "GUESS_SUBMITTED", payload: guess }),
           onGuessUpdate: (guess) => dispatch({ type: "GUESS_UPDATED", payload: guess }),
+          onHintInsert: (hint) => dispatch({ type: "HINT_SENT", payload: hint }),
           onChatMessageInsert: (message) => dispatch({ type: "CHAT_MESSAGE_SENT", payload: message }),
           onChatReactionInsert: (reaction) =>
             dispatch({ type: "CHAT_REACTION_ADDED", payload: reaction }),

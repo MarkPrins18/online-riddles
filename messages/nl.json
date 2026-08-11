@@ -298,9 +298,19 @@
     "empty": "Nog geen vragen gesteld. Begin het verhoor hierboven."
   },
   "NarratorInbox": {
+    "giveHintHeading": "Hint geven",
     "pendingSolutionsHeading": "Openstaande oplossingen",
     "unansweredHeading": "Onbeantwoorde vragen ({count})",
     "allAnswered": "Alles beantwoord, even bijkomen."
+  },
+  "NarratorHintForm": {
+    "placeholder": "Typ een hint voor de spelers...",
+    "ariaLabel": "Hint",
+    "submit": "Hint versturen",
+    "error": "Kon de hint niet versturen. Probeer het opnieuw."
+  },
+  "HintSnackbar": {
+    "label": "💡 Hint van {name}"
   },
   "ChatDrawer": {
     "title": "Overleg"

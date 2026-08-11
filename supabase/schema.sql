@@ -473,6 +473,21 @@ create table if not exists guesses (
   created_at timestamptz not null default now()
 );
 
+-- Narrator-authored hints — purely at the Verteller's own initiative, no
+-- automatic/timer-driven hint exists anymore. One row per hint given (a
+-- narrator may send several over a round); scoped to the specific puzzle
+-- like questions/guesses, so it naturally clears when the round changes.
+create table if not exists hints (
+  id uuid primary key default gen_random_uuid(),
+  room_id uuid not null references rooms (id) on delete cascade,
+  puzzle_id uuid not null references puzzles (id),
+  player_id uuid not null references players (id) on delete cascade,
+  player_name text not null,
+  text text not null,
+  round int not null default 0,
+  created_at timestamptz not null default now()
+);
+
 -- Free-form discussion between players, separate from the structured
 -- vragen-thread to the Verteller. Room-wide (not scoped per puzzle/round).
 create table if not exists chat_messages (
@@ -975,6 +990,14 @@ begin
 end;
 $$;
 
+drop trigger if exists rate_limit_hints on hints;
+create trigger rate_limit_hints
+  before insert on hints
+  for each row execute function enforce_rate_limit(
+    5, 60, 'player_id', 'created_at',
+    'Rustig aan met hints geven — probeer over een minuutje opnieuw.'
+  );
+
 drop trigger if exists rate_limit_chat_messages on chat_messages;
 create trigger rate_limit_chat_messages
   before insert on chat_messages
@@ -1078,6 +1101,11 @@ create trigger moderate_chat_messages
   before insert on chat_messages
   for each row execute function enforce_chat_moderation();
 
+drop trigger if exists moderate_hints on hints;
+create trigger moderate_hints
+  before insert on hints
+  for each row execute function enforce_chat_moderation();
+
 drop trigger if exists moderate_board_items on board_items;
 create trigger moderate_board_items
   before insert on board_items
@@ -1086,8 +1114,8 @@ create trigger moderate_board_items
 -- === Cleanup: stale rooms ===================================================
 -- A room older than 24h is stale regardless of status — nobody leaves a
 -- lobby open, or a game running, for a full day. Deleting the room cascades
--- to players/questions/guesses/chat_messages/case_log automatically (all
--- declared `on delete cascade` above), so this one delete is the entire
+-- to players/questions/guesses/hints/chat_messages/case_log automatically
+-- (all declared `on delete cascade` above), so this one delete is the entire
 -- cleanup. Runs hourly via pg_cron so abandoned rooms don't sit around for
 -- close to a full day before being swept.
 create extension if not exists pg_cron;
@@ -1145,6 +1173,12 @@ begin
     where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'guesses'
   ) then
     alter publication supabase_realtime add table guesses;
+  end if;
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'hints'
+  ) then
+    alter publication supabase_realtime add table hints;
   end if;
   if not exists (
     select 1 from pg_publication_tables
@@ -1208,6 +1242,7 @@ alter table themes enable row level security;
 alter table admins enable row level security;
 alter table questions enable row level security;
 alter table guesses enable row level security;
+alter table hints enable row level security;
 alter table chat_messages enable row level security;
 alter table chat_message_reactions enable row level security;
 alter table round_secrets enable row level security;
@@ -1321,6 +1356,12 @@ create policy "guess as self" on guesses for insert with check (is_own_player(pl
 drop policy if exists "narrator reviews guesses" on guesses;
 create policy "narrator reviews guesses" on guesses for update
   using (is_room_narrator(room_id));
+
+drop policy if exists "public read hints" on hints;
+create policy "public read hints" on hints for select using (true);
+drop policy if exists "narrator gives hints" on hints;
+create policy "narrator gives hints" on hints for insert
+  with check (is_room_narrator(room_id) and is_own_player(player_id));
 
 drop policy if exists "public read chat messages" on chat_messages;
 create policy "public read chat messages" on chat_messages for select using (true);

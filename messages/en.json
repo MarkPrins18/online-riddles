@@ -298,9 +298,19 @@
     "empty": "No questions asked yet. Start the interrogation above."
   },
   "NarratorInbox": {
+    "giveHintHeading": "Give a hint",
     "pendingSolutionsHeading": "Pending solutions",
     "unansweredHeading": "Unanswered questions ({count})",
     "allAnswered": "Everything answered, take a breather."
+  },
+  "NarratorHintForm": {
+    "placeholder": "Type a hint for the players...",
+    "ariaLabel": "Hint",
+    "submit": "Send hint",
+    "error": "Couldn't send the hint. Please try again."
+  },
+  "HintSnackbar": {
+    "label": "💡 Hint from {name}"
   },
   "ChatDrawer": {
     "title": "Discussion"

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Player } from "@/types/player";
 import type { Question } from "@/types/question";
+import type { Hint } from "@/types/hint";
 import { gameReducer, initialGameState } from "./reducer";
 
 function makePlayer(overrides: Partial<Player>): Player {
@@ -30,6 +31,20 @@ function makeQuestion(overrides: Partial<Question>): Question {
     answered_at: null,
     custom_response: null,
     is_best_question: false,
+    round: 1,
+    created_at: "2026-01-01T00:00:00.000Z",
+    ...overrides,
+  };
+}
+
+function makeHint(overrides: Partial<Hint>): Hint {
+  return {
+    id: "h1",
+    room_id: "room1",
+    puzzle_id: "puzzle1",
+    player_id: "p1",
+    player_name: "Alice",
+    text: "Denk aan iets wat je 's ochtends doet.",
     round: 1,
     created_at: "2026-01-01T00:00:00.000Z",
     ...overrides,
@@ -89,6 +104,22 @@ describe("gameReducer", () => {
     const fresh = [makeQuestion({ id: "new" })];
     const next = gameReducer(state, { type: "QUESTIONS_RELOADED", payload: fresh });
     expect(next.questions).toEqual(fresh);
+  });
+
+  it("HINTS_RELOADED replaces the whole list", () => {
+    const state = { ...initialGameState, hints: [makeHint({ id: "old" })] };
+    const fresh = [makeHint({ id: "new" })];
+    const next = gameReducer(state, { type: "HINTS_RELOADED", payload: fresh });
+    expect(next.hints).toEqual(fresh);
+  });
+
+  it("HINT_SENT appends a new hint but is idempotent for duplicates", () => {
+    const hint = makeHint({ id: "h1" });
+    const withHint = gameReducer(initialGameState, { type: "HINT_SENT", payload: hint });
+    expect(withHint.hints).toEqual([hint]);
+
+    const again = gameReducer(withHint, { type: "HINT_SENT", payload: hint });
+    expect(again).toBe(withHint);
   });
 
   it("QUESTION_ASKED appends and QUESTION_ANSWERED updates in place", () => {

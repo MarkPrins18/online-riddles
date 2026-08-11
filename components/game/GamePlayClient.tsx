@@ -27,7 +27,6 @@ import {
   isNextRoundTimeUp,
   secondsUntilNextRound,
 } from "@/lib/game/rounds";
-import { getLastYesAt, shouldShowHint } from "@/lib/game/hint";
 import { targetDifficultyForRound } from "@/lib/game/difficulty";
 import { useNowTick } from "@/lib/game/useNowTick";
 import { computeRemainingSeconds } from "@/lib/game/timer";
@@ -58,6 +57,7 @@ import { NarratorArchive } from "./NarratorArchive";
 import { CorkboardButton } from "./CorkboardButton";
 import { CorkboardOverlay } from "./CorkboardOverlay";
 import { NextRoundCountdown } from "./NextRoundCountdown";
+import { HintSnackbar } from "./HintSnackbar";
 import { NarratorTensionPanel } from "./NarratorTensionPanel";
 import { FinalScoreboard } from "./FinalScoreboard";
 import { GameOverScreen } from "./GameOverScreen";
@@ -236,11 +236,9 @@ export function GamePlayClient({ code }: { code: string }) {
   }, [now, state.room, state.players, state.onlinePlayerIds, playerId, supabase]);
 
   // Computed ahead of the early returns below (hooks can't be conditional):
-  // sound cues for the hint appearing, the player's own guess resolving,
+  // sound cues for a new hint arriving, the player's own guess resolving,
   // and the final countdown seconds.
-  const soundLastYesAt = getLastYesAt(state.questions, state.room?.round_started_at ?? null);
-  const soundShowHint =
-    state.room?.status === "playing" && shouldShowHint(soundLastYesAt, now);
+  const latestHintId = state.hints[state.hints.length - 1]?.id ?? null;
   const myGuesses = state.guesses.filter((g) => g.player_id === playerId);
   const myLatestGuess = myGuesses[myGuesses.length - 1] ?? null;
   const soundRemainingSeconds =
@@ -250,7 +248,7 @@ export function GamePlayClient({ code }: { code: string }) {
       ? computeRemainingSeconds(state.room.round_started_at, state.room.round_duration_seconds, now)
       : null;
   useGameSoundEffects({
-    showHint: soundShowHint,
+    latestHintId,
     myLatestGuessId: myLatestGuess?.id ?? null,
     myLatestGuessStatus: myLatestGuess?.status ?? null,
     remainingSeconds: soundRemainingSeconds,
@@ -270,7 +268,7 @@ export function GamePlayClient({ code }: { code: string }) {
     );
   }
 
-  const { room, puzzle, players, questions, guesses, chatMessages } = state;
+  const { room, puzzle, players, questions, guesses, hints, chatMessages } = state;
 
   if (puzzle.id !== dossierPuzzleId) {
     setDossierPuzzleId(puzzle.id);
@@ -313,9 +311,6 @@ export function GamePlayClient({ code }: { code: string }) {
   const accusationSecondsLeft = accusationOpen
     ? secondsUntilAccusationCloses(room.revealed_at, now)
     : null;
-  const lastYesAt = getLastYesAt(questions, room.round_started_at);
-  const showHint = !isRevealed && shouldShowHint(lastYesAt, now);
-
   const clueCount = questions.filter((q) => q.answer === "yes").length;
   const unansweredCount = questions.filter((q) => q.answer === null).length;
   const pendingGuessCount = guesses.filter((g) => g.status === "pending").length;
@@ -719,6 +714,8 @@ export function GamePlayClient({ code }: { code: string }) {
                         guesses={guesses}
                         players={players}
                         narratorId={room.narrator_id}
+                        playerId={playerId}
+                        playerName={currentPlayer?.name ?? ""}
                         hardcoreMode={room.hardcore_mode}
                         teamLivesRemaining={room.team_lives_remaining}
                       />
@@ -765,8 +762,7 @@ export function GamePlayClient({ code }: { code: string }) {
                         round={room.round}
                         questions={questions}
                         narrating={narrating}
-                        hint={puzzle.hint}
-                        showHint={showHint}
+                        hints={hints}
                       />
                     ),
                   },
@@ -796,6 +792,8 @@ export function GamePlayClient({ code }: { code: string }) {
                         guesses={guesses}
                         players={players}
                         narratorId={room.narrator_id}
+                        playerId={playerId}
+                        playerName={currentPlayer?.name ?? ""}
                         hardcoreMode={room.hardcore_mode}
                         teamLivesRemaining={room.team_lives_remaining}
                       />
@@ -842,8 +840,7 @@ export function GamePlayClient({ code }: { code: string }) {
                         round={room.round}
                         questions={questions}
                         narrating={narrating}
-                        hint={puzzle.hint}
-                        showHint={showHint}
+                        hints={hints}
                       />
                     ),
                   },
@@ -918,6 +915,8 @@ export function GamePlayClient({ code }: { code: string }) {
           </div>
         )}
       </div>
+
+      <HintSnackbar latestHint={!isRevealed ? hints[hints.length - 1] ?? null : null} />
 
       {isRevealed && hasMoreRounds(room.round, room.max_rounds) && room.revealed_at && (
         <NextRoundCountdown

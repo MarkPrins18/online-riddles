@@ -4,6 +4,7 @@ import type { Puzzle } from "@/types/puzzle";
 import type { Question } from "@/types/question";
 import type { Guess } from "@/types/guess";
 import type { ChatMessage } from "@/types/chatMessage";
+import type { Hint } from "@/types/hint";
 import type { ChatMessageReaction } from "@/types/chatMessageReaction";
 import type { CaseLogEntry } from "@/types/caseLog";
 import type { RoundSecret } from "@/types/roundSecret";
@@ -15,6 +16,10 @@ export type GameState = {
   puzzle: Puzzle | null;
   questions: Question[];
   guesses: Guess[];
+  // Narrator-authored, scoped to the current puzzle/round — replaced
+  // wholesale on round change (HINTS_RELOADED), same as questions/guesses,
+  // since there's no automatic/timer-driven hint left to derive this from.
+  hints: Hint[];
   chatMessages: ChatMessage[];
   chatReactions: ChatMessageReaction[];
   caseLog: CaseLogEntry[];
@@ -37,6 +42,7 @@ export const initialGameState: GameState = {
   puzzle: null,
   questions: [],
   guesses: [],
+  hints: [],
   chatMessages: [],
   chatReactions: [],
   caseLog: [],
@@ -59,6 +65,8 @@ export type GameAction =
   | { type: "QUESTION_ANSWERED"; payload: Question }
   | { type: "GUESS_SUBMITTED"; payload: Guess }
   | { type: "GUESS_UPDATED"; payload: Guess }
+  | { type: "HINTS_RELOADED"; payload: Hint[] }
+  | { type: "HINT_SENT"; payload: Hint }
   | { type: "CHAT_MESSAGE_SENT"; payload: ChatMessage }
   | { type: "CHAT_REACTION_ADDED"; payload: ChatMessageReaction }
   | { type: "CHAT_REACTION_REMOVED"; payload: { reactionId: string } }
@@ -132,6 +140,15 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
           g.id === action.payload.id ? action.payload : g
         ),
       };
+
+    case "HINTS_RELOADED":
+      return { ...state, hints: action.payload };
+
+    case "HINT_SENT": {
+      const exists = state.hints.some((h) => h.id === action.payload.id);
+      if (exists) return state;
+      return { ...state, hints: [...state.hints, action.payload] };
+    }
 
     case "CHAT_MESSAGE_SENT":
       return { ...state, chatMessages: [...state.chatMessages, action.payload] };

@@ -35,6 +35,10 @@ create table if not exists rooms (
 -- table already existed from before revealed_at was added.
 alter table rooms add column if not exists revealed_at timestamptz;
 alter table rooms add column if not exists community_pack_ids uuid[];
+alter table rooms add column if not exists hardcore_mode boolean not null default false;
+alter table rooms add column if not exists team_lives_total int;
+alter table rooms add column if not exists team_lives_remaining int;
+alter table rooms add column if not exists saboteur_mode boolean not null default false;
 
 create table if not exists players (
   id uuid primary key default gen_random_uuid(),

@@ -915,7 +915,9 @@ export function GamePlayClient({ code }: { code: string }) {
         )}
       </div>
 
-      <HintSnackbar latestHint={!isRevealed ? hints[hints.length - 1] ?? null : null} />
+      {!narrating && (
+        <HintSnackbar latestHint={!isRevealed ? hints[hints.length - 1] ?? null : null} />
+      )}
 
       {isRevealed && hasMoreRounds(room.round, room.max_rounds) && room.revealed_at && (
         <NextRoundCountdown

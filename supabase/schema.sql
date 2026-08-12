@@ -1789,6 +1789,13 @@ create index if not exists puzzles_created_by_created_at_idx on puzzles (created
 -- (getMyCommunityPacks).
 create index if not exists story_packs_created_by_created_at_idx on story_packs (created_by, created_at);
 
+-- Backs list_community_packs_newest's exact filter+sort (is_community,
+-- is_published, then created_at) — without this, paginating "Newest" is
+-- still a full scan of story_packs on every page.
+create index if not exists story_packs_community_published_created_at_idx
+  on story_packs (is_community, is_published, created_at)
+  where is_community and is_published;
+
 create table if not exists puzzle_votes (
   id uuid primary key default gen_random_uuid(),
   puzzle_id uuid not null references puzzles (id) on delete cascade,
@@ -1825,6 +1832,52 @@ create or replace view puzzle_vote_totals
     coalesce(sum(value), 0) as score
   from puzzle_votes
   group by puzzle_id;
+
+-- A pack's score is the sum of its puzzles' scores — aggregated here once
+-- instead of every browse-page load fetching every published pack's
+-- puzzles and every one of those puzzles' votes just to sum them in JS
+-- (the old listCommunityPacks). Lets "Top" sort and paginate in SQL like
+-- "Newest" already could. Packs with no votes (or no puzzles) simply don't
+-- appear here — the two list functions below LEFT JOIN and coalesce to 0.
+create or replace view pack_vote_totals
+  with (security_invoker = true) as
+  select
+    p.pack_id,
+    coalesce(sum(pvt.score), 0)::int as score
+  from puzzles p
+  join puzzle_vote_totals pvt on pvt.puzzle_id = p.id
+  group by p.pack_id;
+
+-- Both return just (id, score) for one page of results, sorted in SQL —
+-- the caller fetches the actual pack rows (name, theme, ...) for only that
+-- page's ids afterward, same "fetch the page, not the catalog" idea as
+-- get_published_puzzle_candidates/get_published_puzzle above. Split into
+-- two functions rather than one with a sort-mode parameter: the ORDER BY
+-- target differs (created_at vs an aggregate), which doesn't reduce to a
+-- single expression to swap cleanly.
+create or replace function list_community_packs_newest(limit_input int, offset_input int)
+returns table (id uuid, score int)
+language sql stable
+as $$
+  select sp.id, coalesce(pvt.score, 0)
+  from story_packs sp
+  left join pack_vote_totals pvt on pvt.pack_id = sp.id
+  where sp.is_community = true and sp.is_published = true
+  order by sp.created_at desc, sp.id
+  limit limit_input offset offset_input;
+$$;
+
+create or replace function list_community_packs_top(limit_input int, offset_input int)
+returns table (id uuid, score int)
+language sql stable
+as $$
+  select sp.id, coalesce(pvt.score, 0) as score
+  from story_packs sp
+  left join pack_vote_totals pvt on pvt.pack_id = sp.id
+  where sp.is_community = true and sp.is_published = true
+  order by coalesce(pvt.score, 0) desc, sp.id
+  limit limit_input offset offset_input;
+$$;
 
 drop trigger if exists rate_limit_community_puzzles on puzzles;
 create trigger rate_limit_community_puzzles

@@ -267,7 +267,9 @@
     "newest": "Newest",
     "top": "Top",
     "loading": "Loading packs...",
-    "empty": "No published community packs yet. Be the first."
+    "empty": "No published community packs yet. Be the first.",
+    "loadMore": "Load more",
+    "loadingMore": "Loading..."
   },
   "CommunityPackDetailClient": {
     "loading": "Loading pack...",

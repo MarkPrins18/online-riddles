@@ -85,6 +85,14 @@ export type Database = {
         Args: { puzzle_id_input: string; locale_input: string };
         Returns: PublishedPuzzle[];
       };
+      list_community_packs_newest: {
+        Args: { limit_input: number; offset_input: number };
+        Returns: { id: string; score: number }[];
+      };
+      list_community_packs_top: {
+        Args: { limit_input: number; offset_input: number };
+        Returns: { id: string; score: number }[];
+      };
     };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;

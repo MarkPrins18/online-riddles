@@ -267,7 +267,9 @@
     "newest": "Nieuwste",
     "top": "Populairste",
     "loading": "Packs laden...",
-    "empty": "Nog geen gepubliceerde community-packs. Wees de eerste."
+    "empty": "Nog geen gepubliceerde community-packs. Wees de eerste.",
+    "loadMore": "Meer laden",
+    "loadingMore": "Laden..."
   },
   "CommunityPackDetailClient": {
     "loading": "Pack laden...",

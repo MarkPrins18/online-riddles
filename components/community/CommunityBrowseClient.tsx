@@ -1,51 +1,79 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
-import { listCommunityPacks, type StoryPackWithScore } from "@/lib/supabase/communityPacks";
+import {
+  listCommunityPacks,
+  COMMUNITY_PACKS_PAGE_SIZE,
+  type StoryPackWithScore,
+  type CommunityPackSort,
+} from "@/lib/supabase/communityPacks";
 import { getProfiles } from "@/lib/supabase/profiles";
 import { PackCard } from "@/components/community/PackCard";
 import { Button } from "@/components/ui/Button";
 
-type SortMode = "new" | "top";
-
 export function CommunityBrowseClient() {
   const [packs, setPacks] = useState<StoryPackWithScore[] | null>(null);
+  const [hasMore, setHasMore] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [authorNames, setAuthorNames] = useState<Map<string, string>>(new Map());
-  const [sortMode, setSortMode] = useState<SortMode>("new");
+  const [sortMode, setSortMode] = useState<CommunityPackSort>("new");
   const t = useTranslations("CommunityBrowseClient");
   const locale = useLocale();
 
+  async function loadAuthorNames(newPacks: StoryPackWithScore[]) {
+    const supabase = createClient();
+    const authorIds = newPacks.map((p) => p.created_by).filter((id): id is string => !!id);
+    if (authorIds.length === 0) return;
+    const profiles = await getProfiles(supabase, authorIds);
+    setAuthorNames((prev) => {
+      const next = new Map(prev);
+      for (const [id, profile] of profiles) next.set(id, profile.display_name);
+      return next;
+    });
+  }
+
+  // Switching sort mode starts over at the first page — the accumulated
+  // list so far belongs to the old ordering, appending to it under a new
+  // sort would interleave two different orderings.
   useEffect(() => {
     let cancelled = false;
 
-    async function load() {
+    (async () => {
+      setPacks(null);
       const supabase = createClient();
-      const data = await listCommunityPacks(supabase, locale);
+      const { packs: firstPage, hasMore: more } = await listCommunityPacks(supabase, locale, sortMode);
       if (cancelled) return;
-      setPacks(data);
+      setPacks(firstPage);
+      setHasMore(more);
+      void loadAuthorNames(firstPage);
+    })();
 
-      const authorIds = data.map((p) => p.created_by).filter((id): id is string => !!id);
-      const profiles = await getProfiles(supabase, authorIds);
-      if (!cancelled) {
-        setAuthorNames(new Map([...profiles].map(([id, profile]) => [id, profile.display_name])));
-      }
-    }
-
-    load();
     return () => {
       cancelled = true;
     };
-  }, [locale]);
+  }, [locale, sortMode]);
 
-  const sortedPacks = useMemo(() => {
-    if (!packs) return null;
-    // listCommunityPacks already orders by created_at desc — "new" needs no
-    // extra work, only "top" re-sorts.
-    if (sortMode === "new") return packs;
-    return [...packs].sort((a, b) => b.score - a.score);
-  }, [packs, sortMode]);
+  async function handleLoadMore() {
+    if (!packs) return;
+    setIsLoadingMore(true);
+    try {
+      const supabase = createClient();
+      const { packs: nextPage, hasMore: more } = await listCommunityPacks(
+        supabase,
+        locale,
+        sortMode,
+        packs.length,
+        COMMUNITY_PACKS_PAGE_SIZE
+      );
+      setPacks([...packs, ...nextPage]);
+      setHasMore(more);
+      void loadAuthorNames(nextPage);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -71,21 +99,35 @@ export function CommunityBrowseClient() {
         </Button>
       </div>
 
-      {sortedPacks === null ? (
+      {packs === null ? (
         <p className="font-mono text-sm text-text-secondary">{t("loading")}</p>
-      ) : sortedPacks.length === 0 ? (
+      ) : packs.length === 0 ? (
         <p className="font-mono text-sm text-text-secondary">{t("empty")}</p>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2">
-          {sortedPacks.map((pack) => (
-            <PackCard
-              key={pack.id}
-              pack={pack}
-              score={pack.score}
-              authorName={pack.created_by ? authorNames.get(pack.created_by) : undefined}
-            />
-          ))}
-        </div>
+        <>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {packs.map((pack) => (
+              <PackCard
+                key={pack.id}
+                pack={pack}
+                score={pack.score}
+                authorName={pack.created_by ? authorNames.get(pack.created_by) : undefined}
+              />
+            ))}
+          </div>
+
+          {hasMore && (
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={handleLoadMore}
+              disabled={isLoadingMore}
+              className="self-center"
+            >
+              {isLoadingMore ? t("loadingMore") : t("loadMore")}
+            </Button>
+          )}
+        </>
       )}
     </div>
   );

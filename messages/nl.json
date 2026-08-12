@@ -185,8 +185,7 @@
     "play": "Spelen",
     "communityPacks": "Community packs",
     "myPacks": "Mijn packs",
-    "submitRiddle": "Raadsel insturen",
-    "navigateLabel": "Ga naar"
+    "submitRiddle": "Raadsel insturen"
   },
   "AccountModal": {
     "title": "Account",

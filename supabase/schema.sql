@@ -62,6 +62,15 @@ alter table players add column if not exists is_spectator boolean not null defau
 -- app boot; start a fresh room to actually play.
 alter table players add column if not exists user_id uuid references auth.users (id) on delete cascade;
 
+-- Every list-players query filters on room_id (getPlayersInRoom,
+-- findReclaimablePlayer), and so does every is_room_member() call — the
+-- RLS/RPC gate behind nearly every write in the app (join, claim_host,
+-- claim_narrator, reclaim_player, ...). Without this, both are a full
+-- table scan across every player in every room that has ever existed, not
+-- just this one. user_id as the second column covers is_room_member's
+-- exact (room_id, user_id) lookup in one index instead of two.
+create index if not exists players_room_id_user_id_idx on players (room_id, user_id);
+
 -- Anyone joining while a round is already in progress starts as a
 -- spectator (can watch, can't ask/guess) instead of a full player who
 -- missed the round's earlier questions/answers — computed server-side from
@@ -324,6 +333,13 @@ create table if not exists puzzles (
 -- re-run — once `category` is gone this whole block is a no-op.
 alter table puzzles add column if not exists category_id uuid references categories (id) on delete set null;
 
+-- Added here (not further down with the other community-authorship
+-- columns) because get_published_puzzles below already selects both —
+-- on a genuinely fresh database (not an existing one being migrated),
+-- defining that function before these columns exist fails outright.
+alter table puzzles add column if not exists created_by uuid references auth.users (id) on delete cascade;
+alter table puzzles add column if not exists is_community boolean not null default false;
+
 do $$
 begin
   if exists (
@@ -466,6 +482,13 @@ create table if not exists questions (
   created_at timestamptz not null default now()
 );
 
+-- getQuestionsInRoom/clearBestQuestion both filter on room_id, the former
+-- also ordering by created_at — one index covers the filter and (for the
+-- common no-extra-filter case) the sort too, same reasoning as
+-- players_room_id_user_id_idx above. Same pattern repeats below for every
+-- other room-scoped table a client fetches "everything in this room" from.
+create index if not exists questions_room_id_created_at_idx on questions (room_id, created_at);
+
 create table if not exists guesses (
   id uuid primary key default gen_random_uuid(),
   room_id uuid not null references rooms (id) on delete cascade,
@@ -476,6 +499,8 @@ create table if not exists guesses (
   status text not null default 'pending' check (status in ('pending', 'correct', 'incorrect')),
   created_at timestamptz not null default now()
 );
+
+create index if not exists guesses_room_id_created_at_idx on guesses (room_id, created_at);
 
 -- Narrator-authored hints — purely at the Verteller's own initiative, no
 -- automatic/timer-driven hint exists anymore. One row per hint given (a
@@ -492,6 +517,8 @@ create table if not exists hints (
   created_at timestamptz not null default now()
 );
 
+create index if not exists hints_room_id_created_at_idx on hints (room_id, created_at);
+
 -- Free-form discussion between players, separate from the structured
 -- vragen-thread to the Verteller. Room-wide (not scoped per puzzle/round).
 create table if not exists chat_messages (
@@ -502,6 +529,8 @@ create table if not exists chat_messages (
   text text not null,
   created_at timestamptz not null default now()
 );
+
+create index if not exists chat_messages_room_id_created_at_idx on chat_messages (room_id, created_at);
 
 -- Fast reactions on a chat message — any emoji the sender's own
 -- keyboard/picker gives them (like WhatsApp), not a fixed set. The app
@@ -520,6 +549,11 @@ create table if not exists chat_message_reactions (
   created_at timestamptz not null default now(),
   unique (message_id, player_id, emoji)
 );
+
+-- getChatReactionsInRoom fetches all of a room's reactions unfiltered
+-- (no ordering) to reconcile against locally-held messages — no existing
+-- unique constraint here has room_id as its leading column.
+create index if not exists chat_message_reactions_room_id_idx on chat_message_reactions (room_id);
 
 -- One row per concluded round — the "zaken-archief" shown live in-game and
 -- summarized in the end-of-session recap. Denormalized (puzzle_title,
@@ -613,6 +647,12 @@ create table if not exists board_items (
 create unique index if not exists board_items_unique_question
   on board_items (room_id, question_id)
   where question_id is not null;
+
+-- The unique index above is partial (question_id is not null only), so it
+-- can't serve getBoardItems' "every item in this room" fetch (which
+-- includes plain notes, question_id null) or clear_board_on_new_round's
+-- delete — both need a full, unfiltered index on room_id.
+create index if not exists board_items_room_id_created_at_idx on board_items (room_id, created_at);
 
 create table if not exists board_connections (
   id uuid primary key default gen_random_uuid(),
@@ -1193,6 +1233,11 @@ create trigger moderate_board_items
 -- close to a full day before being swept.
 create extension if not exists pg_cron;
 
+-- This delete's WHERE clause is the entire cleanup — without an index on
+-- created_at, every hourly run is a full sequential scan of the whole
+-- rooms table, not just the (bounded, ~24h worth of) stale ones.
+create index if not exists rooms_created_at_idx on rooms (created_at);
+
 create or replace function cleanup_stale_rooms()
 returns void
 language sql
@@ -1704,8 +1749,19 @@ create trigger room_finished_stats
 
 alter table story_packs add column if not exists created_by uuid references auth.users (id) on delete cascade;
 alter table story_packs add column if not exists is_community boolean not null default false;
-alter table puzzles add column if not exists created_by uuid references auth.users (id) on delete cascade;
-alter table puzzles add column if not exists is_community boolean not null default false;
+-- puzzles.created_by/is_community moved up next to the puzzles table
+-- itself, well before this point — see the comment there.
+
+-- Neither pack_id nor created_by had an index before: pack_id backs
+-- listPuzzlesForPack/deletePuzzlesForPack (every puzzle-management screen
+-- filters a pack's puzzles this way), created_by backs "my puzzles"
+-- (getMyCommunityPuzzles), ordered newest-first.
+create index if not exists puzzles_pack_id_idx on puzzles (pack_id);
+create index if not exists puzzles_created_by_created_at_idx on puzzles (created_by, created_at);
+
+-- Same reasoning as puzzles_created_by_created_at_idx, for "my packs"
+-- (getMyCommunityPacks).
+create index if not exists story_packs_created_by_created_at_idx on story_packs (created_by, created_at);
 
 create table if not exists puzzle_votes (
   id uuid primary key default gen_random_uuid(),
@@ -1726,6 +1782,11 @@ create table if not exists pack_favorites (
   created_at timestamptz not null default now(),
   primary key (pack_id, user_id)
 );
+
+-- The primary key above is (pack_id, user_id) — great for "who favorited
+-- this pack", useless for listFavoritePackIds' "this user's favorites"
+-- (user_id isn't the leading column, so it can't use that index).
+create index if not exists pack_favorites_user_id_idx on pack_favorites (user_id);
 
 -- Vote totals per puzzle, for sorting/display. security_invoker so it's
 -- bound by the querying role's own RLS, same reasoning as get_published_puzzles.

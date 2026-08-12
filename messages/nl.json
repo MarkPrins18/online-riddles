@@ -74,10 +74,7 @@
     "noRoomFound": "Geen kamer gevonden met die code.",
     "submitting": "Aansluiten...",
     "submit": "Kamer joinen",
-    "error": "Kon niet bij de kamer aansluiten. Probeer het opnieuw.",
-    "reclaimPrompt": "Er zit al een speler '{name}' in deze kamer. Ben jij dat?",
-    "reclaimConfirm": "Ja, herstel mijn plek",
-    "reclaimDecline": "Nee, ik ben nieuw"
+    "error": "Kon niet bij de kamer aansluiten. Probeer het opnieuw."
   },
   "StartGameButton": {
     "starting": "Zaak wordt geopend...",

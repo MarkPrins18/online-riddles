@@ -8,6 +8,7 @@ import type {
   StoryPack,
   Category,
   PuzzleTranslation,
+  PuzzleTranslationPublic,
   CategoryTranslation,
   StoryPackTranslation,
   TranslationStatus,
@@ -43,6 +44,7 @@ export type Database = {
   public: {
     Views: {
       puzzle_vote_totals: ViewShape<PuzzleVoteTotals>;
+      puzzle_translations_public: ViewShape<PuzzleTranslationPublic>;
     };
     Functions: {
       increment_player_score: {
@@ -63,10 +65,6 @@ export type Database = {
       };
       claim_narrator: {
         Args: { room_id_input: string; new_narrator_id: string };
-        Returns: void;
-      };
-      reclaim_player: {
-        Args: { room_id_input: string; target_player_id: string; name_input: string };
         Returns: void;
       };
       close_accusation_vote: {

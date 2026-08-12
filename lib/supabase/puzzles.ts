@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "./database.types";
-import type { Puzzle, PublishedPuzzle, PuzzleCandidate, PuzzleDifficulty } from "@/types/puzzle";
+import type { Puzzle, PuzzlePreview, PublishedPuzzle, PuzzleCandidate, PuzzleDifficulty } from "@/types/puzzle";
 import { getVoteTotals } from "./votes";
 import { resolveCategoryId } from "./categories";
 
@@ -45,7 +45,7 @@ export async function getRandomPuzzle(
   officialThemes: string[] = [],
   communityPackIds: string[] | null = null,
   preferredDifficulty?: PuzzleDifficulty
-): Promise<Puzzle> {
+): Promise<PuzzlePreview> {
   const { data, error } = await supabase.rpc("get_published_puzzle_candidates");
 
   if (error) throw error;
@@ -156,13 +156,18 @@ export async function hydratePuzzles(
   const puzzleIds = rows.map((r) => r.id);
   const categoryIds = [...new Set(rows.map((r) => r.category_id).filter((id): id is string => !!id))];
 
+  // includeSolution: false reads from puzzle_translations_public (a view
+  // that never exposes solution at all, see schema.sql) rather than just
+  // omitting the column from the select — the base table has no public
+  // read policy anymore, so a select against it here would return zero
+  // rows for anyone but the puzzle's own creator/an admin.
   const { data: translations, error: translationsError } = includeSolution
     ? await supabase
         .from("puzzle_translations")
         .select("puzzle_id, locale, title, scenario, solution, hint")
         .in("puzzle_id", puzzleIds)
     : await supabase
-        .from("puzzle_translations")
+        .from("puzzle_translations_public")
         .select("puzzle_id, locale, title, scenario, hint")
         .in("puzzle_id", puzzleIds);
   if (translationsError) throw translationsError;

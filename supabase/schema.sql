@@ -65,10 +65,10 @@ alter table players add column if not exists user_id uuid references auth.users 
 -- Every list-players query filters on room_id (getPlayersInRoom,
 -- findReclaimablePlayer), and so does every is_room_member() call — the
 -- RLS/RPC gate behind nearly every write in the app (join, claim_host,
--- claim_narrator, reclaim_player, ...). Without this, both are a full
--- table scan across every player in every room that has ever existed, not
--- just this one. user_id as the second column covers is_room_member's
--- exact (room_id, user_id) lookup in one index instead of two.
+-- claim_narrator, ...). Without this, both are a full table scan across
+-- every player in every room that has ever existed, not just this one.
+-- user_id as the second column covers is_room_member's exact (room_id,
+-- user_id) lookup in one index instead of two.
 create index if not exists players_room_id_user_id_idx on players (room_id, user_id);
 
 -- Anyone joining while a round is already in progress starts as a
@@ -102,8 +102,8 @@ create trigger set_spectator_on_join
 -- itself never issues a raw players.update() for these columns — every
 -- privileged change already goes through the security-definer functions
 -- below (increment_player_score, set_host, set_narrator, claim_host,
--- claim_narrator, reclaim_player) and the promote_spectators_on_new_round
--- trigger. This trigger makes that the only path: it sets the
+-- claim_narrator) and the promote_spectators_on_new_round trigger. This
+-- trigger makes that the only path: it sets the
 -- transaction-local flag right before its update, everyone else's changes
 -- to these columns are silently reverted to the pre-update value. Ordinary
 -- client updates (e.g. a future rename feature) keep working since `name`
@@ -147,6 +147,15 @@ create table if not exists story_packs (
   is_published boolean not null default false,
   created_at timestamptz not null default now()
 );
+
+-- Added here (not further down with the other community-authorship
+-- columns) because the "public read story packs"/"public read puzzle
+-- translations" policies below already reference created_by — on a
+-- genuinely fresh database (not an existing one being migrated), defining
+-- those policies before this column exists fails outright. Same reasoning
+-- as puzzles.created_by/is_community above.
+alter table story_packs add column if not exists created_by uuid references auth.users (id) on delete cascade;
+alter table story_packs add column if not exists is_community boolean not null default false;
 
 -- A published_puzzles view from a previous run of this script still selects
 -- columns the migrations below remove (name on story_packs/categories,
@@ -456,6 +465,31 @@ create table if not exists puzzle_translations (
 -- locale, title) combination in application code before inserting, the
 -- same pattern resolveCategoryId already uses for categories.
 
+-- The public-read surface for puzzle text: every column except `solution`.
+-- puzzle_translations itself has no public select policy (see the RLS
+-- section below) — `solution` must never be reachable via a direct table
+-- read, only through get_room_puzzle/get_published_puzzle, which gate it
+-- server-side. security_invoker = false (the default, spelled out here on
+-- purpose) means this runs as the view owner, bypassing the base table's
+-- RLS entirely rather than being bound by it — that's the whole point.
+-- Defined here (immediately after the table, ahead of
+-- get_published_puzzle_candidates/get_published_puzzle further down, both
+-- of which read from this view) because a `language sql` function body is
+-- validated against its referenced relations at CREATE FUNCTION time, so
+-- this can't be defined later and referenced earlier in the file. Own
+-- creators/admins keep full access (including solution) via the base
+-- table's "creators write own"/"admins write" policies (`for all`, so they
+-- already cover select) — this view is only the public/no-solution path.
+create or replace view puzzle_translations_public
+  with (security_invoker = false) as
+  select pt.puzzle_id, pt.locale, pt.title, pt.scenario, pt.hint, pt.status, pt.created_at
+  from puzzle_translations pt
+  join puzzles p on p.id = pt.puzzle_id
+  join story_packs sp on sp.id = p.pack_id
+  where sp.is_published or p.created_by = auth.uid();
+
+grant select on puzzle_translations_public to anon, authenticated;
+
 -- Who's allowed to write puzzle content from the /admin dashboard. A real
 -- (non-anonymous) Supabase Auth account, not the player-facing anonymous
 -- sessions — deliberately has no insert/update/delete policy of its own,
@@ -490,11 +524,18 @@ as $$
   -- exists, not a join, on purpose: a puzzle can have more than one
   -- translation row (nl + en), and a plain join would return it once per
   -- translation — silently doubling its odds of being the one picked.
+  -- puzzle_translations_public, not the base table: this function runs as
+  -- SECURITY INVOKER (see comment above), and puzzle_translations itself
+  -- has no select policy anymore (see the puzzle-solution-exposure fix) —
+  -- reading the base table here would make every EXISTS check fail for
+  -- anyone but a puzzle's own creator, returning zero candidates. The view
+  -- bypasses that (owner-privileged) while still respecting the same
+  -- is_published gate this query already applies.
   select p.id, p.pack_id, sp.theme, p.difficulty, p.is_community
   from puzzles p
   join story_packs sp on sp.id = p.pack_id
   where sp.is_published = true
-    and exists (select 1 from puzzle_translations pt where pt.puzzle_id = p.id);
+    and exists (select 1 from puzzle_translations_public pt where pt.puzzle_id = p.id);
 $$;
 
 -- The other half of get_published_puzzle_candidates above — full
@@ -502,9 +543,13 @@ $$;
 -- old get_published_puzzles had per-row. Re-checks is_published (rather
 -- than trusting the caller already filtered on it) in case the pack was
 -- unpublished in the moment between the candidates fetch and this call.
+-- Deliberately does NOT return solution: this powers getRandomPuzzle's
+-- "pick a puzzle to start the round" call, which never needs it (only
+-- puzzle.id is used) — get_room_puzzle is the one and only path that's
+-- allowed to reveal a solution, and only to the narrator/after reveal.
 create or replace function get_published_puzzle(puzzle_id_input uuid, locale_input text)
 returns table (
-  id uuid, pack_id uuid, title text, scenario text, solution text,
+  id uuid, pack_id uuid, title text, scenario text,
   category_id uuid, category text, difficulty text, hint text,
   created_at timestamptz, theme text, created_by uuid, is_community boolean,
   locale text
@@ -515,7 +560,6 @@ as $$
     p.id, p.pack_id,
     coalesce(pt.title, pt_fallback.title) as title,
     coalesce(pt.scenario, pt_fallback.scenario) as scenario,
-    coalesce(pt.solution, pt_fallback.solution) as solution,
     p.category_id,
     coalesce(ct.name, ct_fallback.name) as category,
     p.difficulty,
@@ -525,8 +569,8 @@ as $$
   from puzzles p
   join story_packs sp on sp.id = p.pack_id
   left join categories c on c.id = p.category_id
-  left join puzzle_translations pt on pt.puzzle_id = p.id and pt.locale = locale_input
-  left join puzzle_translations pt_fallback on pt_fallback.puzzle_id = p.id and pt_fallback.locale = 'nl'
+  left join puzzle_translations_public pt on pt.puzzle_id = p.id and pt.locale = locale_input
+  left join puzzle_translations_public pt_fallback on pt_fallback.puzzle_id = p.id and pt_fallback.locale = 'nl'
   left join category_translations ct on ct.category_id = c.id and ct.locale = locale_input
   left join category_translations ct_fallback on ct_fallback.category_id = c.id and ct_fallback.locale = 'nl'
   where sp.is_published = true
@@ -556,6 +600,34 @@ create table if not exists questions (
 -- other room-scoped table a client fetches "everything in this room" from.
 create index if not exists questions_room_id_created_at_idx on questions (room_id, created_at);
 
+-- "narrator answers questions" below has no `with check`, so it defaults
+-- to reusing `using` — restricting *who* (the narrator) but not *which*
+-- columns, letting a narrator rewrite text/player_id/player_name on
+-- someone else's question via a raw update. Unconditional (no legitimate
+-- flow ever changes these columns, see lib/supabase/questions.ts): unlike
+-- the players/rooms guards, this needs no set_config bypass flag.
+create or replace function guard_question_privileged_columns()
+returns trigger
+language plpgsql
+security definer
+as $$
+begin
+  new.room_id := old.room_id;
+  new.puzzle_id := old.puzzle_id;
+  new.player_id := old.player_id;
+  new.player_name := old.player_name;
+  new.text := old.text;
+  new.round := old.round;
+  new.created_at := old.created_at;
+  return new;
+end;
+$$;
+
+drop trigger if exists guard_question_privileged_columns on questions;
+create trigger guard_question_privileged_columns
+  before update on questions
+  for each row execute function guard_question_privileged_columns();
+
 create table if not exists guesses (
   id uuid primary key default gen_random_uuid(),
   room_id uuid not null references rooms (id) on delete cascade,
@@ -568,6 +640,30 @@ create table if not exists guesses (
 );
 
 create index if not exists guesses_room_id_created_at_idx on guesses (room_id, created_at);
+
+-- Same reasoning/shape as guard_question_privileged_columns: "narrator
+-- reviews guesses" checks role, not columns — lib/supabase/guesses.ts's
+-- reviewGuess only ever changes `status`.
+create or replace function guard_guess_privileged_columns()
+returns trigger
+language plpgsql
+security definer
+as $$
+begin
+  new.room_id := old.room_id;
+  new.puzzle_id := old.puzzle_id;
+  new.player_id := old.player_id;
+  new.player_name := old.player_name;
+  new.text := old.text;
+  new.created_at := old.created_at;
+  return new;
+end;
+$$;
+
+drop trigger if exists guard_guess_privileged_columns on guesses;
+create trigger guard_guess_privileged_columns
+  before update on guesses
+  for each row execute function guard_guess_privileged_columns();
 
 -- Narrator-authored hints — purely at the Verteller's own initiative, no
 -- automatic/timer-driven hint exists anymore. One row per hint given (a
@@ -715,6 +811,32 @@ create unique index if not exists board_items_unique_question
   on board_items (room_id, question_id)
   where question_id is not null;
 
+-- "members move board items" below deliberately lets any room member edit
+-- any item's position/text/color (the board is fully collaborative by
+-- design) — but that same breadth let a member reassign created_by to
+-- themselves on someone else's note, which then blocks the true creator
+-- from deleting it under "creator or host deletes board items". Guards
+-- only the identity/shape columns; position/text/color stay freely
+-- editable by any member.
+create or replace function guard_board_item_privileged_columns()
+returns trigger
+language plpgsql
+security definer
+as $$
+begin
+  new.room_id := old.room_id;
+  new.kind := old.kind;
+  new.question_id := old.question_id;
+  new.created_by := old.created_by;
+  return new;
+end;
+$$;
+
+drop trigger if exists guard_board_item_privileged_columns on board_items;
+create trigger guard_board_item_privileged_columns
+  before update on board_items
+  for each row execute function guard_board_item_privileged_columns();
+
 -- The unique index above is partial (question_id is not null only), so it
 -- can't serve getBoardItems' "every item in this room" fetch (which
 -- includes plain notes, question_id null) or clear_board_on_new_round's
@@ -807,16 +929,49 @@ create trigger set_revealed_at
   before update on rooms
   for each row execute function set_revealed_at();
 
+-- "host or narrator update rooms" below only checks *who* (host or
+-- narrator), not *which columns* — without this, a narrator could PATCH
+-- their own room's host_id directly, self-promoting to host and bypassing
+-- set_host's "only the current host may transfer" check entirely. Same
+-- guard-trigger shape as guard_player_privileged_columns: reverts
+-- host_id/narrator_id to OLD unless the legitimate RPCs (set_host,
+-- set_narrator, claim_host, claim_narrator) flagged this update themselves.
+create or replace function guard_room_privileged_columns()
+returns trigger
+language plpgsql
+security definer
+as $$
+begin
+  if current_setting('app.room_role_update', true) = 'on' then
+    return new;
+  end if;
+
+  new.host_id := old.host_id;
+  new.narrator_id := old.narrator_id;
+  return new;
+end;
+$$;
+
+drop trigger if exists guard_room_privileged_columns on rooms;
+create trigger guard_room_privileged_columns
+  before update on rooms
+  for each row execute function guard_room_privileged_columns();
+
 -- === Authorization helpers ==================================================
 -- security definer + stable: usable inside RLS policies without triggering
 -- RLS recursion (a policy that queries its own table via a normal function
 -- call would otherwise re-trigger RLS and potentially loop/deny itself).
 
+-- p.room_id = target_room_id is load-bearing, not redundant with r.id =
+-- target_room_id: without it, a player who holds the host/narrator seat in
+-- some OTHER room (rooms.host_id/narrator_id has no FK to players, so
+-- nothing stops it pointing at a foreign-room player row) would pass this
+-- check for target_room_id too, since only p.user_id was ever verified.
 create or replace function is_room_host(target_room_id uuid) returns boolean
 language sql stable security definer as $$
   select exists (
     select 1 from rooms r join players p on p.id = r.host_id
-    where r.id = target_room_id and p.user_id = auth.uid()
+    where r.id = target_room_id and p.room_id = target_room_id and p.user_id = auth.uid()
   );
 $$;
 
@@ -824,7 +979,27 @@ create or replace function is_room_narrator(target_room_id uuid) returns boolean
 language sql stable security definer as $$
   select exists (
     select 1 from rooms r join players p on p.id = r.narrator_id
-    where r.id = target_room_id and p.user_id = auth.uid()
+    where r.id = target_room_id and p.room_id = target_room_id and p.user_id = auth.uid()
+  );
+$$;
+
+-- Used by set_host/claim_host/set_narrator/claim_narrator to verify a
+-- target player id actually belongs to the room being acted on, before
+-- writing rooms.host_id/narrator_id (which has no FK to players).
+create or replace function player_belongs_to_room(target_player_id uuid, target_room_id uuid) returns boolean
+language sql stable security definer as $$
+  select exists (
+    select 1 from players where id = target_player_id and room_id = target_room_id
+  );
+$$;
+
+-- Same idea as player_belongs_to_room, keyed on a user id instead of a
+-- player id — used by case_log's insert check, since solver_user_id/
+-- narrator_user_id there reference auth.users, not players.
+create or replace function user_belongs_to_room(target_user_id uuid, target_room_id uuid) returns boolean
+language sql stable security definer as $$
+  select exists (
+    select 1 from players where user_id = target_user_id and room_id = target_room_id
   );
 $$;
 
@@ -905,10 +1080,14 @@ begin
   if not is_room_host(room_id_input) then
     raise exception 'Only the host can assign the Verteller';
   end if;
+  if not player_belongs_to_room(player_id_input, room_id_input) then
+    raise exception 'Target player not in this room';
+  end if;
 
   perform set_config('app.player_privileged_update', 'on', true);
   update players set is_narrator = false where room_id = room_id_input;
   update players set is_narrator = true where id = player_id_input and room_id = room_id_input;
+  perform set_config('app.room_role_update', 'on', true);
   update rooms set narrator_id = player_id_input where id = room_id_input;
 end;
 $$;
@@ -922,10 +1101,14 @@ begin
   if not is_room_host(room_id_input) then
     raise exception 'Only the current host can transfer host';
   end if;
+  if not player_belongs_to_room(player_id_input, room_id_input) then
+    raise exception 'Target player not in this room';
+  end if;
 
   perform set_config('app.player_privileged_update', 'on', true);
   update players set is_host = false where room_id = room_id_input;
   update players set is_host = true where id = player_id_input and room_id = room_id_input;
+  perform set_config('app.room_role_update', 'on', true);
   update rooms set host_id = player_id_input where id = room_id_input;
 end;
 $$;
@@ -951,10 +1134,14 @@ begin
   if not is_own_player(claiming_player_id) then
     raise exception 'Can only claim host for yourself';
   end if;
+  if not player_belongs_to_room(claiming_player_id, room_id_input) then
+    raise exception 'Target player not in this room';
+  end if;
 
   perform set_config('app.player_privileged_update', 'on', true);
   update players set is_host = false where room_id = room_id_input;
   update players set is_host = true where id = claiming_player_id and room_id = room_id_input;
+  perform set_config('app.room_role_update', 'on', true);
   update rooms set host_id = claiming_player_id where id = room_id_input;
 end;
 $$;
@@ -987,39 +1174,20 @@ begin
   perform set_config('app.player_privileged_update', 'on', true);
   update players set is_narrator = false where room_id = room_id_input;
   update players set is_narrator = true where id = new_narrator_id and room_id = room_id_input;
+  perform set_config('app.room_role_update', 'on', true);
   update rooms set narrator_id = new_narrator_id where id = room_id_input;
 end;
 $$;
 
--- Lets a player who lost their session (new device, cleared storage, a
--- different browser) regain their existing row — same score/role — without
--- introducing a second secret alongside the room code: the caller must
--- already know the room code (to resolve room_id_input at all) and the
--- exact name the row was joined under. Not self-claim-only like claim_host,
--- because the caller isn't a room member yet in this session — that's the
--- whole problem being solved. Same "client decides, trust the group" model
--- as claim_host/claim_narrator (see those for why Presence can't gate this
--- server-side); the name check exists purely so a bare room_id + guessed
--- player_id can't silently hijack an unrelated player's row.
-create or replace function reclaim_player(room_id_input uuid, target_player_id uuid, name_input text)
-returns void
-language plpgsql
-security definer
-as $$
-begin
-  if not exists (
-    select 1 from players
-    where id = target_player_id
-      and room_id = room_id_input
-      and lower(name) = lower(name_input)
-  ) then
-    raise exception 'Player not found in this room';
-  end if;
-
-  perform set_config('app.player_privileged_update', 'on', true);
-  update players set user_id = auth.uid() where id = target_player_id;
-end;
-$$;
+-- No cross-device player-identity recovery on purpose: rooms/players are
+-- both publicly readable (see "public read rooms"/"public read players"),
+-- so a room_id + player name is never a real secret — anyone could look
+-- both up without ever having joined and take over an active player's seat.
+-- Same model most similar apps use (Kahoot, Jackbox Games, Skribbl.io):
+-- lose your session, rejoin as a new player. Anyone who wants real
+-- cross-device continuity already has it via the optional real account
+-- (lib/supabase/accountAuth.ts) — same auth.uid(), no reclaim needed.
+-- (Used to be a reclaim_player() RPC here; removed rather than patched.)
 
 -- Closes a round's saboteur-mode accusation vote: tallies every cast vote,
 -- awards each voter a small personal bonus/penalty for guessing right or
@@ -1298,6 +1466,20 @@ create trigger moderate_board_items
   before insert on board_items
   for each row execute function enforce_chat_moderation();
 
+-- questions.text/guesses.text were never wired to this filter — both are
+-- broadcast to the whole room the same way chat is (guesses.text is also
+-- shown on the board via board_items), so the same banned-words check
+-- applies to them.
+drop trigger if exists moderate_questions on questions;
+create trigger moderate_questions
+  before insert on questions
+  for each row execute function enforce_chat_moderation();
+
+drop trigger if exists moderate_guesses on guesses;
+create trigger moderate_guesses
+  before insert on guesses
+  for each row execute function enforce_chat_moderation();
+
 -- === Cleanup: stale rooms ===================================================
 -- A room older than 24h is stale regardless of status — nobody leaves a
 -- lobby open, or a game running, for a full day. Deleting the room cascades
@@ -1469,14 +1651,41 @@ drop policy if exists "leave or be kicked" on players;
 create policy "leave or be kicked" on players for delete
   using (user_id = auth.uid() or is_room_host(room_id));
 
+-- Published packs stay public (the whole point of /community); an
+-- unpublished/draft community pack is only visible to its own creator —
+-- previously `using (true)` let anyone who obtained a draft pack's UUID
+-- read it in full before the creator ever chose to publish. Admins/
+-- creators keep their own access regardless via the `for all` policies
+-- below (those apply to select too).
 drop policy if exists "public read story packs" on story_packs;
-create policy "public read story packs" on story_packs for select using (true);
+create policy "public read story packs" on story_packs for select
+  using (is_published or created_by = auth.uid());
 drop policy if exists "public read story pack translations" on story_pack_translations;
-create policy "public read story pack translations" on story_pack_translations for select using (true);
+create policy "public read story pack translations" on story_pack_translations for select
+  using (
+    exists (
+      select 1 from story_packs sp
+      where sp.id = story_pack_translations.pack_id
+        and (sp.is_published or sp.created_by = auth.uid())
+    )
+  );
 drop policy if exists "public read puzzles" on puzzles;
-create policy "public read puzzles" on puzzles for select using (true);
+create policy "public read puzzles" on puzzles for select
+  using (
+    exists (select 1 from story_packs sp where sp.id = puzzles.pack_id and sp.is_published)
+    or created_by = auth.uid()
+  );
+-- No public policy on puzzle_translations itself anymore — `solution` must
+-- never be readable by a direct table query (see get_room_puzzle/
+-- get_published_puzzle, which are the only intended paths for that column).
+-- puzzle_translations_public below is the actual public-read surface,
+-- explicitly excluding solution and reapplying the same
+-- published-or-own-draft gate as the two policies above.
 drop policy if exists "public read puzzle translations" on puzzle_translations;
-create policy "public read puzzle translations" on puzzle_translations for select using (true);
+-- puzzle_translations_public (the actual public-read surface, excluding
+-- solution) is defined earlier in this file, right after the
+-- puzzle_translations table — see there for why.
+
 drop policy if exists "public read categories" on categories;
 create policy "public read categories" on categories for select using (true);
 drop policy if exists "public read category translations" on category_translations;
@@ -1579,7 +1788,9 @@ drop policy if exists "saboteur reads own secret" on round_secrets;
 create policy "saboteur reads own secret" on round_secrets for select
   using (is_own_player(saboteur_id) or revealed);
 drop policy if exists "host assigns saboteur" on round_secrets;
-create policy "host assigns saboteur" on round_secrets for insert with check (is_room_host(room_id));
+create policy "host assigns saboteur" on round_secrets for insert with check (
+  is_room_host(room_id) and player_belongs_to_room(saboteur_id, room_id)
+);
 
 -- Same "own row, or everyone once revealed" shape as round_secrets, so a
 -- vote can't be seen (and can't sway anyone else) while the window is
@@ -1596,17 +1807,46 @@ create policy "player reads own or revealed accusation" on round_accusations for
         and rs.revealed
     )
   );
+-- is_own_player(voter_id) alone only proves the caller owns that player
+-- row — it never checked room_id/round matched where that player actually
+-- is, so a player in Room A could insert/update a vote row naming Room B,
+-- forging a phantom vote into an unrelated room's accusation tally. The
+-- round_secrets existence check doubles as a (room, round) validity check,
+-- since a round_secrets row is always created for a saboteur round before
+-- accusations can open.
 drop policy if exists "vote as self" on round_accusations;
-create policy "vote as self" on round_accusations for insert with check (is_own_player(voter_id));
+create policy "vote as self" on round_accusations for insert with check (
+  is_own_player(voter_id)
+  and player_belongs_to_room(voter_id, room_id)
+  and player_belongs_to_room(target_id, room_id)
+  and exists (
+    select 1 from round_secrets rs
+    where rs.room_id = round_accusations.room_id and rs.round = round_accusations.round
+  )
+);
 drop policy if exists "change own vote" on round_accusations;
 create policy "change own vote" on round_accusations for update
-  using (is_own_player(voter_id)) with check (is_own_player(voter_id));
+  using (is_own_player(voter_id))
+  with check (
+    is_own_player(voter_id)
+    and player_belongs_to_room(voter_id, room_id)
+    and player_belongs_to_room(target_id, room_id)
+  );
 
 drop policy if exists "public read case log" on case_log;
 create policy "public read case log" on case_log for select using (true);
+-- Previously only checked the caller's own role in room_id, never that
+-- solver_user_id/narrator_user_id on the row actually belong to that room —
+-- a host/narrator could insert a case_log row naming an arbitrary
+-- auth.users id, and apply_case_log_stats (a trigger on this table) would
+-- silently credit that unrelated account's player_stats.
 drop policy if exists "narrator or host logs case" on case_log;
 create policy "narrator or host logs case" on case_log for insert
-  with check (is_room_narrator(room_id) or is_room_host(room_id));
+  with check (
+    (is_room_narrator(room_id) or is_room_host(room_id))
+    and (solver_user_id is null or user_belongs_to_room(solver_user_id, room_id))
+    and (narrator_user_id is null or user_belongs_to_room(narrator_user_id, room_id))
+  );
 
 -- Prikbord: any room member can see and move/edit any item (fully
 -- collaborative board), but only the item's creator or the room host can
@@ -1826,10 +2066,9 @@ create trigger room_finished_stats
   after update on rooms
   for each row execute function apply_room_finished_stats();
 
-alter table story_packs add column if not exists created_by uuid references auth.users (id) on delete cascade;
-alter table story_packs add column if not exists is_community boolean not null default false;
--- puzzles.created_by/is_community moved up next to the puzzles table
--- itself, well before this point — see the comment there.
+-- story_packs.created_by/is_community and puzzles.created_by/is_community
+-- both moved up next to their respective table definitions, well before
+-- this point — see the comments there.
 
 -- Neither pack_id nor created_by had an index before: pack_id backs
 -- listPuzzlesForPack/deletePuzzlesForPack (every puzzle-management screen
@@ -1882,7 +2121,8 @@ create or replace view puzzle_vote_totals
     puzzle_id,
     count(*) filter (where value = 1) as upvotes,
     count(*) filter (where value = -1) as downvotes,
-    coalesce(sum(value), 0) as score
+    coalesce(sum(value), 0) as score,
+    count(*) as vote_count
   from puzzle_votes
   group by puzzle_id;
 
@@ -1896,7 +2136,8 @@ create or replace view pack_vote_totals
   with (security_invoker = true) as
   select
     p.pack_id,
-    coalesce(sum(pvt.score), 0)::int as score
+    coalesce(sum(pvt.score), 0)::int as score,
+    coalesce(sum(pvt.vote_count), 0)::int as vote_count
   from puzzles p
   join puzzle_vote_totals pvt on pvt.puzzle_id = p.id
   group by p.pack_id;
@@ -1920,15 +2161,28 @@ as $$
   limit limit_input offset offset_input;
 $$;
 
+-- Below MIN_VOTES_TO_TRUST_SCORE (same threshold getRandomPuzzle's own
+-- client-side rating filter uses, see lib/supabase/puzzles.ts), a pack's
+-- score is treated as neutral (0) for ranking purposes rather than trusted
+-- outright — a handful of votes from freshly-minted anonymous sessions
+-- (free to create, no friction) would otherwise be enough to push a pack
+-- to the top of "Top" before it's collected any real signal. Doesn't stop
+-- vote-stuffing outright (that needs friction on session creation, a
+-- product decision, not a ranking-formula fix) but damps its effect on
+-- what every visitor sees first.
 create or replace function list_community_packs_top(limit_input int, offset_input int)
 returns table (id uuid, score int)
 language sql stable
 as $$
-  select sp.id, coalesce(pvt.score, 0) as score
+  select
+    sp.id,
+    case when coalesce(pvt.vote_count, 0) < 5 then 0 else coalesce(pvt.score, 0) end as score
   from story_packs sp
   left join pack_vote_totals pvt on pvt.pack_id = sp.id
   where sp.is_community = true and sp.is_published = true
-  order by coalesce(pvt.score, 0) desc, sp.id
+  order by
+    case when coalesce(pvt.vote_count, 0) < 5 then 0 else coalesce(pvt.score, 0) end desc,
+    sp.id
   limit limit_input offset offset_input;
 $$;
 
@@ -1990,6 +2244,103 @@ drop trigger if exists moderate_puzzle_translations on puzzle_translations;
 create trigger moderate_puzzle_translations
   before insert or update on puzzle_translations
   for each row execute function enforce_puzzle_translation_moderation();
+
+-- Puzzle bodies were moderated, but a community pack's own name/theme
+-- weren't — the first thing anyone sees on the /community browse grid,
+-- self-published with no review step. Same banned-words check, same
+-- is_community gate, split across two triggers since name and theme live
+-- on different tables.
+create or replace function enforce_pack_translation_moderation()
+returns trigger
+language plpgsql
+security definer
+as $$
+declare
+  hit text;
+  pack_is_community boolean;
+begin
+  select is_community into pack_is_community from story_packs where id = new.pack_id;
+  if not coalesce(pack_is_community, false) then
+    return new;
+  end if;
+
+  select word into hit
+  from banned_words
+  where new.name ilike '%' || word || '%'
+  limit 1;
+
+  if hit is not null then
+    raise exception 'Deze naam bevat taal die hier niet is toegestaan.';
+  end if;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists moderate_story_pack_translations on story_pack_translations;
+create trigger moderate_story_pack_translations
+  before insert or update on story_pack_translations
+  for each row execute function enforce_pack_translation_moderation();
+
+create or replace function enforce_pack_theme_moderation()
+returns trigger
+language plpgsql
+security definer
+as $$
+declare
+  hit text;
+begin
+  if not coalesce(new.is_community, false) then
+    return new;
+  end if;
+
+  select word into hit
+  from banned_words
+  where new.theme ilike '%' || word || '%'
+  limit 1;
+
+  if hit is not null then
+    raise exception 'Dit thema bevat taal die hier niet is toegestaan.';
+  end if;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists moderate_story_pack_theme on story_packs;
+create trigger moderate_story_pack_theme
+  before insert or update of theme on story_packs
+  for each row execute function enforce_pack_theme_moderation();
+
+-- Generous length backstops against direct API calls bypassing the forms'
+-- client-side maxLength (PackForm.tsx: name 60/theme 40, RiddleForm.tsx:
+-- title 80/hint 120, scenario/solution had no limit at all) — same
+-- reasoning as chat_message_reactions.emoji's length check above. Moderation
+-- still applies regardless; this is purely a storage/rendering-abuse cap,
+-- so the limits stay well above anything a real submission would need.
+-- `add constraint` has no `if not exists` in Postgres, so each is wrapped
+-- to stay safe to re-run.
+do $$
+begin
+  if not exists (select 1 from pg_constraint where conname = 'story_packs_theme_length') then
+    alter table story_packs add constraint story_packs_theme_length check (char_length(theme) <= 200);
+  end if;
+  if not exists (select 1 from pg_constraint where conname = 'story_pack_translations_name_length') then
+    alter table story_pack_translations add constraint story_pack_translations_name_length check (char_length(name) <= 200);
+  end if;
+  if not exists (select 1 from pg_constraint where conname = 'puzzle_translations_title_length') then
+    alter table puzzle_translations add constraint puzzle_translations_title_length check (char_length(title) <= 300);
+  end if;
+  if not exists (select 1 from pg_constraint where conname = 'puzzle_translations_scenario_length') then
+    alter table puzzle_translations add constraint puzzle_translations_scenario_length check (char_length(scenario) <= 5000);
+  end if;
+  if not exists (select 1 from pg_constraint where conname = 'puzzle_translations_solution_length') then
+    alter table puzzle_translations add constraint puzzle_translations_solution_length check (char_length(solution) <= 5000);
+  end if;
+  if not exists (select 1 from pg_constraint where conname = 'puzzle_translations_hint_length') then
+    alter table puzzle_translations add constraint puzzle_translations_hint_length check (char_length(hint) <= 500);
+  end if;
+end $$;
 
 alter table profiles enable row level security;
 alter table puzzle_votes enable row level security;

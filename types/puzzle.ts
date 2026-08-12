@@ -31,8 +31,12 @@ export type Puzzle = {
   locale: string;
 };
 
-/** Row shape of the published_puzzles view — same as Puzzle, plus the pack's theme for filtering. */
-export type PublishedPuzzle = Puzzle & { theme: string };
+/**
+ * Row shape of get_published_puzzle — same as Puzzle minus solution (that
+ * RPC deliberately never returns it, see its comment in schema.sql), plus
+ * the pack's theme for filtering.
+ */
+export type PublishedPuzzle = Omit<Puzzle, "solution"> & { theme: string };
 
 /**
  * Row shape of get_published_puzzle_candidates — just enough to run
@@ -83,6 +87,9 @@ export type PuzzleTranslation = {
   status: TranslationStatus;
   created_at: string;
 };
+
+/** Row shape of the `puzzle_translations_public` view — same as PuzzleTranslation, minus solution. */
+export type PuzzleTranslationPublic = Omit<PuzzleTranslation, "solution">;
 
 /** Raw row shape of `category_translations` — one language's name for one category. */
 export type CategoryTranslation = {

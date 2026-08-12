@@ -67,7 +67,7 @@ export function PasswordTab({
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
         <p className="font-mono text-xs text-text-secondary">
           {mode === "upgrade" ? t("upgradeIntro") : t("loginIntro")}
         </p>
@@ -77,7 +77,7 @@ export function PasswordTab({
             setMode((m) => (m === "upgrade" ? "login" : "upgrade"));
             setError(null);
           }}
-          className="shrink-0 font-mono text-xs uppercase tracking-widest text-accent underline decoration-accent/60 hover:text-accent-muted"
+          className="self-start font-mono text-xs uppercase tracking-widest text-accent underline decoration-accent/60 hover:text-accent-muted sm:shrink-0 sm:self-auto"
         >
           {mode === "upgrade" ? t("switchToLogin") : t("switchToUpgrade")}
         </button>

@@ -9,7 +9,7 @@
   },
   "ErrorBoundary": {
     "title": "Er is iets misgegaan",
-    "description": "Deze pagina is onverwacht vastgelopen. Probeer het opnieuw — als het blijft gebeuren, herlaad dan de pagina.",
+    "description": "Deze pagina is onverwacht vastgelopen. Probeer het opnieuw. Als het blijft gebeuren, herlaad dan de pagina.",
     "retry": "Probeer opnieuw"
   },
   "HomePage": {
@@ -75,7 +75,7 @@
     "submitting": "Aansluiten...",
     "submit": "Kamer joinen",
     "error": "Kon niet bij de kamer aansluiten. Probeer het opnieuw.",
-    "reclaimPrompt": "Er zit al een speler '{name}' in deze kamer — ben jij dat?",
+    "reclaimPrompt": "Er zit al een speler '{name}' in deze kamer. Ben jij dat?",
     "reclaimConfirm": "Ja, herstel mijn plek",
     "reclaimDecline": "Nee, ik ben nieuw"
   },
@@ -197,7 +197,7 @@
     "signOut": "Uitloggen",
     "signingOut": "Uitloggen...",
     "signOutError": "Uitloggen is niet gelukt. Probeer het opnieuw.",
-    "pendingConfirmation": "Bijna klaar — check je e-mail en klik op de bevestigingslink om je account te activeren.",
+    "pendingConfirmation": "Bijna klaar. Check je e-mail en klik op de bevestigingslink om je account te activeren.",
     "close": "Sluiten"
   },
   "PasswordTab": {
@@ -215,7 +215,7 @@
     "submitLogin": "Inloggen"
   },
   "MagicLinkTab": {
-    "intro": "Log in of maak een account met een code die we naar je e-mail sturen — geen wachtwoord nodig.",
+    "intro": "Log in of maak een account met een code die we naar je e-mail sturen. Geen wachtwoord nodig.",
     "emailLabel": "E-mailadres",
     "emailPlaceholder": "jij@voorbeeld.nl",
     "requestCode": "Stuur code",
@@ -530,7 +530,7 @@
   "SaboteurBriefingScreen": {
     "label": "Geheime rol",
     "heading": "Jij bent de saboteur",
-    "instructions": "Jij kent de oplossing, maar doe gewoon mee als rader. Stel vragen, gok mee, chat mee — gebruik je kennis stiekem om de anderen op het verkeerde spoor te zetten zonder dat ze het doorhebben.",
+    "instructions": "Jij kent de oplossing, maar doe gewoon mee als rader. Stel vragen, gok mee, chat mee. Gebruik je kennis stiekem om de anderen op het verkeerde spoor te zetten zonder dat ze het doorhebben.",
     "solutionLabel": "De oplossing",
     "start": "Begrepen"
   },
@@ -546,8 +546,8 @@
   "AccusationReveal": {
     "counting": "De stemmen worden geteld...",
     "heading": "Uitslag",
-    "correctlyAccused": "Het team wees {name} aan — en dat klopte!",
-    "wrongfullyAccused": "Het team wees {name} aan — mis!",
+    "correctlyAccused": "Het team wees {name} aan. Dat klopte!",
+    "wrongfullyAccused": "Het team wees {name} aan. Mis!",
     "noConsensus": "Er was geen duidelijke meerderheid.",
     "actualSaboteur": "De echte saboteur was: {name}.",
     "nearMiss": "Op een haar na goed geraden.",
@@ -577,7 +577,7 @@
     "loading": "Laden...",
     "loadError": "Kon je gegevens niet laden. Probeer het opnieuw.",
     "upgradeTitle": "Zet je statistieken vast",
-    "upgradeBody": "Je speelt nu anoniem — dat werkt prima om te spelen, maar langetermijnstatistieken (potjes gespeeld, opgeloste zaken) gaan verloren zodra je sessie ooit wisselt. Koppel een account om ze vast te zetten — dezelfde die je ook voor community-packs kunt gebruiken.",
+    "upgradeBody": "Je speelt nu anoniem. Dat werkt prima om te spelen, maar langetermijnstatistieken (potjes gespeeld, opgeloste zaken) gaan verloren zodra je sessie ooit wisselt. Koppel een account om ze vast te zetten, dezelfde die je ook voor community-packs kunt gebruiken.",
     "upgradeCta": "Account koppelen",
     "manageAccount": "Account beheren",
     "statsTitle": "Jouw statistieken",

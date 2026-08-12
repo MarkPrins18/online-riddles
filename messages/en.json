@@ -9,7 +9,7 @@
   },
   "ErrorBoundary": {
     "title": "Something went wrong",
-    "description": "This page hit an unexpected error. Try again — if it keeps happening, reload the page.",
+    "description": "This page hit an unexpected error. Try again. If it keeps happening, reload the page.",
     "retry": "Try again"
   },
   "HomePage": {
@@ -75,7 +75,7 @@
     "submitting": "Joining...",
     "submit": "Join room",
     "error": "Couldn't join the room. Please try again.",
-    "reclaimPrompt": "There's already a player named '{name}' in this room — is that you?",
+    "reclaimPrompt": "There's already a player named '{name}' in this room. Is that you?",
     "reclaimConfirm": "Yes, restore my spot",
     "reclaimDecline": "No, I'm new"
   },
@@ -197,7 +197,7 @@
     "signOut": "Sign out",
     "signingOut": "Signing out...",
     "signOutError": "Couldn't sign out. Please try again.",
-    "pendingConfirmation": "Almost there — check your email and click the confirmation link to activate your account.",
+    "pendingConfirmation": "Almost there. Check your email and click the confirmation link to activate your account.",
     "close": "Close"
   },
   "PasswordTab": {
@@ -215,7 +215,7 @@
     "submitLogin": "Log in"
   },
   "MagicLinkTab": {
-    "intro": "Log in or create an account with a code we email you — no password needed.",
+    "intro": "Log in or create an account with a code we email you. No password needed.",
     "emailLabel": "Email address",
     "emailPlaceholder": "you@example.com",
     "requestCode": "Send code",
@@ -530,7 +530,7 @@
   "SaboteurBriefingScreen": {
     "label": "Secret role",
     "heading": "You are the saboteur",
-    "instructions": "You know the solution, but just play along as a rader. Ask questions, guess, chat — secretly use your knowledge to steer the others wrong without them noticing.",
+    "instructions": "You know the solution, but just play along as a rader. Ask questions, guess, chat. Secretly use your knowledge to steer the others wrong without them noticing.",
     "solutionLabel": "The solution",
     "start": "Got it"
   },
@@ -546,8 +546,8 @@
   "AccusationReveal": {
     "counting": "Counting the votes...",
     "heading": "Result",
-    "correctlyAccused": "The team pointed at {name} — and they were right!",
-    "wrongfullyAccused": "The team pointed at {name} — wrong!",
+    "correctlyAccused": "The team pointed at {name}. They were right!",
+    "wrongfullyAccused": "The team pointed at {name}. Wrong!",
     "noConsensus": "There was no clear majority.",
     "actualSaboteur": "The actual saboteur was: {name}.",
     "nearMiss": "Guessed correctly by a hair.",
@@ -577,7 +577,7 @@
     "loading": "Loading...",
     "loadError": "Couldn't load your data. Please try again.",
     "upgradeTitle": "Lock in your stats",
-    "upgradeBody": "You're playing anonymously right now — that's fine for playing, but long-term stats (games played, cases solved) are lost the moment your session ever changes. Link an account to keep them — the same one you can use for community packs.",
+    "upgradeBody": "You're playing anonymously right now. That's fine for playing, but long-term stats (games played, cases solved) are lost the moment your session ever changes. Link an account to keep them, the same one you can use for community packs.",
     "upgradeCta": "Link account",
     "manageAccount": "Manage account",
     "statsTitle": "Your stats",

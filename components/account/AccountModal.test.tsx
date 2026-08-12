@@ -73,7 +73,7 @@ describe("AccountModal", () => {
 
     expect(
       await screen.findByText(
-        "Almost there — check your email and click the confirmation link to activate your account."
+        "Almost there. Check your email and click the confirmation link to activate your account."
       )
     ).toBeInTheDocument();
   });

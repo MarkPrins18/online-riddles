@@ -4,6 +4,7 @@ import type {
   Puzzle,
   PuzzleDifficulty,
   PublishedPuzzle,
+  PuzzleCandidate,
   StoryPack,
   Category,
   PuzzleTranslation,
@@ -76,8 +77,12 @@ export type Database = {
         Args: { room_id_input: string; locale_input?: string };
         Returns: Puzzle[];
       };
-      get_published_puzzles: {
-        Args: { locale_input: string };
+      get_published_puzzle_candidates: {
+        Args: Record<string, never>;
+        Returns: PuzzleCandidate[];
+      };
+      get_published_puzzle: {
+        Args: { puzzle_id_input: string; locale_input: string };
         Returns: PublishedPuzzle[];
       };
     };
@@ -110,7 +115,7 @@ export type Database = {
       // `puzzles` itself is now locale-agnostic (no title/scenario/solution/
       // hint) — those live in `puzzle_translations` below. The Row shape
       // stays `Puzzle` (title etc. included) because every read goes
-      // through get_published_puzzles/get_room_puzzle, which already join
+      // through get_published_puzzle/get_room_puzzle, which already join
       // in the right locale — the client never selects the bare table.
       puzzles: TableShape<
         Puzzle,

@@ -432,7 +432,36 @@ create table if not exists admins (
 -- SECURITY DEFINER, so it runs as SECURITY INVOKER (the default) — bound
 -- by the calling role's own RLS, same reasoning the old view's
 -- `security_invoker = true` had.
-create or replace function get_published_puzzles(locale_input text)
+-- Feeds getRandomPuzzle's client-side filter cascade (theme -> difficulty
+-- -> vote quality -> unplayed, each falling back to the wider pool if
+-- empty) without paying for every published puzzle's full text on every
+-- single round start — this used to be get_published_puzzles, returning
+-- title/scenario/solution/hint for every row just so the caller could
+-- throw all but one of them away. Only the columns that cascade actually
+-- filters on remain; once it has picked a winning id, the caller fetches
+-- that one puzzle's real text via get_published_puzzle below.
+create or replace function get_published_puzzle_candidates()
+returns table (
+  id uuid, pack_id uuid, theme text, difficulty text, is_community boolean
+)
+language sql stable
+as $$
+  -- exists, not a join, on purpose: a puzzle can have more than one
+  -- translation row (nl + en), and a plain join would return it once per
+  -- translation — silently doubling its odds of being the one picked.
+  select p.id, p.pack_id, sp.theme, p.difficulty, p.is_community
+  from puzzles p
+  join story_packs sp on sp.id = p.pack_id
+  where sp.is_published = true
+    and exists (select 1 from puzzle_translations pt where pt.puzzle_id = p.id);
+$$;
+
+-- The other half of get_published_puzzle_candidates above — full
+-- translated text for exactly one puzzle, same locale-fallback shape the
+-- old get_published_puzzles had per-row. Re-checks is_published (rather
+-- than trusting the caller already filtered on it) in case the pack was
+-- unpublished in the moment between the candidates fetch and this call.
+create or replace function get_published_puzzle(puzzle_id_input uuid, locale_input text)
 returns table (
   id uuid, pack_id uuid, title text, scenario text, solution text,
   category_id uuid, category text, difficulty text, hint text,
@@ -451,10 +480,6 @@ as $$
     p.difficulty,
     coalesce(pt.hint, pt_fallback.hint) as hint,
     p.created_at, sp.theme, p.created_by, p.is_community,
-    -- Which language the returned text actually came from — 'nl' when it
-    -- fell back, locale_input when a direct translation existed. Lets the
-    -- client know it's showing a fallback rather than silently pretending
-    -- everything is translated.
     case when pt.puzzle_id is not null then locale_input else 'nl' end as locale
   from puzzles p
   join story_packs sp on sp.id = p.pack_id
@@ -464,6 +489,7 @@ as $$
   left join category_translations ct on ct.category_id = c.id and ct.locale = locale_input
   left join category_translations ct_fallback on ct_fallback.category_id = c.id and ct_fallback.locale = 'nl'
   where sp.is_published = true
+    and p.id = puzzle_id_input
     and coalesce(pt.title, pt_fallback.title) is not null;
 $$;
 

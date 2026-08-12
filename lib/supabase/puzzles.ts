@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "./database.types";
-import type { Puzzle, PublishedPuzzle, PuzzleDifficulty } from "@/types/puzzle";
+import type { Puzzle, PublishedPuzzle, PuzzleCandidate, PuzzleDifficulty } from "@/types/puzzle";
 import { getVoteTotals } from "./votes";
 import { resolveCategoryId } from "./categories";
 
@@ -17,20 +17,26 @@ const MIN_VOTES_TO_TRUST_SCORE = 5;
 const BAD_SCORE_THRESHOLD = -3;
 
 /**
- * Only pulls from packs that have been published — see get_published_puzzles
- * in schema.sql, which also resolves `locale` (falling back to Dutch
- * server-side wherever a puzzle has no translation yet) so this never has
- * to fetch every language's rows to filter one out client-side. Excludes
- * `excludeIds` (puzzles this room already played) so a game night doesn't
- * repeat a riddle everyone already knows the answer to; falls back to the
- * full pool once every puzzle has been used. `officialThemes` restricts
- * non-community puzzles to those pack themes (empty = no restriction);
- * `communityPackIds` restricts community puzzles to those specific packs
- * (null = every published community pack, [] = none). `preferredDifficulty`
- * further narrows the result to match the round's target difficulty (see
- * lib/game/difficulty.ts) — every filter falls back to the wider pool if
- * the narrowed set happens to be empty, rather than blocking the game over
- * a combination with zero puzzles.
+ * Only pulls from packs that have been published — see
+ * get_published_puzzle_candidates in schema.sql. That RPC deliberately
+ * returns just enough per puzzle (id, pack_id, theme, difficulty,
+ * is_community) to run the filter cascade below, not each candidate's full
+ * title/scenario/solution/hint — fetching every published puzzle's full
+ * text just to throw away all but one of them doesn't scale as the catalog
+ * grows. Once the cascade has picked a single winner, get_published_puzzle
+ * fetches that one puzzle's real content (with locale fallback to Dutch,
+ * same as before).
+ *
+ * Excludes `excludeIds` (puzzles this room already played) so a game night
+ * doesn't repeat a riddle everyone already knows the answer to; falls back
+ * to the full pool once every puzzle has been used. `officialThemes`
+ * restricts non-community puzzles to those pack themes (empty = no
+ * restriction); `communityPackIds` restricts community puzzles to those
+ * specific packs (null = every published community pack, [] = none).
+ * `preferredDifficulty` further narrows the result to match the round's
+ * target difficulty (see lib/game/difficulty.ts) — every filter falls back
+ * to the wider pool if the narrowed set happens to be empty, rather than
+ * blocking the game over a combination with zero puzzles.
  */
 export async function getRandomPuzzle(
   supabase: Client,
@@ -40,14 +46,14 @@ export async function getRandomPuzzle(
   communityPackIds: string[] | null = null,
   preferredDifficulty?: PuzzleDifficulty
 ): Promise<Puzzle> {
-  const { data, error } = await supabase.rpc("get_published_puzzles", { locale_input: locale });
+  const { data, error } = await supabase.rpc("get_published_puzzle_candidates");
 
   if (error) throw error;
   if (!data || data.length === 0) {
     throw new Error("Geen gepubliceerde puzzels beschikbaar.");
   }
 
-  const puzzles = data as PublishedPuzzle[];
+  const puzzles = data as PuzzleCandidate[];
   const themeFiltered = puzzles.filter((p) =>
     p.is_community
       ? communityPackIds === null || communityPackIds.includes(p.pack_id)
@@ -76,8 +82,22 @@ export async function getRandomPuzzle(
   const pool = unplayed.length > 0 ? unplayed : ratingFiltered;
 
   const picked = pool[Math.floor(Math.random() * pool.length)];
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- drop theme, the only field published_puzzles adds over Puzzle
-  const { theme, ...puzzle } = picked;
+
+  const { data: puzzleRows, error: puzzleError } = await supabase.rpc("get_published_puzzle", {
+    puzzle_id_input: picked.id,
+    locale_input: locale,
+  });
+  if (puzzleError) throw puzzleError;
+  if (!puzzleRows || puzzleRows.length === 0) {
+    // Vanishingly rare: the picked puzzle's pack got unpublished in the
+    // gap between the two fetches. Not worth a retry loop for — surface
+    // the same "try again" path an empty candidate pool already has.
+    throw new Error("Geen gepubliceerde puzzels beschikbaar.");
+  }
+
+  const pickedFull = puzzleRows[0] as PublishedPuzzle;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- drop theme, the only field get_published_puzzle adds over Puzzle
+  const { theme, ...puzzle } = pickedFull;
   return puzzle;
 }
 

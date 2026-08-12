@@ -35,6 +35,21 @@ export type Puzzle = {
 export type PublishedPuzzle = Puzzle & { theme: string };
 
 /**
+ * Row shape of get_published_puzzle_candidates — just enough to run
+ * getRandomPuzzle's filter cascade (theme, difficulty, pack membership)
+ * without paying for every published puzzle's full text up front. See
+ * get_published_puzzle for the follow-up fetch of the winning id's actual
+ * content.
+ */
+export type PuzzleCandidate = {
+  id: string;
+  pack_id: string;
+  theme: string;
+  difficulty: PuzzleDifficulty;
+  is_community: boolean;
+};
+
+/**
  * Puzzle without its solution — for anything rendered to players who
  * haven't solved it yet (community browse pages). `solution` must never be
  * selected for these views: RLS lets anyone read it, so leaving it out is

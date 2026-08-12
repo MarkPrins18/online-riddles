@@ -93,6 +93,47 @@ create trigger set_spectator_on_join
   before insert on players
   for each row execute function set_spectator_on_join();
 
+-- The "update own player" RLS policy below only checks *who* owns the row,
+-- not *which* columns they're changing — with the (public, by design) anon
+-- key, that's enough for a direct REST call to set is_host/is_narrator on
+-- your own row (then use "leave or be kicked" to remove everyone else), or
+-- score directly (bypassing increment_player_score entirely), or even
+-- room_id (jumping an already-inflated row into an unrelated room). The app
+-- itself never issues a raw players.update() for these columns — every
+-- privileged change already goes through the security-definer functions
+-- below (increment_player_score, set_host, set_narrator, claim_host,
+-- claim_narrator, reclaim_player) and the promote_spectators_on_new_round
+-- trigger. This trigger makes that the only path: it sets the
+-- transaction-local flag right before its update, everyone else's changes
+-- to these columns are silently reverted to the pre-update value. Ordinary
+-- client updates (e.g. a future rename feature) keep working since `name`
+-- is left untouched.
+create or replace function guard_player_privileged_columns()
+returns trigger
+language plpgsql
+security definer
+as $$
+begin
+  if current_setting('app.player_privileged_update', true) = 'on' then
+    return new;
+  end if;
+
+  new.room_id := old.room_id;
+  new.user_id := old.user_id;
+  new.is_host := old.is_host;
+  new.is_narrator := old.is_narrator;
+  new.is_spectator := old.is_spectator;
+  new.score := old.score;
+  new.joined_at := old.joined_at;
+  return new;
+end;
+$$;
+
+drop trigger if exists guard_player_privileged_columns on players;
+create trigger guard_player_privileged_columns
+  before update on players
+  for each row execute function guard_player_privileged_columns();
+
 -- A story pack groups puzzles under one theme (Crime, Sci-Fi, Absurd, ...)
 -- and can be released independently via is_published. `theme` stays a
 -- plain column (see normalize_pack_theme below — it's community-writable
@@ -729,6 +770,7 @@ security definer
 as $$
 begin
   if new.current_puzzle_id is distinct from old.current_puzzle_id then
+    perform set_config('app.player_privileged_update', 'on', true);
     update players set is_spectator = false
     where room_id = new.id and is_spectator = true;
   end if;
@@ -834,6 +876,7 @@ begin
     raise exception 'Not authorized to change scores in this room';
   end if;
 
+  perform set_config('app.player_privileged_update', 'on', true);
   update players set score = greatest(0, score + amount_input)
   where id = player_id_input and room_id = room_id_input
   returning user_id into target_user_id;
@@ -863,6 +906,7 @@ begin
     raise exception 'Only the host can assign the Verteller';
   end if;
 
+  perform set_config('app.player_privileged_update', 'on', true);
   update players set is_narrator = false where room_id = room_id_input;
   update players set is_narrator = true where id = player_id_input and room_id = room_id_input;
   update rooms set narrator_id = player_id_input where id = room_id_input;
@@ -879,6 +923,7 @@ begin
     raise exception 'Only the current host can transfer host';
   end if;
 
+  perform set_config('app.player_privileged_update', 'on', true);
   update players set is_host = false where room_id = room_id_input;
   update players set is_host = true where id = player_id_input and room_id = room_id_input;
   update rooms set host_id = player_id_input where id = room_id_input;
@@ -907,6 +952,7 @@ begin
     raise exception 'Can only claim host for yourself';
   end if;
 
+  perform set_config('app.player_privileged_update', 'on', true);
   update players set is_host = false where room_id = room_id_input;
   update players set is_host = true where id = claiming_player_id and room_id = room_id_input;
   update rooms set host_id = claiming_player_id where id = room_id_input;
@@ -938,6 +984,7 @@ begin
     raise exception 'Target player not in this room';
   end if;
 
+  perform set_config('app.player_privileged_update', 'on', true);
   update players set is_narrator = false where room_id = room_id_input;
   update players set is_narrator = true where id = new_narrator_id and room_id = room_id_input;
   update rooms set narrator_id = new_narrator_id where id = room_id_input;
@@ -969,6 +1016,7 @@ begin
     raise exception 'Player not found in this room';
   end if;
 
+  perform set_config('app.player_privileged_update', 'on', true);
   update players set user_id = auth.uid() where id = target_player_id;
 end;
 $$;
@@ -1409,6 +1457,11 @@ drop policy if exists "public read players" on players;
 create policy "public read players" on players for select using (true);
 drop policy if exists "join as self" on players;
 create policy "join as self" on players for insert with check (user_id = auth.uid());
+-- Row ownership only — see guard_player_privileged_columns above for why
+-- that's still safe: it silently reverts score/is_host/is_narrator/
+-- is_spectator/room_id/user_id on any update that doesn't go through one of
+-- the security-definer RPCs, so a direct update through this policy can
+-- only ever change `name`.
 drop policy if exists "update own player" on players;
 create policy "update own player" on players for update
   using (user_id = auth.uid()) with check (user_id = auth.uid());

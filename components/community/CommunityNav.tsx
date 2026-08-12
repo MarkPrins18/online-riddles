@@ -40,19 +40,39 @@ export function CommunityNav() {
           with one tap, instead of some of them requiring a horizontal
           scroll a visitor might never discover. sm and up switch to the
           tab-shaped links (hidden below sm, this select is hidden at sm
-          and up) since there's room for them there. */}
-      <select
-        value={activeHref}
-        onChange={(e) => router.push(e.target.value)}
-        aria-label={t("navigateLabel")}
-        className="min-w-0 flex-1 rounded-md border border-white/10 bg-bg-primary px-3 py-2 font-mono text-sm text-text-primary focus:border-accent-muted sm:hidden"
-      >
-        {LINKS.map((link) => (
-          <option key={link.href} value={link.href}>
-            {link.label}
-          </option>
-        ))}
-      </select>
+          and up) since there's room for them there. Styled like the
+          active tab itself (gold border/text on the case-brown fill)
+          instead of a plain form input, with the browser's own arrow
+          swapped for one in the accent color, so it reads as "the tabs,
+          collapsed" rather than an unrelated settings field. */}
+      <div className="relative min-w-0 flex-1 sm:hidden">
+        <select
+          value={activeHref}
+          onChange={(e) => router.push(e.target.value)}
+          aria-label={t("navigateLabel")}
+          className="w-full appearance-none rounded-sm border border-accent/40 bg-bg-secondary py-2.5 pl-3 pr-9 font-mono text-xs uppercase tracking-widest text-accent transition-colors focus:border-accent"
+        >
+          {LINKS.map((link) => (
+            <option key={link.href} value={link.href} className="bg-bg-primary text-text-primary">
+              {link.label}
+            </option>
+          ))}
+        </select>
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 12 8"
+          className="pointer-events-none absolute right-3 top-1/2 h-2 w-3 -translate-y-1/2 text-accent"
+        >
+          <path
+            d="M1 1l5 5 5-5"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </div>
 
       <nav className="hidden min-w-0 gap-1 overflow-x-auto sm:flex">
         {LINKS.map((link) => {

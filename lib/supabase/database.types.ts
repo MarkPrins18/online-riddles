@@ -24,6 +24,7 @@ import type { Profile } from "@/types/profile";
 import type { PuzzleVote, PuzzleVoteTotals, VoteValue } from "@/types/vote";
 import type { PackFavorite } from "@/types/packFavorite";
 import type { Hint } from "@/types/hint";
+import type { PlayerStats } from "@/types/playerStats";
 
 type TableShape<Row, Insert, Update> = {
   Row: Row;
@@ -259,6 +260,10 @@ export type Database = {
         Partial<PackFavorite> & { pack_id: string; user_id: string },
         Partial<PackFavorite>
       >;
+      // Row-only — every write goes through security-definer functions
+      // (see schema.sql), never a direct client insert/update, so there's
+      // no Insert/Update shape worth typing here.
+      player_stats: TableShape<PlayerStats, never, never>;
     };
   };
 };

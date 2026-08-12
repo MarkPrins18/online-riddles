@@ -11,6 +11,8 @@ export type CaseLogEntry = {
   outcome: CaseOutcome;
   solver_name: string | null;
   narrator_name: string | null;
+  solver_user_id: string | null;
+  narrator_user_id: string | null;
   questions_asked: number;
   created_at: string;
 };

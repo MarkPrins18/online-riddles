@@ -542,6 +542,16 @@ create table if not exists case_log (
   unique (room_id, round)
 );
 
+-- Nullable, populated by the client alongside solver_name/narrator_name
+-- (which stay purely for display) — lets the case_log_stats trigger below
+-- attribute rounds_solved/rounds_narrated to a real account instead of a
+-- free-text name that could collide or belong to nobody in particular.
+-- Rows logged before this column existed simply stay null and are never
+-- counted, same "stats start from now" precedent as the players.user_id
+-- migration further up this file.
+alter table case_log add column if not exists solver_user_id uuid references auth.users (id) on delete set null;
+alter table case_log add column if not exists narrator_user_id uuid references auth.users (id) on delete set null;
+
 -- Saboteur mode: one hidden rader per round secretly knows the solution and
 -- tries to mislead the others while still looking like a normal player.
 -- `saboteur_id` can NOT live on `rooms` or `players` — both of those tables
@@ -724,6 +734,20 @@ language sql stable security definer as $$
   );
 $$;
 
+-- Long-term stats (see player_stats below) only ever accrue for players who
+-- upgraded their anonymous session to a real account (linked an email) —
+-- an anonymous score is exactly as unverifiable/gameable as any other
+-- outcome in this narrator-trusts-the-group game, so there's no honest way
+-- to call it "long-term" without at least that minimal commitment.
+-- Defaults to true (don't count) if the user can't be found at all.
+create or replace function is_anonymous_user(target_user_id uuid) returns boolean
+language sql stable security definer as $$
+  select coalesce(
+    (select is_anonymous from auth.users where id = target_user_id),
+    true
+  );
+$$;
+
 -- === RPCs for actions that touch someone else's row =========================
 -- A "you can only update yourself" policy can't allow narrator/host
 -- assignment or scoring (those inherently change another player's row), so
@@ -737,13 +761,29 @@ returns void
 language plpgsql
 security definer
 as $$
+declare
+  target_user_id uuid;
 begin
   if not (is_room_narrator(room_id_input) or is_room_host(room_id_input)) then
     raise exception 'Not authorized to change scores in this room';
   end if;
 
   update players set score = greatest(0, score + amount_input)
-  where id = player_id_input and room_id = room_id_input;
+  where id = player_id_input and room_id = room_id_input
+  returning user_id into target_user_id;
+
+  -- Every score change in the game already funnels through this one
+  -- function, so it's the single cheapest place to also keep a lifetime
+  -- total — no separate call site needed anywhere else. See player_stats
+  -- below and is_anonymous_user above for why this only applies to
+  -- upgraded accounts.
+  if target_user_id is not null and not is_anonymous_user(target_user_id) then
+    insert into player_stats (user_id, lifetime_score)
+    values (target_user_id, amount_input)
+    on conflict (user_id) do update
+      set lifetime_score = player_stats.lifetime_score + excluded.lifetime_score,
+          updated_at = now();
+  end if;
 end;
 $$;
 
@@ -1576,6 +1616,92 @@ create table if not exists profiles (
   created_at timestamptz not null default now()
 );
 
+-- Long-term player stats — only ever written by the security-definer hooks
+-- below (increment_player_score, apply_case_log_stats, apply_room_finished
+-- _stats), never directly by a client, and only for accounts that passed
+-- is_anonymous_user. Private to the owner: no leaderboard/global comparison
+-- exists in this app on purpose (see the increment_player_score comment —
+-- an unverifiable narrator-trust game gives cheating real payoff the moment
+-- there's an audience to impress, so this stays a personal-only view).
+create table if not exists player_stats (
+  user_id uuid primary key references auth.users (id) on delete cascade,
+  games_played int not null default 0,
+  rounds_solved int not null default 0,
+  rounds_narrated int not null default 0,
+  lifetime_score int not null default 0,
+  updated_at timestamptz not null default now()
+);
+
+-- After a round's outcome is logged, credit the solver/narrator (if they're
+-- on an upgraded account) with a round played. Fires once per case_log row
+-- — that table's own (room_id, round) unique constraint already prevents
+-- duplicate inserts for the same round, so this can't double-count.
+create or replace function apply_case_log_stats() returns trigger
+language plpgsql
+security definer
+as $$
+begin
+  if new.narrator_user_id is not null and not is_anonymous_user(new.narrator_user_id) then
+    insert into player_stats (user_id, rounds_narrated)
+    values (new.narrator_user_id, 1)
+    on conflict (user_id) do update
+      set rounds_narrated = player_stats.rounds_narrated + 1,
+          updated_at = now();
+  end if;
+
+  if new.outcome = 'solved' and new.solver_user_id is not null
+     and not is_anonymous_user(new.solver_user_id) then
+    insert into player_stats (user_id, rounds_solved)
+    values (new.solver_user_id, 1)
+    on conflict (user_id) do update
+      set rounds_solved = player_stats.rounds_solved + 1,
+          updated_at = now();
+  end if;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists case_log_stats on case_log;
+create trigger case_log_stats
+  after insert on case_log
+  for each row execute function apply_case_log_stats();
+
+-- Credits everyone who actually played (not spectators) with a game once
+-- the room is marked finished — see GamePlayClient for the two points that
+-- set this (out of rounds, or hardcore mode out of team lives). Guarded on
+-- an actual old->new status change so a redundant client call (more than
+-- one player's client can race to set this) can't double-count.
+create or replace function apply_room_finished_stats() returns trigger
+language plpgsql
+security definer
+as $$
+declare
+  member record;
+begin
+  if new.status = 'finished' and old.status is distinct from new.status then
+    for member in
+      select user_id from players
+      where room_id = new.id and is_spectator = false and user_id is not null
+    loop
+      if not is_anonymous_user(member.user_id) then
+        insert into player_stats (user_id, games_played)
+        values (member.user_id, 1)
+        on conflict (user_id) do update
+          set games_played = player_stats.games_played + 1,
+              updated_at = now();
+      end if;
+    end loop;
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists room_finished_stats on rooms;
+create trigger room_finished_stats
+  after update on rooms
+  for each row execute function apply_room_finished_stats();
+
 alter table story_packs add column if not exists created_by uuid references auth.users (id) on delete cascade;
 alter table story_packs add column if not exists is_community boolean not null default false;
 alter table puzzles add column if not exists created_by uuid references auth.users (id) on delete cascade;
@@ -1675,12 +1801,19 @@ create trigger moderate_puzzle_translations
 alter table profiles enable row level security;
 alter table puzzle_votes enable row level security;
 alter table pack_favorites enable row level security;
+alter table player_stats enable row level security;
 
 drop policy if exists "public read profiles" on profiles;
 create policy "public read profiles" on profiles for select using (true);
 drop policy if exists "write own profile" on profiles;
 create policy "write own profile" on profiles for all
   using (id = auth.uid()) with check (id = auth.uid());
+
+-- Private to the owner (no leaderboard) — no insert/update/delete policy at
+-- all, since every write goes through the security-definer hooks in this
+-- file, never directly from a client.
+drop policy if exists "read own player_stats" on player_stats;
+create policy "read own player_stats" on player_stats for select using (user_id = auth.uid());
 
 drop policy if exists "public read puzzle votes" on puzzle_votes;
 create policy "public read puzzle votes" on puzzle_votes for select using (true);

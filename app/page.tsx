@@ -57,6 +57,9 @@ export default function Home() {
           <Link href="/community" className="underline decoration-accent/60 hover:text-accent">
             {t("communityLink")}
           </Link>
+          <Link href="/profile" className="underline decoration-accent/60 hover:text-accent">
+            {t("profileLink")}
+          </Link>
           <HowToPlayButton />
         </div>
       </div>

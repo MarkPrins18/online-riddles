@@ -18,7 +18,8 @@
     "subtitle": "Een lateral thinking verhoor. Stel de slimste vragen, verzamel de gekste aanwijzingen en kraak de zaak samen, of ga solo voor de eer (en de punten).",
     "newFile": "Nieuw dossier",
     "existingFile": "Bestaand dossier",
-    "communityLink": "Bekijk raadsels van de community →"
+    "communityLink": "Bekijk raadsels van de community →",
+    "profileLink": "Mijn statistieken"
   },
   "HowToPlay": {
     "trigger": "Spelregels",
@@ -511,5 +512,23 @@
     "addRiddle": "Raadsel toevoegen",
     "cancel": "Annuleren",
     "error": "Kon het raadsel niet opslaan. Probeer het opnieuw."
+  },
+  "Profile": {
+    "loading": "Laden...",
+    "loadError": "Kon je gegevens niet laden. Probeer het opnieuw.",
+    "upgradeTitle": "Zet je statistieken vast",
+    "upgradeBody": "Je speelt nu anoniem — dat werkt prima om te spelen, maar langetermijnstatistieken (potjes gespeeld, opgeloste zaken) gaan verloren zodra je sessie ooit wisselt. Koppel een e-mailadres om ze vast te zetten aan één account. Geen wachtwoord nodig — je krijgt een link om op te klikken.",
+    "emailLabel": "E-mailadres",
+    "emailPlaceholder": "jij@voorbeeld.nl",
+    "submitting": "Versturen...",
+    "submit": "Stuur mij een link",
+    "linkSent": "Check je mail ({email}) en klik op de link om je account te bevestigen.",
+    "linkError": "Kon de link niet versturen. Probeer het opnieuw.",
+    "statsTitle": "Jouw statistieken",
+    "gamesPlayed": "Potjes gespeeld",
+    "roundsSolved": "Zaken opgelost",
+    "roundsNarrated": "Keer verteller",
+    "lifetimeScore": "Totale score",
+    "noStatsYet": "Nog geen potjes voltooid sinds je account. Speel een potje uit om je eerste statistieken te zien."
   }
 }

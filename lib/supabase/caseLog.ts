@@ -23,6 +23,14 @@ export async function logCaseOutcome(
     outcome: CaseOutcome;
     solverName: string | null;
     narratorName: string | null;
+    // Nullable, separate from the display-only names above — feeds the
+    // case_log_stats trigger (see schema.sql) that credits rounds_solved/
+    // rounds_narrated on player_stats. Left undefined by any caller that
+    // doesn't have this on hand rather than making it required, since a
+    // missing id just means that round doesn't count toward stats instead
+    // of failing the whole insert.
+    solverUserId?: string | null;
+    narratorUserId?: string | null;
     questionsAsked: number;
   }
 ): Promise<void> {
@@ -34,6 +42,8 @@ export async function logCaseOutcome(
     outcome: entry.outcome,
     solver_name: entry.solverName,
     narrator_name: entry.narratorName,
+    solver_user_id: entry.solverUserId ?? null,
+    narrator_user_id: entry.narratorUserId ?? null,
     questions_asked: entry.questionsAsked,
   });
 

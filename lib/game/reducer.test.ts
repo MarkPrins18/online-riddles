@@ -146,6 +146,8 @@ describe("gameReducer", () => {
       outcome: "solved" as const,
       solver_name: "Alice",
       narrator_name: "Bob",
+      solver_user_id: null,
+      narrator_user_id: null,
       questions_asked: 5,
       created_at: "2026-01-01T00:00:00.000Z",
     };

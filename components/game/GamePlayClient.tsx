@@ -144,6 +144,28 @@ export function GamePlayClient({ code }: { code: string }) {
     }
   }, [playerId, code, router]);
 
+  // Nothing else in the app ever sets a room to "finished" — the final
+  // scoreboard is purely a client-side render (no more rounds, or hardcore
+  // mode out of team lives), the room just sits at "revealed" forever.
+  // This is the one place both of those endings are already detected, so
+  // it's also the natural place to flip the status that player_stats'
+  // games_played hook (see schema.sql: apply_room_finished_stats) listens
+  // for. Host-only and idempotent (guarded by the trigger's own old->new
+  // check), so a redundant call from a race is harmless.
+  const finishedHandledRef = useRef(false);
+  useEffect(() => {
+    const room = state.room;
+    if (!room || playerId !== room.host_id || room.status === "finished") return;
+    if (finishedHandledRef.current) return;
+
+    const outOfRounds = room.status === "revealed" && !hasMoreRounds(room.round, room.max_rounds);
+    const outOfLives = room.hardcore_mode && room.team_lives_remaining === 0;
+    if (!outOfRounds && !outOfLives) return;
+
+    finishedHandledRef.current = true;
+    updateRoomStatus(supabase, room.id, "finished");
+  }, [state.room, playerId, supabase]);
+
   const timeUpHandledForRoundRef = useRef<number | null>(null);
   useEffect(() => {
     const room = state.room;
@@ -154,7 +176,7 @@ export function GamePlayClient({ code }: { code: string }) {
     if (timeUpHandledForRoundRef.current === room.round) return;
 
     timeUpHandledForRoundRef.current = room.round;
-    const narratorName = state.players.find((p) => p.id === room.narrator_id)?.name ?? null;
+    const narratorPlayer = state.players.find((p) => p.id === room.narrator_id);
     logCaseOutcome(supabase, {
       roomId: room.id,
       round: room.round,
@@ -162,7 +184,8 @@ export function GamePlayClient({ code }: { code: string }) {
       difficulty: puzzle.difficulty,
       outcome: "unsolved",
       solverName: null,
-      narratorName,
+      narratorName: narratorPlayer?.name ?? null,
+      narratorUserId: narratorPlayer?.user_id ?? null,
       questionsAsked: state.questions.length,
     });
     updateRoomStatus(supabase, room.id, "revealed");

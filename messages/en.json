@@ -18,7 +18,8 @@
     "subtitle": "A lateral thinking interrogation. Ask the smartest questions, gather the wildest clues, and crack the case together, or go solo for the glory (and the points).",
     "newFile": "New file",
     "existingFile": "Existing file",
-    "communityLink": "Browse community riddles →"
+    "communityLink": "Browse community riddles →",
+    "profileLink": "My stats"
   },
   "HowToPlay": {
     "trigger": "How to play",
@@ -511,5 +512,23 @@
     "addRiddle": "Add riddle",
     "cancel": "Cancel",
     "error": "Couldn't save the riddle. Please try again."
+  },
+  "Profile": {
+    "loading": "Loading...",
+    "loadError": "Couldn't load your data. Please try again.",
+    "upgradeTitle": "Lock in your stats",
+    "upgradeBody": "You're playing anonymously right now — that's fine for playing, but long-term stats (games played, cases solved) are lost the moment your session ever changes. Link an email address to tie them to one account. No password needed — you'll get a link to click.",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "you@example.com",
+    "submitting": "Sending...",
+    "submit": "Send me a link",
+    "linkSent": "Check your email ({email}) and click the link to confirm your account.",
+    "linkError": "Couldn't send the link. Please try again.",
+    "statsTitle": "Your stats",
+    "gamesPlayed": "Games played",
+    "roundsSolved": "Cases solved",
+    "roundsNarrated": "Times narrated",
+    "lifetimeScore": "Total score",
+    "noStatsYet": "No games completed since your account yet. Play one out to see your first stats."
   }
 }

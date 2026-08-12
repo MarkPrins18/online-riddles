@@ -49,7 +49,9 @@ export function NarratorGuessControls({
   // second pending guess getting reviewed after the round is already
   // resolved (which would pay out the team bonus twice).
   const [reviewingId, setReviewingId] = useState<string | null>(null);
-  const narratorName = players.find((p) => p.id === narratorId)?.name ?? null;
+  const narratorPlayer = players.find((p) => p.id === narratorId);
+  const narratorName = narratorPlayer?.name ?? null;
+  const narratorUserId = narratorPlayer?.user_id ?? null;
   const t = useTranslations("NarratorGuessControls");
 
   async function handleIncorrect(guess: Guess) {
@@ -70,6 +72,7 @@ export function NarratorGuessControls({
           outcome: "unsolved",
           solverName: null,
           narratorName,
+          narratorUserId,
           questionsAsked: questions.length,
         });
       }
@@ -99,6 +102,7 @@ export function NarratorGuessControls({
       await incrementScore(supabase, bestQuestion.player_id, calculateBestQuestionBonus(), roomId);
     }
 
+    const solverUserId = players.find((p) => p.id === guess.player_id)?.user_id ?? null;
     await logCaseOutcome(supabase, {
       roomId,
       round,
@@ -107,6 +111,8 @@ export function NarratorGuessControls({
       outcome: "solved",
       solverName: guess.player_name,
       narratorName,
+      solverUserId,
+      narratorUserId,
       questionsAsked: questions.length,
     });
 

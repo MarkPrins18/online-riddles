@@ -309,6 +309,22 @@ export async function insertPuzzles(
   return inserted;
 }
 
+/**
+ * Deletes every puzzle in a pack (cascades to puzzle_translations and
+ * puzzle_votes). Fails with a foreign-key error if any of the pack's
+ * puzzles is still referenced by an active room's questions/guesses/hints
+ * — those rows only clear once the room itself is removed by the 24h
+ * cleanup — which is the DB protecting live game state, not a bug to catch
+ * and paper over here. Used to clear a pack before re-importing replacement
+ * content, since insertPuzzles only ever adds, never replaces.
+ */
+export async function deletePackPuzzles(supabase: Client, packId: string): Promise<number> {
+  const { data, error } = await supabase.from("puzzles").delete().eq("pack_id", packId).select("id");
+
+  if (error) throw error;
+  return data?.length ?? 0;
+}
+
 export type PuzzleTranslationInput = {
   /** The existing Dutch title to match against — identifies which puzzle this translation belongs to. */
   matchTitle: string;

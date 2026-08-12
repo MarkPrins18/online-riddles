@@ -6,6 +6,12 @@ import type { Hint } from "@/types/hint";
 
 const VISIBLE_MS = 6000;
 
+// How fresh a hint has to be to still trigger the snackbar. Without this, a
+// page refresh (or returning to the tab after a while) re-mounts this
+// component with a blank seenIdRef, so the room's most recent hint — even
+// one from minutes/hours ago — would look "new" and pop the snackbar again.
+const MAX_HINT_AGE_MS = 15_000;
+
 /**
  * A transient attention-grabber for a freshly sent hint — the hint itself
  * already lives permanently in the InterrogationLog (see HintCard there);
@@ -17,13 +23,27 @@ export function HintSnackbar({ latestHint }: { latestHint: Hint | null }) {
   const seenIdRef = useRef<string | null>(null);
   const t = useTranslations("HintSnackbar");
 
+  const latestHintId = latestHint?.id ?? null;
+
   useEffect(() => {
-    if (!latestHint || latestHint.id === seenIdRef.current) return;
+    if (
+      !latestHint ||
+      latestHint.id === seenIdRef.current ||
+      Date.now() - new Date(latestHint.created_at).getTime() > MAX_HINT_AGE_MS
+    )
+      return;
     seenIdRef.current = latestHint.id;
     setVisibleHint(latestHint);
     const timer = setTimeout(() => setVisibleHint(null), VISIBLE_MS);
     return () => clearTimeout(timer);
-  }, [latestHint]);
+    // Re-run only when the hint's identity (id) actually changes — `latestHint`
+    // is a fresh object/array reference on nearly every realtime update (chat,
+    // presence, timer ticks) even when it's still the same hint. Depending on
+    // the object itself would re-fire this effect on those unrelated renders,
+    // clearing the dismiss timer via cleanup without scheduling a replacement,
+    // so the snackbar would stick around indefinitely for guessers.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [latestHintId]);
 
   if (!visibleHint) return null;
 

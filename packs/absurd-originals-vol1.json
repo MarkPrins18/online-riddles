@@ -7,68 +7,68 @@
   },
   "puzzles": [
     {
-      "title": "De bakker die niemand voedt",
-      "scenario": "Een bakker in een rustig dorp zet elke nacht om precies drie uur zijn oven aan, bakt één enkel brood, en gooit het daarna ongebruikt in de container, al maanden lang, zonder dat hij ooit klanten heeft voor het licht wordt.",
-      "solution": "Hij test elke nacht een nieuw recept voor een bakwedstrijd volgende maand en wil niet dat personeel of klanten het resultaat zien voordat de jury het proeft. Het brood van vannacht gaat de container in zodra hij tevreden of ontevreden is over de korst.",
+      "title": "Vijf minuten dicht, midden op de dag",
+      "scenario": "Een winkelier draait elke dag om klokslag twaalf uur het bordje op 'gesloten', precies vijf minuten, om het dan weer op 'open' te zetten, terwijl de lichten aan blijven en hij de winkel nooit verlaat.",
+      "solution": "Hij eet op dat moment gewoon zijn boterham achter de toonbank en heeft er een broertje dood aan om klanten naar hem te laten kijken tijdens het kauwen. Meer zit er niet achter.",
       "category": "Werk",
       "difficulty": "easy",
-      "hint": "Niet elk brood is bedoeld om verkocht te worden."
+      "hint": "Waar heeft hij vijf minuten voor nodig, als hij de winkel niet eens verlaat?"
     },
     {
-      "title": "Een garage die nooit opengaat",
-      "scenario": "Een man betaalt maandelijks huur voor een garage die hij nooit opent, terwijl zijn eigen auto buiten in de regen staat en de garage vlak bij zijn huis ligt.",
-      "solution": "In de garage staat het decor van het amateurtoneelstuk waar hij regisseur van is. Hij huurt hem als opslag voor de vereniging en betaalt uit eigen zak, omdat de clubkas leeg is. Zijn auto heeft er nooit iets mee te maken gehad.",
+      "title": "Een uur per week in een lege opslagbox",
+      "scenario": "Een man huurt al een jaar een opslagbox aan de andere kant van de stad, waar hij elke zondag precies een uur doorbrengt, zonder ooit iets naar binnen of naar buiten te dragen.",
+      "solution": "In de box staat een drumstel dat hij thuis nooit zou kunnen spelen zonder de buren gek te maken. De opslaghal ligt ver genoeg van woonhuizen dat niemand klaagt, en het uit- en weer inpakken van het stel zou zijn enige vrije uur opeten, dus laat hij het gewoon staan.",
       "category": "Hobby",
       "difficulty": "medium",
-      "hint": "Vraag je af waar zijn auto eigenlijk staat, niet waarom de garage dicht blijft."
+      "hint": "Wat kun je in een afgesloten ruimte doen dat je thuis niet zou kunnen, zonder dat het om spullen gaat?"
     },
     {
-      "title": "Twee collega's zonder woorden",
-      "scenario": "Op een kantoor wisselen twee collega's die naast elkaar zitten nooit een woord en communiceren alleen via briefjes op elkaars scherm, terwijl ze met de rest van de afdeling gewoon praten.",
-      "solution": "Ze hebben een weddenschap lopen over wie het langst zijn stem kan sparen voor een marathon-voorleesactie in het weekend. Praten met elkaar zou de weddenschap breken, met anderen niet, want die telt niet mee.",
+      "title": "Nooit een vergadering van precies een half uur",
+      "scenario": "Een projectmanager plant elke vergadering exact negenenveertig minuten, nooit dertig, nooit een uur, en weigert uit te leggen waarom als iemand ernaar vraagt.",
+      "solution": "Het boekingssysteem voor de vergaderzalen rekent per aangebroken kwartier af, met een afrondingsregel die hij als enige heeft doorgrond: negenenveertig minuten is het langst dat een vergadering kan duren zonder in het duurdere tarief te vallen. Hij bespaart zo elke week een paar euro, en vindt het net te onbenullig om aan zijn team uit te leggen.",
       "category": "Werk",
       "difficulty": "medium",
-      "hint": "De stilte geldt niet voor iedereen, alleen voor elkaar."
+      "hint": "Kijk niet naar de klok in de vergaderzaal, maar naar de rekening die erna komt."
     },
     {
-      "title": "Twaalf wekkers voor één ochtend",
-      "scenario": "Elke ochtend zet een oude man precies twaalf identieke wekkers naast zijn bed, terwijl hij er zichtbaar maar één per dag nodig heeft om wakker te worden.",
-      "solution": "Hij verzamelt wekkers uit de failliete fabriek waar hij veertig jaar werkte en zet ze elke nacht in een andere volgorde aan om te controleren of ze na al die jaren nog steeds allemaal doen wat ze moeten, een controle die hij nooit heeft losgelaten.",
+      "title": "Altijd de neus naar de uitgang",
+      "scenario": "Een vrouw parkeert haar auto altijd met de neus naar de uitgang, op elke parkeerplek die ze ooit heeft gebruikt, zelfs op een doodlopende oprit waar niemand ooit haastig hoeft te vertrekken.",
+      "solution": "Haar vader werkte jarenlang als meldkamercentralist bij de ambulancedienst en hamerde erop dat een auto die klaarstaat om weg te rijden in een noodgeval seconden kan schelen. De gewoonte is gebleven, ook al is de reden op de achtergrond geraakt.",
       "category": "Gewoonte",
       "difficulty": "easy",
-      "hint": "Niet elke wekker hoeft hem wakker te maken om zijn werk te doen."
+      "hint": "Denk aan wie haar ooit heeft leren rijden, en in welk beroep die persoon werkte."
     },
     {
-      "title": "Een kaart uit een stad die ze niet bezoekt",
-      "scenario": "Een vrouw stuurt wekelijks een ansichtkaart naar zichzelf, altijd vanuit dezelfde stad, ook al is ze daar al jaren niet meer geweest.",
-      "solution": "Haar zoon woont in die stad en stuurt de kaarten in haar naam, zodat de postbode, wiens praatjes ze juist erg op prijs stelt, bij aankomst altijd even blijft hangen. De kaart is een excuus voor het gesprek, niet voor het nieuws erop.",
+      "title": "Regen, elke dag, al een jaar lang",
+      "scenario": "Een man stuurt zijn zus al een jaar lang, elke ochtend om acht uur, exact hetzelfde berichtje: 'nog steeds regen', ook al woont hij ergens waar het amper regent, en zij antwoordt altijd alleen met een duimpje omhoog.",
+      "solution": "Het begon als een weddenschap met een vriend die hij allang vergeten is, om een jaar lang een compleet nietszeggend berichtje te sturen. Zijn zus vond het na een paar weken zo grappig saai dat ze het duimpje een vast onderdeel van hun ochtend liet worden, en nu stuurt hij het vooral nog voor haar.",
       "category": "Familie",
       "difficulty": "medium",
-      "hint": "Wie schrijft, is niet per se wie ze denkt dat schrijft."
+      "hint": "Vraag niet waarom hij begon, maar waarom hij nooit is gestopt."
     },
     {
-      "title": "Koffie die nooit wordt opgedronken",
-      "scenario": "In een klein café bestelt dezelfde klant elke dag een kop koffie die hij nooit opdrinkt, en toch komt hij de volgende dag precies op tijd weer terug voor een nieuwe.",
-      "solution": "De koffie is zijn manier om een tafel te reserveren zonder dat te hoeven zeggen. Hij komt voor het snelle wifi-signaal van de zaak ernaast, dat net tot bij dat ene tafeltje reikt, en de eigenaar laat het oogluikend toe zolang hij iets bestelt.",
+      "title": "Precies een kwartier wachten op hetzelfde gerecht",
+      "scenario": "Een vaste klant in een eettentje bestelt elke dag hetzelfde gerecht, maar vraagt de ober telkens om het exact een kwartier later te brengen, nooit eerder, ook al staat de keuken erom bekend snel te zijn.",
+      "solution": "Hij moet zijn medicatie voor zijn bloedsuiker precies op tijd innemen bij zijn eerste hap. Zijn eigen agenda is te onvoorspelbaar, maar het kwartier van dit tentje is dat niet, dus bouwde hij zijn routine om de betrouwbaarheid van de keuken heen in plaats van andersom.",
       "category": "Horeca",
       "difficulty": "medium",
-      "hint": "Waarvoor betaalt hij eigenlijk, als het niet de koffie is?"
+      "hint": "Wat moet er voor hem exact op tijd gebeuren, vlak voordat hij eet?"
     },
     {
-      "title": "Een plant die elk weekend verdwijnt",
-      "scenario": "Een schoolklas krijgt van de conciërge elke maandag een nieuwe plant op de vensterbank, en elke vrijdag is die spoorloos verdwenen, zonder dat er ooit iemand is gezien die hem meeneemt.",
-      "solution": "De conciërge haalt hem vrijdagmiddag zelf op om hem het weekend mee naar huis te nemen voor water en licht: de klaslokalen staan het weekend potdicht in de volle zon. Maandag zet hij een verse of dezelfde plant weer terug.",
+      "title": "De gevonden-voorwerpenbak die elke vrijdag leeg is",
+      "scenario": "Op een school ligt de gevonden-voorwerpenbak op donderdag altijd overvol met truien en broodtrommels, maar elke vrijdagmiddag is hij volledig leeg, zonder dat iemand ooit iets heeft zien weghalen.",
+      "solution": "Een lerares doorzoekt de bak elke vrijdag tijdens de lunchpauze voor zichzelf als een soort spelletje: ze probeert elk voorwerp uit haar hoofd aan de juiste leerling te koppelen en legt alles zelf terug in de kluisjes, zodat de bak leeg het weekend in gaat.",
       "category": "School",
       "difficulty": "easy",
-      "hint": "Wie heeft er als enige een sleutel voor elk lokaal?"
+      "hint": "Wie in de school kent de leerlingen goed genoeg om spullen zonder naamlabel toch terug te bezorgen?"
     },
     {
-      "title": "Een deurbel voor een lege straat",
-      "scenario": "Elke avond om precies negen uur klinkt in de hele straat hetzelfde deurbelgeluid, maar niemand doet ooit open en niemand staat er ooit voor de deur.",
-      "solution": "Een buurtbewoner test al maanden een nieuw slimme-deurbelsysteem. Door een fabrieksfout in de testmodus stuurt zijn eigen bel het geluid naar alle bellen in de straat in plaats van alleen naar die van hemzelf, iets wat de leverancier pas na klachten ontdekt.",
+      "title": "Alle straatlantaarns doven tegelijk, tien seconden lang",
+      "scenario": "In een nieuwbouwwijk dimmen elke avond, op een net iets ander tijdstip, alle slimme straatlantaarns tegelijk gedurende exact tien seconden, en de netbeheerder verzekert dat er niets mis is met de stroomvoorziening.",
+      "solution": "De lantaarns zijn gekoppeld aan een pilotfunctie van de gemeente: zodra een sensor bij de dierenopvang verderop een zwervend dier langs de hoofdweg detecteert, dimmen de lichten kort als stil signaal voor een appgroep van vrijwilligers, zonder sirene of melding aan bewoners. Het tijdstip verschilt gewoon, omdat dieren geen agenda hebben.",
       "category": "Techniek",
       "difficulty": "hard",
-      "hint": "Is het geluid van één deurbel, of van een heel systeem?"
+      "hint": "Het signaal is niet voor bewoners bedoeld. Voor wie dan wel, en wie of wat activeert het?"
     }
   ]
 }

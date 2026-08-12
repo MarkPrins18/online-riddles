@@ -5,7 +5,6 @@ import { useTranslations } from "next-intl";
 import type { ChatMessage } from "@/types/chatMessage";
 import type { ReactionSummary } from "@/lib/game/chatReactions";
 import { usePressHold } from "@/lib/ui/usePressHold";
-import { Badge } from "@/components/ui/Badge";
 import { ChatReactionPills } from "./ChatReactionPills";
 import { ChatReactionPicker } from "./ChatReactionPicker";
 
@@ -19,17 +18,14 @@ import { ChatReactionPicker } from "./ChatReactionPicker";
  */
 export function ChatMessageRow({
   message,
-  narratorId,
   summaries,
   onToggleReaction,
 }: {
   message: ChatMessage;
-  narratorId: string | null;
   summaries: ReactionSummary[];
   onToggleReaction: (emoji: string) => Promise<void>;
 }) {
   const [pickerOpen, setPickerOpen] = useState(false);
-  const t = useTranslations("ChatThread");
   const reactionsT = useTranslations("ChatMessageReactions");
   const pressHold = usePressHold(() => setPickerOpen(true));
 
@@ -41,15 +37,7 @@ export function ChatMessageRow({
   return (
     <li className="group relative flex flex-col gap-0.5">
       <div {...pressHold} className="flex select-none items-baseline gap-2">
-        <span className="font-mono text-xs text-text-secondary">
-          {message.player_name}
-          {message.player_id === narratorId && (
-            <Badge tone="accent" className="ml-1 align-middle">
-              {t("narratorBadge")}
-            </Badge>
-          )}
-          :
-        </span>
+        <span className="font-mono text-xs text-text-secondary">{message.player_name}:</span>
         <span className="font-mono text-sm text-text-primary">{message.text}</span>
         <button
           type="button"

@@ -6,13 +6,11 @@ import { ChatMessageRow } from "./ChatMessageRow";
 
 export function ChatThread({
   messages,
-  narratorId,
   chatReactions,
   playerId,
   onToggleReaction,
 }: {
   messages: ChatMessage[];
-  narratorId: string | null;
   chatReactions: ChatMessageReaction[];
   playerId: string;
   onToggleReaction: (messageId: string, emoji: string) => Promise<void>;
@@ -31,7 +29,6 @@ export function ChatThread({
         <ChatMessageRow
           key={message.id}
           message={message}
-          narratorId={narratorId}
           summaries={summarizeReactions(chatReactions, message.id, playerId)}
           onToggleReaction={(emoji) => onToggleReaction(message.id, emoji)}
         />

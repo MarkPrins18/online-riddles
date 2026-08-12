@@ -187,6 +187,71 @@
     "myPacks": "My packs",
     "submitRiddle": "Submit a riddle"
   },
+  "AccountModal": {
+    "title": "Account",
+    "loading": "Loading...",
+    "explainer": "Optional: link an account so your packs and riddles aren't lost if your browser session disappears.",
+    "tabMagicLink": "Email code",
+    "tabPassword": "Password",
+    "signedInAs": "Signed in as {email}",
+    "signOut": "Sign out",
+    "signingOut": "Signing out...",
+    "signOutError": "Couldn't sign out. Please try again.",
+    "pendingConfirmation": "Almost there — check your email and click the confirmation link to activate your account.",
+    "close": "Close"
+  },
+  "PasswordTab": {
+    "upgradeIntro": "Add an email and password to your current session.",
+    "loginIntro": "Log in to an account you already have.",
+    "switchToLogin": "Already have an account? Log in",
+    "switchToUpgrade": "No account yet? Create one",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "you@example.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "At least 6 characters",
+    "orphanWarning": "Note: unsaved riddles from this browser won't stay linked to the account you sign in to.",
+    "saving": "Saving...",
+    "submitUpgrade": "Create account",
+    "submitLogin": "Log in"
+  },
+  "MagicLinkTab": {
+    "intro": "Log in or create an account with a code we email you — no password needed.",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "you@example.com",
+    "requestCode": "Send code",
+    "sending": "Sending...",
+    "codeSentIntro": "We've sent a code to {email}.",
+    "codeLabel": "Code",
+    "codePlaceholder": "123456",
+    "verify": "Confirm",
+    "verifying": "Confirming...",
+    "back": "Different email address",
+    "resendCode": "Request a new code",
+    "resendCooldown": "New code in {seconds}s"
+  },
+  "AccountButton": {
+    "trigger": "Account",
+    "signOut": "Sign out",
+    "signingOut": "Signing out...",
+    "signOutError": "Couldn't sign out. Please try again."
+  },
+  "AccountNudgeBanner": {
+    "body": "Your packs and riddles are currently tied to this browser. Link a free account so you don't lose them.",
+    "cta": "Link account",
+    "dismissAriaLabel": "Dismiss"
+  },
+  "AccountErrors": {
+    "email_exists": "This email address already has an account.",
+    "user_already_exists": "This email address already has an account.",
+    "invalid_credentials": "Email or password is incorrect.",
+    "otp_expired": "This code is wrong or expired. Request a new one.",
+    "over_email_send_rate_limit": "Too many emails requested. Try again in an hour.",
+    "over_request_rate_limit": "Too many attempts. Try again shortly.",
+    "weak_password": "Choose a stronger password (at least 6 characters).",
+    "email_address_invalid": "That email address doesn't look valid.",
+    "same_password": "That's already your current password.",
+    "generic": "Something went wrong. Please try again."
+  },
   "FavoriteButton": {
     "addAriaLabel": "Add to favorites",
     "removeAriaLabel": "Remove from favorites",
@@ -227,7 +292,7 @@
     "error": "Couldn't send your question. Please try again."
   },
   "ChatForm": {
-    "placeholder": "Discuss with your fellow players...",
+    "placeholder": "Share a theory with the team...",
     "ariaLabel": "Chat message",
     "submit": "Send",
     "error": "Couldn't send your message. Please try again."
@@ -393,8 +458,7 @@
     "submit": "Send"
   },
   "ChatThread": {
-    "empty": "Nobody has said anything yet. Feel free to discuss with your fellow players.",
-    "narratorBadge": "Narrator"
+    "empty": "Nobody's said anything yet. Share the first theory."
   },
   "ChatMessageReactions": {
     "addLabel": "React with {emoji}",
@@ -455,10 +519,6 @@
     "skipConfirm": "Skip this case? All questions and guesses so far will be lost.",
     "nextCaseError": "Couldn't start a new case. Please try again.",
     "skipPuzzleError": "Couldn't fetch another case. Please try again."
-  },
-  "SoundToggleButton": {
-    "muteLabel": "Mute sound",
-    "unmuteLabel": "Unmute sound"
   },
   "NarratorBriefingScreen": {
     "newCase": "New case",

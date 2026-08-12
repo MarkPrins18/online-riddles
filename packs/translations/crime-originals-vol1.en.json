@@ -6,60 +6,60 @@
   },
   "puzzles": [
     {
-      "matchTitle": "De nachtelijke bezoeker",
-      "title": "The Nighttime Visitor",
-      "scenario": "The jeweler sighs with relief when he finds his safe closed in the morning. The digital log tells a different story, though: the safe was opened and closed three times that night, even though only the jeweler knows the code.",
-      "solution": "The night watchman, who had gambling debts, had spied on the jeweler for months and learned the code. He opened the safe several times for small, inconspicuous thefts to pay off his creditors, hoping the small losses wouldn't be noticed.",
-      "hint": "The code wasn't the only secret the jeweler should have guarded."
+      "matchTitle": "Precies hetzelfde tekort, elke donderdag",
+      "title": "The Exact Same Shortfall, Every Thursday",
+      "scenario": "At a small bookshop, the till never quite adds up at closing — but only on Thursdays, and always by the exact same small amount, even though the morning count that day is always correct.",
+      "solution": "A part-time employee who only works Thursdays treats himself to a coffee from the shop's small snack corner without ringing it up properly, always meaning to cover it out of his own pocket later, and always forgetting by his next shift. The amount is too small for him to ever think it matters.",
+      "hint": "Why that one day specifically, and who only works that day?"
     },
     {
-      "matchTitle": "De handtekening van een geest",
-      "title": "The Ghost's Signature",
-      "scenario": "When opening the will of a wealthy widow, the notary discovers something strange. There are two signatures, made weeks apart. But the woman had been completely paralyzed in her right hand for the last month of her life.",
-      "solution": "Her devoted caregiver, who knew she would be disinherited, had spent months practicing the woman's handwriting. After the paralysis, she used her 'talent' to make one final, fraudulent change to the will that made her the main heir.",
-      "hint": "Who had access to her past and could rewrite her future?"
+      "matchTitle": "Een handtekening, drie dagen na zijn overlijden",
+      "title": "A Signature, Three Days After His Death",
+      "scenario": "A charity has received the same donation letter every year for a decade from a wealthy donor, always with an identical, elegant signature. This year, the letter turns out to have been sent three days after his confirmed date of death.",
+      "solution": "Knowing his health was failing, the donor had a lawyer help him pre-sign and date an entire batch of letters years in advance, set to be mailed automatically every year regardless of his health, so the charity's funding would never visibly interrupt — not even in the year he died. The signature was real; it was just years older than the postmark suggested.",
+      "hint": "Is the signature fake, or is it just the timing of the mailing that's later than you'd expect?"
     },
     {
-      "matchTitle": "De getuige met het glazen oog",
-      "title": "The Witness with the Glass Eye",
-      "scenario": "A man reports to the police station, clearly in shock after a robbery. Despite the darkness and chaos, his description of the perpetrator is razor-sharp: the faint scar near the temple, the expensive aftershave, the nervous tic in his fingers. Too sharp, perhaps.",
-      "solution": "The 'witness' is the perpetrator. Overwhelmed by adrenaline and paranoia after his crime, he invents a scheme to send the police on a false trail. He gives a perfect description of himself, a detailed self-portrait, hoping the police will search for a phantom while he goes free.",
-      "hint": "His eyes didn't see the robber, but his own reflection."
+      "matchTitle": "Geen slot geforceerd, toch ingebroken",
+      "title": "No Lock Forced, Yet Someone Broke In",
+      "scenario": "A burglary victim is certain the thief must have had a key, since there's no sign of forced entry. Yet the locksmith who rekeyed the house last month swears he handed a key to no one but the homeowner.",
+      "solution": "The homeowner's teenage son had quietly had a spare key cut at a hardware store months earlier and lost it at a party, on a keyring with a carelessly attached tag showing the house address. Whoever picked it up knew exactly which door it opened.",
+      "hint": "The locksmith only handed over one key. Has a second one appeared since, without him knowing?"
     },
     {
-      "matchTitle": "De lekkage uit het verleden",
-      "title": "The Leak from the Past",
-      "scenario": "An insurance agent handles a claim for significant water damage. Everything seems in order, until he discovers that the 'affected' owner sold the property three months ago to an unsuspecting buyer.",
-      "solution": "The seller had deliberately concealed the water damage when selling. When he noticed the insurance policy was still in his name, he filed a claim for the 'recent' damage. He bet that the new owner wouldn't notice the old damage and he could cash in twice.",
-      "hint": "The money didn't leak from the pipes, but from his greed."
+      "matchTitle": "Jarenlang dezelfde ronde bedragen voor 'kantoorbenodigdheden'",
+      "title": "The Same Round Numbers for 'Office Supplies,' Year After Year",
+      "scenario": "A small business owner is suspected of tax fraud after auditors find years of suspiciously round, near-identical expenses for 'office supplies,' though he swears he never filed most of those invoices himself.",
+      "solution": "His bookkeeper had been embezzling from several small clients at once for years, padding each one's office-supplies line by a modest, easy-to-miss amount every month and routing the difference to himself through an intermediary account. It only surfaced when a new auditor compared several of the bookkeeper's clients side by side and noticed the identical pattern running across otherwise unrelated businesses.",
+      "hint": "Don't look at just one business. Look at who handles the books for several at once."
     },
     {
-      "matchTitle": "De stilte van de sensor",
-      "title": "The Silence of the Sensor",
-      "scenario": "Burglars break into an office building through a heavily secured door. The alarm never went off. Investigation shows the door sensor had been offline for weeks, without a single fault notification ever being sent.",
-      "solution": "A corrupt technician from the security company had deliberately tampered with the sensor. He used the 'offline' window to steal goods from the warehouse undisturbed at night for his own side business. The burglars unknowingly benefited from his internal operation.",
-      "hint": "The thief wasn't outside, but inside the system."
+      "matchTitle": "Elf minuten herhaalde beelden, elke nacht op een ander moment",
+      "title": "Eleven Minutes of Looped Footage, at a Different Time Each Night",
+      "scenario": "A warehouse's security cameras have recorded flawless footage every night for months, until investigators discover that every night, at a different time, eleven minutes of the previous night's footage quietly loops in place of the live feed.",
+      "solution": "The night guard has been secretly delivering food through a gig app during the quiet hours of his shift, and set the system up months ago to loop a clean eleven-minute clip whenever he steps out. The timing varies because his delivery orders come in unpredictably. It was never meant to cover up a theft, just his side job, until a routine metadata check exposed it.",
+      "hint": "Is the gap in coverage planned around a crime, or around something else the guard does that night?"
     },
     {
-      "matchTitle": "De dubbele bagage",
-      "title": "The Duplicate Baggage",
-      "scenario": "A baggage handler at the airport frowns. He sees a suitcase with the same tag and the same destination pass by on the belt for the second time. The passenger of that suitcase is already long seated on the plane.",
-      "solution": "A smuggler among the baggage staff knew how the system worked. He printed a duplicate of an existing baggage tag and attached it to a suitcase full of smuggled goods. That way his own suitcase could hitch a ride on a legitimate flight, while the passenger's original suitcase simply went aboard as normal.",
-      "hint": "The tag was real, but the contents were fake."
+      "matchTitle": "Veertig kilo te zwaar, twee jaar lang genegeerd",
+      "title": "Forty Kilos Too Heavy, Ignored for Two Years",
+      "scenario": "A specific shipping container has cleared customs without issue on the same route for two years, yet it consistently arrives forty kilos heavier than its manifest states, though the seals never show tampering and nothing visibly has been added.",
+      "solution": "The container's refrigeration unit, custom-fitted for this route, hides a false bottom in its coolant reservoir where the exporter smuggles a dense, non-perishable good sealed in an inert gel. For two years the discrepancy was written off as a known quirk in that particular container's scale reading, until a new inspector got tired of the excuse and had it taken apart.",
+      "hint": "Don't search the cargo itself. Look at what's already built into the container and never gets checked."
     },
     {
-      "matchTitle": "De spookleverancier",
-      "title": "The Ghost Supplier",
-      "scenario": "A new, ambitious accountant dives into the books and stumbles upon a mystery. A certain supplier has been paid punctually for delivered goods for years, but no one in the company has ever heard of them, let alone seen them.",
-      "solution": "The previous, dishonest accountant had set up a shell company in his mother-in-law's name. For years he paid fake invoices to 'himself'. When he retired, he simply let the automatic payments continue, betting on his successor's inattentiveness.",
-      "hint": "The supplier only existed on paper, and in a bank account."
+      "matchTitle": "De storting klopt nooit helemaal",
+      "title": "The Deposit Never Quite Adds Up",
+      "scenario": "A café owner counts and bags the exact right amount of cash for his weekly bank deposit himself, yet the amount that lands in his account is always rounded down to the nearest ten.",
+      "solution": "The teller who has processed his deposits for years pockets the small leftover change each time, assuming a business owner making regular deposits would never notice or bother reporting a few euros' difference. He only catches the pattern after a tax audit forces him to start keeping his own precise log.",
+      "hint": "Did the difference happen before he counted the money, or after, at the hands of whoever receives it?"
     },
     {
-      "matchTitle": "Het einde van het spoor",
-      "title": "The End of the Trail",
-      "scenario": "After an art heist, sniffer dogs flawlessly follow the thief's scent trail through the city. The trail leads to a busy bus terminal and stops there abruptly. However, no bus or taxi departed around that time.",
-      "solution": "The thief was a master of deception. He wore shoes he had stolen from a homeless man who often slept near the terminal. After the heist, he ran to the terminal and swapped the shoes for his own pair. The dogs followed the homeless man's scent, not the thief's.",
-      "hint": "The dogs followed the right scent, but the wrong man."
+      "matchTitle": "De vluchtauto staat precies waar de camera's niets zien",
+      "title": "The Getaway Car Sits Exactly Where the Cameras Can't See",
+      "scenario": "After a robbery, the getaway car turns up exactly where the traffic cameras have a blind spot. Investigators are stumped: every route to that spot should have passed at least one working camera, yet none logged a matching vehicle.",
+      "solution": "The thief never drove his own getaway car there at all. He rented an identical model through a car-sharing app, took camera-free back roads to the blind spot, and walked the last stretch to switch into his real car — which a cash-paid driver, who knew nothing, had already parked there hours earlier as an ordinary rental drop-off.",
+      "hint": "Don't look for the car the thief himself drove to the blind spot. Did he actually drive there at all?"
     }
   ]
 }

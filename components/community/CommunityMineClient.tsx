@@ -14,6 +14,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { RiddleForm } from "@/components/community/RiddleForm";
+import { AccountNudgeBanner } from "@/components/account/AccountNudgeBanner";
 
 export function CommunityMineClient() {
   const [isLoading, setIsLoading] = useState(true);
@@ -79,6 +80,8 @@ export function CommunityMineClient() {
           <Button>{t("submitButton")}</Button>
         </Link>
       </div>
+
+      <AccountNudgeBanner packs={packs} puzzles={puzzles} />
 
       {packs.length === 0 ? (
         <p className="font-mono text-sm text-text-secondary">{t("noPacksYet")}</p>

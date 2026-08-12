@@ -55,6 +55,34 @@ See [`packs/example-pack.json`](packs/example-pack.json) for the JSON
 shape. `GET /api/admin/puzzles` (same header) lists packs with their
 puzzle counts and publish state.
 
+## Abuse prevention: anonymous sign-in rate limiting
+
+Every per-player/per-room rate limit in [`supabase/schema.sql`](supabase/schema.sql)
+(`enforce_rate_limit`, covering chat messages, hints, questions, guesses,
+board items, new player joins, community puzzle submissions, and votes) is
+keyed to a Supabase Auth identity. Since anonymous sign-in (`signInAnonymously()`,
+see `lib/supabase/authSession.ts`) is free and instant, a script can defeat
+any of these limits by simply signing in again before each burst — and it
+can do that with a direct call to Supabase's own Auth REST endpoint, so no
+amount of code in this repo can close that gap on its own.
+
+The fix has to live in the Supabase project itself: in the **Supabase
+Dashboard → your project → Authentication → Rate Limits**, set a per-IP
+limit on anonymous sign-ins. A starting value of **30 sign-ins per hour per
+IP** comfortably covers a real burst (a group of friends joining a room
+from the same wifi/NAT within a few minutes) while leaving a scripted
+abuser with nowhere near enough sign-ins per hour to make identity-cycling
+worthwhile. Treat this as a tunable knob — adjust it based on real usage
+once the app has traffic.
+
+This closes the most likely abuse pattern (a script hammering sign-ins
+from one IP) but isn't a guarantee against an attacker spread across many
+IPs. A CAPTCHA (e.g. Cloudflare Turnstile) in front of `signInAnonymously()`
+would raise that bar further, at the cost of a new dependency and changes
+to the several places that call `ensureAnonymousSession()` automatically
+on page load — not done here, worth revisiting only if the simple rate
+limit proves insufficient in practice.
+
 ## Monitoring & error tracking
 
 Server and client errors are always logged as structured JSON (via Next's

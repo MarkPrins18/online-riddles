@@ -46,26 +46,3 @@ export async function ensureAnonymousSession(
 
   return sessionPromise;
 }
-
-/**
- * Upgrades the current anonymous session to a real account by linking an
- * email — same auth.uid() throughout, so every existing players row (and
- * anything derived from it) keeps working with zero migration. Supabase
- * sends a confirmation link; is_anonymous only flips to false once the
- * player clicks it (see is_anonymous_user in schema.sql, which every
- * player_stats write gates on).
- */
-export async function linkEmailToSession(supabase: SupabaseClient<Database>, email: string): Promise<void> {
-  const { error } = await supabase.auth.updateUser(
-    { email },
-    { emailRedirectTo: `${window.location.origin}/profile` }
-  );
-  if (error) throw error;
-}
-
-/** Convenience read of the current session's is_anonymous flag (see linkEmailToSession). */
-export async function getCurrentUser(supabase: SupabaseClient<Database>) {
-  const { data, error } = await supabase.auth.getUser();
-  if (error) throw error;
-  return data.user;
-}

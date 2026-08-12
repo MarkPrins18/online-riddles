@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { AccountButton } from "@/components/account/AccountButton";
 
 // "/" and "/community" need an exact match — startsWith would make both of
 // them (mis)fire as active on every route, since every path starts with
@@ -47,6 +48,7 @@ export function CommunityNav() {
           </Link>
         );
       })}
+      <AccountButton />
     </nav>
   );
 }

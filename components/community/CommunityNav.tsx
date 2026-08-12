@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { AccountButton } from "@/components/account/AccountButton";
 
@@ -18,6 +18,7 @@ const EXACT_MATCH_HREFS = new Set(["/", "/community"]);
  */
 export function CommunityNav() {
   const pathname = usePathname();
+  const router = useRouter();
   const t = useTranslations("CommunityNav");
 
   const LINKS = [
@@ -27,17 +28,35 @@ export function CommunityNav() {
     { href: "/community/nieuw", label: t("submitRiddle") },
   ];
 
+  const activeHref =
+    LINKS.find((link) =>
+      EXACT_MATCH_HREFS.has(link.href) ? pathname === link.href : pathname.startsWith(link.href)
+    )?.href ?? LINKS[0].href;
+
   return (
-    <div className="flex items-center gap-2 border-b border-white/10">
-      {/* min-w-0 lets this shrink below its content width so it's the one
-          that scrolls (not the whole page) when the tabs + AccountButton
-          don't all fit — four tab labels plus an account trigger routinely
-          don't, on a phone-width screen. */}
-      <nav className="flex min-w-0 gap-1 overflow-x-auto">
+    <div className="flex items-center gap-2 border-b border-white/10 pb-3 sm:gap-0 sm:pb-0">
+      {/* Four tab labels plus the account trigger don't fit a phone
+          screen — a dropdown keeps every destination equally reachable
+          with one tap, instead of some of them requiring a horizontal
+          scroll a visitor might never discover. sm and up switch to the
+          tab-shaped links (hidden below sm, this select is hidden at sm
+          and up) since there's room for them there. */}
+      <select
+        value={activeHref}
+        onChange={(e) => router.push(e.target.value)}
+        aria-label={t("navigateLabel")}
+        className="min-w-0 flex-1 rounded-md border border-white/10 bg-bg-primary px-3 py-2 font-mono text-sm text-text-primary focus:border-accent-muted sm:hidden"
+      >
+        {LINKS.map((link) => (
+          <option key={link.href} value={link.href}>
+            {link.label}
+          </option>
+        ))}
+      </select>
+
+      <nav className="hidden min-w-0 gap-1 overflow-x-auto sm:flex">
         {LINKS.map((link) => {
-          const isActive = EXACT_MATCH_HREFS.has(link.href)
-            ? pathname === link.href
-            : pathname.startsWith(link.href);
+          const isActive = link.href === activeHref;
           return (
             <Link
               key={link.href}

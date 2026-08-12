@@ -185,7 +185,8 @@
     "play": "Play",
     "communityPacks": "Community packs",
     "myPacks": "My packs",
-    "submitRiddle": "Submit a riddle"
+    "submitRiddle": "Submit a riddle",
+    "navigateLabel": "Navigate to"
   },
   "AccountModal": {
     "title": "Account",

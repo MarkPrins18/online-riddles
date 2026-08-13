@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { Question } from "@/types/question";
+import type { Player } from "@/types/player";
 import type { BoardItemKind, BoardNoteColor } from "@/types/boardItem";
 import { useBoardState } from "@/lib/game/useBoardState";
 import {
@@ -79,6 +80,7 @@ export function CorkboardOverlay({
   roomId,
   playerId,
   playerName,
+  players,
   questions,
   isHost,
   onClose,
@@ -87,11 +89,13 @@ export function CorkboardOverlay({
   roomId: string;
   playerId: string;
   playerName: string;
+  players: Player[];
   questions: Question[];
   isHost: boolean;
   onClose: () => void;
 }) {
-  const { state, broadcastCursor } = useBoardState(supabase, roomId);
+  const knownPlayerIds = new Set(players.map((p) => p.id));
+  const { state, broadcastCursor } = useBoardState(supabase, roomId, knownPlayerIds);
   const [actionError, setActionError] = useState<string | null>(null);
   const [dragPositions, setDragPositions] = useState<Record<string, { x: number; y: number }>>({});
   const [connectDraft, setConnectDraft] = useState<{ fromId: string; x: number; y: number } | null>(null);

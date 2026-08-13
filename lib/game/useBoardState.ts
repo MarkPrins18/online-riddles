@@ -8,6 +8,18 @@ import { getBoardItems, getBoardConnections } from "@/lib/supabase/board";
 import { subscribeToBoard, unsubscribeFromBoard, sendCursor } from "@/lib/realtime/board-channel";
 import { getErrorMessage } from "@/lib/errors";
 
+/**
+ * The board's realtime `broadcast` channel accepts a cursor payload from
+ * anyone holding the (public) anon key, room member or not — Postgres RLS
+ * doesn't apply to broadcast messages the way it does to postgres_changes.
+ * Rather than a spoofed cursor (any name/position, any player_id) actually
+ * rendering for real participants, this rejects anything whose player_id
+ * isn't a player this client already knows is in the room.
+ */
+export function isKnownBoardCursor(cursor: BoardCursor, knownPlayerIds: ReadonlySet<string>): boolean {
+  return knownPlayerIds.has(cursor.player_id);
+}
+
 type BoardState = {
   items: BoardItem[];
   connections: BoardConnection[];
@@ -76,9 +88,21 @@ function boardReducer(state: BoardState, action: BoardAction): BoardState {
  * from the always-on lib/game/useGameState.ts so players who never open
  * the board never load board data or hold a board subscription open.
  */
-export function useBoardState(supabase: SupabaseClient<Database>, roomId: string) {
+export function useBoardState(
+  supabase: SupabaseClient<Database>,
+  roomId: string,
+  knownPlayerIds: ReadonlySet<string>
+) {
   const [state, dispatch] = useReducer(boardReducer, initialState);
   const channelRef = useRef<RealtimeChannel | null>(null);
+  // Kept fresh via its own effect (not a dependency of the subscription
+  // effect below) so the subscription set up once always checks against
+  // the current player list, not a stale snapshot from whenever the main
+  // effect last ran — refs can't be written during render itself.
+  const knownPlayerIdsRef = useRef(knownPlayerIds);
+  useEffect(() => {
+    knownPlayerIdsRef.current = knownPlayerIds;
+  }, [knownPlayerIds]);
 
   useEffect(() => {
     let cancelled = false;
@@ -98,7 +122,10 @@ export function useBoardState(supabase: SupabaseClient<Database>, roomId: string
           onItemDelete: (id) => dispatch({ type: "ITEM_DELETE", payload: { id } }),
           onConnectionInsert: (c) => dispatch({ type: "CONNECTION_INSERT", payload: c }),
           onConnectionDelete: (id) => dispatch({ type: "CONNECTION_DELETE", payload: { id } }),
-          onCursor: (cursor) => dispatch({ type: "CURSOR", payload: cursor }),
+          onCursor: (cursor) => {
+            if (!isKnownBoardCursor(cursor, knownPlayerIdsRef.current)) return;
+            dispatch({ type: "CURSOR", payload: cursor });
+          },
         });
         channelRef.current = channel;
       } catch (error) {

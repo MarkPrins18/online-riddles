@@ -1012,6 +1012,7 @@ export function GamePlayClient({ code }: { code: string }) {
           roomId={room.id}
           playerId={playerId}
           playerName={currentPlayer?.name ?? ""}
+          players={state.players}
           questions={questions}
           isHost={isHost}
           onClose={() => setCorkboardOpen(false)}

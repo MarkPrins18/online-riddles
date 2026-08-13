@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Player } from "@/types/player";
-import { pickNextHost, pickNarratorTakeoverElector, pickRandomOnlineCandidate } from "./membership";
+import { pickNextHost, pickRandomOnlineCandidate } from "./membership";
 
 function makePlayer(overrides: Partial<Player>): Player {
   return {
@@ -47,45 +47,6 @@ describe("pickNextHost", () => {
     ];
     expect(
       pickNextHost(players, new Set(["p2", "p3"]), "host")?.id
-    ).toBe("p3");
-  });
-});
-
-describe("pickNarratorTakeoverElector", () => {
-  it("returns null when there is no narrator", () => {
-    const players = [makePlayer({ id: "p1" })];
-    expect(pickNarratorTakeoverElector(players, new Set(["p1"]), null)).toBeNull();
-  });
-
-  it("returns null when the narrator is still online", () => {
-    const players = [makePlayer({ id: "narrator" })];
-    expect(pickNarratorTakeoverElector(players, new Set(["narrator"]), "narrator")).toBeNull();
-  });
-
-  it("returns null when nobody else is online", () => {
-    const players = [makePlayer({ id: "narrator" }), makePlayer({ id: "p2" })];
-    expect(pickNarratorTakeoverElector(players, new Set(), "narrator")).toBeNull();
-  });
-
-  it("picks the earliest-joined online, non-spectator candidate", () => {
-    const players = [
-      makePlayer({ id: "narrator", joined_at: "2026-01-01T00:00:00.000Z" }),
-      makePlayer({ id: "p2", joined_at: "2026-01-01T00:02:00.000Z" }),
-      makePlayer({ id: "p3", joined_at: "2026-01-01T00:01:00.000Z" }),
-    ];
-    expect(
-      pickNarratorTakeoverElector(players, new Set(["p2", "p3"]), "narrator")?.id
-    ).toBe("p3");
-  });
-
-  it("skips spectators even if they're online", () => {
-    const players = [
-      makePlayer({ id: "narrator" }),
-      makePlayer({ id: "p2", is_spectator: true }),
-      makePlayer({ id: "p3" }),
-    ];
-    expect(
-      pickNarratorTakeoverElector(players, new Set(["p2", "p3"]), "narrator")?.id
     ).toBe("p3");
   });
 });

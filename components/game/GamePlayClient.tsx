@@ -15,11 +15,7 @@ import {
   nextRoundCountdownAnchor,
   secondsUntilAccusationCloses,
 } from "@/lib/game/accusation";
-import {
-  createKickHandler,
-  pickNarratorTakeoverElector,
-  pickRandomOnlineCandidate,
-} from "@/lib/game/membership";
+import { createKickHandler, pickRandomOnlineCandidate } from "@/lib/game/membership";
 import {
   nextRoundNumber,
   hasMoreRounds,
@@ -241,9 +237,11 @@ export function GamePlayClient({ code }: { code: string }) {
 
   // Once the Verteller has been offline past NARRATOR_OFFLINE_TIMEOUT_MS,
   // automatically hands the role to a random online player — no banner, no
-  // manual choice (see lib/game/membership.ts: pickNarratorTakeoverElector
-  // picks the one client that acts, so concurrent clients don't race each
-  // other; pickRandomOnlineCandidate picks who they hand it to).
+  // manual choice. claim_narrator is host-only server-side (see schema.sql:
+  // any-member reassignment used to open a score-manipulation path via
+  // increment_player_score), so only the host's own client acts here; if the
+  // host is also offline, claim_host lets a successor become host first,
+  // and their client picks this up on the next render.
   const narratorTakeoverAttemptedRef = useRef<string | null>(null);
   useEffect(() => {
     const room = state.room;
@@ -252,11 +250,11 @@ export function GamePlayClient({ code }: { code: string }) {
     if (!room || !narratorId || offlineSince === null) return;
     if (now - offlineSince < NARRATOR_OFFLINE_TIMEOUT_MS) return;
 
+    const isHostClient = state.players.find((p) => p.id === playerId)?.is_host ?? false;
+    if (!isHostClient) return;
+
     const episodeKey = `${narratorId}:${offlineSince}`;
     if (narratorTakeoverAttemptedRef.current === episodeKey) return;
-
-    const elector = pickNarratorTakeoverElector(state.players, state.onlinePlayerIds, narratorId);
-    if (!elector || elector.id !== playerId) return;
 
     const candidate = pickRandomOnlineCandidate(state.players, state.onlinePlayerIds, narratorId);
     if (!candidate) return;

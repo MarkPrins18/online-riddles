@@ -5,7 +5,8 @@
   "RootLayout": {
     "title": "Online Riddles",
     "description": "A lateral thinking puzzle game for groups. Ask yes/no questions, gather clues, and crack the mystery.",
-    "skipToContent": "Skip to main content"
+    "skipToContent": "Skip to main content",
+    "privacyLink": "Privacy & cookies"
   },
   "ErrorBoundary": {
     "title": "Something went wrong",
@@ -585,5 +586,29 @@
     "roundsNarrated": "Times narrated",
     "lifetimeScore": "Total score",
     "noStatsYet": "No games completed since your account yet. Play one out to see your first stats."
+  },
+  "Privacy": {
+    "title": "Privacy & cookies",
+    "intro": "This page explains what Online Riddles collects, why, and for how long, in plain language.",
+    "draftNotice": "Draft notice: this is a good-faith summary of what the app actually does, not legally reviewed text. If you need a formally reviewed policy, have it checked before relying on it.",
+    "dataHeading": "What we collect",
+    "dataBody": "The display name you pick when you join a room. If you choose to create a free account, an email address and password (or a one-time email code). Gameplay data tied to a room: questions, guesses, hints, and chat messages. If you have an account, private lifetime stats (games played, rounds solved, rounds narrated, total score) — never shown on a public leaderboard.",
+    "purposeHeading": "Why we collect it",
+    "purposeBody": "Your name is shown to other players in your room so the game works. Rate limits that prevent spam and abuse are tied to your player or account, not your IP address. An account is entirely optional and only exists so your stats and content survive across devices.",
+    "retentionHeading": "How long we keep it",
+    "retentionBody": "A room and everything in it (players, questions, guesses, hints, chat) is automatically deleted about 24 hours after it's created. Account data (email, stats) is kept until you delete your account — note that there is currently no self-service way to delete an account; contact us if you want yours removed.",
+    "cookiesHeading": "Cookies",
+    "cookiesBody": "We use two cookies, both strictly necessary for the app to work: one that keeps you signed in (including anonymous play), and one that remembers your language choice. Neither requires consent under GDPR, and we don't set any advertising or analytics cookies.",
+    "thirdPartyHeading": "Third parties",
+    "thirdPartyBody": "We don't use any advertising or analytics trackers. If error monitoring (Sentry) is enabled on this deployment, crash diagnostics such as a stack trace and page URL may be sent to Sentry to help us fix bugs — this only happens when explicitly configured.",
+    "contactHeading": "Contact",
+    "contactBody": "Questions about this page or your data? Email markus.mp40@gmail.com.",
+    "backLink": "← Back to home"
+  },
+  "CookieNoticeBanner": {
+    "message": "This app uses only functionally necessary cookies (session and language) — no tracking.",
+    "linkLabel": "Read more",
+    "dismiss": "Got it",
+    "dismissAriaLabel": "Dismiss cookie notice"
   }
 }

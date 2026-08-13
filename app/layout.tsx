@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, IBM_Plex_Mono } from "next/font/google";
+import Link from "next/link";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
+import { CookieNoticeBanner } from "@/components/CookieNoticeBanner";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -64,7 +66,13 @@ export default async function RootLayout({
             {t("skipToContent")}
           </a>
           {children}
+          <footer className="px-6 py-6 text-center font-mono text-xs uppercase tracking-widest text-text-secondary">
+            <Link href="/privacy" className="underline decoration-accent/60 hover:text-accent">
+              {t("privacyLink")}
+            </Link>
+          </footer>
           <ServiceWorkerRegister />
+          <CookieNoticeBanner />
         </NextIntlClientProvider>
       </body>
     </html>

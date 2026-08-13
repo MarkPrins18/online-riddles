@@ -1,13 +1,22 @@
 import type { NextRequest } from "next/server";
+import { createHash, timingSafeEqual } from "node:crypto";
 import { createAdminClient } from "@/lib/supabase/admin-client";
 import { validatePuzzlePackPayload, importPuzzlePack } from "@/lib/admin/importPuzzlePack";
 import { listPacksWithPuzzleCounts } from "@/lib/supabase/storyPacks";
 import { getErrorMessage } from "@/lib/errors";
 
+// Hashing both sides to a fixed-length digest before comparing means
+// timingSafeEqual never hits a length mismatch (it throws on those), so a
+// caller can't use response timing to learn how close a guess's length is
+// to the real secret's.
 function isAuthorized(request: NextRequest): boolean {
   const secret = process.env.ADMIN_IMPORT_SECRET;
   if (!secret) return false;
-  return request.headers.get("x-admin-secret") === secret;
+  const provided = request.headers.get("x-admin-secret") ?? "";
+
+  const expected = createHash("sha256").update(secret).digest();
+  const actual = createHash("sha256").update(provided).digest();
+  return timingSafeEqual(expected, actual);
 }
 
 /**

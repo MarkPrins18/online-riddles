@@ -5,7 +5,8 @@
   "RootLayout": {
     "title": "Online Riddles",
     "description": "Een lateral thinking puzzelspel voor groepen. Stel ja/nee-vragen, verzamel aanwijzingen en ontrafel het mysterie.",
-    "skipToContent": "Naar hoofdinhoud"
+    "skipToContent": "Naar hoofdinhoud",
+    "privacyLink": "Privacy & cookies"
   },
   "ErrorBoundary": {
     "title": "Er is iets misgegaan",
@@ -585,5 +586,29 @@
     "roundsNarrated": "Keer verteller",
     "lifetimeScore": "Totale score",
     "noStatsYet": "Nog geen potjes voltooid sinds je account. Speel een potje uit om je eerste statistieken te zien."
+  },
+  "Privacy": {
+    "title": "Privacy & cookies",
+    "intro": "Deze pagina legt in gewone taal uit wat Online Riddles verzamelt, waarom, en hoelang.",
+    "draftNotice": "Conceptmelding: dit is een te goeder trouw opgestelde samenvatting van wat de app daadwerkelijk doet, geen juridisch geverifieerde tekst. Heb je een formeel getoetst beleid nodig, laat deze tekst dan eerst controleren.",
+    "dataHeading": "Wat we verzamelen",
+    "dataBody": "De naam die je kiest bij het joinen van een kamer. Als je een gratis account aanmaakt: een e-mailadres en wachtwoord (of een eenmalige code per e-mail). Gameplaydata die aan een kamer hangt: vragen, gokken, hints en chatberichten. Met een account: privé lifetime-statistieken (potjes gespeeld, rondes opgelost, rondes verteld, totale score) — nooit zichtbaar op een openbaar leaderboard.",
+    "purposeHeading": "Waarom we het verzamelen",
+    "purposeBody": "Je naam wordt getoond aan andere spelers in je kamer, dat is nodig om het spel te laten werken. Rate limits die spam en misbruik tegengaan zijn gekoppeld aan je speler of account, niet aan je IP-adres. Een account is volledig optioneel en bestaat alleen zodat je statistieken en content bewaard blijven tussen apparaten.",
+    "retentionHeading": "Hoelang we het bewaren",
+    "retentionBody": "Een kamer en alles daarin (spelers, vragen, gokken, hints, chat) wordt automatisch verwijderd ongeveer 24 uur na aanmaak. Accountgegevens (e-mail, statistieken) blijven bestaan tot je je account verwijdert — let op: er is nu nog geen self-service manier om een account te verwijderen; neem contact op als je je gegevens verwijderd wilt hebben.",
+    "cookiesHeading": "Cookies",
+    "cookiesBody": "We gebruiken twee cookies, allebei functioneel noodzakelijk om de app te laten werken: één die je ingelogd houdt (ook bij anoniem spelen), en één die je taalkeuze onthoudt. Voor geen van beide is toestemming vereist onder de AVG, en we plaatsen geen advertentie- of analytics-cookies.",
+    "thirdPartyHeading": "Derde partijen",
+    "thirdPartyBody": "We gebruiken geen advertentie- of analytics-trackers. Als foutmonitoring (Sentry) aanstaat op deze deployment, kunnen crash-diagnostiek zoals een stack trace en pagina-URL naar Sentry gestuurd worden om bugs op te lossen — dit gebeurt alleen als dat expliciet is ingesteld.",
+    "contactHeading": "Contact",
+    "contactBody": "Vragen over deze pagina of je gegevens? Mail naar markus.mp40@gmail.com.",
+    "backLink": "← Terug naar home"
+  },
+  "CookieNoticeBanner": {
+    "message": "Deze app gebruikt alleen functioneel noodzakelijke cookies (sessie en taal) — geen tracking.",
+    "linkLabel": "Meer lezen",
+    "dismiss": "Begrepen",
+    "dismissAriaLabel": "Cookiemelding sluiten"
   }
 }

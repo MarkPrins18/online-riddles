@@ -1147,22 +1147,24 @@ end;
 $$;
 
 -- For automatic offline-takeover only (see lib/game/membership.ts:
--- pickNarratorTakeoverElector / pickRandomOnlineCandidate, called from
--- GamePlayClient after the Verteller has been offline past a timeout).
--- Unlike claim_host, this is NOT self-claim-only: the caller assigns the
--- role to a different, randomly-chosen player, since the whole point is
--- that the Verteller isn't around to claim it themselves. Any room member
--- may reassign the Verteller to any other room member — same trust model as
--- claim_host (Presence isn't visible server-side, so this can't verify the
--- old Verteller is really gone; the client decides when this is warranted).
+-- pickRandomOnlineCandidate, called from GamePlayClient after the Verteller
+-- has been offline past a timeout, by the current host's own client). Host-
+-- only, same trust model as set_narrator: since increment_player_score
+-- authorizes on "is currently narrator or host", letting any member
+-- reassign the role to anyone (including themselves) used to be a
+-- score-manipulation path (claim narrator, award yourself points, hand it
+-- back) — restricting the caller to the host closes that without needing
+-- server-side presence tracking. If the host is also offline, claim_host
+-- (unchanged, self-claim, no timeout) lets the deterministic successor
+-- become host first; their client then completes the narrator takeover.
 create or replace function claim_narrator(room_id_input uuid, new_narrator_id uuid)
 returns void
 language plpgsql
 security definer
 as $$
 begin
-  if not is_room_member(room_id_input) then
-    raise exception 'Not a member of this room';
+  if not is_room_host(room_id_input) then
+    raise exception 'Only the host can reassign the Verteller';
   end if;
   if not exists (
     select 1 from players
@@ -2345,6 +2347,47 @@ begin
   end if;
   if not exists (select 1 from pg_constraint where conname = 'puzzle_translations_hint_length') then
     alter table puzzle_translations add constraint puzzle_translations_hint_length check (char_length(hint) <= 500);
+  end if;
+end $$;
+
+-- Same reasoning as the block above, applied to the gameplay tables: only
+-- client-side maxLength today (JoinRoomForm.tsx/SetNameForm.tsx name 24,
+-- ChatForm.tsx text 300, QuestionForm.tsx text 140, QuestionCard.tsx
+-- customResponse 200, GuessForm.tsx text 280, NarratorHintForm.tsx text
+-- 300) — a direct API call bypasses all of those. player_name is
+-- denormalized onto questions/guesses/hints/chat_messages from players.name
+-- at write time, so it gets the same cap as players.name itself.
+do $$
+begin
+  if not exists (select 1 from pg_constraint where conname = 'players_name_length') then
+    alter table players add constraint players_name_length check (char_length(name) <= 100);
+  end if;
+  if not exists (select 1 from pg_constraint where conname = 'chat_messages_text_length') then
+    alter table chat_messages add constraint chat_messages_text_length check (char_length(text) <= 1000);
+  end if;
+  if not exists (select 1 from pg_constraint where conname = 'chat_messages_player_name_length') then
+    alter table chat_messages add constraint chat_messages_player_name_length check (char_length(player_name) <= 100);
+  end if;
+  if not exists (select 1 from pg_constraint where conname = 'questions_text_length') then
+    alter table questions add constraint questions_text_length check (char_length(text) <= 500);
+  end if;
+  if not exists (select 1 from pg_constraint where conname = 'questions_player_name_length') then
+    alter table questions add constraint questions_player_name_length check (char_length(player_name) <= 100);
+  end if;
+  if not exists (select 1 from pg_constraint where conname = 'questions_custom_response_length') then
+    alter table questions add constraint questions_custom_response_length check (char_length(custom_response) <= 500);
+  end if;
+  if not exists (select 1 from pg_constraint where conname = 'guesses_text_length') then
+    alter table guesses add constraint guesses_text_length check (char_length(text) <= 1000);
+  end if;
+  if not exists (select 1 from pg_constraint where conname = 'guesses_player_name_length') then
+    alter table guesses add constraint guesses_player_name_length check (char_length(player_name) <= 100);
+  end if;
+  if not exists (select 1 from pg_constraint where conname = 'hints_text_length') then
+    alter table hints add constraint hints_text_length check (char_length(text) <= 1000);
+  end if;
+  if not exists (select 1 from pg_constraint where conname = 'hints_player_name_length') then
+    alter table hints add constraint hints_player_name_length check (char_length(player_name) <= 100);
   end if;
 end $$;
 

@@ -13,11 +13,10 @@ import { Button } from "@/components/ui/Button";
  * online but AFK/unresponsive, or the host wants to hand the role off for
  * some other reason. Genuine disconnects are handled automatically instead
  * (see GamePlayClient's narrator-offline effect and
- * lib/game/membership.ts: pickNarratorTakeoverElector /
- * pickRandomOnlineCandidate), so this always starts collapsed — it's not
- * the tool for that case anymore. One button per candidate rather than a
- * <select>, so a long name wraps instead of getting clipped in the narrow
- * sidebar.
+ * lib/game/membership.ts: pickRandomOnlineCandidate), so this always starts
+ * collapsed — it's not the tool for that case anymore. One button per
+ * candidate rather than a <select>, so a long name wraps instead of getting
+ * clipped in the narrow sidebar.
  */
 export function NarratorTakeoverControl({
   supabase,

@@ -50,7 +50,10 @@
     "ariaLabel": "Copy room code",
     "label": "Room code",
     "copied": "Copied",
-    "copyPrompt": "Click to copy"
+    "copyPrompt": "Click to copy",
+    "shareTitle": "Join my Online Riddles room",
+    "shareLink": "Share invite link",
+    "linkCopied": "Link copied"
   },
   "LeaveRoomButton": {
     "leaving": "Leaving...",
@@ -75,7 +78,8 @@
     "noRoomFound": "No room found with that code.",
     "submitting": "Joining...",
     "submit": "Join room",
-    "error": "Couldn't join the room. Please try again."
+    "error": "Couldn't join the room. Please try again.",
+    "roomFull": "This room is full."
   },
   "StartGameButton": {
     "starting": "Opening the case...",
@@ -101,7 +105,10 @@
     "communityLegend": "Community",
     "communityLoading": "Loading community...",
     "communityEmpty": "No published community packs yet.",
+    "communityOff": "No community packs",
     "communityToggle": "Include community packs",
+    "communityFavorites": "★ Use my favorites",
+    "communityFavoritesEmpty": "You haven't favorited any packs yet.",
     "communityHint": "Riddles made by other players, separate from the official themes above.",
     "chooseThemeOrPack": "Choose at least one theme or community pack.",
     "modesLegend": "Game modes",

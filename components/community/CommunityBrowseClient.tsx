@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
+import { ensureAnonymousSession } from "@/lib/supabase/authSession";
 import {
   listCommunityPacks,
   COMMUNITY_PACKS_PAGE_SIZE,
   type StoryPackWithScore,
   type CommunityPackSort,
 } from "@/lib/supabase/communityPacks";
+import { listFavoritePackIds } from "@/lib/supabase/packFavorites";
 import { getProfiles } from "@/lib/supabase/profiles";
 import { PackCard } from "@/components/community/PackCard";
 import { Button } from "@/components/ui/Button";
@@ -18,6 +20,7 @@ export function CommunityBrowseClient() {
   const [hasMore, setHasMore] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [authorNames, setAuthorNames] = useState<Map<string, string>>(new Map());
+  const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
   const [sortMode, setSortMode] = useState<CommunityPackSort>("new");
   const t = useTranslations("CommunityBrowseClient");
   const locale = useLocale();
@@ -43,10 +46,15 @@ export function CommunityBrowseClient() {
     (async () => {
       setPacks(null);
       const supabase = createClient();
-      const { packs: firstPage, hasMore: more } = await listCommunityPacks(supabase, locale, sortMode);
+      const userId = await ensureAnonymousSession(supabase);
+      const [{ packs: firstPage, hasMore: more }, favIds] = await Promise.all([
+        listCommunityPacks(supabase, locale, sortMode),
+        listFavoritePackIds(supabase, userId),
+      ]);
       if (cancelled) return;
       setPacks(firstPage);
       setHasMore(more);
+      setFavoriteIds(favIds);
       void loadAuthorNames(firstPage);
     })();
 
@@ -112,6 +120,7 @@ export function CommunityBrowseClient() {
                 pack={pack}
                 score={pack.score}
                 authorName={pack.created_by ? authorNames.get(pack.created_by) : undefined}
+                initialFavorited={favoriteIds.has(pack.id)}
               />
             ))}
           </div>

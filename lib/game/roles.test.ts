@@ -32,6 +32,12 @@ describe("pickNextNarrator", () => {
     ).toBeNull();
   });
 
+  it("returns null when only one eligible player remains", () => {
+    const players = [makePlayer({ id: "p1" })];
+    expect(pickNextNarrator(players, "p1")).toBeNull();
+    expect(pickNextNarrator(players, null)).toBeNull();
+  });
+
   it("picks the earliest joiner when there is no current narrator", () => {
     const players = [
       makePlayer({ id: "p2", joined_at: "2026-01-01T00:02:00.000Z" }),

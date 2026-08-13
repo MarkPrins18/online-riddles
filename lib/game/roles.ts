@@ -4,13 +4,15 @@ import type { Player } from "@/types/player";
  * Determines who narrates next by rotating through players in join order.
  * The player after the current narrator gets the role; if there is no
  * current narrator (first round), the earliest joiner becomes narrator.
+ * Needs at least 2 eligible players — with only 1, that player would end up
+ * narrating to themselves with nobody left to ask questions.
  */
 export function pickNextNarrator(
   players: Player[],
   currentNarratorId: string | null
 ): Player | null {
   const eligible = players.filter((p) => !p.is_spectator);
-  if (eligible.length === 0) return null;
+  if (eligible.length < 2) return null;
 
   const ordered = [...eligible].sort(
     (a, b) => new Date(a.joined_at).getTime() - new Date(b.joined_at).getTime()

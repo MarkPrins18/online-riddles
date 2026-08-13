@@ -7,7 +7,11 @@ import type { Database } from "@/lib/supabase/database.types";
 import type { RoomSettingsInput } from "@/types/room";
 import { getOfficialThemes } from "@/lib/supabase/storyPacks";
 import { countPublishedCommunityPacks } from "@/lib/supabase/communityPacks";
+import { listFavoritePackIds } from "@/lib/supabase/packFavorites";
+import { ensureAnonymousSession } from "@/lib/supabase/authSession";
 import { MIN_PLAYERS_FOR_SABOTEUR_MODE } from "@/lib/game/roles";
+
+type CommunityMode = "off" | "all" | "favorites";
 
 type DurationLabelKey = "duration5" | "duration10" | "duration15" | "duration20" | "durationNone";
 
@@ -37,6 +41,15 @@ export function RoomSettingsForm({
 }) {
   const [officialThemes, setOfficialThemes] = useState<string[] | null>(null);
   const [communityPackCount, setCommunityPackCount] = useState<number | null>(null);
+  const [favoritePackIds, setFavoritePackIds] = useState<Set<string> | null>(null);
+  // Tracked separately from `value.communityPackIds` rather than derived from
+  // it on every render — an empty favorites selection collapses to the same
+  // `[]` as "off", so re-deriving the mode from `value` would be ambiguous.
+  // This form is the only producer of a non-null, non-empty array, so the
+  // one-time initial derivation below is safe.
+  const [communityMode, setCommunityModeState] = useState<CommunityMode>(() =>
+    value.communityPackIds === null ? "all" : value.communityPackIds.length === 0 ? "off" : "favorites"
+  );
   const t = useTranslations("RoomSettingsForm");
 
   useEffect(() => {
@@ -51,6 +64,11 @@ export function RoomSettingsForm({
     countPublishedCommunityPacks(supabase).then((count) => {
       if (!cancelled) setCommunityPackCount(count);
     });
+    ensureAnonymousSession(supabase)
+      .then((userId) => listFavoritePackIds(supabase, userId))
+      .then((favIds) => {
+        if (!cancelled) setFavoritePackIds(favIds);
+      });
     return () => {
       cancelled = true;
     };
@@ -58,6 +76,16 @@ export function RoomSettingsForm({
     // identity change would refetch needlessly.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [supabase]);
+
+  // Reacts once the favorites finish loading — reads communityMode fresh at
+  // that point, not a stale mount-time value, so it still applies correctly
+  // even if the host picked "favorites" before this fetch resolved.
+  useEffect(() => {
+    if (favoritePackIds && communityMode === "favorites") {
+      onChange({ ...value, communityPackIds: [...favoritePackIds] });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [favoritePackIds]);
 
   function toggleTheme(theme: string) {
     const isSelected = value.packThemeFilter.includes(theme);
@@ -67,8 +95,15 @@ export function RoomSettingsForm({
     onChange({ ...value, packThemeFilter: next });
   }
 
-  function toggleCommunity(enabled: boolean) {
-    onChange({ ...value, communityPackIds: enabled ? null : [] });
+  function setCommunityMode(mode: CommunityMode) {
+    setCommunityModeState(mode);
+    if (mode === "off") {
+      onChange({ ...value, communityPackIds: [] });
+    } else if (mode === "all") {
+      onChange({ ...value, communityPackIds: null });
+    } else {
+      onChange({ ...value, communityPackIds: [...(favoritePackIds ?? [])] });
+    }
   }
 
   const groupLegendClass = "mb-3 font-mono text-xs uppercase tracking-widest text-text-primary";
@@ -164,16 +199,50 @@ export function RoomSettingsForm({
                 <p className="font-mono text-xs text-text-secondary">{t("communityEmpty")}</p>
               ) : (
                 <>
-                  <label className="flex items-center gap-2 font-mono text-sm text-text-primary">
-                    <input
-                      type="checkbox"
-                      className="accent-accent"
-                      checked={value.communityPackIds === null}
-                      onChange={(e) => toggleCommunity(e.target.checked)}
-                    />
-                    {t("communityToggle")}
-                    <span className="font-mono text-xs text-text-secondary">({communityPackCount})</span>
-                  </label>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="flex items-center gap-2 font-mono text-sm text-text-primary">
+                      <input
+                        type="radio"
+                        name="community-mode"
+                        className="accent-accent"
+                        checked={communityMode === "off"}
+                        onChange={() => setCommunityMode("off")}
+                      />
+                      {t("communityOff")}
+                    </label>
+                    <label className="flex items-center gap-2 font-mono text-sm text-text-primary">
+                      <input
+                        type="radio"
+                        name="community-mode"
+                        className="accent-accent"
+                        checked={communityMode === "all"}
+                        onChange={() => setCommunityMode("all")}
+                      />
+                      {t("communityToggle")}
+                      <span className="font-mono text-xs text-text-secondary">({communityPackCount})</span>
+                    </label>
+                    <label className="flex items-center gap-2 font-mono text-sm text-text-primary">
+                      <input
+                        type="radio"
+                        name="community-mode"
+                        className="accent-accent"
+                        disabled={!favoritePackIds || favoritePackIds.size === 0}
+                        checked={communityMode === "favorites"}
+                        onChange={() => setCommunityMode("favorites")}
+                      />
+                      {t("communityFavorites")}
+                      {favoritePackIds && (
+                        <span className="font-mono text-xs text-text-secondary">
+                          ({favoritePackIds.size})
+                        </span>
+                      )}
+                    </label>
+                  </div>
+                  {favoritePackIds && favoritePackIds.size === 0 && (
+                    <p className="mt-1 font-mono text-xs text-text-secondary">
+                      {t("communityFavoritesEmpty")}
+                    </p>
+                  )}
                   <p className="mt-1 font-mono text-xs text-text-secondary">{t("communityHint")}</p>
                 </>
               )}

@@ -93,6 +93,51 @@ create trigger set_spectator_on_join
   before insert on players
   for each row execute function set_spectator_on_join();
 
+-- Enforced server-side (not just client-side) — matches the "trust the
+-- group, but never trust the client alone" philosophy already used for
+-- rate limits and privileged-column guards below. Spectators never count
+-- toward the cap and are never rejected: they can't ask questions or guess
+-- (set_spectator_on_join already locks that out), so letting more of them
+-- watch doesn't crowd active play, and rejecting a well-meaning latecomer
+-- into an already-started "full" room would be a confusing dead end instead
+-- of the spectator seat they'd otherwise get. Room status is re-derived
+-- here rather than reading new.is_spectator, since BEFORE INSERT triggers
+-- on the same table run in name order (alphabetically before
+-- set_spectator_on_join), so that column isn't reliably set yet.
+create or replace function enforce_room_capacity()
+returns trigger
+language plpgsql
+security definer
+as $$
+declare
+  room_status text;
+  active_count int;
+  cap constant int := 20;
+begin
+  select status into room_status from rooms where id = new.room_id;
+
+  if room_status is distinct from 'lobby' then
+    return new;
+  end if;
+
+  select count(*) into active_count
+  from players
+  where room_id = new.room_id and is_spectator = false;
+
+  if active_count >= cap then
+    raise exception 'Deze kamer zit vol (max % spelers).', cap
+      using errcode = 'RM001';
+  end if;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists enforce_room_capacity on players;
+create trigger enforce_room_capacity
+  before insert on players
+  for each row execute function enforce_room_capacity();
+
 -- The "update own player" RLS policy below only checks *who* owns the row,
 -- not *which* columns they're changing — with the (public, by design) anon
 -- key, that's enough for a direct REST call to set is_host/is_narrator on

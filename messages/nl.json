@@ -50,7 +50,10 @@
     "ariaLabel": "Kopieer roomcode",
     "label": "Roomcode",
     "copied": "Gekopieerd",
-    "copyPrompt": "Klik om te kopiëren"
+    "copyPrompt": "Klik om te kopiëren",
+    "shareTitle": "Doe mee met mijn Online Riddles kamer",
+    "shareLink": "Deel uitnodigingslink",
+    "linkCopied": "Link gekopieerd"
   },
   "LeaveRoomButton": {
     "leaving": "Verlaten...",
@@ -75,7 +78,8 @@
     "noRoomFound": "Geen kamer gevonden met die code.",
     "submitting": "Aansluiten...",
     "submit": "Kamer joinen",
-    "error": "Kon niet bij de kamer aansluiten. Probeer het opnieuw."
+    "error": "Kon niet bij de kamer aansluiten. Probeer het opnieuw.",
+    "roomFull": "Deze kamer zit vol."
   },
   "StartGameButton": {
     "starting": "Zaak wordt geopend...",
@@ -101,7 +105,10 @@
     "communityLegend": "Community",
     "communityLoading": "Community laden...",
     "communityEmpty": "Nog geen gepubliceerde community-packs.",
+    "communityOff": "Geen community-packs",
     "communityToggle": "Community packs meespelen",
+    "communityFavorites": "★ Gebruik mijn favorieten",
+    "communityFavoritesEmpty": "Je hebt nog geen pakketten favoriet gemaakt.",
     "communityHint": "Raadsels gemaakt door andere spelers, los van de officiële thema's hierboven.",
     "chooseThemeOrPack": "Kies minstens één thema of community pack.",
     "modesLegend": "Spelmodussen",

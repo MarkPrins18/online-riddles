@@ -55,7 +55,8 @@ export function JoinRoomForm({
       const player = await joinRoom(supabase, room.id, name.trim(), false, userId);
       finishJoin(room, player.id);
     } catch (err) {
-      setError(getErrorMessage(err, t("error")));
+      const code = (err as { code?: string } | null)?.code;
+      setError(code === "RM001" ? t("roomFull") : getErrorMessage(err, t("error")));
       setIsSubmitting(false);
     }
   }

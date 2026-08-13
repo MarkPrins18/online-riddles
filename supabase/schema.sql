@@ -1833,8 +1833,14 @@ create policy "change own vote" on round_accusations for update
     and player_belongs_to_room(target_id, room_id)
   );
 
+-- Was `using (true)` — let anyone with the anon key read solver_user_id/
+-- narrator_user_id for every room ever played, correlating an account's
+-- identity across rooms they were never a member of. The app itself
+-- (getCaseLogForRoom) always scopes this per room_id already — it's a
+-- per-room "zaken-archief"/recap feature, not a global archive — so
+-- scoping the policy the same way is a pure tightening, not a UX change.
 drop policy if exists "public read case log" on case_log;
-create policy "public read case log" on case_log for select using (true);
+create policy "public read case log" on case_log for select using (is_room_member(room_id));
 -- Previously only checked the caller's own role in room_id, never that
 -- solver_user_id/narrator_user_id on the row actually belong to that room —
 -- a host/narrator could insert a case_log row naming an arbitrary

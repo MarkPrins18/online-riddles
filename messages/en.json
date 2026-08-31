@@ -3,7 +3,7 @@
     "close": "Close"
   },
   "RootLayout": {
-    "title": "DetectiveNights",
+    "title": "InvestigateTogether",
     "description": "A lateral thinking puzzle game for groups. Ask yes/no questions, gather clues, and crack the mystery.",
     "skipToContent": "Skip to main content",
     "privacyLink": "Privacy & cookies"
@@ -15,7 +15,7 @@
   },
   "HomePage": {
     "coverStamp": "Case file · closed",
-    "title": "DetectiveNights",
+    "title": "InvestigateTogether",
     "subtitle": "One mystery. Sharp questions. Who cracks the case?",
     "newFile": "New file",
     "existingFile": "Existing file",
@@ -53,7 +53,7 @@
     "label": "Room code",
     "copied": "Copied",
     "copyPrompt": "Click to copy",
-    "shareTitle": "Join my DetectiveNights room",
+    "shareTitle": "Join my InvestigateTogether room",
     "shareLink": "Share invite link",
     "linkCopied": "Link copied"
   },
@@ -446,7 +446,7 @@
     "recapError": "Couldn't build a recap. Please try again.",
     "shareOrDownload": "Share / download",
     "recapImageAlt": "Recap of the game night",
-    "shareTitle": "DetectiveNights: case closed"
+    "shareTitle": "InvestigateTogether: case closed"
   },
   "FinalScoreboard": {
     "caseFileClosed": "Case file closed",
@@ -609,7 +609,7 @@
   },
   "Privacy": {
     "title": "Privacy & cookies",
-    "intro": "This page explains what DetectiveNights collects, why, and for how long, in plain language.",
+    "intro": "This page explains what InvestigateTogether collects, why, and for how long, in plain language.",
     "draftNotice": "Draft notice: this is a good-faith summary of what the app actually does, not legally reviewed text. If you need a formally reviewed policy, have it checked before relying on it.",
     "dataHeading": "What we collect",
     "dataBody": "The display name you pick when you join a room. If you choose to create a free account, an email address and password (or a one-time email code). Gameplay data tied to a room: questions, guesses, hints, and chat messages. If you have an account, private lifetime stats (games played, rounds solved, rounds narrated, total score) — never shown on a public leaderboard.",

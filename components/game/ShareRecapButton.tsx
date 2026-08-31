@@ -67,7 +67,7 @@ export function ShareRecapButton({
 
   async function handleShare() {
     if (!imageBlob) return;
-    const file = new File([imageBlob], "online-riddles-zaak-gesloten.png", { type: "image/png" });
+    const file = new File([imageBlob], "detective-nights-zaak-gesloten.png", { type: "image/png" });
 
     if (navigator.canShare?.({ files: [file] })) {
       try {
@@ -84,7 +84,7 @@ export function ShareRecapButton({
 
     const link = document.createElement("a");
     link.href = imageUrl!;
-    link.download = "online-riddles-zaak-gesloten.png";
+    link.download = "detective-nights-zaak-gesloten.png";
     link.click();
   }
 

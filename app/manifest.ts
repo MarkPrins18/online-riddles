@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Online Riddles",
-    short_name: "Riddles",
+    name: "DetectiveNights",
+    short_name: "DetectiveNights",
     description:
       "A lateral thinking puzzle game for groups. Ask yes/no questions, gather clues, and crack the mystery.",
     start_url: "/",

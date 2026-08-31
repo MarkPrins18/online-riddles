@@ -83,6 +83,13 @@ export function HowToPlayButton({ className = "" }: { className?: string }) {
             </section>
 
             <section>
+              <p className="font-serif text-lg italic text-text-primary">{t("saboteurTitle")}</p>
+              <p className="mt-1 font-mono text-sm leading-relaxed text-text-secondary">
+                {t("saboteurBody")}
+              </p>
+            </section>
+
+            <section>
               <p className="font-serif text-lg italic text-text-primary">{t("corkboardTitle")}</p>
               <p className="mt-1 font-mono text-sm leading-relaxed text-text-secondary">
                 {t("corkboardBody")}

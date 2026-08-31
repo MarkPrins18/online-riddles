@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { PointerEvent as ReactPointerEvent } from "react";
+import type { KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEvent } from "react";
 import { useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
@@ -9,6 +9,7 @@ import type { Question } from "@/types/question";
 import type { Player } from "@/types/player";
 import type { BoardItemKind, BoardNoteColor } from "@/types/boardItem";
 import { useBoardState } from "@/lib/game/useBoardState";
+import { useMediaQuery } from "@/lib/ui/useMediaQuery";
 import {
   addNote,
   pinQuestion,
@@ -23,6 +24,10 @@ import { Button } from "@/components/ui/Button";
 import { BoardNote } from "./BoardNote";
 import { BoardQuestionCard } from "./BoardQuestionCard";
 import { BoardCursorLayer } from "./BoardCursorLayer";
+import { CorkboardListView } from "./CorkboardListView";
+
+const KEYBOARD_MOVE_STEP = 0.02;
+const CANVAS_MEDIA_QUERY = "(min-width: 1280px)";
 
 const NOTE_COLORS: BoardNoteColor[] = ["yellow", "pink", "blue", "green"];
 const CURSOR_THROTTLE_MS = 50;
@@ -100,6 +105,7 @@ export function CorkboardOverlay({
   const [dragPositions, setDragPositions] = useState<Record<string, { x: number; y: number }>>({});
   const [connectDraft, setConnectDraft] = useState<{ fromId: string; x: number; y: number } | null>(null);
   const [connectHoverTargetId, setConnectHoverTargetId] = useState<string | null>(null);
+  const [keyboardConnectFromId, setKeyboardConnectFromId] = useState<string | null>(null);
   const [addingNote, setAddingNote] = useState(false);
   const [noteDraft, setNoteDraft] = useState("");
   const [noteColor, setNoteColor] = useState<BoardNoteColor>("yellow");
@@ -107,6 +113,7 @@ export function CorkboardOverlay({
   const [surfaceWidthPx, setSurfaceWidthPx] = useState(800);
   const [surfaceHeightPx, setSurfaceHeightPx] = useState(600);
 
+  const isDesktop = useMediaQuery(CANVAS_MEDIA_QUERY);
   const t = useTranslations("CorkboardOverlay");
 
   const surfaceRef = useRef<HTMLDivElement>(null);
@@ -202,6 +209,14 @@ export function CorkboardOverlay({
     setDragPositions((prev) => ({ ...prev, [draggingId]: { x: itemX, y: itemY } }));
   }
 
+  function connectItems(fromId: string, toId: string) {
+    if (fromId === toId || isAlreadyConnected(fromId, toId)) return;
+    addConnection(supabase, { roomId, playerId, fromItemId: fromId, toItemId: toId }).catch((err) => {
+      const message = getErrorMessage(err, t("addConnectionError"));
+      setActionError(message.includes("duplicate key") ? t("duplicateConnectionError") : message);
+    });
+  }
+
   function handleSurfacePointerUp(e: ReactPointerEvent<HTMLDivElement>) {
     if (connectDragFromRef.current) {
       const fromId = connectDragFromRef.current;
@@ -214,16 +229,7 @@ export function CorkboardOverlay({
         .elementFromPoint(e.clientX, e.clientY)
         ?.closest("[data-item-id]")
         ?.getAttribute("data-item-id");
-      if (dropTarget && dropTarget !== fromId && !isAlreadyConnected(fromId, dropTarget)) {
-        addConnection(supabase, { roomId, playerId, fromItemId: fromId, toItemId: dropTarget }).catch(
-          (err) => {
-            const message = getErrorMessage(err, t("addConnectionError"));
-            setActionError(
-              message.includes("duplicate key") ? t("duplicateConnectionError") : message
-            );
-          }
-        );
-      }
+      if (dropTarget) connectItems(fromId, dropTarget);
       return;
     }
 
@@ -248,6 +254,50 @@ export function CorkboardOverlay({
     deleteConnection(supabase, connectionId).catch((err) =>
       setActionError(getErrorMessage(err, t("deleteConnectionError")))
     );
+  }
+
+  // Keyboard equivalent of the pointer drag/connect gestures: arrows nudge
+  // position, Enter starts a connection from the focused card and Enter on
+  // a second card completes it (Escape cancels), Delete removes the card.
+  function handleItemKeyDown(
+    itemId: string,
+    pos: { x: number; y: number },
+    canDelete: boolean,
+    e: ReactKeyboardEvent<HTMLDivElement>
+  ) {
+    if (e.key === "ArrowUp" || e.key === "ArrowDown" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      e.preventDefault();
+      const dx = e.key === "ArrowLeft" ? -KEYBOARD_MOVE_STEP : e.key === "ArrowRight" ? KEYBOARD_MOVE_STEP : 0;
+      const dy = e.key === "ArrowUp" ? -KEYBOARD_MOVE_STEP : e.key === "ArrowDown" ? KEYBOARD_MOVE_STEP : 0;
+      const next = { x: clamp(pos.x + dx, 0, 1), y: clamp(pos.y + dy, 0, 1) };
+      setDragPositions((prev) => ({ ...prev, [itemId]: next }));
+      moveBoardItem(supabase, itemId, next.x, next.y).catch((err) =>
+        setActionError(getErrorMessage(err, t("moveItemError")))
+      );
+      return;
+    }
+
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      if (keyboardConnectFromId && keyboardConnectFromId !== itemId) {
+        connectItems(keyboardConnectFromId, itemId);
+        setKeyboardConnectFromId(null);
+      } else {
+        setKeyboardConnectFromId((current) => (current === itemId ? null : itemId));
+      }
+      return;
+    }
+
+    if (e.key === "Escape" && keyboardConnectFromId) {
+      e.preventDefault();
+      setKeyboardConnectFromId(null);
+      return;
+    }
+
+    if ((e.key === "Delete" || e.key === "Backspace") && canDelete) {
+      e.preventDefault();
+      handleDelete(itemId);
+    }
   }
 
   function handleAddNote() {
@@ -391,7 +441,7 @@ export function CorkboardOverlay({
       )}
 
       <p className="border-b border-white/5 px-4 py-2 font-mono text-xs text-text-secondary">
-        {t("instructions")}
+        {isDesktop ? t("instructions") : t("instructionsList")}
       </p>
 
       {(actionError || state.error) && (
@@ -400,6 +450,20 @@ export function CorkboardOverlay({
         </p>
       )}
 
+      {!isDesktop && (
+        <CorkboardListView
+          items={state.items}
+          connections={state.connections}
+          questions={questions}
+          playerId={playerId}
+          isHost={isHost}
+          onDeleteItem={handleDelete}
+          onDeleteConnection={handleDeleteConnection}
+          onAddConnection={connectItems}
+        />
+      )}
+
+      {isDesktop && (
       <div
         ref={surfaceRef}
         className="relative min-h-0 flex-1 touch-none overflow-hidden bg-[radial-gradient(circle,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[length:24px_24px]"
@@ -479,9 +543,11 @@ export function CorkboardOverlay({
                 x={pos.x}
                 y={pos.y}
                 canDelete={canDelete}
+                connecting={keyboardConnectFromId === item.id}
                 onPointerDown={(e) => handleItemPointerDown(item.id, pos.x, pos.y, e)}
                 onConnectorPointerDown={(e) => handleConnectorPointerDown(item.id, e)}
                 onDelete={() => handleDelete(item.id)}
+                onKeyDown={(e) => handleItemKeyDown(item.id, pos, canDelete, e)}
               />
             );
           }
@@ -494,15 +560,18 @@ export function CorkboardOverlay({
               x={pos.x}
               y={pos.y}
               canDelete={canDelete}
+              connecting={keyboardConnectFromId === item.id}
               onPointerDown={(e) => handleItemPointerDown(item.id, pos.x, pos.y, e)}
               onConnectorPointerDown={(e) => handleConnectorPointerDown(item.id, e)}
               onDelete={() => handleDelete(item.id)}
+              onKeyDown={(e) => handleItemKeyDown(item.id, pos, canDelete, e)}
             />
           );
         })}
 
         <BoardCursorLayer cursors={state.cursors} selfPlayerId={playerId} />
       </div>
+      )}
     </Modal>
   );
 }

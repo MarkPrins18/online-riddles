@@ -1,4 +1,4 @@
--- Online Riddles schema
+-- DetectiveNights schema
 -- Run this in the Supabase SQL editor for a new project.
 --
 -- This version requires Supabase Anonymous Auth (enabled by default on new

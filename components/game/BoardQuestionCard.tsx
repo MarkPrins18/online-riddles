@@ -1,4 +1,4 @@
-import type { PointerEvent as ReactPointerEvent } from "react";
+import type { KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEvent } from "react";
 import { useTranslations } from "next-intl";
 import type { BoardItem } from "@/types/boardItem";
 import type { Question } from "@/types/question";
@@ -18,18 +18,22 @@ export function BoardQuestionCard({
   x,
   y,
   canDelete,
+  connecting,
   onPointerDown,
   onConnectorPointerDown,
   onDelete,
+  onKeyDown,
 }: {
   item: BoardItem;
   question: Question | undefined;
   x: number;
   y: number;
   canDelete: boolean;
+  connecting: boolean;
   onPointerDown: (e: ReactPointerEvent<HTMLDivElement>) => void;
   onConnectorPointerDown: (e: ReactPointerEvent<HTMLDivElement>) => void;
   onDelete: () => void;
+  onKeyDown: (e: ReactKeyboardEvent<HTMLDivElement>) => void;
 }) {
   const rotate = rotationFor(item.id);
   const { hoverSide, handlePointerMove, handlePointerLeave } = useCardHover();
@@ -45,11 +49,15 @@ export function BoardQuestionCard({
   return (
     <div
       data-item-id={item.id}
-      className="absolute w-[200px] -translate-x-1/2 -translate-y-1/2 touch-none select-none rounded-sm bg-[#eae4d3] p-3 text-[#12141c] shadow-md shadow-black/40"
+      tabIndex={0}
+      role="button"
+      aria-label={question?.text ?? t("notFound")}
+      className={`absolute w-[200px] -translate-x-1/2 -translate-y-1/2 touch-none select-none rounded-sm bg-[#eae4d3] p-3 text-[#12141c] shadow-md shadow-black/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${connecting ? "ring-2 ring-accent" : ""}`}
       style={{ left: `${x * 100}%`, top: `${y * 100}%`, transform: `rotate(${rotate}deg)` }}
       onPointerDown={onPointerDown}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
+      onKeyDown={onKeyDown}
     >
       {canDelete && (
         <button

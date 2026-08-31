@@ -1,4 +1,4 @@
-import type { PointerEvent as ReactPointerEvent } from "react";
+import type { KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEvent } from "react";
 import { useTranslations } from "next-intl";
 import type { BoardItem, BoardNoteColor } from "@/types/boardItem";
 import { ConnectorDot, useCardHover } from "./ConnectorDot";
@@ -15,17 +15,21 @@ export function BoardNote({
   x,
   y,
   canDelete,
+  connecting,
   onPointerDown,
   onConnectorPointerDown,
   onDelete,
+  onKeyDown,
 }: {
   item: BoardItem;
   x: number;
   y: number;
   canDelete: boolean;
+  connecting: boolean;
   onPointerDown: (e: ReactPointerEvent<HTMLDivElement>) => void;
   onConnectorPointerDown: (e: ReactPointerEvent<HTMLDivElement>) => void;
   onDelete: () => void;
+  onKeyDown: (e: ReactKeyboardEvent<HTMLDivElement>) => void;
 }) {
   const { hoverSide, handlePointerMove, handlePointerLeave } = useCardHover();
   const t = useTranslations("BoardNote");
@@ -33,11 +37,15 @@ export function BoardNote({
   return (
     <div
       data-item-id={item.id}
-      className="absolute w-[180px] -translate-x-1/2 -translate-y-1/2 touch-none select-none rounded-sm p-3 text-[#12141c] shadow-md shadow-black/40"
+      tabIndex={0}
+      role="button"
+      aria-label={item.text ?? ""}
+      className={`absolute w-[180px] -translate-x-1/2 -translate-y-1/2 touch-none select-none rounded-sm p-3 text-[#12141c] shadow-md shadow-black/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${connecting ? "ring-2 ring-accent" : ""}`}
       style={{ left: `${x * 100}%`, top: `${y * 100}%`, backgroundColor: NOTE_COLORS[item.color] }}
       onPointerDown={onPointerDown}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
+      onKeyDown={onKeyDown}
     >
       {canDelete && (
         <button

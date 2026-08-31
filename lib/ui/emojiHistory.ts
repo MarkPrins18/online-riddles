@@ -1,6 +1,6 @@
 "use client";
 
-const STORAGE_KEY = "dark-riddles:recent-emojis";
+const STORAGE_KEY = "detective-nights:recent-emojis";
 const MAX_RECENT = 8;
 
 // Shown until the player has picked anything themselves — a sensible

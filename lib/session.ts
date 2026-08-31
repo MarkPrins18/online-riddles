@@ -1,4 +1,4 @@
-const STORAGE_PREFIX = "dark-riddles:player:";
+const STORAGE_PREFIX = "detective-nights:player:";
 
 export function getStoredPlayerId(roomCode: string): string | null {
   if (typeof window === "undefined") return null;

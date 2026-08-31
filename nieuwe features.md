@@ -1,4 +1,4 @@
-# Nieuwe features — ideeën voor Dark Riddles
+# Nieuwe features — ideeën voor DetectiveNights
 
 Brainstorm op basis van analyse van de codebase (augustus 2026). Van klein tot groot.
 

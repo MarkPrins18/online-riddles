@@ -3,7 +3,7 @@
     "close": "Close"
   },
   "RootLayout": {
-    "title": "Online Riddles",
+    "title": "DetectiveNights",
     "description": "A lateral thinking puzzle game for groups. Ask yes/no questions, gather clues, and crack the mystery.",
     "skipToContent": "Skip to main content",
     "privacyLink": "Privacy & cookies"
@@ -15,7 +15,7 @@
   },
   "HomePage": {
     "coverStamp": "Case file · closed",
-    "title": "Online Riddles",
+    "title": "DetectiveNights",
     "subtitle": "One mystery. Sharp questions. Who cracks the case?",
     "newFile": "New file",
     "existingFile": "Existing file",
@@ -37,6 +37,8 @@
     "pointsBody": "A harder case earns more points. The player who solves it and the Narrator both get a bonus, as does the round's best question. A wrong guess costs points.",
     "hardcoreTitle": "Hardcore mode",
     "hardcoreBody": "Optional, set by the host: every wrong guess costs the whole team 1 life. At 0 lives, it's game over for the whole session.",
+    "saboteurTitle": "Saboteur mode",
+    "saboteurBody": "Optional, set by the host, needs at least 4 players. Each round, one rader is secretly the Saboteur and quietly tries to steer the group toward the wrong answer. After the reveal, everyone votes on who they think it was. Guess right and the group gets a bonus; accuse the wrong player and it costs points.",
     "corkboardTitle": "Corkboard",
     "corkboardBody": "A shared board to pin clues and theories and connect them with threads. Desktop/tablet only, not available on phones."
   },
@@ -51,7 +53,7 @@
     "label": "Room code",
     "copied": "Copied",
     "copyPrompt": "Click to copy",
-    "shareTitle": "Join my Online Riddles room",
+    "shareTitle": "Join my DetectiveNights room",
     "shareLink": "Share invite link",
     "linkCopied": "Link copied"
   },
@@ -333,7 +335,8 @@
     "close": "Close",
     "notePlaceholder": "Write a theory...",
     "pin": "Pin",
-    "instructions": "Drag from the red dot on a card to another card to connect them. Click a thread to remove it again.",
+    "instructions": "Drag from the red dot on a card to another card to connect them. Click a thread to remove it again. Keyboard: arrow keys move the focused card, Enter starts a connection and Enter on a second card finishes it (Escape cancels), Delete removes it.",
+    "instructionsList": "Tap Remove to unpin something, or pick another card from the dropdown to link it.",
     "deleteConnectionTitle": "Click to remove this thread",
     "addConnectionError": "Couldn't draw a thread.",
     "duplicateConnectionError": "These two cards are already connected.",
@@ -342,6 +345,16 @@
     "deleteConnectionError": "Couldn't remove this thread.",
     "addNoteError": "Couldn't pin your note.",
     "pinQuestionError": "Couldn't pin this question."
+  },
+  "CorkboardListView": {
+    "empty": "Nothing pinned yet.",
+    "questionNotFound": "Question not found.",
+    "questionBadge": "Question",
+    "remove": "Remove",
+    "deleteItemAriaLabel": "Remove this",
+    "removeLinkAriaLabel": "Remove this link",
+    "addLinkAriaLabel": "Link to another card",
+    "linkTo": "Link to..."
   },
   "CaseLog": {
     "heading": "Case archive",
@@ -433,7 +446,7 @@
     "recapError": "Couldn't build a recap. Please try again.",
     "shareOrDownload": "Share / download",
     "recapImageAlt": "Recap of the game night",
-    "shareTitle": "Online Riddles: case closed"
+    "shareTitle": "DetectiveNights: case closed"
   },
   "FinalScoreboard": {
     "caseFileClosed": "Case file closed",
@@ -596,7 +609,7 @@
   },
   "Privacy": {
     "title": "Privacy & cookies",
-    "intro": "This page explains what Online Riddles collects, why, and for how long, in plain language.",
+    "intro": "This page explains what DetectiveNights collects, why, and for how long, in plain language.",
     "draftNotice": "Draft notice: this is a good-faith summary of what the app actually does, not legally reviewed text. If you need a formally reviewed policy, have it checked before relying on it.",
     "dataHeading": "What we collect",
     "dataBody": "The display name you pick when you join a room. If you choose to create a free account, an email address and password (or a one-time email code). Gameplay data tied to a room: questions, guesses, hints, and chat messages. If you have an account, private lifetime stats (games played, rounds solved, rounds narrated, total score) — never shown on a public leaderboard.",

@@ -482,16 +482,13 @@ export function GamePlayClient({ code }: { code: string }) {
                 durationSeconds={room.round_duration_seconds}
               />
             )}
-            {/* Prikbord is a freeform drag-and-connect canvas with
-                fixed-width cards (180-200px) — deliberately desktop-only.
-                Below xl those cards eat most of the screen width and the
-                small connector-drag targets are hard to hit with a finger;
-                it'd need its own simplified mobile design (e.g. a plain
-                list) rather than just unhiding this button. */}
+            {/* CorkboardOverlay itself switches between the freeform
+                drag-and-connect canvas (xl+, where fixed-width 180-200px
+                cards and connector-drag targets have room) and a plain
+                tap-friendly list (below xl) — so the button stays visible
+                at every size instead of the feature disappearing on phones. */}
             {!narrating && !isSpectator && (
-              <div className="hidden xl:block">
-                <CorkboardButton onClick={() => setCorkboardOpen(true)} />
-              </div>
+              <CorkboardButton onClick={() => setCorkboardOpen(true)} />
             )}
           </div>
         </div>

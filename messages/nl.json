@@ -14,7 +14,7 @@
     "retry": "Probeer opnieuw"
   },
   "HomePage": {
-    "coverStamp": "Zaak-dossier · gesloten",
+    "coverStamp": "Zaak-dossier · open",
     "title": "DetectiveNights",
     "subtitle": "Eén mysterie. Alle rechercheurs. Wie kraakt de zaak?",
     "newFile": "Nieuw dossier",

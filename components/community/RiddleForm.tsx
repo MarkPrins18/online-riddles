@@ -15,7 +15,14 @@ const inputClasses =
 const textareaClasses = `${inputClasses} min-h-24 resize-y`;
 const labelClasses = "font-mono text-xs uppercase tracking-widest text-text-secondary";
 
-const DIFFICULTY_VALUES: Puzzle["difficulty"][] = ["easy", "medium", "hard"];
+// Community creators pick from easy/hard only — self-reporting "medium"
+// turned out to mean nothing consistent (see difficulty.ts's round ramp,
+// which relies on that label being roughly honest). "Medium" stays a valid
+// backend value for curated/official puzzles (added via the admin script,
+// not this form) and for the round ramp's own fallback logic, so an
+// existing community puzzle that already has it keeps that option here too
+// rather than silently losing it on the next edit.
+const NEW_PUZZLE_DIFFICULTY_VALUES: Puzzle["difficulty"][] = ["easy", "hard"];
 
 export function RiddleForm({
   packId,
@@ -35,7 +42,11 @@ export function RiddleForm({
   const [solution, setSolution] = useState(puzzle?.solution ?? "");
   const [categoryId, setCategoryId] = useState(puzzle?.category_id ?? "");
   const [categories, setCategories] = useState<Category[]>([]);
-  const [difficulty, setDifficulty] = useState<Puzzle["difficulty"]>(puzzle?.difficulty ?? "medium");
+  const [difficulty, setDifficulty] = useState<Puzzle["difficulty"]>(puzzle?.difficulty ?? "easy");
+  const difficultyValues =
+    puzzle?.difficulty === "medium"
+      ? (["easy", "medium", "hard"] as const)
+      : NEW_PUZZLE_DIFFICULTY_VALUES;
   const [hint, setHint] = useState(puzzle?.hint ?? "");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -153,7 +164,7 @@ export function RiddleForm({
             onChange={(e) => setDifficulty(e.target.value as Puzzle["difficulty"])}
             className={`${inputClasses} mt-1 w-full`}
           >
-            {DIFFICULTY_VALUES.map((value) => (
+            {difficultyValues.map((value) => (
               <option key={value} value={value}>
                 {tDifficulty(value)}
               </option>

@@ -257,7 +257,8 @@
     "newest": "Newest",
     "top": "Top",
     "loading": "Loading packs...",
-    "empty": "No published community packs yet. Be the first.",
+    "empty": "No published community packs yet.",
+    "emptyCta": "Submit one, no account needed.",
     "loadMore": "Load more",
     "loadingMore": "Loading..."
   },

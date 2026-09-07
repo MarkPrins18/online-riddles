@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { ensureAnonymousSession } from "@/lib/supabase/authSession";
@@ -110,7 +111,12 @@ export function CommunityBrowseClient() {
       {packs === null ? (
         <p className="font-mono text-sm text-text-secondary">{t("loading")}</p>
       ) : packs.length === 0 ? (
-        <p className="font-mono text-sm text-text-secondary">{t("empty")}</p>
+        <p className="font-mono text-sm text-text-secondary">
+          {t("empty")}{" "}
+          <Link href="/community/nieuw" className="underline decoration-accent/60 hover:text-accent">
+            {t("emptyCta")}
+          </Link>
+        </p>
       ) : (
         <>
           <div className="grid gap-4 sm:grid-cols-2">

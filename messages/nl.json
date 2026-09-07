@@ -257,7 +257,8 @@
     "newest": "Nieuwste",
     "top": "Populairste",
     "loading": "Packs laden...",
-    "empty": "Nog geen gepubliceerde community-packs. Wees de eerste.",
+    "empty": "Nog geen gepubliceerde community-packs.",
+    "emptyCta": "Maak er zelf een, geen account nodig.",
     "loadMore": "Meer laden",
     "loadingMore": "Laden..."
   },

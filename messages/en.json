@@ -593,7 +593,6 @@
   "Privacy": {
     "title": "Privacy & cookies",
     "intro": "This page explains what DetectiveNights collects, why, and for how long, in plain language.",
-    "draftNotice": "Draft notice: this is a good-faith summary of what the app actually does, not legally reviewed text. If you need a formally reviewed policy, have it checked before relying on it.",
     "dataHeading": "What we collect",
     "dataBody": "The display name you pick when you join a room. If you choose to create a free account, an email address (used only to send you a one-time login code). Gameplay data tied to a room: questions, guesses, hints, and chat messages. If you have an account, private lifetime stats (games played, rounds solved, rounds narrated, total score) — never shown on a public leaderboard.",
     "purposeHeading": "Why we collect it",

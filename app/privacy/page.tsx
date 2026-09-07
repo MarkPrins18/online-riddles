@@ -29,9 +29,6 @@ export default async function PrivacyPage() {
             <p className="mt-3 font-mono text-sm leading-relaxed text-text-secondary">
               {t("intro")}
             </p>
-            <p className="mt-3 font-mono text-xs uppercase tracking-widest text-accent">
-              {t("draftNotice")}
-            </p>
           </div>
 
           <Section heading={t("dataHeading")} body={t("dataBody")} />

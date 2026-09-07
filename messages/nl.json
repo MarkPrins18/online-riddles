@@ -593,7 +593,6 @@
   "Privacy": {
     "title": "Privacy & cookies",
     "intro": "Deze pagina legt in gewone taal uit wat DetectiveNights verzamelt, waarom, en hoelang.",
-    "draftNotice": "Conceptmelding: dit is een te goeder trouw opgestelde samenvatting van wat de app daadwerkelijk doet, geen juridisch geverifieerde tekst. Heb je een formeel getoetst beleid nodig, laat deze tekst dan eerst controleren.",
     "dataHeading": "Wat we verzamelen",
     "dataBody": "De naam die je kiest bij het joinen van een kamer. Als je een gratis account aanmaakt: een e-mailadres (alleen gebruikt om je een eenmalige inlogcode te sturen). Gameplaydata die aan een kamer hangt: vragen, gokken, hints en chatberichten. Met een account: privé lifetime-statistieken (potjes gespeeld, rondes opgelost, rondes verteld, totale score) — nooit zichtbaar op een openbaar leaderboard.",
     "purposeHeading": "Waarom we het verzamelen",

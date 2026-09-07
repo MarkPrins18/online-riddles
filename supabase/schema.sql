@@ -1245,8 +1245,12 @@ $$;
 -- needs to read round_secrets/round_accusations rows nobody but their own
 -- owner could normally see — that's the whole point of doing this
 -- server-side instead of the host client reading-then-writing in two steps.
--- Safe to call more than once (e.g. a retried request): the `not revealed`
--- guard makes every later call after the first a no-op.
+-- Safe to call more than once, and safe to call concurrently (e.g. two
+-- host tabs both crossing the vote deadline at once): the reveal flip
+-- below happens in the same statement as the `not revealed` read via
+-- `update ... returning`, so only one caller can ever see a non-null
+-- saboteur — every other concurrent or later call is a no-op instead of
+-- double-awarding every voter and the saboteur.
 create or replace function close_accusation_vote(room_id_input uuid, round_input int)
 returns void
 language plpgsql
@@ -1262,9 +1266,9 @@ begin
     raise exception 'Only the host can close the accusation vote';
   end if;
 
-  select saboteur_id into saboteur
-  from round_secrets
-  where room_id = room_id_input and round = round_input and not revealed;
+  update round_secrets set revealed = true
+  where room_id = room_id_input and round = round_input and not revealed
+  returning saboteur_id into saboteur;
 
   if saboteur is null then
     return;
@@ -1307,9 +1311,6 @@ begin
   else
     perform increment_player_score(saboteur, case when was_solved then 40 else 150 end, room_id_input);
   end if;
-
-  update round_secrets set revealed = true
-  where room_id = room_id_input and round = round_input;
 end;
 $$;
 

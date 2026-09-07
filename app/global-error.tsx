@@ -20,10 +20,10 @@ function readLocale(): Locale {
 
 export default function GlobalError({
   error,
-  unstable_retry,
+  retry,
 }: {
   error: Error & { digest?: string };
-  unstable_retry: () => void;
+  retry: () => void;
 }) {
   useEffect(() => {
     console.error(error);
@@ -53,7 +53,7 @@ export default function GlobalError({
         <h1>{copy.title}</h1>
         <button
           type="button"
-          onClick={() => unstable_retry()}
+          onClick={() => retry()}
           style={{
             padding: "0.5rem 1.5rem",
             borderRadius: "9999px",

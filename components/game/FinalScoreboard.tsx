@@ -13,6 +13,7 @@ export function FinalScoreboard({
   players,
   isHost,
   onPlayAnotherRound,
+  isAdvancing = false,
   onNewGame,
 }: {
   supabase: SupabaseClient<Database>;
@@ -20,6 +21,7 @@ export function FinalScoreboard({
   players: Player[];
   isHost: boolean;
   onPlayAnotherRound: () => void;
+  isAdvancing?: boolean;
   onNewGame: () => void;
 }) {
   const ranked = [...players].sort((a, b) => b.score - a.score);
@@ -60,7 +62,7 @@ export function FinalScoreboard({
 
       {isHost && (
         <div className="mt-3 flex flex-col gap-3 sm:flex-row">
-          <Button className="w-full" onClick={onPlayAnotherRound}>
+          <Button className="w-full" onClick={onPlayAnotherRound} disabled={isAdvancing}>
             {t("playAnotherRound")}
           </Button>
           <Button variant="secondary" className="w-full" onClick={onNewGame}>

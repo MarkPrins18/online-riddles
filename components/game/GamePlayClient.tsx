@@ -102,6 +102,14 @@ export function GamePlayClient({ code }: { code: string }) {
   const [dossierOpen, setDossierOpen] = useState(true);
   const [dossierPuzzleId, setDossierPuzzleId] = useState<string | undefined>(undefined);
   const advancingToNextRoundRef = useRef(false);
+  // Mirrors advancingToNextRoundRef into render-visible state purely to
+  // disable the "next case" buttons while a round-advance is in flight —
+  // the ref alone already makes handleNextCase itself double-submit-safe
+  // (set synchronously before the first await, so a same-tick double click
+  // is a no-op), this only adds visible feedback and shrinks the window in
+  // which a second, slower actor (e.g. the same host open in another tab)
+  // could still race the server.
+  const [isAdvancingRound, setIsAdvancingRound] = useState(false);
 
   // Measures "vast" (dossier + los-de-zaak-op/spanningspaneel) so the
   // Overleg column (xl up) can be pinned to that exact pixel height instead
@@ -346,6 +354,7 @@ export function GamePlayClient({ code }: { code: string }) {
     if (!narrator) return;
 
     advancingToNextRoundRef.current = true;
+    setIsAdvancingRound(true);
     setNextCaseError(null);
     try {
       const nextRound = nextRoundNumber(currentRoom.round);
@@ -375,6 +384,7 @@ export function GamePlayClient({ code }: { code: string }) {
       setNextCaseError(getErrorMessage(error, t("nextCaseError")));
     } finally {
       advancingToNextRoundRef.current = false;
+      setIsAdvancingRound(false);
     }
   }
 
@@ -912,7 +922,11 @@ export function GamePlayClient({ code }: { code: string }) {
               {nextCaseError && (
                 <p className="mb-3 font-mono text-xs text-danger">{nextCaseError}</p>
               )}
-              <Button className="w-full" onClick={handleNextCase} disabled={!nextNarrator}>
+              <Button
+                className="w-full"
+                onClick={handleNextCase}
+                disabled={!nextNarrator || isAdvancingRound}
+              >
                 {t("nextCase")}
               </Button>
             </Card>
@@ -940,6 +954,7 @@ export function GamePlayClient({ code }: { code: string }) {
             players={players}
             isHost={isHost}
             onPlayAnotherRound={handleNextCase}
+            isAdvancing={isAdvancingRound}
             onNewGame={() => router.push("/")}
           />
           {isHost && nextCaseError && (

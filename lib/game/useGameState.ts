@@ -38,7 +38,17 @@ export function useGameState(roomCode: string, playerId: string | null = null, l
       try {
         await ensureAnonymousSession(supabase);
         const room = await getRoomByCode(supabase, roomCode);
-        if (!room || cancelled) return;
+        if (cancelled) return;
+        if (!room) {
+          // A nonexistent/mistyped code (or a room the cleanup cron already
+          // removed) previously left state.room permanently undefined here —
+          // RoomLobbyClient/GamePlayClient both only render a loading spinner
+          // in that case, so without this the visitor was stuck forever with
+          // no way out. Surfacing it as an error instead lets the existing
+          // error branch in both components show a message.
+          dispatch({ type: "ERROR", payload: "Deze kamer bestaat niet (meer)." });
+          return;
+        }
 
         const players = await getPlayersInRoom(supabase, room.id);
         const puzzle = room.current_puzzle_id

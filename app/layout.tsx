@@ -22,13 +22,27 @@ const plexMono = IBM_Plex_Mono({
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("RootLayout");
+  const title = t("title");
+  const description = t("description");
 
   return {
-    title: t("title"),
-    description: t("description"),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+    title,
+    description,
     icons: {
       icon: "/icons/192",
       apple: "/icons/180",
+    },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      siteName: title,
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
     },
   };
 }

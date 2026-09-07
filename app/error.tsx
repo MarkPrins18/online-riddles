@@ -8,10 +8,10 @@ import { Card } from "@/components/ui/Card";
 
 export default function Error({
   error,
-  unstable_retry,
+  retry,
 }: {
   error: Error & { digest?: string };
-  unstable_retry: () => void;
+  retry: () => void;
 }) {
   const t = useTranslations("ErrorBoundary");
 
@@ -25,7 +25,7 @@ export default function Error({
       <Card tone="chrome" role="alert" className="max-w-md text-center">
         <h1 className="font-serif text-xl text-text-primary">{t("title")}</h1>
         <p className="mt-2 text-sm text-text-secondary">{t("description")}</p>
-        <Button type="button" className="mt-5" onClick={() => unstable_retry()}>
+        <Button type="button" className="mt-5" onClick={() => retry()}>
           {t("retry")}
         </Button>
       </Card>

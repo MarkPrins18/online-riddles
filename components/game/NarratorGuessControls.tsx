@@ -89,6 +89,7 @@ export function NarratorGuessControls({
     await incrementScore(supabase, guess.player_id, solverBonus, roomId);
 
     for (const player of players) {
+      if (player.is_spectator) continue;
       if (player.id === guess.player_id || player.id === narratorId) continue;
       await incrementScore(supabase, player.id, calculateTeamSolveBonus(), roomId);
     }

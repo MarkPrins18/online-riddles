@@ -2,11 +2,20 @@ import type { Question } from "@/types/question";
 
 export const MAX_ROUNDS_PER_GAME = 5;
 
+/**
+ * `currentRound` is the 0-indexed round that was just played/revealed (the
+ * UI displays it as `currentRound + 1`, see GamePlayClient's roundLabel), so
+ * with `maxRounds` rounds total the valid indices are `0..maxRounds - 1` —
+ * the last one is `maxRounds - 1`, not `maxRounds`. Comparing directly
+ * against `maxRounds` (i.e. `currentRound < maxRounds`) would still say
+ * "yes, more rounds" while sitting on that very last round, causing the
+ * host-configured round count to always be exceeded by one.
+ */
 export function hasMoreRounds(
   currentRound: number,
   maxRounds: number = MAX_ROUNDS_PER_GAME
 ): boolean {
-  return currentRound < maxRounds;
+  return currentRound < maxRounds - 1;
 }
 
 export function nextRoundNumber(currentRound: number): number {

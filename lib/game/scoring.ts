@@ -25,7 +25,7 @@ export function calculateGuessScore(
   return Math.max(MIN_SCORE, base - penalty);
 }
 
-/** Awarded to every non-narrator player (including the solver) when a puzzle is solved. */
+/** Awarded to every non-narrator, non-spectator player (including the solver) when a puzzle is solved. */
 export const TEAM_SOLVE_BONUS = 100;
 
 export function calculateTeamSolveBonus(): number {

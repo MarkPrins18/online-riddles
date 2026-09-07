@@ -13,6 +13,11 @@
     "description": "This page hit an unexpected error. Try again. If it keeps happening, reload the page.",
     "retry": "Try again"
   },
+  "NotFound": {
+    "title": "Case not found",
+    "description": "There's nothing at this address. It may have been moved, or the link was wrong.",
+    "home": "Back to home"
+  },
   "HomePage": {
     "coverStamp": "Case file · open",
     "title": "DetectiveNights",

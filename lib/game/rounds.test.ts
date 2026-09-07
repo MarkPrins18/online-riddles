@@ -30,15 +30,35 @@ function makeQuestion(round: number): Question {
 }
 
 describe("hasMoreRounds", () => {
-  it("is true below the max and false at/above it", () => {
+  it("is true while below the last valid (0-indexed) round, false on/after it", () => {
     expect(hasMoreRounds(1)).toBe(true);
-    expect(hasMoreRounds(MAX_ROUNDS_PER_GAME - 1)).toBe(true);
+    // MAX_ROUNDS_PER_GAME - 1 is the *last* round for a game of that length
+    // (rounds are 0-indexed) — there must be nothing after it.
+    expect(hasMoreRounds(MAX_ROUNDS_PER_GAME - 2)).toBe(true);
+    expect(hasMoreRounds(MAX_ROUNDS_PER_GAME - 1)).toBe(false);
     expect(hasMoreRounds(MAX_ROUNDS_PER_GAME)).toBe(false);
   });
 
   it("respects a custom max", () => {
-    expect(hasMoreRounds(2, 3)).toBe(true);
+    expect(hasMoreRounds(1, 3)).toBe(true);
+    expect(hasMoreRounds(2, 3)).toBe(false);
     expect(hasMoreRounds(3, 3)).toBe(false);
+  });
+
+  // Regression for a real off-by-one: with 0-indexed rounds and a
+  // host-configured count of N, exactly N rounds (indices 0..N-1) must be
+  // played — not N+1. Simulates the full reveal -> hasMoreRounds ->
+  // nextRoundNumber loop GamePlayClient runs after every reveal.
+  it("drives exactly maxRounds rounds to completion, never one extra", () => {
+    const maxRounds = 3;
+    let round = 0;
+    let roundsPlayed = 1; // round 0 is already "played" once the game starts
+    while (hasMoreRounds(round, maxRounds)) {
+      round = nextRoundNumber(round);
+      roundsPlayed++;
+    }
+    expect(roundsPlayed).toBe(maxRounds);
+    expect(round).toBe(maxRounds - 1);
   });
 });
 

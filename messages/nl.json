@@ -13,6 +13,11 @@
     "description": "Deze pagina is onverwacht vastgelopen. Probeer het opnieuw. Als het blijft gebeuren, herlaad dan de pagina.",
     "retry": "Probeer opnieuw"
   },
+  "NotFound": {
+    "title": "Zaak niet gevonden",
+    "description": "Er is niets op dit adres. Misschien is het verplaatst, of klopte de link niet.",
+    "home": "Terug naar home"
+  },
   "HomePage": {
     "coverStamp": "Zaak-dossier · open",
     "title": "DetectiveNights",

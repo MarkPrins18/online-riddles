@@ -157,7 +157,9 @@
     "namePlaceholder": "Detective...",
     "saving": "Saving...",
     "submit": "Continue",
-    "error": "Couldn't save your name. Please try again."
+    "error": "Couldn't save your name. Please try again.",
+    "accountNudge": "Want this name to follow you to other devices?",
+    "accountNudgeLink": "Link an account"
   },
   "RiddleCard": {
     "by": "by {name}"

@@ -8,6 +8,7 @@ import { upsertProfile } from "@/lib/supabase/profiles";
 import { getErrorMessage } from "@/lib/errors";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { AccountModal } from "@/components/account/AccountModal";
 
 const inputClasses =
   "rounded-md border border-white/10 bg-bg-primary px-3 py-2.5 font-mono text-sm text-text-primary placeholder:text-text-secondary/60 focus:border-accent-muted";
@@ -22,6 +23,7 @@ export function SetNameForm({ onDone }: { onDone: (displayName: string) => void 
   const [name, setName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [accountModalOpen, setAccountModalOpen] = useState(false);
   const t = useTranslations("SetNameForm");
 
   async function handleSubmit(event: React.FormEvent) {
@@ -63,6 +65,17 @@ export function SetNameForm({ onDone }: { onDone: (displayName: string) => void 
           {isSubmitting ? t("saving") : t("submit")}
         </Button>
       </form>
+      <p className="mt-3 font-mono text-xs text-text-secondary">
+        {t("accountNudge")}{" "}
+        <button
+          type="button"
+          onClick={() => setAccountModalOpen(true)}
+          className="underline decoration-accent/60 hover:text-accent"
+        >
+          {t("accountNudgeLink")}
+        </button>
+      </p>
+      {accountModalOpen && <AccountModal onClose={() => setAccountModalOpen(false)} />}
     </Card>
   );
 }

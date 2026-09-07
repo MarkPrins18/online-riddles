@@ -157,7 +157,9 @@
     "namePlaceholder": "Rechercheur...",
     "saving": "Opslaan...",
     "submit": "Doorgaan",
-    "error": "Kon je naam niet opslaan. Probeer het opnieuw."
+    "error": "Kon je naam niet opslaan. Probeer het opnieuw.",
+    "accountNudge": "Wil je dat deze naam meegaat naar andere apparaten?",
+    "accountNudgeLink": "Koppel een account"
   },
   "RiddleCard": {
     "by": "door {name}"

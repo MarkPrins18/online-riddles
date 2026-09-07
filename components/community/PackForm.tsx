@@ -5,24 +5,19 @@ import { useLocale, useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { ensureAnonymousSession } from "@/lib/supabase/authSession";
 import { createOwnPack } from "@/lib/supabase/communityPacks";
-import { getAvailableThemes } from "@/lib/supabase/storyPacks";
+import { listThemes } from "@/lib/supabase/themes";
 import { getErrorMessage } from "@/lib/errors";
-import type { StoryPack } from "@/types/puzzle";
+import type { StoryPack, Theme } from "@/types/puzzle";
 import { Button } from "@/components/ui/Button";
 
 const inputClasses =
   "rounded-md border border-white/10 bg-bg-primary px-3 py-2.5 font-mono text-sm text-text-primary placeholder:text-text-secondary/60 focus:border-accent-muted";
 const labelClasses = "font-mono text-xs uppercase tracking-widest text-text-secondary";
 
-// Sentinel for "type your own theme" in the <select> — a real theme name
-// could never collide with it.
-const NEW_THEME_VALUE = "__nieuw__";
-
 export function PackForm({ onCreated }: { onCreated: (pack: StoryPack) => void }) {
   const [name, setName] = useState("");
-  const [availableThemes, setAvailableThemes] = useState<string[]>([]);
-  const [themeChoice, setThemeChoice] = useState<string>(NEW_THEME_VALUE);
-  const [customTheme, setCustomTheme] = useState("");
+  const [themes, setThemes] = useState<Theme[]>([]);
+  const [themeId, setThemeId] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const t = useTranslations("PackForm");
@@ -31,26 +26,26 @@ export function PackForm({ onCreated }: { onCreated: (pack: StoryPack) => void }
   useEffect(() => {
     let cancelled = false;
     const supabase = createClient();
-    getAvailableThemes(supabase).then((themes) => {
-      if (!cancelled) setAvailableThemes(themes);
+    listThemes(supabase, locale).then((list) => {
+      if (cancelled) return;
+      setThemes(list);
+      setThemeId((current) => current || (list[0]?.id ?? ""));
     });
     return () => {
       cancelled = true;
     };
-  }, []);
-
-  const theme = themeChoice === NEW_THEME_VALUE ? customTheme.trim() : themeChoice;
+  }, [locale]);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    if (!name.trim() || !theme) return;
+    if (!name.trim() || !themeId) return;
 
     setIsSubmitting(true);
     setError(null);
     try {
       const supabase = createClient();
       const userId = await ensureAnonymousSession(supabase);
-      const pack = await createOwnPack(supabase, userId, name.trim(), theme, locale);
+      const pack = await createOwnPack(supabase, userId, name.trim(), themeId, locale);
       onCreated(pack);
     } catch (err) {
       setError(getErrorMessage(err, t("error")));
@@ -77,28 +72,18 @@ export function PackForm({ onCreated }: { onCreated: (pack: StoryPack) => void }
       </label>
       <select
         id="pack-theme"
-        value={themeChoice}
-        onChange={(e) => setThemeChoice(e.target.value)}
+        value={themeId}
+        onChange={(e) => setThemeId(e.target.value)}
         className={inputClasses}
       >
-        {availableThemes.map((theme) => (
-          <option key={theme} value={theme}>
-            {theme}
+        {themes.map((theme) => (
+          <option key={theme.id} value={theme.id}>
+            {theme.name}
           </option>
         ))}
-        <option value={NEW_THEME_VALUE}>{t("newThemeOption")}</option>
       </select>
-      {themeChoice === NEW_THEME_VALUE && (
-        <input
-          value={customTheme}
-          onChange={(e) => setCustomTheme(e.target.value)}
-          placeholder={t("customThemePlaceholder")}
-          maxLength={40}
-          className={inputClasses}
-        />
-      )}
       {error && <p className="font-mono text-xs text-danger">{error}</p>}
-      <Button type="submit" variant="secondary" disabled={isSubmitting || !name.trim() || !theme}>
+      <Button type="submit" variant="secondary" disabled={isSubmitting || !name.trim() || !themeId}>
         {isSubmitting ? t("submitting") : t("submit")}
       </Button>
     </form>

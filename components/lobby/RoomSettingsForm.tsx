@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { RoomSettingsInput } from "@/types/room";
-import { getOfficialThemes } from "@/lib/supabase/storyPacks";
+import type { Theme } from "@/types/puzzle";
+import { listOfficialThemeOptions } from "@/lib/supabase/themes";
 import { countPublishedCommunityPacks } from "@/lib/supabase/communityPacks";
 import { listFavoritePackIds } from "@/lib/supabase/packFavorites";
 import { ensureAnonymousSession } from "@/lib/supabase/authSession";
@@ -39,7 +40,7 @@ export function RoomSettingsForm({
   narratorPreviewName?: string;
   playerCount?: number;
 }) {
-  const [officialThemes, setOfficialThemes] = useState<string[] | null>(null);
+  const [officialThemes, setOfficialThemes] = useState<Theme[] | null>(null);
   const [communityPackCount, setCommunityPackCount] = useState<number | null>(null);
   const [favoritePackIds, setFavoritePackIds] = useState<Set<string> | null>(null);
   // Tracked separately from `value.communityPackIds` rather than derived from
@@ -51,14 +52,15 @@ export function RoomSettingsForm({
     value.communityPackIds === null ? "all" : value.communityPackIds.length === 0 ? "off" : "favorites"
   );
   const t = useTranslations("RoomSettingsForm");
+  const locale = useLocale();
 
   useEffect(() => {
     let cancelled = false;
-    getOfficialThemes(supabase).then((themes) => {
+    listOfficialThemeOptions(supabase, locale).then((themes) => {
       if (cancelled) return;
       setOfficialThemes(themes);
       if (value.packThemeFilter.length === 0 && themes.length > 0) {
-        onChange({ ...value, packThemeFilter: themes });
+        onChange({ ...value, packThemeFilter: themes.map((theme) => theme.id) });
       }
     });
     countPublishedCommunityPacks(supabase).then((count) => {
@@ -87,11 +89,11 @@ export function RoomSettingsForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [favoritePackIds]);
 
-  function toggleTheme(theme: string) {
-    const isSelected = value.packThemeFilter.includes(theme);
+  function toggleTheme(themeId: string) {
+    const isSelected = value.packThemeFilter.includes(themeId);
     const next = isSelected
-      ? value.packThemeFilter.filter((t) => t !== theme)
-      : [...value.packThemeFilter, theme];
+      ? value.packThemeFilter.filter((id) => id !== themeId)
+      : [...value.packThemeFilter, themeId];
     onChange({ ...value, packThemeFilter: next });
   }
 
@@ -176,14 +178,14 @@ export function RoomSettingsForm({
             ) : (
               <div className="flex flex-col gap-1.5">
                 {officialThemes.map((theme) => (
-                  <label key={theme} className="flex items-center gap-2 font-mono text-sm text-text-primary">
+                  <label key={theme.id} className="flex items-center gap-2 font-mono text-sm text-text-primary">
                     <input
                       type="checkbox"
                       className="accent-accent"
-                      checked={value.packThemeFilter.includes(theme)}
-                      onChange={() => toggleTheme(theme)}
+                      checked={value.packThemeFilter.includes(theme.id)}
+                      onChange={() => toggleTheme(theme.id)}
                     />
-                    {theme}
+                    {theme.name}
                   </label>
                 ))}
               </div>

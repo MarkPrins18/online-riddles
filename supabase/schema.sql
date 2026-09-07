@@ -20,7 +20,7 @@ create table if not exists rooms (
   played_puzzle_ids uuid[] not null default '{}',
   round_duration_seconds int,
   max_rounds int not null default 5,
-  pack_theme_filter text[],
+  pack_theme_filter uuid[],
   community_pack_ids uuid[],
   hardcore_mode boolean not null default false,
   team_lives_total int,
@@ -39,6 +39,14 @@ alter table rooms add column if not exists hardcore_mode boolean not null defaul
 alter table rooms add column if not exists team_lives_total int;
 alter table rooms add column if not exists team_lives_remaining int;
 alter table rooms add column if not exists saboteur_mode boolean not null default false;
+
+-- Upgrade path: pack_theme_filter used to store theme *names* (free text);
+-- themes are now curated ids (see themes/theme_translations below), so any
+-- value already stored here can't mean anything under the new column type
+-- and is simply cleared. Harmless in practice — rooms are deleted by
+-- cleanup_stale_rooms within 24h anyway, and RoomSettingsForm re-fills this
+-- with every official theme's id the next time a host opens it empty.
+alter table rooms alter column pack_theme_filter type uuid[] using null::uuid[];
 
 create table if not exists players (
   id uuid primary key default gen_random_uuid(),
@@ -179,16 +187,28 @@ create trigger guard_player_privileged_columns
   before update on players
   for each row execute function guard_player_privileged_columns();
 
+-- A curated, admin-managed pack theme (Crime, Sci-Fi, Absurd, ...) — same
+-- shape as `categories` further down (bare id here, the actual name lives
+-- in theme_translations, defined later once story_packs also exists — a
+-- `language sql`/FK forward-reference issue, not this table). Created here,
+-- ahead of story_packs, purely so story_packs.theme_id has something to
+-- reference. Used to be free text any pack creator could type directly
+-- into story_packs.theme; that let junk/typo themes accumulate with no
+-- review and mixed languages with no translation, so it's curated the same
+-- way categories already were.
+create table if not exists themes (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now()
+);
+
 -- A story pack groups puzzles under one theme (Crime, Sci-Fi, Absurd, ...)
--- and can be released independently via is_published. `theme` stays a
--- plain column (see normalize_pack_theme below — it's community-writable
--- free text, not a curated vocabulary, so it isn't split per-language like
--- `name` is). `slug` is the locale-agnostic identifier used for upserts —
--- it deliberately never moves to a translation table.
+-- and can be released independently via is_published. `slug` is the
+-- locale-agnostic identifier used for upserts — it deliberately never moves
+-- to a translation table.
 create table if not exists story_packs (
   id uuid primary key default gen_random_uuid(),
   slug text unique not null,
-  theme text not null,
+  theme_id uuid references themes (id),
   is_published boolean not null default false,
   created_at timestamptz not null default now()
 );
@@ -198,9 +218,11 @@ create table if not exists story_packs (
 -- translations" policies below already reference created_by — on a
 -- genuinely fresh database (not an existing one being migrated), defining
 -- those policies before this column exists fails outright. Same reasoning
--- as puzzles.created_by/is_community above.
+-- as puzzles.created_by/is_community above. theme_id is added the same
+-- defensive way, for a database migrating from before this column existed.
 alter table story_packs add column if not exists created_by uuid references auth.users (id) on delete cascade;
 alter table story_packs add column if not exists is_community boolean not null default false;
+alter table story_packs add column if not exists theme_id uuid references themes (id);
 
 -- A published_puzzles view from a previous run of this script still selects
 -- columns the migrations below remove (name on story_packs/categories,
@@ -361,54 +383,103 @@ from (values
 join category_translations ct_nl on ct_nl.locale = 'nl' and lower(ct_nl.name) = lower(v.name_nl)
 on conflict (category_id, locale) do nothing;
 
--- Same anti-drift idea as `categories` above, but for story_packs.theme
--- ("Crime" vs "crime" vs "SciFi") — unlike categories this is NOT
--- admin-gated: community pack creators must be able to name a genuinely new
--- theme themselves (see PackForm.tsx's "+ Nieuw thema" flow), so anyone may
--- insert. `story_packs.theme` stays a plain text column (see
--- normalize_pack_theme below) — this table is purely a canonicalization
--- ledger, not a foreign key every reader has to join through. Not (yet)
--- split into per-language translations — themes are community-authored
--- free text, not a curated vocabulary like categories, so translating them
--- automatically isn't a clean fit; deferred.
-create table if not exists themes (
-  id uuid primary key default gen_random_uuid(),
+-- Upgrade path: a database that still has the old free-text themes.name
+-- column (and story_packs.theme text) gets both migrated to the curated +
+-- translated shape below, then the old columns/trigger/function are
+-- dropped. Safe to re-run — once `themes.name` is gone this whole block is
+-- a no-op.
+do $$
+begin
+  if exists (
+    select 1 from information_schema.columns
+    where table_name = 'themes' and column_name = 'name'
+  ) then
+    create table if not exists theme_translations (
+      theme_id uuid not null references themes (id) on delete cascade,
+      locale text not null,
+      name text not null,
+      status text not null default 'reviewed' check (status in ('machine', 'reviewed')),
+      created_at timestamptz not null default now(),
+      primary key (theme_id, locale)
+    );
+
+    insert into theme_translations (theme_id, locale, name, status)
+    select id, 'nl', name, 'reviewed' from themes
+    on conflict (theme_id, locale) do nothing;
+
+    -- story_packs.theme (old free text) -> theme_id, matched by Dutch name.
+    -- theme_id already exists at this point (added via `alter table ...
+    -- add column if not exists` above), nullable and unset on every
+    -- pre-existing row until this backfill runs.
+    update story_packs sp
+    set theme_id = tt.theme_id
+    from theme_translations tt
+    where sp.theme_id is null and tt.locale = 'nl' and lower(tt.name) = lower(sp.theme);
+
+    drop trigger if exists normalize_pack_theme_trigger on story_packs;
+    drop function if exists normalize_pack_theme();
+    drop trigger if exists moderate_story_pack_theme on story_packs;
+    drop function if exists enforce_pack_theme_moderation();
+
+    drop index if exists themes_name_unique;
+    alter table themes drop column name;
+    alter table story_packs drop column theme;
+  end if;
+end $$;
+
+-- Every pack has had a theme_id backfilled by the block above (upgrade) or
+-- never had any rows yet to violate this (fresh install, story_packs is
+-- still empty at this point in the script) — safe to enforce unconditionally.
+alter table story_packs alter column theme_id set not null;
+
+create table if not exists theme_translations (
+  theme_id uuid not null references themes (id) on delete cascade,
+  locale text not null,
   name text not null,
-  created_at timestamptz not null default now()
+  -- 'machine': auto-translated, not yet vetted by a human. 'reviewed':
+  -- confirmed correct (every curated theme below is 'reviewed' from the
+  -- start — see the seed loop below).
+  status text not null default 'machine' check (status in ('machine', 'reviewed')),
+  created_at timestamptz not null default now(),
+  primary key (theme_id, locale)
 );
 
-create unique index if not exists themes_name_unique on themes (lower(name));
+create unique index if not exists theme_translations_locale_name_unique
+  on theme_translations (locale, lower(name));
 
-insert into themes (name)
-select distinct theme from story_packs
-on conflict (lower(name)) do nothing;
-
--- For every insert/update of story_packs.theme: if a case-insensitive match
--- already exists in `themes`, silently snap the stored value to that
--- existing spelling (stops "Sci-Fi" vs "SciFi" from becoming two separate
--- checkboxes in the room-settings theme list); if it's genuinely new, record
--- it so future writes can match against it. Applies to every write path
--- (official import via upsertPack's on-conflict-update, community creation
--- via createOwnPack) without either needing to know this table exists.
-create or replace function normalize_pack_theme() returns trigger
-language plpgsql as $$
+-- Seeds the curated theme catalog (Dutch + English) — same pattern as the
+-- categories seed loop above. Community pack creators pick from this fixed
+-- list (see lib/supabase/themes.ts's listThemes and PackForm.tsx); unlike
+-- before, they can no longer type an arbitrary new one — only an admin
+-- (service-role key, via resolveThemeId) can add one.
+do $$
 declare
-  canonical text;
+  theme_name text;
+  new_theme_id uuid;
 begin
-  select name into canonical from themes where lower(name) = lower(new.theme);
-  if canonical is not null then
-    new.theme := canonical;
-  else
-    insert into themes (name) values (new.theme);
-  end if;
-  return new;
-end;
-$$;
+  foreach theme_name in array array['Klassiek', 'Crime', 'Sci-Fi', 'Absurd', 'Mysterie']
+  loop
+    if not exists (
+      select 1 from theme_translations where locale = 'nl' and lower(name) = lower(theme_name)
+    ) then
+      insert into themes default values returning id into new_theme_id;
+      insert into theme_translations (theme_id, locale, name, status)
+      values (new_theme_id, 'nl', theme_name, 'reviewed');
+    end if;
+  end loop;
+end $$;
 
-drop trigger if exists normalize_pack_theme_trigger on story_packs;
-create trigger normalize_pack_theme_trigger
-  before insert or update of theme on story_packs
-  for each row execute function normalize_pack_theme();
+-- English names for the same curated themes, matched to their existing
+-- theme_id via the Dutch name above — same pattern as the categories'
+-- English-translation insert.
+insert into theme_translations (theme_id, locale, name, status)
+select tt_nl.theme_id, 'en', v.name_en, 'reviewed'
+from (values
+  ('Klassiek', 'Classic'), ('Crime', 'Crime'), ('Sci-Fi', 'Sci-Fi'),
+  ('Absurd', 'Absurd'), ('Mysterie', 'Mystery')
+) as v(name_nl, name_en)
+join theme_translations tt_nl on tt_nl.locale = 'nl' and lower(tt_nl.name) = lower(v.name_nl)
+on conflict (theme_id, locale) do nothing;
 
 -- === i18n: puzzles are locale-agnostic; their text lives in
 -- puzzle_translations (one row per language, including Dutch — no language
@@ -560,9 +631,13 @@ create table if not exists admins (
 -- throw all but one of them away. Only the columns that cascade actually
 -- filters on remain; once it has picked a winning id, the caller fetches
 -- that one puzzle's real text via get_published_puzzle below.
+-- Explicit drop first: Postgres refuses `create or replace` when a
+-- function's return row shape changes column types (here: theme text ->
+-- theme_id uuid), only when column names/count change.
+drop function if exists get_published_puzzle_candidates();
 create or replace function get_published_puzzle_candidates()
 returns table (
-  id uuid, pack_id uuid, theme text, difficulty text, is_community boolean
+  id uuid, pack_id uuid, theme_id uuid, difficulty text, is_community boolean
 )
 language sql stable
 as $$
@@ -575,8 +650,10 @@ as $$
   -- reading the base table here would make every EXISTS check fail for
   -- anyone but a puzzle's own creator, returning zero candidates. The view
   -- bypasses that (owner-privileged) while still respecting the same
-  -- is_published gate this query already applies.
-  select p.id, p.pack_id, sp.theme, p.difficulty, p.is_community
+  -- is_published gate this query already applies. theme_id, not the
+  -- translated name: getRandomPuzzle only ever compares this against a
+  -- room's pack_theme_filter (also ids), never displays it.
+  select p.id, p.pack_id, sp.theme_id, p.difficulty, p.is_community
   from puzzles p
   join story_packs sp on sp.id = p.pack_id
   where sp.is_published = true
@@ -592,11 +669,13 @@ $$;
 -- "pick a puzzle to start the round" call, which never needs it (only
 -- puzzle.id is used) — get_room_puzzle is the one and only path that's
 -- allowed to reveal a solution, and only to the narrator/after reveal.
+-- Same drop-first reasoning as get_published_puzzle_candidates above.
+drop function if exists get_published_puzzle(uuid, text);
 create or replace function get_published_puzzle(puzzle_id_input uuid, locale_input text)
 returns table (
   id uuid, pack_id uuid, title text, scenario text,
   category_id uuid, category text, difficulty text, hint text,
-  created_at timestamptz, theme text, created_by uuid, is_community boolean,
+  created_at timestamptz, theme_id uuid, created_by uuid, is_community boolean,
   locale text
 )
 language sql stable
@@ -609,7 +688,7 @@ as $$
     coalesce(ct.name, ct_fallback.name) as category,
     p.difficulty,
     coalesce(pt.hint, pt_fallback.hint) as hint,
-    p.created_at, sp.theme, p.created_by, p.is_community,
+    p.created_at, sp.theme_id, p.created_by, p.is_community,
     case when pt.puzzle_id is not null then locale_input else 'nl' end as locale
   from puzzles p
   join story_packs sp on sp.id = p.pack_id
@@ -1661,6 +1740,7 @@ alter table puzzle_translations enable row level security;
 alter table categories enable row level security;
 alter table category_translations enable row level security;
 alter table themes enable row level security;
+alter table theme_translations enable row level security;
 alter table admins enable row level security;
 alter table questions enable row level security;
 alter table guesses enable row level security;
@@ -1740,13 +1820,11 @@ drop policy if exists "public read category translations" on category_translatio
 create policy "public read category translations" on category_translations for select using (true);
 drop policy if exists "public read themes" on themes;
 create policy "public read themes" on themes for select using (true);
--- Community pack creators must be able to name a genuinely new theme
--- themselves (PackForm.tsx's "+ Nieuw thema" flow), so unlike categories
--- this can't be admin-only-write — the normalize_pack_theme trigger above
--- is the only thing that ever writes here for the app, and only via
--- insert, never update/delete.
-drop policy if exists "anyone inserts themes" on themes;
-create policy "anyone inserts themes" on themes for insert with check (true);
+drop policy if exists "public read theme translations" on theme_translations;
+create policy "public read theme translations" on theme_translations for select using (true);
+-- No "anyone inserts themes" policy anymore: themes are curated the same
+-- way categories are (admin/service-role only) now that a creator can only
+-- pick an existing one, never type a new one — see PackForm.tsx.
 
 -- Content management: an authenticated admin (see the /admin dashboard)
 -- may write story packs and puzzles directly, same as the service-role
@@ -1778,6 +1856,10 @@ create policy "admins write category translations" on category_translations for 
   with check (exists (select 1 from admins where id = auth.uid()));
 drop policy if exists "admins write themes" on themes;
 create policy "admins write themes" on themes for all
+  using (exists (select 1 from admins where id = auth.uid()))
+  with check (exists (select 1 from admins where id = auth.uid()));
+drop policy if exists "admins write theme translations" on theme_translations;
+create policy "admins write theme translations" on theme_translations for all
   using (exists (select 1 from admins where id = auth.uid()))
   with check (exists (select 1 from admins where id = auth.uid()));
 
@@ -1931,8 +2013,10 @@ create policy "creator or host deletes board connections" on board_connections f
 -- Seed a starter pack so the game has something to play immediately.
 -- Add more via `npm run puzzles:import -- packs/your-pack.json` or POST
 -- /api/admin/puzzles (see packs/example-pack.json for the JSON shape).
-insert into story_packs (slug, theme, is_published) values
-  ('classics-vol-1', 'Klassiek', true)
+insert into story_packs (slug, theme_id, is_published)
+select 'classics-vol-1', tt.theme_id, true
+from theme_translations tt
+where tt.locale = 'nl' and lower(tt.name) = lower('Klassiek')
 on conflict (slug) do nothing;
 
 insert into story_pack_translations (pack_id, locale, name, status)
@@ -2336,49 +2420,25 @@ create trigger moderate_story_pack_translations
   before insert or update on story_pack_translations
   for each row execute function enforce_pack_translation_moderation();
 
-create or replace function enforce_pack_theme_moderation()
-returns trigger
-language plpgsql
-security definer
-as $$
-declare
-  hit text;
-begin
-  if not coalesce(new.is_community, false) then
-    return new;
-  end if;
-
-  select word into hit
-  from banned_words
-  where new.theme ilike '%' || word || '%'
-  limit 1;
-
-  if hit is not null then
-    raise exception 'Dit thema bevat taal die hier niet is toegestaan.';
-  end if;
-
-  return new;
-end;
-$$;
-
-drop trigger if exists moderate_story_pack_theme on story_packs;
-create trigger moderate_story_pack_theme
-  before insert or update of theme on story_packs
-  for each row execute function enforce_pack_theme_moderation();
+-- enforce_pack_theme_moderation/moderate_story_pack_theme used to moderate
+-- free-text story_packs.theme content — removed along with that column now
+-- that themes are a curated, admin-managed catalog (see themes/
+-- theme_translations near the top of this file): there's no free text left
+-- on this column to moderate, a creator can only pick an existing theme_id.
 
 -- Generous length backstops against direct API calls bypassing the forms'
--- client-side maxLength (PackForm.tsx: name 60/theme 40, RiddleForm.tsx:
--- title 80/hint 120, scenario/solution had no limit at all) — same
--- reasoning as chat_message_reactions.emoji's length check above. Moderation
--- still applies regardless; this is purely a storage/rendering-abuse cap,
--- so the limits stay well above anything a real submission would need.
+-- client-side maxLength (PackForm.tsx: name 60, RiddleForm.tsx: title
+-- 80/hint 120, scenario/solution had no limit at all) — same reasoning as
+-- chat_message_reactions.emoji's length check above. Moderation still
+-- applies regardless; this is purely a storage/rendering-abuse cap, so the
+-- limits stay well above anything a real submission would need. No
+-- theme-length constraint: themes are curated (admin/service-role only,
+-- see themes/theme_translations near the top of this file), same trust
+-- model as categories, which never had one either.
 -- `add constraint` has no `if not exists` in Postgres, so each is wrapped
 -- to stay safe to re-run.
 do $$
 begin
-  if not exists (select 1 from pg_constraint where conname = 'story_packs_theme_length') then
-    alter table story_packs add constraint story_packs_theme_length check (char_length(theme) <= 200);
-  end if;
   if not exists (select 1 from pg_constraint where conname = 'story_pack_translations_name_length') then
     alter table story_pack_translations add constraint story_pack_translations_name_length check (char_length(name) <= 200);
   end if;

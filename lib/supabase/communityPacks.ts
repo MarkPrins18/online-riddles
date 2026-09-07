@@ -25,19 +25,19 @@ function slugify(name: string): string {
   return `${base || "pack"}-${crypto.randomUUID().slice(0, 8)}`;
 }
 
-/** Creates a new community pack owned by the caller. Starts unpublished. */
+/** Creates a new community pack owned by the caller. Starts unpublished. `themeId` must be an existing curated theme (see lib/supabase/themes.ts's listThemes) — themes are no longer free text a creator can type. */
 export async function createOwnPack(
   supabase: Client,
   userId: string,
   name: string,
-  theme: string,
+  themeId: string,
   locale: string
 ): Promise<StoryPack> {
   const { data: pack, error } = await supabase
     .from("story_packs")
     .insert({
       slug: slugify(name),
-      theme,
+      theme_id: themeId,
       is_published: false,
       is_community: true,
       created_by: userId,

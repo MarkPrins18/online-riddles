@@ -1,12 +1,14 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "./database.types";
 import type { StoryPack } from "@/types/puzzle";
+import { resolveThemeId, listThemes } from "./themes";
 
 type Client = SupabaseClient<Database>;
 
 export type UpsertPackInput = {
   slug: string;
   name: string;
+  /** Theme name (e.g. "Crime") — resolved to a curated theme_id via resolveThemeId, creating it if this is a genuinely new theme. Keeps packs/*.json unchanged even though themes are curated, not free text, at the story_packs level. */
   theme: string;
   isPublished?: boolean;
   /** Language `name` is written in. Defaults to Dutch, matching every existing pack file. */
@@ -16,7 +18,7 @@ export type UpsertPackInput = {
 type RawStoryPackRow = {
   id: string;
   slug: string;
-  theme: string;
+  theme_id: string;
   is_published: boolean;
   created_at: string;
   created_by: string | null;
@@ -27,7 +29,9 @@ type RawStoryPackRow = {
  * Joins bare `story_packs` rows (no `name` — that never lived there) against
  * their translations, resolved for `locale` with a fallback to whatever
  * translation the pack *does* have (first Dutch, then anything) — same
- * pattern as lib/supabase/puzzles.ts's hydratePuzzles.
+ * pattern as lib/supabase/puzzles.ts's hydratePuzzles. Also resolves each
+ * pack's theme_id to its translated name via listThemes, same locale
+ * fallback rule.
  */
 export async function hydrateStoryPacks(
   supabase: Client,
@@ -52,6 +56,9 @@ export async function hydrateStoryPacks(
     translationsByPack.set(row.pack_id, list);
   }
 
+  const themes = await listThemes(supabase, locale);
+  const themeNameById = new Map(themes.map((theme) => [theme.id, theme.name]));
+
   return rows.flatMap((row) => {
     const candidates = translationsByPack.get(row.id) ?? [];
     const translation =
@@ -61,12 +68,16 @@ export async function hydrateStoryPacks(
       null;
     if (!translation) return [];
 
+    const themeName = themeNameById.get(row.theme_id);
+    if (!themeName) return [];
+
     return [
       {
         id: row.id,
         slug: row.slug,
         name: translation.name,
-        theme: row.theme,
+        theme_id: row.theme_id,
+        theme: themeName,
         is_published: row.is_published,
         created_at: row.created_at,
         created_by: row.created_by,
@@ -80,11 +91,12 @@ export async function hydrateStoryPacks(
 /** Insert-or-update by slug, so re-importing a pack updates its metadata (including its translated name). */
 export async function upsertPack(supabase: Client, input: UpsertPackInput): Promise<StoryPack> {
   const locale = input.locale ?? "nl";
+  const themeId = await resolveThemeId(supabase, input.theme, locale);
 
   const { data: pack, error } = await supabase
     .from("story_packs")
     .upsert(
-      { slug: input.slug, theme: input.theme, is_published: input.isPublished ?? false },
+      { slug: input.slug, theme_id: themeId, is_published: input.isPublished ?? false },
       { onConflict: "slug" }
     )
     .select("*")
@@ -137,28 +149,6 @@ export async function listPacksWithPuzzleCounts(
     ...pack,
     puzzle_count: counts.get(pack.id) ?? 0,
   }));
-}
-
-/** Distinct themes across published packs, for theme-name suggestions when creating a pack. Theme is never translated (see schema.sql), so this needs no locale. */
-export async function getAvailableThemes(supabase: Client): Promise<string[]> {
-  const { data, error } = await supabase.from("story_packs").select("theme").eq("is_published", true);
-
-  if (error) throw error;
-  const themes = new Set((data ?? []).map((row) => row.theme));
-  return [...themes].sort();
-}
-
-/** Distinct themes across published *official* packs only — the room-settings form's "Thema's" list, kept separate from community packs so it doesn't grow into an unreadable row as those pile up. */
-export async function getOfficialThemes(supabase: Client): Promise<string[]> {
-  const { data, error } = await supabase
-    .from("story_packs")
-    .select("theme")
-    .eq("is_published", true)
-    .eq("is_community", false);
-
-  if (error) throw error;
-  const themes = new Set((data ?? []).map((row) => row.theme));
-  return [...themes].sort();
 }
 
 export async function setPackPublished(supabase: Client, packId: string, isPublished: boolean): Promise<void> {

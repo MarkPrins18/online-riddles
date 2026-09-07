@@ -168,8 +168,6 @@
     "nameLabel": "Name of your pack",
     "namePlaceholder": "My first cases",
     "themeLabel": "Theme",
-    "newThemeOption": "+ New theme...",
-    "customThemePlaceholder": "Crime, Sci-Fi, Absurd...",
     "submitting": "Creating pack...",
     "submit": "Create pack",
     "error": "Couldn't create a pack. Please try again."

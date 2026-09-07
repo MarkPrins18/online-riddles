@@ -29,10 +29,11 @@ const BAD_SCORE_THRESHOLD = -3;
  *
  * Excludes `excludeIds` (puzzles this room already played) so a game night
  * doesn't repeat a riddle everyone already knows the answer to; falls back
- * to the full pool once every puzzle has been used. `officialThemes`
- * restricts non-community puzzles to those pack themes (empty = no
- * restriction); `communityPackIds` restricts community puzzles to those
- * specific packs (null = every published community pack, [] = none).
+ * to the full pool once every puzzle has been used. `officialThemeIds`
+ * restricts non-community puzzles to those pack themes, by id, not
+ * translated name (empty = no restriction); `communityPackIds` restricts
+ * community puzzles to those specific packs (null = every published
+ * community pack, [] = none).
  * `preferredDifficulty` further narrows the result to match the round's
  * target difficulty (see lib/game/difficulty.ts) — every filter falls back
  * to the wider pool if the narrowed set happens to be empty, rather than
@@ -42,7 +43,7 @@ export async function getRandomPuzzle(
   supabase: Client,
   locale: string,
   excludeIds: string[] = [],
-  officialThemes: string[] = [],
+  officialThemeIds: string[] = [],
   communityPackIds: string[] | null = null,
   preferredDifficulty?: PuzzleDifficulty
 ): Promise<PuzzlePreview> {
@@ -57,7 +58,7 @@ export async function getRandomPuzzle(
   const themeFiltered = puzzles.filter((p) =>
     p.is_community
       ? communityPackIds === null || communityPackIds.includes(p.pack_id)
-      : officialThemes.length === 0 || officialThemes.includes(p.theme)
+      : officialThemeIds.length === 0 || officialThemeIds.includes(p.theme_id)
   );
   const themeCandidates = themeFiltered.length > 0 ? themeFiltered : puzzles;
 
@@ -96,8 +97,8 @@ export async function getRandomPuzzle(
   }
 
   const pickedFull = puzzleRows[0] as PublishedPuzzle;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- drop theme, the only field get_published_puzzle adds over Puzzle
-  const { theme, ...puzzle } = pickedFull;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- drop theme_id, the only field get_published_puzzle adds over Puzzle
+  const { theme_id, ...puzzle } = pickedFull;
   return puzzle;
 }
 

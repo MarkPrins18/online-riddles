@@ -5,6 +5,12 @@ export type Category = {
   name: string;
 };
 
+/** A curated, admin-managed pack theme (Crime, Sci-Fi, ...) — see themes/theme_translations in schema.sql. */
+export type Theme = {
+  id: string;
+  name: string;
+};
+
 export type Puzzle = {
   id: string;
   pack_id: string;
@@ -34,9 +40,11 @@ export type Puzzle = {
 /**
  * Row shape of get_published_puzzle — same as Puzzle minus solution (that
  * RPC deliberately never returns it, see its comment in schema.sql), plus
- * the pack's theme for filtering.
+ * the pack's theme id for filtering. Never the theme's translated name —
+ * nothing downstream of this RPC displays it, only compares it against a
+ * room's `pack_theme_filter` (also ids), so there's no locale to resolve.
  */
-export type PublishedPuzzle = Omit<Puzzle, "solution"> & { theme: string };
+export type PublishedPuzzle = Omit<Puzzle, "solution"> & { theme_id: string };
 
 /**
  * Row shape of get_published_puzzle_candidates — just enough to run
@@ -48,7 +56,7 @@ export type PublishedPuzzle = Omit<Puzzle, "solution"> & { theme: string };
 export type PuzzleCandidate = {
   id: string;
   pack_id: string;
-  theme: string;
+  theme_id: string;
   difficulty: PuzzleDifficulty;
   is_community: boolean;
 };
@@ -65,6 +73,8 @@ export type StoryPack = {
   id: string;
   slug: string;
   name: string;
+  theme_id: string;
+  /** Theme name, resolved from theme_id for `locale` (falling back to Dutch) — see hydrateStoryPacks. */
   theme: string;
   is_published: boolean;
   created_at: string;
@@ -103,6 +113,15 @@ export type CategoryTranslation = {
 /** Raw row shape of `story_pack_translations` — one language's name for one pack. */
 export type StoryPackTranslation = {
   pack_id: string;
+  locale: string;
+  name: string;
+  status: TranslationStatus;
+  created_at: string;
+};
+
+/** Raw row shape of `theme_translations` — one language's name for one theme. */
+export type ThemeTranslation = {
+  theme_id: string;
   locale: string;
   name: string;
   status: TranslationStatus;

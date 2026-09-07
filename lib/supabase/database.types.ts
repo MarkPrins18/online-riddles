@@ -7,10 +7,12 @@ import type {
   PuzzleCandidate,
   StoryPack,
   Category,
+  Theme,
   PuzzleTranslation,
   PuzzleTranslationPublic,
   CategoryTranslation,
   StoryPackTranslation,
+  ThemeTranslation,
   TranslationStatus,
 } from "@/types/puzzle";
 import type { Question, QuestionAnswer } from "@/types/question";
@@ -110,13 +112,28 @@ export type Database = {
       // requested locale, same story as `puzzles`/`categories` below.
       story_packs: TableShape<
         StoryPack,
-        { slug: string; theme: string; is_published?: boolean; created_by?: string | null; is_community?: boolean },
-        Partial<{ theme: string; is_published: boolean }>
+        {
+          slug: string;
+          theme_id: string;
+          is_published?: boolean;
+          created_by?: string | null;
+          is_community?: boolean;
+        },
+        Partial<{ theme_id: string; is_published: boolean }>
       >;
       story_pack_translations: TableShape<
         StoryPackTranslation,
         { pack_id: string; locale: string; name: string; status?: TranslationStatus },
         Partial<Omit<StoryPackTranslation, "pack_id" | "locale">>
+      >;
+      // Same story as `categories` below: a curated, admin-managed list —
+      // `themes` itself carries no name, `theme_translations` has one row
+      // per language. See lib/supabase/themes.ts.
+      themes: TableShape<Theme, Record<string, never>, Record<string, never>>;
+      theme_translations: TableShape<
+        ThemeTranslation,
+        { theme_id: string; locale: string; name: string; status?: TranslationStatus },
+        Partial<Omit<ThemeTranslation, "theme_id" | "locale">>
       >;
       // `puzzles` itself is now locale-agnostic (no title/scenario/solution/
       // hint) — those live in `puzzle_translations` below. The Row shape

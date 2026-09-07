@@ -124,7 +124,7 @@ export function RiddleForm({
         className={textareaClasses}
       />
 
-      <div className="flex gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row">
         <div className="flex-1">
           <label htmlFor="riddle-category" className={labelClasses}>
             {t("categoryLabel")}
@@ -143,7 +143,7 @@ export function RiddleForm({
             ))}
           </select>
         </div>
-        <div className="w-40">
+        <div className="sm:w-40">
           <label htmlFor="riddle-difficulty" className={labelClasses}>
             {t("difficultyLabel")}
           </label>

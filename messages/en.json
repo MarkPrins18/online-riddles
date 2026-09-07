@@ -602,7 +602,7 @@
     "cookiesHeading": "Cookies",
     "cookiesBody": "We use two cookies, both strictly necessary for the app to work: one that keeps you signed in (including anonymous play), and one that remembers your language choice. Neither requires consent under GDPR, and we don't set any advertising or analytics cookies.",
     "thirdPartyHeading": "Third parties",
-    "thirdPartyBody": "We don't use any advertising or analytics trackers. If error monitoring (Sentry) is enabled on this deployment, crash diagnostics such as a stack trace and page URL may be sent to Sentry to help us fix bugs — this only happens when explicitly configured.",
+    "thirdPartyBody": "We don't use any advertising or analytics trackers. We use Sentry for error monitoring: when something crashes, diagnostic information such as a stack trace and the page URL is sent to Sentry so we can fix it. Sentry also receives lightweight performance data (page load timing) for a random sample of sessions, for the same purpose.",
     "contactHeading": "Contact",
     "contactBody": "Questions about this page or your data? Email markus.mp40@gmail.com.",
     "backLink": "← Back to home"

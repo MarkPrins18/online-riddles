@@ -210,7 +210,7 @@
     "close": "Close"
   },
   "MagicLinkTab": {
-    "intro": "Log in or create an account with a code we email you. No password needed.",
+    "intro": "Log in or create an account with a code we email you. No password needed. Same email on any device brings back your account.",
     "emailLabel": "Email address",
     "emailPlaceholder": "you@example.com",
     "requestCode": "Send code",

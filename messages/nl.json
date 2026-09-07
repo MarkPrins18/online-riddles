@@ -210,7 +210,7 @@
     "close": "Sluiten"
   },
   "MagicLinkTab": {
-    "intro": "Log in of maak een account met een code die we naar je e-mail sturen. Geen wachtwoord nodig.",
+    "intro": "Log in of maak een account met een code die we naar je e-mail sturen. Geen wachtwoord nodig. Zelfde e-mail op elk apparaat herkent je account.",
     "emailLabel": "E-mailadres",
     "emailPlaceholder": "jij@voorbeeld.nl",
     "requestCode": "Stuur code",

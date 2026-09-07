@@ -602,7 +602,7 @@
     "cookiesHeading": "Cookies",
     "cookiesBody": "We gebruiken twee cookies, allebei functioneel noodzakelijk om de app te laten werken: één die je ingelogd houdt (ook bij anoniem spelen), en één die je taalkeuze onthoudt. Voor geen van beide is toestemming vereist onder de AVG, en we plaatsen geen advertentie- of analytics-cookies.",
     "thirdPartyHeading": "Derde partijen",
-    "thirdPartyBody": "We gebruiken geen advertentie- of analytics-trackers. We gebruiken Sentry voor foutmonitoring: als er iets crasht, wordt diagnostische informatie zoals een stack trace en de pagina-URL naar Sentry gestuurd zodat we het kunnen oplossen. Sentry ontvangt ook lichte performance-data (laadtijden) voor een willekeurige steekproef van sessies, met hetzelfde doel.",
+    "thirdPartyBody": "We gebruiken geen advertentie- of analytics-trackers. Je gegevens worden opgeslagen en verwerkt door Supabase (onze database-, authenticatie- en realtime-provider) en, voor inlogcode-mails, Resend (onze e-mailprovider) — beide uitsluitend om de app te laten werken, nooit voor advertenties of analytics. We gebruiken Sentry voor foutmonitoring: als er iets crasht, wordt diagnostische informatie zoals een stack trace en de pagina-URL naar Sentry gestuurd zodat we het kunnen oplossen. Sentry ontvangt ook lichte performance-data (laadtijden) voor een willekeurige steekproef van sessies, met hetzelfde doel.",
     "contactHeading": "Contact",
     "contactBody": "Vragen over deze pagina of je gegevens? Mail naar markus.mp40@gmail.com.",
     "backLink": "← Terug naar home"

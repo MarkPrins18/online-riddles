@@ -31,13 +31,11 @@ export function RoomSettingsForm({
   supabase,
   value,
   onChange,
-  narratorPreviewName,
   playerCount,
 }: {
   supabase: SupabaseClient<Database>;
   value: RoomSettingsInput;
   onChange: (value: RoomSettingsInput) => void;
-  narratorPreviewName?: string;
   playerCount?: number;
 }) {
   const [officialThemes, setOfficialThemes] = useState<Theme[] | null>(null);
@@ -283,9 +281,7 @@ export function RoomSettingsForm({
                     htmlFor="team-lives"
                     className="mb-1 block font-mono text-xs uppercase tracking-widest text-text-secondary"
                   >
-                    {narratorPreviewName
-                      ? t("teamLivesLabelWithNarrator", { name: narratorPreviewName })
-                      : t("teamLivesLabel")}
+                    {t("teamLivesLabel")}
                   </label>
                   <select
                     id="team-lives"

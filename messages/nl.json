@@ -121,7 +121,6 @@
     "modesLegend": "Spelmodussen",
     "hardcoreToggle": "Hardcore modus (gedeelde team-levens)",
     "hardcoreHint": "Elke foute gok kost het hele team 1 leven. Op 0 levens is het game over voor de hele sessie.",
-    "teamLivesLabelWithNarrator": "{name} bepaalt: hoeveel levens krijgt het team?",
     "teamLivesLabel": "Hoeveel levens krijgt het team?",
     "teamLivesOption": "{count} levens",
     "saboteurToggle": "Saboteur-modus",

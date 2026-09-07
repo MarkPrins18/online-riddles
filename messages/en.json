@@ -121,7 +121,6 @@
     "modesLegend": "Game modes",
     "hardcoreToggle": "Hardcore mode (shared team lives)",
     "hardcoreHint": "Every wrong guess costs the whole team 1 life. At 0 lives, it's game over for the whole session.",
-    "teamLivesLabelWithNarrator": "{name} decides: how many lives does the team get?",
     "teamLivesLabel": "How many lives does the team get?",
     "teamLivesOption": "{count} lives",
     "saboteurToggle": "Saboteur mode",

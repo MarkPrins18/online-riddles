@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useGameState } from "@/lib/game/useGameState";
 import { getStoredPlayerId } from "@/lib/session";
-import { resolveNarrator, type NarratorSelection } from "@/lib/game/roles";
+import type { NarratorSelection } from "@/lib/game/roles";
 import type { RoomSettingsInput } from "@/types/room";
 import { createKickHandler } from "@/lib/game/membership";
 import { Card } from "@/components/ui/Card";
@@ -62,7 +62,6 @@ export function RoomLobbyClient({ code }: { code: string }) {
   }
 
   const isHost = playerId === state.room.host_id;
-  const narratorPreview = resolveNarrator(narratorSelection, state.players, null);
 
   return (
     <div className="flex w-full max-w-md flex-col gap-6">
@@ -96,19 +95,18 @@ export function RoomLobbyClient({ code }: { code: string }) {
         isHost ? (
           <>
             <Card>
-              <RoomSettingsForm
-                supabase={supabase}
-                value={roomSettings}
-                onChange={setRoomSettings}
-                narratorPreviewName={narratorPreview?.name}
-                playerCount={state.players.length}
-              />
-            </Card>
-            <Card>
               <NarratorPicker
                 players={state.players}
                 selection={narratorSelection}
                 onChange={setNarratorSelection}
+              />
+            </Card>
+            <Card>
+              <RoomSettingsForm
+                supabase={supabase}
+                value={roomSettings}
+                onChange={setRoomSettings}
+                playerCount={state.players.length}
               />
             </Card>
             <StartGameButton

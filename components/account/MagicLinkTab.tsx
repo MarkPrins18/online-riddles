@@ -23,7 +23,7 @@ type Step = "email" | "code";
  * signInWithOtp + verifyOtp handles both "first time" and "returning user"
  * transparently — Supabase decides at verify time whether this email links
  * to the current anonymous session or signs in to a pre-existing account —
- * so unlike PasswordTab there's no separate upgrade/login mode here.
+ * so there's no separate upgrade/login mode to choose here.
  */
 export function MagicLinkTab({ onSuccess }: { onSuccess: () => void }) {
   const [step, setStep] = useState<Step>("email");

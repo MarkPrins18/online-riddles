@@ -8,23 +8,12 @@ import { getAccountStatus, signOut } from "@/lib/supabase/accountAuth";
 import { getErrorMessage } from "@/lib/errors";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
-import { PasswordTab } from "./PasswordTab";
 import { MagicLinkTab } from "./MagicLinkTab";
-
-type Tab = "magicLink" | "password";
 
 type Phase =
   | { kind: "loading" }
   | { kind: "anonymous" }
-  | { kind: "signedIn"; email: string | null }
-  | { kind: "pendingConfirmation" };
-
-const TAB_CLASSES = (isActive: boolean) =>
-  `tab-shape border border-b-0 px-4 pb-2 pt-2.5 font-mono text-xs uppercase tracking-widest transition-colors ${
-    isActive
-      ? "border-accent/40 bg-bg-secondary text-accent"
-      : "border-white/10 bg-transparent text-text-secondary hover:text-text-primary"
-  }`;
+  | { kind: "signedIn"; email: string | null };
 
 /**
  * Shared surface for both entry points (AccountButton, AccountNudgeBanner).
@@ -34,7 +23,6 @@ const TAB_CLASSES = (isActive: boolean) =>
  */
 export function AccountModal({ onClose }: { onClose: () => void }) {
   const [phase, setPhase] = useState<Phase>({ kind: "loading" });
-  const [tab, setTab] = useState<Tab>("magicLink");
   const [signOutError, setSignOutError] = useState<string | null>(null);
   const [isSigningOut, setIsSigningOut] = useState(false);
   const t = useTranslations("AccountModal");
@@ -109,32 +97,10 @@ export function AccountModal({ onClose }: { onClose: () => void }) {
           </div>
         )}
 
-        {phase.kind === "pendingConfirmation" && (
-          <p className="font-mono text-sm text-text-primary">{t("pendingConfirmation")}</p>
-        )}
-
         {phase.kind === "anonymous" && (
           <>
             <p className="font-mono text-xs text-text-secondary">{t("explainer")}</p>
-
-            <div className="flex gap-1 border-b border-white/10">
-              <button type="button" onClick={() => setTab("magicLink")} className={TAB_CLASSES(tab === "magicLink")}>
-                {t("tabMagicLink")}
-              </button>
-              <button type="button" onClick={() => setTab("password")} className={TAB_CLASSES(tab === "password")}>
-                {t("tabPassword")}
-              </button>
-            </div>
-
-            {tab === "magicLink" ? (
-              <MagicLinkTab onSuccess={() => void refreshStatus()} />
-            ) : (
-              <PasswordTab
-                onSuccess={({ pending }) =>
-                  pending ? setPhase({ kind: "pendingConfirmation" }) : void refreshStatus()
-                }
-              />
-            )}
+            <MagicLinkTab onSuccess={() => void refreshStatus()} />
           </>
         )}
       </div>

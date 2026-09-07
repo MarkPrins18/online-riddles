@@ -27,37 +27,6 @@ export async function getAccountStatus(supabase: Client): Promise<AccountStatus 
 }
 
 /**
- * First-time upgrade: attaches email+password to the CURRENT anonymous
- * session, preserving its auth.uid() (and therefore every created_by row
- * already tied to it). Supabase requires the emailed confirmation link to
- * be clicked before is_anonymous actually flips to false — see
- * app/auth/confirm/route.ts, which emailRedirectTo must point at.
- */
-export async function upgradeWithPassword(
-  supabase: Client,
-  email: string,
-  password: string,
-  emailRedirectTo: string
-): Promise<void> {
-  const { error } = await supabase.auth.updateUser({ email, password }, { emailRedirectTo });
-  if (error) throw error;
-}
-
-/**
- * Returning user on a new browser/device: signs in to an existing
- * permanent account, replacing whatever anonymous session is active in
- * this tab. Immediate — no email confirmation step.
- */
-export async function signInWithPassword(
-  supabase: Client,
-  email: string,
-  password: string
-): Promise<void> {
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) throw error;
-}
-
-/**
  * Step 1 of the passwordless flow: emails a 6-digit code. Works for both
  * upgrading the current anonymous session and returning-user login —
  * Supabase decides server-side (at verify time) whether the email already

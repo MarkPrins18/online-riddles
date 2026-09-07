@@ -5,15 +5,10 @@ const t = (key: string) => `translated:${key}`;
 
 describe("describeAccountError", () => {
   it.each([
-    "email_exists",
-    "user_already_exists",
-    "invalid_credentials",
     "otp_expired",
     "over_email_send_rate_limit",
     "over_request_rate_limit",
-    "weak_password",
     "email_address_invalid",
-    "same_password",
   ])("translates known code %s via the AccountErrors namespace", (code) => {
     expect(describeAccountError({ code, message: "raw supabase message" }, t)).toBe(
       `translated:${code}`

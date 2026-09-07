@@ -10,8 +10,8 @@ const nextConfig: NextConfig = {
         source: "/(.*)",
         headers: [
           // Clickjacking: without this, any origin could iframe this app
-          // (including /auth/confirm and account/community pages with
-          // real state-changing actions) and trick a click.
+          // (including account/community pages with real state-changing
+          // actions) and trick a click.
           { key: "X-Frame-Options", value: "DENY" },
           { key: "X-Content-Type-Options", value: "nosniff" },
           // Room codes appear in the path (/room/ABC123) — this keeps them

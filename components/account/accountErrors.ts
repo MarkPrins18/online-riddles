@@ -1,15 +1,10 @@
 import { getErrorMessage } from "@/lib/errors";
 
 const KNOWN_CODES = new Set([
-  "email_exists",
-  "user_already_exists",
-  "invalid_credentials",
   "otp_expired",
   "over_email_send_rate_limit",
   "over_request_rate_limit",
-  "weak_password",
   "email_address_invalid",
-  "same_password",
 ]);
 
 /**

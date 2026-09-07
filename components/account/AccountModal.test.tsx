@@ -18,11 +18,6 @@ vi.mock("@/lib/supabase/authSession", () => ({
 vi.mock("@/lib/supabase/client", () => ({
   createClient: vi.fn(),
 }));
-vi.mock("./PasswordTab", () => ({
-  PasswordTab: ({ onSuccess }: { onSuccess: (result: { pending: boolean }) => void }) => (
-    <button onClick={() => onSuccess({ pending: true })}>password-tab-stub</button>
-  ),
-}));
 vi.mock("./MagicLinkTab", () => ({
   MagicLinkTab: ({ onSuccess }: { onSuccess: () => void }) => (
     <button onClick={() => onSuccess()}>magic-link-tab-stub</button>
@@ -42,20 +37,12 @@ beforeEach(() => {
 });
 
 describe("AccountModal", () => {
-  it("shows the tab switcher, magic link first, once the anonymous session is confirmed", async () => {
+  it("shows the magic-link form once the anonymous session is confirmed", async () => {
     renderWithIntl(<AccountModal onClose={vi.fn()} />);
     expect(await screen.findByText("magic-link-tab-stub")).toBeInTheDocument();
-    expect(screen.queryByText("password-tab-stub")).not.toBeInTheDocument();
   });
 
-  it("switches to the password tab on click", async () => {
-    renderWithIntl(<AccountModal onClose={vi.fn()} />);
-    await screen.findByText("magic-link-tab-stub");
-    await userEvent.click(screen.getByRole("button", { name: "Password" }));
-    expect(screen.getByText("password-tab-stub")).toBeInTheDocument();
-  });
-
-  it("shows the signed-in view with sign-out instead of tabs when already non-anonymous", async () => {
+  it("shows the signed-in view with sign-out instead of the form when already non-anonymous", async () => {
     mockedGetAccountStatus.mockResolvedValue({
       id: "u1",
       email: "you@example.com",
@@ -64,18 +51,6 @@ describe("AccountModal", () => {
     renderWithIntl(<AccountModal onClose={vi.fn()} />);
     expect(await screen.findByText("Signed in as you@example.com")).toBeInTheDocument();
     expect(screen.queryByText("magic-link-tab-stub")).not.toBeInTheDocument();
-  });
-
-  it("shows the pending-confirmation message after a password upgrade", async () => {
-    renderWithIntl(<AccountModal onClose={vi.fn()} />);
-    await userEvent.click(await screen.findByRole("button", { name: "Password" }));
-    await userEvent.click(screen.getByText("password-tab-stub"));
-
-    expect(
-      await screen.findByText(
-        "Almost there. Check your email and click the confirmation link to activate your account."
-      )
-    ).toBeInTheDocument();
   });
 
   it("switches to the signed-in view after a successful magic-link verification", async () => {

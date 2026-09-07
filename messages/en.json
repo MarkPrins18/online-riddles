@@ -608,7 +608,7 @@
     "backLink": "← Back to home"
   },
   "CookieNoticeBanner": {
-    "message": "This app uses only functionally necessary cookies (session and language) — no tracking.",
+    "message": "This app uses only functionally necessary cookies (session and language). No tracking.",
     "linkLabel": "Read more",
     "dismiss": "Got it",
     "dismissAriaLabel": "Dismiss cookie notice"

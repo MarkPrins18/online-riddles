@@ -608,7 +608,7 @@
     "backLink": "← Terug naar home"
   },
   "CookieNoticeBanner": {
-    "message": "Deze app gebruikt alleen functioneel noodzakelijke cookies (sessie en taal) — geen tracking.",
+    "message": "Deze app gebruikt alleen functioneel noodzakelijke cookies (sessie en taal). Geen tracking.",
     "linkLabel": "Meer lezen",
     "dismiss": "Begrepen",
     "dismissAriaLabel": "Cookiemelding sluiten"

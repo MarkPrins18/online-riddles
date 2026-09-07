@@ -53,7 +53,7 @@ export function CluesList({
           </p>
           <div className="mt-2 flex items-center justify-between gap-2 border-t border-black/10 pt-2">
             <p className="font-mono text-[11px] text-black/55">
-              — {clue.player_name}
+              · {clue.player_name}
             </p>
             {onPinToBoard && (
               // Prikbord itself is desktop-only (see GamePlayClient) — this

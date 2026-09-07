@@ -129,7 +129,7 @@ export function QuestionCard({
     >
       <div className="flex items-start justify-between gap-3">
         <p className="font-mono text-[11px] uppercase tracking-widest text-black/55">
-          — {question.player_name}
+          · {question.player_name}
         </p>
         <div className="flex shrink-0 items-center gap-2">
           {isAnswered && question.answer !== "custom" && (

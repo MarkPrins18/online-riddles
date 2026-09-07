@@ -22,7 +22,7 @@ export function CaseLog({ entries }: { entries: CaseLogEntry[] }) {
               {t("caseLabel", { round: entry.round + 1, difficulty: tDifficulty(entry.difficulty) })}
             </span>
             <p className="mt-0.5 text-text-secondary">
-              {entry.puzzle_title} —{" "}
+              {entry.puzzle_title} ·{" "}
               {entry.outcome === "solved" ? (
                 <span className="text-accent-secondary">
                   {t("solvedBy", { name: entry.solver_name ?? "", count: entry.questions_asked })}

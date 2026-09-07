@@ -138,7 +138,7 @@ export function NarratorGuessControls({
         >
           <div>
             <p className="font-serif text-sm text-text-primary">{guess.text}</p>
-            <p className="font-mono text-xs text-text-secondary">— {guess.player_name}</p>
+            <p className="font-mono text-xs text-text-secondary">· {guess.player_name}</p>
           </div>
           <div className="flex gap-2">
             <Button

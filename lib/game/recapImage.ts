@@ -91,7 +91,7 @@ function buildHighlightLines(recap: SessionRecap | null): HighlightLine[] {
   }
   if (recap?.bestQuestions.length) {
     const q = recap.bestQuestions[0];
-    lines.push({ label: "BESTE VRAAG", text: `"${q.text}" — ${q.playerName}`, color: COLORS.textPrimary });
+    lines.push({ label: "BESTE VRAAG", text: `"${q.text}" · ${q.playerName}`, color: COLORS.textPrimary });
   }
   if (recap?.mostWrongGuesses) {
     lines.push({

@@ -45,7 +45,7 @@ export function NarratorArchive({
               >
                 <div>
                   <p className="font-serif text-sm text-text-primary">{guess.text}</p>
-                  <p className="font-mono text-xs text-text-secondary">— {guess.player_name}</p>
+                  <p className="font-mono text-xs text-text-secondary">· {guess.player_name}</p>
                 </div>
                 <Badge tone={guess.status === "correct" ? "accent" : "danger"}>
                   {guess.status === "correct" ? t("correct") : t("incorrect")}

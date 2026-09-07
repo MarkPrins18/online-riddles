@@ -63,7 +63,7 @@ export function SolutionReveal({
         {puzzle.solution}
       </p>
       {voteState && (
-        <div className="mt-4 flex items-center justify-between gap-3 border-t border-white/5 pt-4">
+        <div className="mt-4 flex flex-col gap-3 border-t border-white/5 pt-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="font-mono text-xs text-text-secondary">{t("ratePrompt")}</p>
           <VoteButtons puzzleId={puzzle.id} score={voteState.score} myVote={voteState.myVote} />
         </div>

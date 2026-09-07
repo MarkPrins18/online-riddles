@@ -49,7 +49,7 @@ export function PlayerList({
                 type="button"
                 onClick={() => onKick(player.id)}
                 aria-label={t("removeAriaLabel", { name: player.name })}
-                className="font-mono text-xs text-text-secondary hover:text-danger"
+                className="rounded p-2.5 font-mono text-xs text-text-secondary transition-colors hover:text-danger"
               >
                 ✕
               </button>

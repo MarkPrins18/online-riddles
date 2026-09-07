@@ -457,7 +457,10 @@ declare
   theme_name text;
   new_theme_id uuid;
 begin
-  foreach theme_name in array array['Klassiek', 'Crime', 'Sci-Fi', 'Absurd', 'Mysterie']
+  foreach theme_name in array array[
+    'Klassiek', 'Crime', 'Sci-Fi', 'Absurd', 'Mysterie',
+    'Horror', 'Fantasy', 'Spionage', 'Piraten', 'Western', 'Sprookje'
+  ]
   loop
     if not exists (
       select 1 from theme_translations where locale = 'nl' and lower(name) = lower(theme_name)
@@ -476,7 +479,9 @@ insert into theme_translations (theme_id, locale, name, status)
 select tt_nl.theme_id, 'en', v.name_en, 'reviewed'
 from (values
   ('Klassiek', 'Classic'), ('Crime', 'Crime'), ('Sci-Fi', 'Sci-Fi'),
-  ('Absurd', 'Absurd'), ('Mysterie', 'Mystery')
+  ('Absurd', 'Absurd'), ('Mysterie', 'Mystery'),
+  ('Horror', 'Horror'), ('Fantasy', 'Fantasy'), ('Spionage', 'Espionage'),
+  ('Piraten', 'Pirates'), ('Western', 'Western'), ('Sprookje', 'Fairy Tale')
 ) as v(name_nl, name_en)
 join theme_translations tt_nl on tt_nl.locale = 'nl' and lower(tt_nl.name) = lower(v.name_nl)
 on conflict (theme_id, locale) do nothing;

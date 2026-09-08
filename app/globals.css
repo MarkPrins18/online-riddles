@@ -75,7 +75,7 @@ body {
    native one: the native arrow is drawn flush against the box's outer
    edge rather than inside its rounded/bordered surface, so it reads as
    sitting outside the control. padding-right is forced with !important
-   because it must win over whichever px-*/pr-* Tailwind utility a given
+   because it must win over whichever px-* or pr-* Tailwind utility a given
    call site already applies, or the arrow overlaps the selected text. */
 select {
   appearance: none;

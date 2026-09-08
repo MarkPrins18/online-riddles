@@ -24,8 +24,12 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 Puzzles live in Supabase, grouped into **story packs** by theme (`Crime`,
 `Sci-Fi`, `Absurd`, ...). A pack is a draft until you flip `is_published`,
-at which point its puzzles become eligible for `getRandomPuzzle` (see the
-`published_puzzles` view in [`supabase/schema.sql`](supabase/schema.sql)).
+at which point its puzzles become eligible for `getRandomPuzzle`. That fetch
+is two round-trips: `get_published_puzzle_candidates()` returns only the
+id/pack/theme/difficulty fields needed to run the client-side filter
+cascade, then `get_published_puzzle(id, locale)` fetches the full text
+(title/scenario/solution/hint) for the one puzzle actually picked — see
+both functions in [`supabase/schema.sql`](supabase/schema.sql).
 
 Run `supabase/schema.sql` once in the Supabase SQL editor to create the
 tables (`story_packs`, `puzzles`) and seed a starter pack.

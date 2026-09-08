@@ -5,15 +5,17 @@ import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { ensureAnonymousSession } from "@/lib/supabase/authSession";
 import { getAccountStatus, signOut } from "@/lib/supabase/accountAuth";
+import { getProfile } from "@/lib/supabase/profiles";
 import { getErrorMessage } from "@/lib/errors";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 import { MagicLinkTab } from "./MagicLinkTab";
+import { SetNameForm } from "@/components/community/SetNameForm";
 
 type Phase =
   | { kind: "loading" }
   | { kind: "anonymous" }
-  | { kind: "signedIn"; email: string | null };
+  | { kind: "signedIn"; email: string | null; hasName: boolean };
 
 /**
  * Shared surface for both entry points (AccountButton, AccountNudgeBanner).
@@ -32,7 +34,9 @@ export function AccountModal({ onClose }: { onClose: () => void }) {
     const status = await getAccountStatus(supabase);
     if (guard && !guard()) return;
     if (status && !status.isAnonymous) {
-      setPhase({ kind: "signedIn", email: status.email });
+      const profile = await getProfile(supabase, status.id);
+      if (guard && !guard()) return;
+      setPhase({ kind: "signedIn", email: status.email, hasName: !!profile });
     } else {
       setPhase({ kind: "anonymous" });
     }
@@ -81,7 +85,11 @@ export function AccountModal({ onClose }: { onClose: () => void }) {
           <p className="font-mono text-sm text-text-secondary">{t("loading")}</p>
         )}
 
-        {phase.kind === "signedIn" && (
+        {phase.kind === "signedIn" && !phase.hasName && (
+          <SetNameForm onDone={() => void refreshStatus()} showAccountNudge={false} />
+        )}
+
+        {phase.kind === "signedIn" && phase.hasName && (
           <div className="flex flex-col gap-3">
             <p className="font-mono text-sm text-text-primary">
               {t("signedInAs", { email: phase.email ?? "" })}

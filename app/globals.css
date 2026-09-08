@@ -71,6 +71,21 @@ body {
   border-radius: 2px;
 }
 
+/* Every <select> site-wide gets this chevron instead of the browser's
+   native one: the native arrow is drawn flush against the box's outer
+   edge rather than inside its rounded/bordered surface, so it reads as
+   sitting outside the control. padding-right is forced with !important
+   because it must win over whichever px-*/pr-* Tailwind utility a given
+   call site already applies, or the arrow overlaps the selected text. */
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%239c9080' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 7l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.65rem center;
+  background-size: 0.85em;
+  padding-right: 2.25rem !important;
+}
+
 /*
  * Game screen: players | game | chat. Areas are named so the mobile stack
  * order can differ from the desktop column order without touching markup.

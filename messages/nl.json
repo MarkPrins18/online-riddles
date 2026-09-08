@@ -189,7 +189,11 @@
     "newPackButton": "Nieuw pack",
     "cancel": "Annuleren",
     "addedNoticePrefix": "“{title}” is toegevoegd. Vergeet niet je pack te publiceren via",
-    "myPacksLink": "Mijn packs"
+    "myPacksLink": "Mijn packs",
+    "chooseHeading": "Voor je eerste raadsel",
+    "chooseSubtitle": "Maak een account aan zodat je naam en inzendingen meegaan naar andere apparaten, of stel alleen een naam in voor deze sessie.",
+    "createAccountButton": "Account aanmaken / inloggen",
+    "skipToNameOnly": "Geen account, alleen een naam instellen"
   },
   "CommunityMineClient": {
     "loading": "Even laden...",

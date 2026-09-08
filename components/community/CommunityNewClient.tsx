@@ -11,6 +11,7 @@ import type { StoryPack, Puzzle } from "@/types/puzzle";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { SetNameForm } from "@/components/community/SetNameForm";
+import { AccountModal } from "@/components/account/AccountModal";
 import { PackForm } from "@/components/community/PackForm";
 import { RiddleForm } from "@/components/community/RiddleForm";
 
@@ -20,6 +21,8 @@ export function CommunityNewClient() {
   const [selectedPackId, setSelectedPackId] = useState<string | null>(null);
   const [showNewPackForm, setShowNewPackForm] = useState(false);
   const [justAdded, setJustAdded] = useState<string | null>(null);
+  const [showNameOnlyForm, setShowNameOnlyForm] = useState(false);
+  const [accountModalOpen, setAccountModalOpen] = useState(false);
   const t = useTranslations("CommunityNewClient");
   const locale = useLocale();
 
@@ -30,6 +33,14 @@ export function CommunityNewClient() {
     setPacks(ownPacks);
     if (ownPacks.length > 0) setSelectedPackId(ownPacks[0].id);
     else setShowNewPackForm(true);
+  }
+
+  async function refreshNameStatus() {
+    const supabase = createClient();
+    const userId = await ensureAnonymousSession(supabase);
+    const profile = await getProfile(supabase, userId);
+    setHasName(!!profile);
+    if (profile) await loadOwnPacks();
   }
 
   useEffect(() => {
@@ -58,13 +69,45 @@ export function CommunityNewClient() {
   }
 
   if (!hasName) {
+    if (showNameOnlyForm) {
+      return (
+        <SetNameForm
+          onDone={async () => {
+            setHasName(true);
+            await loadOwnPacks();
+          }}
+          showAccountNudge={false}
+        />
+      );
+    }
+
     return (
-      <SetNameForm
-        onDone={async () => {
-          setHasName(true);
-          await loadOwnPacks();
-        }}
-      />
+      <Card tone="case">
+        <p className="mb-4 font-mono text-xs uppercase tracking-widest text-accent">
+          {t("chooseHeading")}
+        </p>
+        <p className="mb-4 font-mono text-sm text-text-secondary">{t("chooseSubtitle")}</p>
+        <div className="flex flex-col gap-3">
+          <Button type="button" onClick={() => setAccountModalOpen(true)}>
+            {t("createAccountButton")}
+          </Button>
+          <button
+            type="button"
+            onClick={() => setShowNameOnlyForm(true)}
+            className="font-mono text-xs uppercase tracking-widest text-text-secondary underline decoration-accent/60 hover:text-accent"
+          >
+            {t("skipToNameOnly")}
+          </button>
+        </div>
+        {accountModalOpen && (
+          <AccountModal
+            onClose={() => {
+              setAccountModalOpen(false);
+              void refreshNameStatus();
+            }}
+          />
+        )}
+      </Card>
     );
   }
 

@@ -22,10 +22,16 @@ const labelClasses = "font-mono text-xs uppercase tracking-widest text-text-seco
 export function SetNameForm({
   onDone,
   showAccountNudge = true,
+  variant = "creator",
+  bare = false,
 }: {
   onDone: (displayName: string) => void;
   /** Hide the "or link an account" nudge when already shown inside AccountModal. */
   showAccountNudge?: boolean;
+  /** "account" swaps the creator-focused heading/subtitle for a neutral one, for use inside AccountModal. */
+  variant?: "creator" | "account";
+  /** Skip the surrounding Card when already nested inside another bordered panel (e.g. AccountModal). */
+  bare?: boolean;
 }) {
   const [name, setName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -51,10 +57,14 @@ export function SetNameForm({
     }
   }
 
-  return (
-    <Card tone="case">
-      <p className="mb-4 font-mono text-xs uppercase tracking-widest text-accent">{t("heading")}</p>
-      <p className="mb-4 font-mono text-sm text-text-secondary">{t("subtitle")}</p>
+  const content = (
+    <>
+      <p className="mb-4 font-mono text-xs uppercase tracking-widest text-accent">
+        {t(variant === "account" ? "headingAccount" : "heading")}
+      </p>
+      <p className="mb-4 font-mono text-sm text-text-secondary">
+        {t(variant === "account" ? "subtitleAccount" : "subtitle")}
+      </p>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <label htmlFor="creator-name" className={labelClasses}>
           {t("nameLabel")}
@@ -85,6 +95,8 @@ export function SetNameForm({
         </p>
       )}
       {accountModalOpen && <AccountModal onClose={() => setAccountModalOpen(false)} />}
-    </Card>
+    </>
   );
+
+  return bare ? content : <Card tone="case">{content}</Card>;
 }

@@ -163,6 +163,8 @@
   "SetNameForm": {
     "heading": "Word maker",
     "subtitle": "Kies een naam waaronder je raadsels en packs verschijnen.",
+    "headingAccount": "Kies een naam",
+    "subtitleAccount": "Zichtbaar bij alles wat je instuurt of waarop je stemt.",
     "nameLabel": "Naam als maker",
     "namePlaceholder": "Rechercheur...",
     "saving": "Opslaan...",
@@ -216,7 +218,6 @@
   "AccountModal": {
     "title": "Account",
     "loading": "Even laden...",
-    "explainer": "Optioneel: koppel een account zodat je packs en raadsels niet verloren gaan als je browsersessie verdwijnt.",
     "signedInAs": "Ingelogd als {email}",
     "signOut": "Uitloggen",
     "signingOut": "Uitloggen...",
@@ -224,7 +225,7 @@
     "close": "Sluiten"
   },
   "MagicLinkTab": {
-    "intro": "Log in of maak een account met een code die we naar je e-mail sturen. Geen wachtwoord nodig. Zelfde e-mail op elk apparaat herkent je account.",
+    "intro": "We mailen je een eenmalige code — geen wachtwoord nodig, werkt op elk apparaat.",
     "emailLabel": "E-mailadres",
     "emailPlaceholder": "jij@voorbeeld.nl",
     "requestCode": "Stuur code",

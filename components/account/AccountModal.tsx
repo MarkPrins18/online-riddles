@@ -86,7 +86,12 @@ export function AccountModal({ onClose }: { onClose: () => void }) {
         )}
 
         {phase.kind === "signedIn" && !phase.hasName && (
-          <SetNameForm onDone={() => void refreshStatus()} showAccountNudge={false} />
+          <SetNameForm
+            onDone={() => void refreshStatus()}
+            showAccountNudge={false}
+            variant="account"
+            bare
+          />
         )}
 
         {phase.kind === "signedIn" && phase.hasName && (
@@ -105,12 +110,7 @@ export function AccountModal({ onClose }: { onClose: () => void }) {
           </div>
         )}
 
-        {phase.kind === "anonymous" && (
-          <>
-            <p className="font-mono text-xs text-text-secondary">{t("explainer")}</p>
-            <MagicLinkTab onSuccess={() => void refreshStatus()} />
-          </>
-        )}
+        {phase.kind === "anonymous" && <MagicLinkTab onSuccess={() => void refreshStatus()} />}
       </div>
     </Modal>
   );

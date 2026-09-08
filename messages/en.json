@@ -163,6 +163,8 @@
   "SetNameForm": {
     "heading": "Become a creator",
     "subtitle": "Choose a name your riddles and packs will appear under.",
+    "headingAccount": "Choose a display name",
+    "subtitleAccount": "Shown on anything you submit or vote on.",
     "nameLabel": "Creator name",
     "namePlaceholder": "Detective...",
     "saving": "Saving...",
@@ -216,7 +218,6 @@
   "AccountModal": {
     "title": "Account",
     "loading": "Loading...",
-    "explainer": "Optional: link an account so your packs and riddles aren't lost if your browser session disappears.",
     "signedInAs": "Signed in as {email}",
     "signOut": "Sign out",
     "signingOut": "Signing out...",
@@ -224,7 +225,7 @@
     "close": "Close"
   },
   "MagicLinkTab": {
-    "intro": "Log in or create an account with a code we email you. No password needed. Same email on any device brings back your account.",
+    "intro": "We'll email you a one-time code — no password, works on any device.",
     "emailLabel": "Email address",
     "emailPlaceholder": "you@example.com",
     "requestCode": "Send code",

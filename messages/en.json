@@ -12,7 +12,12 @@
     "communityTitle": "Community riddles",
     "communityDescription": "Browse lateral thinking riddle packs made and rated by the DetectiveNights community, and play them free with your group.",
     "packDescription": "\"{packName}\" is a {theme} riddle pack for DetectiveNights, a free online lateral thinking party game. {count, plural, one {# riddle} other {# riddles}} inside — ask yes/no questions with your group to crack the case.",
-    "packNotFoundTitle": "Pack not found"
+    "packNotFoundTitle": "Pack not found",
+    "roomTitle": "Room {code}",
+    "roomPlayTitle": "Playing · Room {code}",
+    "profileDescription": "Your private DetectiveNights stats — games played, cases solved, and total score.",
+    "myPacksDescription": "Manage the community riddle packs you've created and published to DetectiveNights.",
+    "submitRiddleDescription": "Submit a new riddle to one of your DetectiveNights community packs."
   },
   "ErrorBoundary": {
     "title": "Something went wrong",

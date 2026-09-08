@@ -1,4 +1,17 @@
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { GamePlayClient } from "@/components/game/GamePlayClient";
+
+// See app/room/[code]/page.tsx for why this only sets a title.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ code: string }>;
+}): Promise<Metadata> {
+  const { code } = await params;
+  const t = await getTranslations("Metadata");
+  return { title: t("roomPlayTitle", { code: code.toUpperCase() }) };
+}
 
 export default async function PlayPage({
   params,

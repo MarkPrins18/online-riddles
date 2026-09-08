@@ -12,7 +12,12 @@
     "communityTitle": "Community-raadsels",
     "communityDescription": "Bekijk raadselpacks gemaakt en beoordeeld door de DetectiveNights-community, en speel ze gratis met je groep.",
     "packDescription": "\"{packName}\" is een raadselpack ({theme}) voor DetectiveNights, een gratis online lateral thinking spel voor groepen. {count, plural, one {# raadsel} other {# raadsels}} — stel samen ja/nee-vragen om de zaak op te lossen.",
-    "packNotFoundTitle": "Pack niet gevonden"
+    "packNotFoundTitle": "Pack niet gevonden",
+    "roomTitle": "Kamer {code}",
+    "roomPlayTitle": "Aan het spelen · Kamer {code}",
+    "profileDescription": "Jouw privé DetectiveNights-statistieken — potjes gespeeld, opgeloste zaken en totale score.",
+    "myPacksDescription": "Beheer de community-raadselpacks die je hebt gemaakt en gepubliceerd op DetectiveNights.",
+    "submitRiddleDescription": "Stuur een nieuw raadsel in voor een van je DetectiveNights community-packs."
   },
   "ErrorBoundary": {
     "title": "Er is iets misgegaan",

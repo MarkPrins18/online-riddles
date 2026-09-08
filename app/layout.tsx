@@ -27,8 +27,18 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
-    title,
+    title: {
+      default: title,
+      template: `%s — ${title}`,
+    },
     description,
+    alternates: {
+      canonical: "/",
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
     icons: {
       icon: "/icons/192",
       apple: "/icons/180",
@@ -40,10 +50,24 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: title,
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title,
       description,
     },
+  };
+}
+
+// WebSite structured data — a light, always-correct entity signal for
+// search engines (name + canonical URL). Kept separate from the JSON-LD on
+// dynamic pages (e.g. community pack pages), which describe the specific
+// content of that page instead.
+function websiteJsonLd(siteUrl: string, name: string, description: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name,
+    description,
+    url: siteUrl,
   };
 }
 
@@ -65,6 +89,7 @@ export default async function RootLayout({
 }>) {
   const locale = await getLocale();
   const t = await getTranslations("RootLayout");
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
   return (
     <html
@@ -72,6 +97,14 @@ export default async function RootLayout({
       className={`${fraunces.variable} ${plexMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-bg-primary text-text-primary">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(
+              websiteJsonLd(siteUrl, t("title"), t("description"))
+            ).replace(/</g, "\\u003c"),
+          }}
+        />
         <NextIntlClientProvider>
           <a
             href="#main-content"

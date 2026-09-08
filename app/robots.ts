@@ -10,10 +10,18 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      // Session-bound / private surfaces: a room code or "my packs" list
-      // isn't meant to be indexed, and there's nothing for a crawler to
-      // usefully see there anyway (client-rendered, per-player state).
-      disallow: ["/api/", "/auth/", "/room/", "/profile", "/community/mijn"],
+      // Non-page routes only — nothing here is HTML a crawler could ever
+      // usefully render. Per-player pages (/profile, /community/mijn,
+      // /community/nieuw) are deliberately *not* disallowed here: a
+      // robots.txt disallow only blocks crawling, so a URL linked to from
+      // elsewhere could still get indexed with no visible content. Those
+      // pages instead carry their own `noindex` (see their metadata),
+      // which only works if Google is actually allowed to crawl and see
+      // it. /room/ stays disallowed rather than noindex'd — it's dynamic,
+      // ephemeral (rooms are deleted ~24h after creation), and never meant
+      // to be a landing page, so there's no meta tag worth maintaining
+      // across every room route.
+      disallow: ["/api/", "/auth/", "/room/"],
     },
     sitemap: `${siteUrl}/sitemap.xml`,
   };

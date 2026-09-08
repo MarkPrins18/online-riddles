@@ -5,7 +5,11 @@ import { Card } from "@/components/ui/Card";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Privacy");
-  return { title: t("title") };
+  return {
+    title: t("title"),
+    description: t("intro"),
+    alternates: { canonical: "/privacy" },
+  };
 }
 
 function Section({ heading, body }: { heading: string; body: string }) {

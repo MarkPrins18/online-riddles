@@ -5,7 +5,11 @@ import { Card } from "@/components/ui/Card";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("NotFound");
-  return { title: t("title") };
+  return {
+    title: t("title"),
+    description: t("description"),
+    robots: { index: false, follow: true },
+  };
 }
 
 // Renders for any unmatched URL (and wherever notFound() is thrown). Kept

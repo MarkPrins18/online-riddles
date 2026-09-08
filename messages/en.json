@@ -8,6 +8,12 @@
     "skipToContent": "Skip to main content",
     "privacyLink": "Privacy & cookies"
   },
+  "Metadata": {
+    "communityTitle": "Community riddles",
+    "communityDescription": "Browse lateral thinking riddle packs made and rated by the DetectiveNights community, and play them free with your group.",
+    "packDescription": "\"{packName}\" is a {theme} riddle pack for DetectiveNights, a free online lateral thinking party game. {count, plural, one {# riddle} other {# riddles}} inside — ask yes/no questions with your group to crack the case.",
+    "packNotFoundTitle": "Pack not found"
+  },
   "ErrorBoundary": {
     "title": "Something went wrong",
     "description": "This page hit an unexpected error. Try again. If it keeps happening, reload the page.",

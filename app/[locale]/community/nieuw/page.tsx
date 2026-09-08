@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CommunityNewClient } from "@/components/community/CommunityNewClient";
+import { isLocale } from "@/lib/i18n/locales";
 
 // A submission form, not content worth ranking — see app/profile/page.tsx
 // for why this is `noindex` rather than a robots.txt disallow, and for a
@@ -17,7 +18,13 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function CommunityNewPage() {
+export default async function CommunityNewPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  if (isLocale(locale)) setRequestLocale(locale);
   return (
     <div className="max-w-2xl">
       <CommunityNewClient />

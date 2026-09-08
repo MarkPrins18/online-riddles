@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, IBM_Plex_Mono } from "next/font/google";
-import Link from "next/link";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { CookieNoticeBanner } from "@/components/CookieNoticeBanner";
+import { Link } from "@/i18n/navigation";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -26,19 +26,21 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = t("description");
 
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
     title: {
       default: title,
       template: `%s — ${title}`,
     },
     description,
-    alternates: {
-      canonical: "/",
-    },
-    robots: {
-      index: true,
-      follow: true,
-    },
+    // Deliberately no blanket `alternates.canonical` or `robots` default
+    // here: both are inherited by any page that doesn't set its own (Next
+    // merges metadata down the tree), so a fixed "/" canonical or
+    // "index, follow" here would silently leak onto pages that need
+    // something else — /room/[code] (no canonical of its own to give),
+    // or app/not-found.tsx (Next already injects `noindex` for any
+    // 404-status page; an inherited "index, follow" here would
+    // contradict that). Pages that need a canonical or a non-default
+    // robots value set their own (see /privacy, /profile, /community/*).
     icons: {
       icon: "/icons/192",
       apple: "/icons/180",
@@ -89,7 +91,7 @@ export default async function RootLayout({
 }>) {
   const locale = await getLocale();
   const t = await getTranslations("RootLayout");
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
   return (
     <html

@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Card } from "@/components/ui/Card";
+import { Link } from "@/i18n/navigation";
 
+// No explicit `robots` here — Next.js already injects `noindex` on any
+// 404-status response (including this one) automatically.
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("NotFound");
   return {
     title: t("title"),
     description: t("description"),
-    robots: { index: false, follow: true },
   };
 }
 

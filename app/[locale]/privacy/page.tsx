@@ -1,14 +1,20 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Card } from "@/components/ui/Card";
+import { Link } from "@/i18n/navigation";
+import { isLocale } from "@/lib/i18n/locales";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
   const t = await getTranslations("Privacy");
   return {
     title: t("title"),
     description: t("intro"),
-    alternates: { canonical: "/privacy" },
+    alternates: { canonical: locale === "nl" ? "/nl/privacy" : "/privacy" },
   };
 }
 
@@ -21,7 +27,13 @@ function Section({ heading, body }: { heading: string; body: string }) {
   );
 }
 
-export default async function PrivacyPage() {
+export default async function PrivacyPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  if (isLocale(locale)) setRequestLocale(locale);
   const t = await getTranslations("Privacy");
 
   return (

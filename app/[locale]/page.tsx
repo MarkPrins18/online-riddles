@@ -1,19 +1,41 @@
-import Link from "next/link";
+import { use } from "react";
+import type { Metadata } from "next";
+import NextLink from "next/link";
 import { useTranslations } from "next-intl";
+import { setRequestLocale } from "next-intl/server";
 import { CreateRoomForm } from "@/components/lobby/CreateRoomForm";
 import { JoinRoomForm } from "@/components/lobby/JoinRoomForm";
 import { Card } from "@/components/ui/Card";
 import { HowToPlayButton } from "@/components/HowToPlayButton";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { LocalizedLanguageSwitcher } from "@/components/LocalizedLanguageSwitcher";
+import { Link } from "@/i18n/navigation";
+import { isLocale } from "@/lib/i18n/locales";
 
-export default function Home() {
+// No title/description override — the root layout's default ("DetectiveNights"
+// / the tagline) already fits the homepage; only the canonical needs to be
+// locale-aware here (see CommunityPage's generateMetadata for why a plain
+// relative path isn't enough once /nl exists as a separate URL).
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return {
+    alternates: { canonical: locale === "nl" ? "/nl" : "/" },
+  };
+}
+
+export default function Home({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = use(params);
+  if (isLocale(locale)) setRequestLocale(locale);
   const t = useTranslations("HomePage");
 
   return (
     <main id="main-content" className="flex flex-1 flex-col items-center justify-center px-6 py-16">
       <div className="w-full max-w-3xl">
         <div className="flex justify-end">
-          <LanguageSwitcher />
+          <LocalizedLanguageSwitcher pathname="/" />
         </div>
 
         {/* Cover: title stamped on a tab, notes typed off to the side —
@@ -57,9 +79,9 @@ export default function Home() {
           <Link href="/community" className="underline decoration-accent/60 hover:text-accent">
             {t("communityLink")}
           </Link>
-          <Link href="/profile" className="underline decoration-accent/60 hover:text-accent">
+          <NextLink href="/profile" className="underline decoration-accent/60 hover:text-accent">
             {t("profileLink")}
-          </Link>
+          </NextLink>
           <HowToPlayButton />
         </div>
       </div>

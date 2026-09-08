@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CommunityMineClient } from "@/components/community/CommunityMineClient";
+import { isLocale } from "@/lib/i18n/locales";
 
 // Per-player content (the caller's own packs, published or not) — see
 // app/profile/page.tsx for why this is `noindex` rather than only a
@@ -17,6 +18,12 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function CommunityMinePage() {
+export default async function CommunityMinePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  if (isLocale(locale)) setRequestLocale(locale);
   return <CommunityMineClient />;
 }

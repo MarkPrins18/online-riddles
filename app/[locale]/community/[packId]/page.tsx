@@ -1,10 +1,11 @@
 import { cache } from "react";
 import type { Metadata } from "next";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CommunityPackDetailClient } from "@/components/community/CommunityPackDetailClient";
 import { createPublicClient } from "@/lib/supabase/publicClient";
 import { getOwnPack } from "@/lib/supabase/communityPacks";
 import { listPuzzlesForPack } from "@/lib/supabase/communityPuzzles";
+import { isLocale } from "@/lib/i18n/locales";
 
 // Anon-key read, same rows a crawler (or any anonymous visitor) can see —
 // RLS only returns a pack here when it's published, so a null result means
@@ -23,10 +24,9 @@ const getPublicPackData = cache(async (packId: string, locale: string) => {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ packId: string }>;
+  params: Promise<{ locale: string; packId: string }>;
 }): Promise<Metadata> {
-  const { packId } = await params;
-  const locale = await getLocale();
+  const { locale, packId } = await params;
   const t = await getTranslations("Metadata");
   const { pack, puzzles } = await getPublicPackData(packId, locale);
 
@@ -40,11 +40,12 @@ export async function generateMetadata({
     theme: pack.theme,
     count: puzzles.length,
   });
+  const path = `/community/${packId}`;
 
   return {
     title,
     description,
-    alternates: { canonical: `/community/${packId}` },
+    alternates: { canonical: locale === "nl" ? `/nl${path}` : path },
     openGraph: { title, description, type: "article" },
     twitter: { title, description },
   };
@@ -53,10 +54,10 @@ export async function generateMetadata({
 export default async function CommunityPackPage({
   params,
 }: {
-  params: Promise<{ packId: string }>;
+  params: Promise<{ locale: string; packId: string }>;
 }) {
-  const { packId } = await params;
-  const locale = await getLocale();
+  const { locale, packId } = await params;
+  if (isLocale(locale)) setRequestLocale(locale);
   const { pack, puzzles } = await getPublicPackData(packId, locale);
 
   const jsonLd = pack

@@ -4,7 +4,7 @@ import { createPublicClient } from "@/lib/supabase/publicClient";
 // No production domain is hardcoded here — set NEXT_PUBLIC_SITE_URL once a
 // domain is chosen so these URLs point at the real deployment instead of
 // localhost (see app/robots.ts).
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 // Well under Google's 50,000-URL-per-sitemap limit — a single sitemap.ts
 // (no sharding via generateSitemaps) is enough for that. If the published
@@ -14,10 +14,28 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 // path, so don't add the sharding half without the other.
 const MAX_PACK_URLS = 20000;
 
+type LocalizedEntry = Omit<MetadataRoute.Sitemap[number], "url" | "alternates">;
+
+// Every indexable page lives under app/[locale] (see i18n/routing.ts):
+// English is unprefixed ("as-needed"), Dutch gets an explicit /nl prefix.
+// One `path` (e.g. "/community/<id>") is therefore always two URLs here,
+// each pointing at the other via `alternates.languages` — the sitemap's
+// own hreflang signal, on top of the `Link` response header next-intl's
+// middleware already adds to every response (alternateLinks: true).
+function localizedUrls(path: string, entry: LocalizedEntry = {}): MetadataRoute.Sitemap {
+  const enUrl = `${siteUrl}${path}`;
+  const nlUrl = `${siteUrl}/nl${path}`;
+  const alternates = { languages: { en: enUrl, nl: nlUrl } };
+  return [
+    { url: enUrl, alternates, ...entry },
+    { url: nlUrl, alternates, ...entry },
+  ];
+}
+
 const STATIC_ROUTES: MetadataRoute.Sitemap = [
-  { url: siteUrl, changeFrequency: "weekly", priority: 1 },
-  { url: `${siteUrl}/community`, changeFrequency: "daily", priority: 0.8 },
-  { url: `${siteUrl}/privacy`, changeFrequency: "yearly", priority: 0.3 },
+  ...localizedUrls("", { changeFrequency: "weekly", priority: 1 }),
+  ...localizedUrls("/community", { changeFrequency: "daily", priority: 0.8 }),
+  ...localizedUrls("/privacy", { changeFrequency: "yearly", priority: 0.3 }),
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -40,12 +58,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .range(0, MAX_PACK_URLS - 1);
     if (error) throw error;
 
-    packUrls = (packs ?? []).map((pack) => ({
-      url: `${siteUrl}/community/${pack.id}`,
-      lastModified: pack.created_at,
-      changeFrequency: "monthly",
-      priority: 0.5,
-    }));
+    packUrls = (packs ?? []).flatMap((pack) =>
+      localizedUrls(`/community/${pack.id}`, {
+        lastModified: pack.created_at,
+        changeFrequency: "monthly",
+        priority: 0.5,
+      })
+    );
   } catch (error) {
     console.error("sitemap: failed to load community packs", error);
   }

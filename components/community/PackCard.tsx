@@ -1,9 +1,9 @@
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 import type { StoryPack } from "@/types/puzzle";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { FavoriteButton } from "@/components/community/FavoriteButton";
+import { Link } from "@/i18n/navigation";
 
 export function PackCard({
   pack,

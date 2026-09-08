@@ -19,7 +19,14 @@ const labelClasses = "font-mono text-xs uppercase tracking-widest text-text-seco
  * author name to display instead of everything being anonymous. No email,
  * no account — just a name attached to the existing anonymous session.
  */
-export function SetNameForm({ onDone }: { onDone: (displayName: string) => void }) {
+export function SetNameForm({
+  onDone,
+  showAccountNudge = true,
+}: {
+  onDone: (displayName: string) => void;
+  /** Hide the "or link an account" nudge when already shown inside AccountModal. */
+  showAccountNudge?: boolean;
+}) {
   const [name, setName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -65,16 +72,18 @@ export function SetNameForm({ onDone }: { onDone: (displayName: string) => void 
           {isSubmitting ? t("saving") : t("submit")}
         </Button>
       </form>
-      <p className="mt-3 font-mono text-xs text-text-secondary">
-        {t("accountNudge")}{" "}
-        <button
-          type="button"
-          onClick={() => setAccountModalOpen(true)}
-          className="underline decoration-accent/60 hover:text-accent"
-        >
-          {t("accountNudgeLink")}
-        </button>
-      </p>
+      {showAccountNudge && (
+        <p className="mt-3 font-mono text-xs text-text-secondary">
+          {t("accountNudge")}{" "}
+          <button
+            type="button"
+            onClick={() => setAccountModalOpen(true)}
+            className="underline decoration-accent/60 hover:text-accent"
+          >
+            {t("accountNudgeLink")}
+          </button>
+        </p>
+      )}
       {accountModalOpen && <AccountModal onClose={() => setAccountModalOpen(false)} />}
     </Card>
   );

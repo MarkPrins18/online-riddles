@@ -189,7 +189,11 @@
     "newPackButton": "New pack",
     "cancel": "Cancel",
     "addedNoticePrefix": "“{title}” was added. Don't forget to publish your pack via",
-    "myPacksLink": "My packs"
+    "myPacksLink": "My packs",
+    "chooseHeading": "Before your first riddle",
+    "chooseSubtitle": "Create an account so your name and submissions carry over to other devices, or just set a name for this session.",
+    "createAccountButton": "Create account / log in",
+    "skipToNameOnly": "No account, just set a name"
   },
   "CommunityMineClient": {
     "loading": "Loading...",

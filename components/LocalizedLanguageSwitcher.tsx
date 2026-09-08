@@ -1,5 +1,5 @@
 import { getLocale } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
+import { getPathname } from "@/i18n/navigation";
 import { locales, type Locale } from "@/lib/i18n/locales";
 
 const LOCALE_LABELS: Record<Locale, string> = {
@@ -15,8 +15,17 @@ const LOCALE_LABELS: Record<Locale, string> = {
  * cookie, so a cookie flip alone wouldn't change anything here. Not shared
  * with LanguageSwitcher (used on /room, which stays outside [locale])
  * because the two need genuinely different navigation mechanics, not just
- * different markup. Server component: a real <a href> per locale needs no
- * client-side state or transition here, unlike the cookie-writing version.
+ * different markup.
+ *
+ * Deliberately a plain `<a>` (not next-intl's `Link`, which soft-navigates
+ * via the Next.js router): app/layout.tsx sets `<html lang>` from the same
+ * request-scoped locale that app/[locale]/... does, but it's the *root*
+ * layout, shared by every route including the ones outside [locale] — a
+ * client-side transition between two [locale] segments reuses that shared
+ * layout instead of re-running it, so `<html lang>` (and anything else the
+ * root layout computes from the locale) is left stale until a full
+ * reload. A plain `<a>` forces exactly that full reload, which is exactly
+ * what a language switch should do anyway.
  */
 export async function LocalizedLanguageSwitcher({
   pathname,
@@ -44,14 +53,13 @@ export async function LocalizedLanguageSwitcher({
             {LOCALE_LABELS[option]}
           </span>
         ) : (
-          <Link
+          <a
             key={option}
-            href={pathname}
-            locale={option}
+            href={getPathname({ href: pathname, locale: option })}
             className="rounded-sm px-2 py-1 transition-colors hover:text-accent"
           >
             {LOCALE_LABELS[option]}
-          </Link>
+          </a>
         )
       )}
     </div>

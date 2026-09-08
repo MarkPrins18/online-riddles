@@ -1,10 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
 const DISMISS_KEY = "ors-cookie-notice-dismissed";
+const listeners = new Set<() => void>();
+
+function subscribe(onStoreChange: () => void) {
+  listeners.add(onStoreChange);
+  return () => listeners.delete(onStoreChange);
+}
+
+function getSnapshot() {
+  return window.localStorage.getItem(DISMISS_KEY) === "1";
+}
+
+// The server can't read localStorage — render dismissed there, and for the
+// client's first hydration pass too (which must match the server exactly
+// or React discards and fully re-renders this subtree). useSyncExternalStore
+// re-reads the real value right after hydration, without the mismatch a
+// plain `useState(() => localStorage...)` or a bare setState-in-useEffect
+// would cause.
+function getServerSnapshot() {
+  return true;
+}
 
 /**
  * Passive disclosure, not a consent flow — the only cookies this app sets
@@ -12,14 +32,12 @@ const DISMISS_KEY = "ors-cookie-notice-dismissed";
  * opt in/out of under GDPR. Just a link to /privacy and a dismiss button.
  */
 export function CookieNoticeBanner() {
-  const [isDismissed, setIsDismissed] = useState(() =>
-    typeof window === "undefined" ? true : window.localStorage.getItem(DISMISS_KEY) === "1"
-  );
+  const isDismissed = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const t = useTranslations("CookieNoticeBanner");
 
   function dismiss() {
     window.localStorage.setItem(DISMISS_KEY, "1");
-    setIsDismissed(true);
+    listeners.forEach((listener) => listener());
   }
 
   if (isDismissed) return null;

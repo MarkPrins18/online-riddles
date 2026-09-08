@@ -232,7 +232,7 @@
     "sending": "Sending...",
     "codeSentIntro": "We've sent a code to {email}.",
     "codeLabel": "Code",
-    "codePlaceholder": "123456",
+    "codePlaceholder": "Enter the code",
     "verify": "Confirm",
     "verifying": "Confirming...",
     "back": "Different email address",

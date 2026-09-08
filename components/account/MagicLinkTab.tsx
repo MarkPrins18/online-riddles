@@ -121,7 +121,10 @@ export function MagicLinkTab({ onSuccess }: { onSuccess: () => void }) {
         id="magic-link-code"
         inputMode="numeric"
         autoComplete="one-time-code"
-        maxLength={6}
+        // Code length is a Supabase project setting (Authentication →
+        // Emails → OTP length), not something this app controls — don't
+        // hardcode a specific digit count here, just a generous upper bound.
+        maxLength={10}
         value={code}
         onChange={(e) => setCode(e.target.value)}
         placeholder={t("codePlaceholder")}

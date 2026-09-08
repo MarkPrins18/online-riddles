@@ -232,7 +232,7 @@
     "sending": "Versturen...",
     "codeSentIntro": "We hebben een code gestuurd naar {email}.",
     "codeLabel": "Code",
-    "codePlaceholder": "123456",
+    "codePlaceholder": "Vul de code in",
     "verify": "Bevestigen",
     "verifying": "Bevestigen...",
     "back": "Ander e-mailadres",

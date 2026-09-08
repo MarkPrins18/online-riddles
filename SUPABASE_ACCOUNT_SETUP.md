@@ -5,7 +5,7 @@ Deze stappen horen bij de "Account koppelen"-feature (`components/account/`,
 dashboard**, niet in deze codebase, en zijn dus niet via een commit af te
 vinken.
 
-Het account-systeem heeft één inlogmethode: een 6-cijferige code per e-mail
+Het account-systeem heeft één inlogmethode: een code per e-mail
 ("Code per e-mail" in de account-modal, `MagicLinkTab.tsx`). Er is bewust
 géén wachtwoord-optie meer (verwijderd tijdens de production-readiness
 pass — zie CLAUDE.md item 9) — die vereiste een aparte "mode" (account
@@ -51,21 +51,27 @@ wordt nergens `auth.signUp()` of `updateUser({email})` aangeroepen.
 
 1. Ga naar **Authentication → Emails → Magic Link**.
 2. Klik op **"Source"** om de ruwe HTML te bewerken.
-3. Zorg dat de mail de variabele `{{ .Token }}` prominent toont (de
-   6-cijferige code die de speler in de app moet invullen) — de
-   standaardtekst benadrukt vooral een klikbare link, die deze flow niet
-   gebruikt (er wordt geen `emailRedirectTo` meegegeven, dus zo'n link
-   zou nergens correct heen gaan).
+3. Zorg dat de mail de variabele `{{ .Token }}` prominent toont (de code
+   die de speler in de app moet invullen) — de standaardtekst benadrukt
+   vooral een klikbare link, die deze flow niet gebruikt (er wordt geen
+   `emailRedirectTo` meegegeven, dus zo'n link zou nergens correct heen
+   gaan).
 4. Klik **Save changes**.
 
 Geen URL Configuration-stap nodig: zonder klik-door-link speelt Site
 URL/Redirect URLs voor deze feature geen rol.
 
+De lengte van `{{ .Token }}` zelf (**Authentication → Providers → Email
+→ "OTP Length"**, standaard 6, instelbaar per project) staat los van deze
+sjabloon-stap — de code-invoer in `MagicLinkTab.tsx` gaat bewust niet uit
+van een vaste lengte, dus wijzig deze instelling gerust zonder dat de app
+erop moet worden aangepast.
+
 ## Testen
 
 1. Open de app, ga naar de community-tab of `/profile` → "Account" →
    vul een e-mailadres in → "Stuur code".
-2. Check de inbox van dat e-mailadres — de mail moet de 6-cijferige code
+2. Check de inbox van dat e-mailadres — de mail moet de code
    duidelijk tonen.
 3. Vul de code in de app in → "Bevestigen".
 4. De "Account"-knop zou nu je e-mailadres moeten tonen in plaats van

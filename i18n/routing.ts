@@ -20,4 +20,13 @@ export const routing = defineRouting({
     sameSite: "lax",
     path: "/",
   },
+  // Without this, the proxy auto-redirects any unprefixed request back to
+  // whatever locale the cookie last recorded — so once a visitor had been
+  // on /nl even once, clicking "EN" (a plain navigation to "/") bounced
+  // straight back to /nl, because the cookie still said "nl". That made
+  // the switcher look broken/stuck on Dutch. The cookie itself is still
+  // written (localeCookie above) and still read manually by
+  // i18n/request.ts for pages outside [locale] (/room, /profile) — this
+  // only stops the proxy from using it to override an explicit URL.
+  localeDetection: false,
 });

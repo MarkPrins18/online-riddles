@@ -71,18 +71,26 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
             <CreateRoomForm />
           </div>
           <div className="relative hidden min-h-[420px] min-w-0 flex-[1_1_360px] items-end justify-center md:flex">
-            <svg aria-hidden="true" viewBox="0 0 400 400" className="block h-auto w-full max-w-[440px]">
-              <path
-                d="M120 150c0-14 40-24 80-24s80 10 80 24c0 6-10 10-24 13 4 8 6 18 6 28 0 34-28 62-62 62s-62-28-62-62c0-10 2-20 6-28-14-3-24-7-24-13Z"
-                fill="var(--ink)"
-              />
-              <path d="M150 126c4-30 24-46 50-46s46 16 50 46" fill="var(--ink)" />
-              <path d="M60 400c4-80 60-130 140-130s136 50 140 130Z" fill="var(--ink)" />
-              <rect x="128" y="150" width="144" height="12" fill="var(--danger)" />
-            </svg>
-            <p className="absolute left-0 top-[30px] max-w-[258px] rounded-[18px] border-[3px] border-ink bg-white px-4 py-3 text-base font-bold shadow-[4px_4px_0_var(--ink)]">
-              {t("exampleQuote")}
-            </p>
+            {/* Detective silhouette: shoulders, neck, head, then the fedora
+                (crown with a pinched top, red band, brim) drawn over it. The
+                speech bubble is anchored to the drawing itself, centered on
+                its top edge, so it always sits above the hat at any width. */}
+            <div className="relative w-full max-w-[440px]">
+              <svg aria-hidden="true" viewBox="0 0 400 400" className="block h-auto w-full max-w-[440px]">
+                <path d="M60 400c4-80 60-130 140-130s136 50 140 130Z" fill="var(--ink)" />
+                <rect x="178" y="236" width="44" height="44" fill="var(--ink)" />
+                <circle cx="200" cy="198" r="54" fill="var(--ink)" />
+                <path
+                  d="M145 140 L152 92 Q158 76 182 79 Q200 90 218 79 Q242 76 248 92 L255 140 Z"
+                  fill="var(--ink)"
+                />
+                <path d="M149.3 110 L250.7 110 L253 127 L147 127 Z" fill="var(--danger)" />
+                <ellipse cx="200" cy="140" rx="92" ry="15" fill="var(--ink)" />
+              </svg>
+              <p className="absolute left-0 top-0 max-w-[258px] -translate-y-1/2 rounded-[18px] border-[3px] border-ink bg-white px-4 py-3 text-base font-bold shadow-[4px_4px_0_var(--ink)]">
+                {t("exampleQuote")}
+              </p>
+            </div>
           </div>
         </section>
 

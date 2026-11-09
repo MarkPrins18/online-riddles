@@ -33,12 +33,12 @@ export function FinalScoreboard({
       className="redact-reveal rounded-lg border border-accent/40 bg-bg-secondary p-8 shadow-lg shadow-accent/10 sm:p-10"
       style={{ animation: "reveal-in 420ms cubic-bezier(0.16, 1, 0.3, 1)" }}
     >
-      <p className="font-mono text-xs uppercase tracking-widest text-accent">
+      <p className="text-sm font-bold text-accent">
         {t("caseFileClosed")}
       </p>
-      <h2 className="mt-3 font-serif text-3xl text-text-primary">{t("gameOver")}</h2>
+      <h2 className="mt-3 font-display uppercase text-3xl text-text-primary">{t("gameOver")}</h2>
       {winner && (
-        <p className="mt-2 font-mono text-sm text-accent">
+        <p className="mt-2 text-sm text-accent">
           {t("winner", { name: winner.name, score: winner.score })}
         </p>
       )}
@@ -46,10 +46,10 @@ export function FinalScoreboard({
       <ul className="mt-6 flex flex-col divide-y divide-white/5">
         {ranked.map((player, index) => (
           <li key={player.id} className="flex items-center justify-between py-3">
-            <span className="font-mono text-sm text-text-primary">
+            <span className="text-sm text-text-primary">
               {medalForRank(index) ?? `${index + 1}.`} {player.name}
             </span>
-            <span className="font-mono text-sm font-semibold text-accent">{player.score}</span>
+            <span className="text-sm font-semibold text-accent">{player.score}</span>
           </li>
         ))}
       </ul>

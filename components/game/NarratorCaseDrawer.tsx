@@ -40,10 +40,10 @@ export function NarratorCaseDrawer({
     <Drawer title={t("title")} onClose={onClose}>
       <div className="flex flex-col gap-4">
         <div>
-          <p className="mb-2 font-mono text-xs uppercase tracking-widest text-text-secondary">
+          <p className="mb-2 text-sm font-bold text-text-secondary">
             {title}
           </p>
-          <p className="font-serif text-base leading-relaxed text-text-primary/90">{scenario}</p>
+          <p className="text-base leading-relaxed text-text-primary/90">{scenario}</p>
         </div>
         <NarratorTensionPanel
           solution={solution}

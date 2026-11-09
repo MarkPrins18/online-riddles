@@ -43,7 +43,7 @@ export function ChatReactionPills({
           }`}
         >
           <span aria-hidden="true">{emoji}</span>
-          <span className="font-mono text-[10px]">{count}</span>
+          <span className="text-[10px]">{count}</span>
         </button>
       ))}
     </div>

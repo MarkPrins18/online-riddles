@@ -83,7 +83,7 @@ export function StartGameButton({
 
   return (
     <div className="flex flex-col gap-2">
-      {error && <p className="font-mono text-xs text-danger">{error}</p>}
+      {error && <p className="text-xs text-danger">{error}</p>}
       <Button
         onClick={handleStart}
         disabled={isStarting || players.length < 2 || settingsIncomplete}

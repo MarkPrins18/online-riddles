@@ -18,7 +18,7 @@ export default function Image() {
           alignItems: "center",
           justifyContent: "center",
           gap: 56,
-          background: "#241a10",
+          background: "#f6c326",
         }}
       >
         <div
@@ -26,7 +26,7 @@ export default function Image() {
             width: 220,
             height: 220,
             borderRadius: "9999px",
-            border: "5px solid #d9a441",
+            border: "6px solid #111111",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -36,9 +36,8 @@ export default function Image() {
           <div
             style={{
               fontSize: 96,
-              fontWeight: 700,
-              fontStyle: "italic",
-              color: "#d9a441",
+              fontWeight: 800,
+              color: "#111111",
               lineHeight: 1,
               transform: "translateY(-2%)",
             }}
@@ -50,9 +49,9 @@ export default function Image() {
           <div
             style={{
               fontSize: 88,
-              fontStyle: "italic",
-              fontWeight: 600,
-              color: "#f4ece1",
+              fontWeight: 800,
+              color: "#111111",
+              textTransform: "uppercase",
               lineHeight: 1.05,
             }}
           >
@@ -62,8 +61,8 @@ export default function Image() {
             style={{
               marginTop: 20,
               fontSize: 34,
-              color: "#d9a441",
-              letterSpacing: 1,
+              color: "#111111",
+              fontWeight: 500,
             }}
           >
             A lateral thinking puzzle game for groups

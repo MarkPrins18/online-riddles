@@ -29,7 +29,7 @@ export function Timer({
 
   if (durationSeconds == null) {
     return (
-      <span className="font-mono text-sm tabular-nums text-text-secondary">
+      <span className="text-sm tabular-nums text-text-secondary">
         {formatDuration(elapsedSeconds)}
       </span>
     );
@@ -41,7 +41,7 @@ export function Timer({
 
   return (
     <span
-      className={`font-mono text-sm tabular-nums ${isUrgent ? "font-bold text-danger" : "text-text-secondary"}`}
+      className={`text-sm tabular-nums ${isUrgent ? "font-bold text-danger" : "text-text-secondary"}`}
     >
       {/* Urgency isn't color-only: the bold weight above and this prefix
           both carry the signal for users who can't perceive the color change. */}

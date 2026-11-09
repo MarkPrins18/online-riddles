@@ -23,7 +23,7 @@ export default function Error({
   return (
     <div className="flex min-h-[60vh] items-center justify-center p-6">
       <Card tone="chrome" role="alert" className="max-w-md text-center">
-        <h1 className="font-serif text-xl text-text-primary">{t("title")}</h1>
+        <h1 className="font-display uppercase text-xl text-text-primary">{t("title")}</h1>
         <p className="mt-2 text-sm text-text-secondary">{t("description")}</p>
         <Button type="button" className="mt-5" onClick={() => retry()}>
           {t("retry")}

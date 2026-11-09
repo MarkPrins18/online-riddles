@@ -87,8 +87,8 @@ export function CommunityBrowseClient() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="font-serif text-3xl italic text-text-primary">{t("heading")}</h1>
-        <p className="mt-1 font-mono text-sm text-text-secondary">{t("subtitle")}</p>
+        <h1 className="font-display text-3xl uppercase text-text-primary">{t("heading")}</h1>
+        <p className="mt-1 text-sm text-text-secondary">{t("subtitle")}</p>
       </div>
 
       <div className="flex gap-2">
@@ -109,9 +109,9 @@ export function CommunityBrowseClient() {
       </div>
 
       {packs === null ? (
-        <p className="font-mono text-sm text-text-secondary">{t("loading")}</p>
+        <p className="text-sm text-text-secondary">{t("loading")}</p>
       ) : packs.length === 0 ? (
-        <p className="font-mono text-sm text-text-secondary">
+        <p className="text-sm text-text-secondary">
           {t("empty")}{" "}
           <Link href="/community/nieuw" className="underline decoration-accent/60 hover:text-accent">
             {t("emptyCta")}

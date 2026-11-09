@@ -125,7 +125,7 @@ export function NarratorGuessControls({
 
   if (pending.length === 0) {
     return (
-      <p className="font-mono text-sm text-text-secondary">{t("noPending")}</p>
+      <p className="text-sm text-text-secondary">{t("noPending")}</p>
     );
   }
 
@@ -137,8 +137,8 @@ export function NarratorGuessControls({
           className="flex flex-col gap-2 rounded-md border border-white/10 bg-bg-primary/60 p-3 sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
-            <p className="font-serif text-sm text-text-primary">{guess.text}</p>
-            <p className="font-mono text-xs text-text-secondary">· {guess.player_name}</p>
+            <p className="text-sm text-text-primary">{guess.text}</p>
+            <p className="text-xs text-text-secondary">· {guess.player_name}</p>
           </div>
           <div className="flex gap-2">
             <Button

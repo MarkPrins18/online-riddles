@@ -51,7 +51,7 @@ export function VoteButtons({
 
   return (
     <div className="flex flex-col items-end gap-1">
-      <div className="flex items-center gap-2 font-mono text-sm">
+      <div className="flex items-center gap-2 text-sm">
         <Button
           type="button"
           variant={myVote === 1 ? "primary" : "secondary"}
@@ -76,7 +76,7 @@ export function VoteButtons({
           {myVote === -1 ? "▼" : "▽"}
         </Button>
       </div>
-      {error && <p className="font-mono text-xs text-danger">{error}</p>}
+      {error && <p className="text-xs text-danger">{error}</p>}
     </div>
   );
 }

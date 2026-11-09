@@ -40,8 +40,8 @@ export function SessionRecapPanel({
 
   const content = (
     <>
-      <p className="mb-4 font-mono text-xs uppercase tracking-widest text-accent">{t("heading")}</p>
-      <ul className="flex flex-col gap-3 font-mono text-sm leading-relaxed text-text-primary">
+      <p className="mb-4 text-sm font-bold text-accent">{t("heading")}</p>
+      <ul className="flex flex-col gap-3 text-sm leading-relaxed text-text-primary">
         {recap.mvpNarrator && (
           <li>
             {t("mvpNarrator", {

@@ -40,7 +40,7 @@ export function AccusationReveal({
   if (counting) {
     return (
       <Card>
-        <p className="font-mono text-sm text-text-secondary">{t("counting")}</p>
+        <p className="text-sm text-text-secondary">{t("counting")}</p>
       </Card>
     );
   }
@@ -67,27 +67,27 @@ export function AccusationReveal({
       className="border-accent/40"
       style={{ animation: "reveal-in 300ms ease-out" }}
     >
-      <p className="font-mono text-xs uppercase tracking-widest text-accent">
+      <p className="text-sm font-bold text-accent">
         {t("heading")}
       </p>
 
-      <p className="mt-2 font-serif text-base text-text-primary">
+      <p className="mt-2 text-base text-text-primary">
         {accusedName
           ? t(wasIdentified ? "correctlyAccused" : "wrongfullyAccused", { name: accusedName })
           : t("noConsensus")}
       </p>
-      <p className="mt-1 font-serif text-base text-text-primary">
+      <p className="mt-1 text-base text-text-primary">
         {t("actualSaboteur", { name: saboteurName })}
       </p>
-      {nearMiss && <p className="mt-1 font-mono text-xs text-text-secondary">{t("nearMiss")}</p>}
+      {nearMiss && <p className="mt-1 text-xs text-text-secondary">{t("nearMiss")}</p>}
 
       {iAmSaboteur ? (
-        <p className="mt-3 font-mono text-xs text-text-secondary">
+        <p className="mt-3 text-xs text-text-secondary">
           {t("saboteurOutcome", { points: saboteurBonus })}
         </p>
       ) : (
         myVote && (
-          <p className="mt-3 font-mono text-xs text-text-secondary">
+          <p className="mt-3 text-xs text-text-secondary">
             {myVote.target_id === saboteurId
               ? t("yourVoteCorrect", { points: ACCUSATION_CORRECT_BONUS })
               : t("yourVoteWrong", { points: ACCUSATION_WRONG_PENALTY })}

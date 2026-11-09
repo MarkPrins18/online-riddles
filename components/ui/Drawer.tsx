@@ -70,9 +70,9 @@ export function Drawer({
         <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
           <p
             id={titleId}
-            className="relative font-mono text-xs uppercase tracking-widest text-text-secondary before:absolute before:-left-2 before:-top-2 before:h-3 before:w-8 before:-rotate-3 before:bg-accent/25 before:content-['']"
+            className="font-display text-xl uppercase tracking-wide text-text-primary"
           >
-            <span className="relative">{title}</span>
+            {title}
           </p>
           <button
             type="button"

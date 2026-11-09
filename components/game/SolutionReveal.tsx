@@ -52,19 +52,19 @@ export function SolutionReveal({
       className="redact-reveal rounded-lg border border-accent/40 bg-bg-secondary p-6 shadow-lg shadow-accent/10"
       style={{ animation: "reveal-in 420ms cubic-bezier(0.16, 1, 0.3, 1)" }}
     >
-      <p className="font-mono text-xs uppercase tracking-widest text-accent">
+      <p className="text-sm font-bold text-accent">
         {t("caseClosed")}
       </p>
-      <h2 className="mt-2 font-serif text-2xl text-text-primary">{puzzle.title}</h2>
-      <p className="mt-1 font-mono text-sm text-accent">
+      <h2 className="mt-2 font-display uppercase text-2xl text-text-primary">{puzzle.title}</h2>
+      <p className="mt-1 text-sm text-accent">
         {solverName ? t("solvedBy", { name: solverName }) : t("nobodySolved")}
       </p>
-      <p className="mt-4 font-serif text-base leading-relaxed text-text-primary/90">
+      <p className="mt-4 text-base leading-relaxed text-text-primary/90">
         {puzzle.solution}
       </p>
       {voteState && (
         <div className="mt-4 flex flex-col gap-3 border-t border-white/5 pt-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-mono text-xs text-text-secondary">{t("ratePrompt")}</p>
+          <p className="text-xs text-text-secondary">{t("ratePrompt")}</p>
           <VoteButtons puzzleId={puzzle.id} score={voteState.score} myVote={voteState.myVote} />
         </div>
       )}

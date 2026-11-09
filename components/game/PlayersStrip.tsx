@@ -40,19 +40,19 @@ export function PlayersStrip({
               player.id === narratorId
                 ? "border-accent bg-accent/20 text-accent"
                 : "border-white/15 bg-bg-secondary text-text-secondary"
-            } font-mono text-[10px]`}
+            } text-[10px]`}
             title={player.name}
           >
             {initialsFor(player.name)}
           </span>
         ))}
         {overflow > 0 && (
-          <span className="flex h-6 w-6 items-center justify-center rounded-full border border-white/15 bg-bg-secondary font-mono text-[10px] text-text-secondary">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full border border-white/15 bg-bg-secondary text-[10px] text-text-secondary">
             +{overflow}
           </span>
         )}
       </span>
-      <span className="hidden font-mono text-xs text-text-secondary sm:inline">
+      <span className="hidden text-xs text-text-secondary sm:inline">
         {t("count", { count: players.length })}
       </span>
     </button>

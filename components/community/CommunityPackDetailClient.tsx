@@ -56,11 +56,11 @@ export function CommunityPackDetailClient({ packId }: { packId: string }) {
   }, [packId, locale]);
 
   if (pack === undefined) {
-    return <p className="font-mono text-sm text-text-secondary">{t("loading")}</p>;
+    return <p className="text-sm text-text-secondary">{t("loading")}</p>;
   }
 
   if (pack === null) {
-    return <p className="font-mono text-sm text-text-secondary">{t("notFound")}</p>;
+    return <p className="text-sm text-text-secondary">{t("notFound")}</p>;
   }
 
   const sortedPuzzles = [...puzzles].sort(
@@ -70,14 +70,14 @@ export function CommunityPackDetailClient({ packId }: { packId: string }) {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="font-serif text-3xl italic text-text-primary">{pack.name}</h1>
+        <h1 className="font-display text-3xl uppercase text-text-primary">{pack.name}</h1>
         <div className="mt-2 flex gap-2">
           <Badge tone="accent">{pack.theme}</Badge>
         </div>
       </div>
 
       {sortedPuzzles.length === 0 ? (
-        <p className="font-mono text-sm text-text-secondary">{t("noPuzzles")}</p>
+        <p className="text-sm text-text-secondary">{t("noPuzzles")}</p>
       ) : (
         <div className="flex flex-col gap-4">
           {sortedPuzzles.map((puzzle) => (

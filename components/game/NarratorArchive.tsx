@@ -26,7 +26,7 @@ export function NarratorArchive({
 
   if (answered.length === 0 && resolvedGuesses.length === 0) {
     return (
-      <p className="font-mono text-sm text-text-secondary">{t("empty")}</p>
+      <p className="text-sm text-text-secondary">{t("empty")}</p>
     );
   }
 
@@ -34,7 +34,7 @@ export function NarratorArchive({
     <div className="flex flex-col gap-6">
       {resolvedGuesses.length > 0 && (
         <div>
-          <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary">
+          <p className="mb-3 text-sm font-bold text-text-secondary">
             {t("solutionsHeading")}
           </p>
           <ul className="flex flex-col gap-3">
@@ -44,8 +44,8 @@ export function NarratorArchive({
                 className="flex flex-col gap-2 rounded-md border border-white/10 bg-bg-primary/60 p-3 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div>
-                  <p className="font-serif text-sm text-text-primary">{guess.text}</p>
-                  <p className="font-mono text-xs text-text-secondary">· {guess.player_name}</p>
+                  <p className="text-sm text-text-primary">{guess.text}</p>
+                  <p className="text-xs text-text-secondary">· {guess.player_name}</p>
                 </div>
                 <Badge tone={guess.status === "correct" ? "accent" : "danger"}>
                   {guess.status === "correct" ? t("correct") : t("incorrect")}
@@ -58,7 +58,7 @@ export function NarratorArchive({
 
       {answered.length > 0 && (
         <div>
-          <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary">
+          <p className="mb-3 text-sm font-bold text-text-secondary">
             {t("questionsHeading")}
           </p>
           <div className="flex flex-col gap-3">

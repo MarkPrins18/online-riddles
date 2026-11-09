@@ -46,8 +46,8 @@ export default function GlobalError({
           padding: "2rem",
           textAlign: "center",
           fontFamily: "system-ui, sans-serif",
-          background: "#15120e",
-          color: "#ede7d8",
+          background: "#111111",
+          color: "#f3e9d2",
         }}
       >
         <h1>{copy.title}</h1>
@@ -57,7 +57,7 @@ export default function GlobalError({
           style={{
             padding: "0.5rem 1.5rem",
             borderRadius: "9999px",
-            border: "1px solid #ede7d8",
+            border: "1px solid #f3e9d2",
             background: "transparent",
             color: "inherit",
             cursor: "pointer",

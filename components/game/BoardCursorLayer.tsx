@@ -1,6 +1,6 @@
 import type { BoardCursor } from "@/types/boardCursor";
 
-const CURSOR_PALETTE = ["#d9a441", "#7fb3d5", "#e07a7a", "#8fbf8f", "#c98fd9", "#e0b56b"];
+const CURSOR_PALETTE = ["#f6c326", "#7fb3d5", "#e07a7a", "#8fbf8f", "#c98fd9", "#e0b56b"];
 
 function colorForPlayerId(id: string): string {
   let hash = 0;
@@ -30,7 +30,7 @@ export function BoardCursorLayer({
               style={{ backgroundColor: colorForPlayerId(cursor.player_id) }}
             />
             <p
-              className="mt-1 whitespace-nowrap rounded bg-black/70 px-1.5 py-0.5 font-mono text-[10px] text-white/90"
+              className="mt-1 whitespace-nowrap rounded bg-black/70 px-1.5 py-0.5 text-[10px] text-white/90"
               style={{ color: colorForPlayerId(cursor.player_id) }}
             >
               {cursor.name}

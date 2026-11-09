@@ -11,9 +11,9 @@ import type { Category, Puzzle } from "@/types/puzzle";
 import { Button } from "@/components/ui/Button";
 
 const inputClasses =
-  "rounded-md border border-white/10 bg-bg-primary px-3 py-2.5 font-mono text-sm text-text-primary placeholder:text-text-secondary/60 focus:border-accent-muted";
+  "rounded-lg border-2 border-border bg-bg-primary px-3 py-2.5 text-base text-text-primary placeholder:text-text-secondary/60 focus:border-accent";
 const textareaClasses = `${inputClasses} min-h-24 resize-y`;
-const labelClasses = "font-mono text-xs uppercase tracking-widest text-text-secondary";
+const labelClasses = "text-sm font-bold text-text-secondary";
 
 // Community creators pick from easy/hard only — self-reporting "medium"
 // turned out to mean nothing consistent (see difficulty.ts's round ramp,
@@ -185,7 +185,7 @@ export function RiddleForm({
         className={inputClasses}
       />
 
-      {error && <p className="font-mono text-xs text-danger">{error}</p>}
+      {error && <p className="text-xs text-danger">{error}</p>}
       <div className="flex gap-2">
         <Button type="submit" disabled={isSubmitting || !canSubmit}>
           {isSubmitting ? t("saving") : isEditing ? t("saveChanges") : t("addRiddle")}

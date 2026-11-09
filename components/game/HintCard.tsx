@@ -5,11 +5,11 @@ export function HintCard({ hint }: { hint: string }) {
 
   return (
     <div
-      className="w-full rounded-md border-l-4 border-dashed border-l-[#3d2609] bg-paper p-4 text-ink shadow-sm"
+      className="w-full rounded-xl border-2 border-ink bg-accent p-4 text-ink"
       style={{ animation: "reveal-in 180ms ease-out" }}
     >
-      <p className="font-mono text-[11px] uppercase tracking-widest text-[#3d2609]">{t("label")}</p>
-      <p className="mt-1.5 font-serif text-base font-medium leading-snug">{hint}</p>
+      <p className="font-display text-base uppercase tracking-wide text-ink">{t("label")}</p>
+      <p className="mt-1.5 text-base font-medium leading-snug">{hint}</p>
     </div>
   );
 }

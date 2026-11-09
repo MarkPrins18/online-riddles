@@ -36,7 +36,7 @@ export function InterrogationLog({
 
   if (questions.length === 0 && hints.length === 0) {
     return (
-      <p className="font-mono text-sm text-text-secondary">{t("empty")}</p>
+      <p className="text-sm text-text-secondary">{t("empty")}</p>
     );
   }
 

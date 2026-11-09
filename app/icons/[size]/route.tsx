@@ -36,7 +36,7 @@ export async function GET(
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#241a10",
+          background: "#f6c326",
         }}
       >
         <div
@@ -44,7 +44,7 @@ export async function GET(
             width: size - ringInset * 2,
             height: size - ringInset * 2,
             borderRadius: "9999px",
-            border: `${ringWidth}px solid #d9a441`,
+            border: `${ringWidth}px solid #111111`,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -53,9 +53,8 @@ export async function GET(
           <div
             style={{
               fontSize: size * 0.42,
-              fontWeight: 700,
-              fontStyle: "italic",
-              color: "#d9a441",
+              fontWeight: 800,
+              color: "#111111",
               lineHeight: 1,
               transform: "translateY(-2%)",
             }}

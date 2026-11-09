@@ -30,12 +30,20 @@
     "home": "Back to home"
   },
   "HomePage": {
-    "coverStamp": "Case file · open",
     "title": "DetectiveNights",
-    "subtitle": "One Mystery. All Detectives. Who Cracks the Case?",
-    "newFile": "New file",
-    "existingFile": "Existing file",
-    "communityLink": "Browse community riddles →",
+    "badge": "Party game · 3 to 12 players",
+    "heading": "Who cracks the case?",
+    "lead": "One player knows the solution. Everyone else asks yes/no questions until someone gets it.",
+    "exampleQuote": "“Every Sunday he spends exactly an hour in an empty storage unit…”",
+    "newFile": "New game",
+    "existingFile": "Join with a code",
+    "step1Title": "1. Start a room",
+    "step1Body": "Share the code with your friends. No account needed.",
+    "step2Title": "2. Question the Narrator",
+    "step2Body": "Only yes or no. Every 'yes' becomes a clue.",
+    "step3Title": "3. Crack the case",
+    "step3Body": "First to guess it scores. Then someone else narrates.",
+    "communityLink": "Community riddles",
     "profileLink": "My stats"
   },
   "HowToPlay": {
@@ -83,19 +91,19 @@
   },
   "CreateRoomForm": {
     "nameLabel": "Your name",
-    "namePlaceholder": "Detective...",
+    "namePlaceholder": "E.g. Sam",
     "submitting": "Creating room...",
-    "submit": "Start a new room",
+    "submit": "Start a room",
     "error": "Couldn't create a room. Please try again."
   },
   "JoinRoomForm": {
     "nameLabel": "Your name",
-    "namePlaceholder": "Detective...",
+    "namePlaceholder": "E.g. Sam",
     "codeLabel": "Room code",
     "codePlaceholder": "XXXXXX",
     "noRoomFound": "No room found with that code.",
     "submitting": "Joining...",
-    "submit": "Join room",
+    "submit": "Join",
     "error": "Couldn't join the room. Please try again.",
     "roomFull": "This room is full."
   },

@@ -67,24 +67,24 @@ export function BoardQuestionCard({
             e.stopPropagation();
             onDelete();
           }}
-          className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 font-mono text-xs text-white/80 hover:bg-black"
+          className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-xs text-white/80 hover:bg-black"
           aria-label={t("deleteAriaLabel")}
         >
           ×
         </button>
       )}
-      <p className="font-mono text-[11px] uppercase tracking-widest text-black/60">
+      <p className="text-xs font-bold text-black/60">
         {t("questionLabel")}
       </p>
       {question ? (
         <>
-          <p className="mt-1 font-serif text-sm font-medium leading-snug">{question.text}</p>
-          <p className="mt-3 font-mono text-xs font-bold uppercase tracking-widest text-[#3d2609]">
+          <p className="mt-1 text-sm font-medium leading-snug">{question.text}</p>
+          <p className="mt-3 text-sm font-extrabold text-[#3d2609]">
             {question.answer ? ANSWER_LABEL[question.answer] : "..."}
           </p>
         </>
       ) : (
-        <p className="mt-1 font-mono text-xs text-black/60">{t("notFound")}</p>
+        <p className="mt-1 text-xs text-black/60">{t("notFound")}</p>
       )}
       {hoverSide && <ConnectorDot side={hoverSide} onPointerDown={onConnectorPointerDown} />}
     </div>

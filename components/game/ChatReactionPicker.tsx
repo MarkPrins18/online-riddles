@@ -91,7 +91,7 @@ export function ChatReactionPicker({
         <div className="flex max-h-56 w-56 flex-col gap-2 overflow-y-auto">
           {EMOJI_CATEGORIES.map((category) => (
             <div key={category.labelKey}>
-              <p className="font-mono text-[10px] uppercase tracking-widest text-text-secondary">
+              <p className="text-xs font-bold text-text-secondary">
                 {t(category.labelKey)}
               </p>
               <div className="mt-1 flex flex-wrap gap-1">
@@ -119,18 +119,18 @@ export function ChatReactionPicker({
               placeholder={t("customPlaceholder")}
               aria-label={t("customLabel")}
               maxLength={8}
-              className="w-full rounded-md border border-white/10 bg-bg-primary px-1.5 py-1 font-mono text-xs text-text-primary placeholder:text-text-secondary/60 focus:border-accent-muted"
+              className="w-full rounded-md border border-white/10 bg-bg-primary px-1.5 py-1 text-xs text-text-primary placeholder:text-text-secondary/60 focus:border-accent-muted"
             />
             <button
               type="submit"
               disabled={!customValue.trim()}
-              className="shrink-0 rounded-md border border-white/10 px-1.5 py-1 font-mono text-[10px] uppercase tracking-widest text-text-secondary hover:border-accent-muted disabled:opacity-50"
+              className="shrink-0 rounded-md border border-white/10 px-1.5 py-1 text-xs font-bold text-text-secondary hover:border-accent-muted disabled:opacity-50"
             >
               {t("customSubmit")}
             </button>
           </form>
           {customError && (
-            <p role="alert" className="font-mono text-[10px] text-danger">
+            <p role="alert" className="text-[10px] text-danger">
               {customError}
             </p>
           )}

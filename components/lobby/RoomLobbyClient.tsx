@@ -20,7 +20,7 @@ import { NarratorPicker } from "./NarratorPicker";
 import { RoomSettingsForm } from "./RoomSettingsForm";
 import { LeaveRoomButton } from "./LeaveRoomButton";
 
-const CARD_TITLE_CLASS = "mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary";
+const CARD_TITLE_CLASS = "mb-3 text-sm font-bold text-text-secondary";
 
 export function RoomLobbyClient({ code }: { code: string }) {
   const [playerId, setPlayerId] = useState(() => getStoredPlayerId(code));
@@ -49,7 +49,7 @@ export function RoomLobbyClient({ code }: { code: string }) {
 
   if (state.error) {
     return (
-      <p className="font-mono text-sm text-danger">
+      <p className="text-sm text-danger">
         {t("errorPrefix", { error: state.error })}
       </p>
     );
@@ -57,7 +57,7 @@ export function RoomLobbyClient({ code }: { code: string }) {
 
   if (!state.room) {
     return (
-      <p className="font-mono text-sm text-text-secondary">{t("loadingRoom")}</p>
+      <p className="text-sm text-text-secondary">{t("loadingRoom")}</p>
     );
   }
 
@@ -121,7 +121,7 @@ export function RoomLobbyClient({ code }: { code: string }) {
             />
           </>
         ) : (
-          <p className="text-center font-mono text-sm text-text-secondary">
+          <p className="text-center text-sm text-text-secondary">
             {t("waitingForHost")}
           </p>
         )

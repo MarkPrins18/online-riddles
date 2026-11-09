@@ -11,45 +11,44 @@ const MAX_SCOREBOARD_ROWS = 8;
 // Same palette as app/globals.css — canvas can't read CSS variables, so
 // these are copied by hand. Keep in sync if the theme colors ever change.
 const COLORS = {
-  bgPrimary: "#15120e",
-  bgCase: "#241a10",
-  accent: "#d9a441",
-  accentMuted: "#8a6b2e",
-  accentSecondary: "#6f93ad",
-  textPrimary: "#ede7d8",
-  textSecondary: "#9c9080",
-  danger: "#ab3f2f",
+  bgPrimary: "#111111",
+  bgCase: "#1c1c1c",
+  accent: "#f6c326",
+  accentMuted: "#c99a12",
+  accentSecondary: "#e5533f",
+  textPrimary: "#f3e9d2",
+  textSecondary: "#b9b2a2",
+  danger: "#e5533f",
 };
 
 type HighlightLine = { label: string; text: string; color: string };
 
 /**
- * Resolves the real Fraunces/Plex Mono family names next/font generated
- * (something like `'__Fraunces_36bd41', ...`) so the shared image actually
+ * Resolves the real Anton/Figtree family names next/font generated
+ * (something like `'__Anton_36bd41', ...`) so the shared image actually
  * matches the app's look instead of a generic system font. Best-effort: any
  * failure (SSR, unusual browser, a font that never loads) just falls back
  * to the generic families, which still read fine.
  */
-async function resolveFonts(): Promise<{ serif: string; mono: string }> {
-  const fallback = { serif: "Georgia, serif", mono: "Consolas, monospace" };
+async function resolveFonts(): Promise<{ display: string; body: string }> {
+  const fallback = { display: "Impact, sans-serif", body: "system-ui, sans-serif" };
   if (typeof document === "undefined" || !("fonts" in document)) return fallback;
 
   try {
     const styles = getComputedStyle(document.documentElement);
-    const serifVar = styles.getPropertyValue("--font-serif").trim();
-    const monoVar = styles.getPropertyValue("--font-mono").trim();
-    const serif = serifVar ? `${serifVar}, ${fallback.serif}` : fallback.serif;
-    const mono = monoVar ? `${monoVar}, ${fallback.mono}` : fallback.mono;
+    const displayVar = styles.getPropertyValue("--font-display").trim();
+    const bodyVar = styles.getPropertyValue("--font-sans").trim();
+    const display = displayVar ? `${displayVar}, ${fallback.display}` : fallback.display;
+    const body = bodyVar ? `${bodyVar}, ${fallback.body}` : fallback.body;
 
     await Promise.all([
-      document.fonts.load(`italic 600 64px ${serif}`),
-      document.fonts.load(`700 64px ${serif}`),
-      document.fonts.load(`400 28px ${mono}`),
-      document.fonts.load(`600 28px ${mono}`),
+      document.fonts.load(`400 64px ${display}`),
+      document.fonts.load(`400 28px ${body}`),
+      document.fonts.load(`700 28px ${body}`),
     ]).catch(() => undefined);
     await document.fonts.ready;
 
-    return { serif, mono };
+    return { display, body };
   } catch {
     return fallback;
   }
@@ -122,7 +121,7 @@ export async function generateRecapImage(
   const mctx = measureCanvas.getContext("2d");
   if (!mctx) return null;
 
-  const { serif, mono } = await resolveFonts();
+  const { display, body } = await resolveFonts();
   const ranked = [...players].sort((a, b) => b.score - a.score);
   const winner = ranked[0];
   const maxTextWidth = WIDTH - PAD * 2;
@@ -141,7 +140,7 @@ export async function generateRecapImage(
   const wrappedHighlights: string[][] = [];
   if (highlightLines.length > 0) {
     y += 50; // divider before highlights
-    mctx.font = `400 27px ${mono}`;
+    mctx.font = `400 27px ${body}`;
     for (const line of highlightLines) {
       const wrapped = wrapLines(mctx, line.text, maxTextWidth);
       wrappedHighlights.push(wrapped);
@@ -166,7 +165,7 @@ export async function generateRecapImage(
 
   ctx.textAlign = "center";
   ctx.fillStyle = COLORS.textSecondary;
-  ctx.font = `600 26px ${mono}`;
+  ctx.font = `700 26px ${body}`;
   ctx.save();
   ctx.letterSpacing = "6px";
   ctx.fillText("ONLINE RIDDLES", WIDTH / 2, PAD + 20);
@@ -183,7 +182,7 @@ export async function generateRecapImage(
   ctx.lineWidth = 1.5;
   ctx.strokeRect(-248, -28, 496, 56);
   ctx.fillStyle = COLORS.accent;
-  ctx.font = `italic 700 44px ${serif}`;
+  ctx.font = `400 44px ${display}`;
   ctx.textBaseline = "middle";
   ctx.fillText("Zaak gesloten", 0, 2);
   ctx.restore();
@@ -193,15 +192,15 @@ export async function generateRecapImage(
 
   if (winner) {
     ctx.fillStyle = COLORS.textSecondary;
-    ctx.font = `600 24px ${mono}`;
+    ctx.font = `700 24px ${body}`;
     ctx.fillText("WINNAAR", WIDTH / 2, y);
     y += 56;
     ctx.fillStyle = COLORS.accent;
-    ctx.font = `italic 600 58px ${serif}`;
+    ctx.font = `400 58px ${display}`;
     ctx.fillText(winner.name, WIDTH / 2, y);
     y += 44;
     ctx.fillStyle = COLORS.textPrimary;
-    ctx.font = `400 26px ${mono}`;
+    ctx.font = `400 26px ${body}`;
     ctx.fillText(`${winner.score} punten`, WIDTH / 2, y);
     y += 64;
   }
@@ -215,7 +214,7 @@ export async function generateRecapImage(
   y += 56;
 
   ctx.textAlign = "left";
-  ctx.font = `400 30px ${mono}`;
+  ctx.font = `400 30px ${body}`;
   for (const [index, player] of ranked.slice(0, MAX_SCOREBOARD_ROWS).entries()) {
     const label = medalForRank(index) ?? `${index + 1}.`;
     ctx.fillStyle = COLORS.textPrimary;
@@ -228,7 +227,7 @@ export async function generateRecapImage(
   }
   if (ranked.length > MAX_SCOREBOARD_ROWS) {
     ctx.fillStyle = COLORS.textSecondary;
-    ctx.font = `400 24px ${mono}`;
+    ctx.font = `400 24px ${body}`;
     ctx.fillText(`+ ${ranked.length - MAX_SCOREBOARD_ROWS} andere rechercheurs`, PAD, y);
     y += 48;
   }
@@ -244,12 +243,12 @@ export async function generateRecapImage(
 
     highlightLines.forEach((line, i) => {
       ctx.fillStyle = COLORS.accent;
-      ctx.font = `600 20px ${mono}`;
+      ctx.font = `700 20px ${body}`;
       ctx.fillText(line.label, PAD, y);
       y += 34;
 
       ctx.fillStyle = line.color;
-      ctx.font = `400 27px ${mono}`;
+      ctx.font = `400 27px ${body}`;
       for (const wrappedLine of wrappedHighlights[i]) {
         ctx.fillText(wrappedLine, PAD, y);
         y += 36;
@@ -260,7 +259,7 @@ export async function generateRecapImage(
 
   ctx.textAlign = "center";
   ctx.fillStyle = COLORS.accentMuted;
-  ctx.font = `600 20px ${mono}`;
+  ctx.font = `700 20px ${body}`;
   ctx.fillText("EEN LATERAL THINKING VERHOOR VOOR GROEPEN", WIDTH / 2, HEIGHT - PAD);
 
   return new Promise((resolve) => canvas.toBlob((blob) => resolve(blob), "image/png"));

@@ -55,13 +55,13 @@ export function BoardNote({
             e.stopPropagation();
             onDelete();
           }}
-          className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 font-mono text-xs text-white/80 hover:bg-black"
+          className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-xs text-white/80 hover:bg-black"
           aria-label={t("deleteAriaLabel")}
         >
           ×
         </button>
       )}
-      <p className="font-serif text-sm leading-snug">{item.text}</p>
+      <p className="text-sm leading-snug">{item.text}</p>
       {hoverSide && <ConnectorDot side={hoverSide} onPointerDown={onConnectorPointerDown} />}
     </div>
   );

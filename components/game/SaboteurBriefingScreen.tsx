@@ -24,16 +24,16 @@ export function SaboteurBriefingScreen({
       className="redact-reveal rounded-lg border border-danger/40 bg-bg-secondary p-6 shadow-lg shadow-danger/10 sm:p-8"
       style={{ animation: "reveal-in 420ms cubic-bezier(0.16, 1, 0.3, 1)" }}
     >
-      <p className="font-mono text-xs uppercase tracking-widest text-danger">{t("label")}</p>
-      <h2 className="mt-2 font-serif text-2xl text-text-primary">{t("heading")}</h2>
-      <p className="mt-3 font-serif text-base leading-relaxed text-text-primary/90">
+      <p className="text-sm font-bold text-danger">{t("label")}</p>
+      <h2 className="mt-2 font-display uppercase text-2xl text-text-primary">{t("heading")}</h2>
+      <p className="mt-3 text-base leading-relaxed text-text-primary/90">
         {t("instructions")}
       </p>
 
-      <p className="mt-6 border-t border-white/5 pt-4 font-mono text-xs uppercase tracking-widest text-text-secondary">
+      <p className="mt-6 border-t border-white/5 pt-4 text-sm font-bold text-text-secondary">
         {t("solutionLabel")}
       </p>
-      <p className="mt-2 font-serif text-base leading-relaxed text-text-primary/90">{solution}</p>
+      <p className="mt-2 text-base leading-relaxed text-text-primary/90">{solution}</p>
 
       <Button variant="secondary" className="mt-8 w-full" onClick={onAcknowledge}>
         {t("start")}

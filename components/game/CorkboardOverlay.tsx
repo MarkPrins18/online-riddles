@@ -366,7 +366,7 @@ export function CorkboardOverlay({
   return (
     <Modal onClose={onClose}>
       <div className="flex items-center justify-between gap-3 border-b border-white/5 p-4">
-        <p className="font-mono text-sm uppercase tracking-widest text-text-secondary">{t("title")}</p>
+        <p className="text-sm font-bold text-text-secondary">{t("title")}</p>
         <div className="flex flex-wrap items-center gap-2">
           <Button
             variant="secondary"
@@ -403,7 +403,7 @@ export function CorkboardOverlay({
             }}
             placeholder={t("notePlaceholder")}
             maxLength={200}
-            className="min-w-[200px] flex-1 rounded-md border border-white/10 bg-bg-primary px-3 py-2 font-mono text-sm text-text-primary placeholder:text-text-secondary/60 focus:border-accent-muted"
+            className="min-w-[200px] flex-1 rounded-lg border-2 border-border bg-bg-primary px-3 py-2 text-base text-text-primary placeholder:text-text-secondary/60 focus:border-accent"
           />
           <div className="flex gap-1">
             {NOTE_COLORS.map((c) => (
@@ -432,7 +432,7 @@ export function CorkboardOverlay({
               key={q.id}
               type="button"
               onClick={() => handlePinQuestion(q.id)}
-              className="rounded-md border border-white/10 px-3 py-2 text-left font-serif text-sm text-text-primary hover:border-accent-muted"
+              className="rounded-md border border-white/10 px-3 py-2 text-left text-sm text-text-primary hover:border-accent-muted"
             >
               {q.text}
             </button>
@@ -440,12 +440,12 @@ export function CorkboardOverlay({
         </div>
       )}
 
-      <p className="border-b border-white/5 px-4 py-2 font-mono text-xs text-text-secondary">
+      <p className="border-b border-white/5 px-4 py-2 text-xs text-text-secondary">
         {isDesktop ? t("instructions") : t("instructionsList")}
       </p>
 
       {(actionError || state.error) && (
-        <p className="border-b border-white/5 px-4 py-2 font-mono text-xs text-danger">
+        <p className="border-b border-white/5 px-4 py-2 text-xs text-danger">
           {actionError ?? state.error}
         </p>
       )}

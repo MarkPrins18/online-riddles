@@ -37,8 +37,8 @@ export function ChatMessageRow({
   return (
     <li className="group relative flex flex-col gap-0.5">
       <div {...pressHold} className="flex select-none items-baseline gap-2">
-        <span className="font-mono text-xs text-text-secondary">{message.player_name}:</span>
-        <span className="font-mono text-sm text-text-primary">{message.text}</span>
+        <span className="text-xs text-text-secondary">{message.player_name}:</span>
+        <span className="text-sm text-text-primary">{message.text}</span>
         <button
           type="button"
           onClick={() => setPickerOpen((v) => !v)}

@@ -9,8 +9,8 @@ import { describeAccountError } from "./accountErrors";
 import { Button } from "@/components/ui/Button";
 
 const inputClasses =
-  "rounded-md border border-white/10 bg-bg-primary px-3 py-2.5 font-mono text-sm text-text-primary placeholder:text-text-secondary/60 focus:border-accent-muted";
-const labelClasses = "font-mono text-xs uppercase tracking-widest text-text-secondary";
+  "rounded-lg border-2 border-border bg-bg-primary px-3 py-2.5 text-base text-text-primary placeholder:text-text-secondary/60 focus:border-accent";
+const labelClasses = "text-sm font-bold text-text-secondary";
 
 // Not a real rate limiter — the shared 2-emails/hour Supabase quota is
 // enforced server-side regardless. This is pure UX friction to stop
@@ -86,7 +86,7 @@ export function MagicLinkTab({ onSuccess }: { onSuccess: () => void }) {
         }}
         className="flex flex-col gap-3"
       >
-        <p className="font-mono text-xs text-text-secondary">{t("intro")}</p>
+        <p className="text-xs text-text-secondary">{t("intro")}</p>
         <label htmlFor="magic-link-email" className={labelClasses}>
           {t("emailLabel")}
         </label>
@@ -100,7 +100,7 @@ export function MagicLinkTab({ onSuccess }: { onSuccess: () => void }) {
           className={inputClasses}
         />
         {error && (
-          <p role="alert" className="font-mono text-xs text-danger">
+          <p role="alert" className="text-xs text-danger">
             {error}
           </p>
         )}
@@ -113,7 +113,7 @@ export function MagicLinkTab({ onSuccess }: { onSuccess: () => void }) {
 
   return (
     <form onSubmit={handleVerify} className="flex flex-col gap-3">
-      <p className="font-mono text-xs text-text-secondary">{t("codeSentIntro", { email })}</p>
+      <p className="text-xs text-text-secondary">{t("codeSentIntro", { email })}</p>
       <label htmlFor="magic-link-code" className={labelClasses}>
         {t("codeLabel")}
       </label>
@@ -131,7 +131,7 @@ export function MagicLinkTab({ onSuccess }: { onSuccess: () => void }) {
         className={inputClasses}
       />
       {error && (
-        <p role="alert" className="font-mono text-xs text-danger">
+        <p role="alert" className="text-xs text-danger">
           {error}
         </p>
       )}
@@ -143,7 +143,7 @@ export function MagicLinkTab({ onSuccess }: { onSuccess: () => void }) {
             setCode("");
             setError(null);
           }}
-          className="font-mono text-xs uppercase tracking-widest text-text-secondary underline decoration-accent/60 hover:text-accent"
+          className="text-sm font-bold text-text-secondary underline decoration-accent/60 hover:text-accent"
         >
           {t("back")}
         </button>
@@ -151,7 +151,7 @@ export function MagicLinkTab({ onSuccess }: { onSuccess: () => void }) {
           type="button"
           disabled={cooldown > 0 || isSubmitting}
           onClick={() => void sendCode()}
-          className="font-mono text-xs uppercase tracking-widest text-accent underline decoration-accent/60 hover:text-accent-muted disabled:cursor-not-allowed disabled:text-text-secondary disabled:no-underline"
+          className="text-sm font-bold text-accent underline decoration-accent/60 hover:text-accent-muted disabled:cursor-not-allowed disabled:text-text-secondary disabled:no-underline"
         >
           {cooldown > 0 ? t("resendCooldown", { seconds: cooldown }) : t("resendCode")}
         </button>

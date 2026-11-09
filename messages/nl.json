@@ -30,12 +30,20 @@
     "home": "Terug naar home"
   },
   "HomePage": {
-    "coverStamp": "Zaak-dossier · open",
     "title": "DetectiveNights",
-    "subtitle": "Eén mysterie. Alle rechercheurs. Wie kraakt de zaak?",
-    "newFile": "Nieuw dossier",
-    "existingFile": "Bestaand dossier",
-    "communityLink": "Bekijk raadsels van de community →",
+    "badge": "Partyspel · 3 tot 12 spelers",
+    "heading": "Wie kraakt de zaak?",
+    "lead": "Eén speler kent de oplossing. De rest stelt ja/nee-vragen tot iemand het snapt.",
+    "exampleQuote": "“Elke zondag zit hij een uur in een lege opslagbox…”",
+    "newFile": "Nieuw spel",
+    "existingFile": "Meedoen met een code",
+    "step1Title": "1. Start een kamer",
+    "step1Body": "Deel de code met je vrienden. Geen account nodig.",
+    "step2Title": "2. Verhoor de Verteller",
+    "step2Body": "Alleen ja of nee. Elk 'ja' wordt een aanwijzing.",
+    "step3Title": "3. Kraak de zaak",
+    "step3Body": "Wie het eerst raadt, scoort. Daarna vertelt een ander.",
+    "communityLink": "Raadsels van de community",
     "profileLink": "Mijn statistieken"
   },
   "HowToPlay": {
@@ -83,19 +91,19 @@
   },
   "CreateRoomForm": {
     "nameLabel": "Jouw naam",
-    "namePlaceholder": "Rechercheur...",
+    "namePlaceholder": "Bijv. Sanne",
     "submitting": "Kamer aanmaken...",
-    "submit": "Nieuwe kamer starten",
+    "submit": "Start een kamer",
     "error": "Kon geen kamer aanmaken. Probeer het opnieuw."
   },
   "JoinRoomForm": {
     "nameLabel": "Jouw naam",
-    "namePlaceholder": "Rechercheur...",
-    "codeLabel": "Roomcode",
+    "namePlaceholder": "Bijv. Sanne",
+    "codeLabel": "Kamercode",
     "codePlaceholder": "XXXXXX",
     "noRoomFound": "Geen kamer gevonden met die code.",
     "submitting": "Aansluiten...",
-    "submit": "Kamer joinen",
+    "submit": "Meedoen",
     "error": "Kon niet bij de kamer aansluiten. Probeer het opnieuw.",
     "roomFull": "Deze kamer zit vol."
   },

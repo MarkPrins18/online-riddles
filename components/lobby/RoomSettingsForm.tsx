@@ -106,8 +106,8 @@ export function RoomSettingsForm({
     }
   }
 
-  const groupLegendClass = "mb-3 font-mono text-xs uppercase tracking-widest text-text-primary";
-  const fieldLegendClass = "mb-1 font-mono text-xs uppercase tracking-widest text-text-secondary";
+  const groupLegendClass = "mb-3 text-sm font-bold text-text-primary";
+  const fieldLegendClass = "mb-1 text-sm font-bold text-text-secondary";
 
   return (
     <div className="flex flex-col gap-6">
@@ -117,7 +117,7 @@ export function RoomSettingsForm({
           <div>
             <label
               htmlFor="round-duration"
-              className="mb-1 block font-mono text-xs uppercase tracking-widest text-text-secondary"
+              className="mb-1 block text-sm font-bold text-text-secondary"
             >
               {t("durationLabel")}
             </label>
@@ -130,7 +130,7 @@ export function RoomSettingsForm({
                   roundDurationSeconds: e.target.value === "none" ? null : Number(e.target.value),
                 })
               }
-              className="w-full rounded-md border border-white/10 bg-bg-primary px-3 py-2 font-mono text-sm text-text-primary focus:border-accent-muted"
+              className="w-full rounded-lg border-2 border-border bg-bg-primary px-3 py-2 text-base text-text-primary focus:border-accent"
             >
               {DURATION_OPTIONS.map((option) => (
                 <option key={option.labelKey} value={option.value === null ? "none" : option.value}>
@@ -143,7 +143,7 @@ export function RoomSettingsForm({
           <div>
             <label
               htmlFor="round-count"
-              className="mb-1 block font-mono text-xs uppercase tracking-widest text-text-secondary"
+              className="mb-1 block text-sm font-bold text-text-secondary"
             >
               {t("roundCountLabel")}
             </label>
@@ -151,7 +151,7 @@ export function RoomSettingsForm({
               id="round-count"
               value={value.maxRounds}
               onChange={(e) => onChange({ ...value, maxRounds: Number(e.target.value) })}
-              className="w-full rounded-md border border-white/10 bg-bg-primary px-3 py-2 font-mono text-sm text-text-primary focus:border-accent-muted"
+              className="w-full rounded-lg border-2 border-border bg-bg-primary px-3 py-2 text-base text-text-primary focus:border-accent"
             >
               {ROUND_COUNT_OPTIONS.map((count) => (
                 <option key={count} value={count}>
@@ -170,13 +170,13 @@ export function RoomSettingsForm({
           <fieldset>
             <legend className={fieldLegendClass}>{t("themesLegend")}</legend>
             {officialThemes === null ? (
-              <p className="font-mono text-xs text-text-secondary">{t("themesLoading")}</p>
+              <p className="text-xs text-text-secondary">{t("themesLoading")}</p>
             ) : officialThemes.length === 0 ? (
-              <p className="font-mono text-xs text-text-secondary">{t("themesEmpty")}</p>
+              <p className="text-xs text-text-secondary">{t("themesEmpty")}</p>
             ) : (
               <div className="flex flex-col gap-1.5">
                 {officialThemes.map((theme) => (
-                  <label key={theme.id} className="flex items-center gap-2 font-mono text-sm text-text-primary">
+                  <label key={theme.id} className="flex items-center gap-2 text-sm text-text-primary">
                     <input
                       type="checkbox"
                       className="accent-accent"
@@ -194,13 +194,13 @@ export function RoomSettingsForm({
             <fieldset>
               <legend className={fieldLegendClass}>{t("communityLegend")}</legend>
               {communityPackCount === null ? (
-                <p className="font-mono text-xs text-text-secondary">{t("communityLoading")}</p>
+                <p className="text-xs text-text-secondary">{t("communityLoading")}</p>
               ) : communityPackCount === 0 ? (
-                <p className="font-mono text-xs text-text-secondary">{t("communityEmpty")}</p>
+                <p className="text-xs text-text-secondary">{t("communityEmpty")}</p>
               ) : (
                 <>
                   <div className="flex flex-col gap-1.5">
-                    <label className="flex items-center gap-2 font-mono text-sm text-text-primary">
+                    <label className="flex items-center gap-2 text-sm text-text-primary">
                       <input
                         type="radio"
                         name="community-mode"
@@ -210,7 +210,7 @@ export function RoomSettingsForm({
                       />
                       {t("communityOff")}
                     </label>
-                    <label className="flex items-center gap-2 font-mono text-sm text-text-primary">
+                    <label className="flex items-center gap-2 text-sm text-text-primary">
                       <input
                         type="radio"
                         name="community-mode"
@@ -219,9 +219,9 @@ export function RoomSettingsForm({
                         onChange={() => setCommunityMode("all")}
                       />
                       {t("communityToggle")}
-                      <span className="font-mono text-xs text-text-secondary">({communityPackCount})</span>
+                      <span className="text-xs text-text-secondary">({communityPackCount})</span>
                     </label>
-                    <label className="flex items-center gap-2 font-mono text-sm text-text-primary">
+                    <label className="flex items-center gap-2 text-sm text-text-primary">
                       <input
                         type="radio"
                         name="community-mode"
@@ -232,18 +232,18 @@ export function RoomSettingsForm({
                       />
                       {t("communityFavorites")}
                       {favoritePackIds && (
-                        <span className="font-mono text-xs text-text-secondary">
+                        <span className="text-xs text-text-secondary">
                           ({favoritePackIds.size})
                         </span>
                       )}
                     </label>
                   </div>
                   {favoritePackIds && favoritePackIds.size === 0 && (
-                    <p className="mt-1 font-mono text-xs text-text-secondary">
+                    <p className="mt-1 text-xs text-text-secondary">
                       {t("communityFavoritesEmpty")}
                     </p>
                   )}
-                  <p className="mt-1 font-mono text-xs text-text-secondary">{t("communityHint")}</p>
+                  <p className="mt-1 text-xs text-text-secondary">{t("communityHint")}</p>
                 </>
               )}
             </fieldset>
@@ -254,7 +254,7 @@ export function RoomSettingsForm({
             officialThemes.length + communityPackCount > 0 &&
             value.packThemeFilter.length === 0 &&
             (value.communityPackIds === null ? communityPackCount === 0 : value.communityPackIds.length === 0) && (
-              <p className="mt-3 font-mono text-xs text-danger">{t("chooseThemeOrPack")}</p>
+              <p className="mt-3 text-xs text-danger">{t("chooseThemeOrPack")}</p>
             )}
         </fieldset>
       </div>
@@ -264,7 +264,7 @@ export function RoomSettingsForm({
           <legend className={groupLegendClass}>{t("modesLegend")}</legend>
           <div className="flex flex-col divide-y divide-white/5">
             <div className="pb-3">
-              <label className="flex items-center gap-2 font-mono text-sm text-text-primary">
+              <label className="flex items-center gap-2 text-sm text-text-primary">
                 <input
                   type="checkbox"
                   className="accent-accent"
@@ -273,13 +273,13 @@ export function RoomSettingsForm({
                 />
                 {t("hardcoreToggle")}
               </label>
-              <p className="mt-1 font-mono text-xs text-text-secondary">{t("hardcoreHint")}</p>
+              <p className="mt-1 text-xs text-text-secondary">{t("hardcoreHint")}</p>
 
               {value.hardcoreMode && (
                 <div className="mt-3">
                   <label
                     htmlFor="team-lives"
-                    className="mb-1 block font-mono text-xs uppercase tracking-widest text-text-secondary"
+                    className="mb-1 block text-sm font-bold text-text-secondary"
                   >
                     {t("teamLivesLabel")}
                   </label>
@@ -287,7 +287,7 @@ export function RoomSettingsForm({
                     id="team-lives"
                     value={value.teamLives}
                     onChange={(e) => onChange({ ...value, teamLives: Number(e.target.value) })}
-                    className="w-full rounded-md border border-white/10 bg-bg-primary px-3 py-2 font-mono text-sm text-text-primary focus:border-accent-muted"
+                    className="w-full rounded-lg border-2 border-border bg-bg-primary px-3 py-2 text-base text-text-primary focus:border-accent"
                   >
                     {TEAM_LIVES_OPTIONS.map((count) => (
                       <option key={count} value={count}>
@@ -300,7 +300,7 @@ export function RoomSettingsForm({
             </div>
 
             <div className="pt-3">
-              <label className="flex items-center gap-2 font-mono text-sm text-text-primary">
+              <label className="flex items-center gap-2 text-sm text-text-primary">
                 <input
                   type="checkbox"
                   className="accent-accent"
@@ -309,11 +309,11 @@ export function RoomSettingsForm({
                 />
                 {t("saboteurToggle")}
               </label>
-              <p className="mt-1 font-mono text-xs text-text-secondary">{t("saboteurHint")}</p>
+              <p className="mt-1 text-xs text-text-secondary">{t("saboteurHint")}</p>
               {value.saboteurMode &&
                 playerCount !== undefined &&
                 playerCount < MIN_PLAYERS_FOR_SABOTEUR_MODE && (
-                  <p className="mt-1 font-mono text-xs text-danger">
+                  <p className="mt-1 text-xs text-danger">
                     {t("saboteurNeedsMorePlayers", { count: MIN_PLAYERS_FOR_SABOTEUR_MODE })}
                   </p>
                 )}

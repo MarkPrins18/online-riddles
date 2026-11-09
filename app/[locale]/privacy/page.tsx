@@ -21,8 +21,8 @@ export async function generateMetadata({
 function Section({ heading, body }: { heading: string; body: string }) {
   return (
     <div>
-      <h2 className="font-serif text-lg italic text-text-primary">{heading}</h2>
-      <p className="mt-2 font-mono text-sm leading-relaxed text-text-secondary">{body}</p>
+      <h2 className="font-display text-lg uppercase text-text-primary">{heading}</h2>
+      <p className="mt-2 text-sm leading-relaxed text-text-secondary">{body}</p>
     </div>
   );
 }
@@ -41,8 +41,8 @@ export default async function PrivacyPage({
       <div className="w-full max-w-2xl">
         <Card tone="case" className="flex flex-col gap-8">
           <div>
-            <h1 className="font-serif text-3xl italic text-text-primary">{t("title")}</h1>
-            <p className="mt-3 font-mono text-sm leading-relaxed text-text-secondary">
+            <h1 className="font-display text-3xl uppercase text-text-primary">{t("title")}</h1>
+            <p className="mt-3 text-sm leading-relaxed text-text-secondary">
               {t("intro")}
             </p>
           </div>
@@ -56,7 +56,7 @@ export default async function PrivacyPage({
 
           <Link
             href="/"
-            className="font-mono text-xs uppercase tracking-widest text-text-secondary underline decoration-accent/60 hover:text-accent"
+            className="text-sm font-bold text-text-secondary underline decoration-accent/60 hover:text-accent"
           >
             {t("backLink")}
           </Link>

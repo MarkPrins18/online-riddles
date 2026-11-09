@@ -62,7 +62,7 @@ export function CommunityNav() {
           screen — a dropdown keeps every destination equally reachable
           with one tap, instead of some of them requiring a horizontal
           scroll a visitor might never discover. sm and up switch to the
-          tab-shaped links (hidden below sm, this trigger is hidden at sm
+          tab links (hidden below sm, this trigger is hidden at sm
           and up) since there's room for them there. */}
       <div className="relative min-w-0 flex-1 sm:hidden" ref={menuRef}>
         <button
@@ -70,7 +70,7 @@ export function CommunityNav() {
           onClick={() => setMenuOpen((open) => !open)}
           aria-haspopup="menu"
           aria-expanded={menuOpen}
-          className="flex w-full items-center justify-between gap-2 rounded-sm border border-accent/40 bg-bg-secondary px-3 py-2.5 font-mono text-sm text-accent transition-colors"
+          className="flex w-full items-center justify-between gap-2 rounded-sm border border-accent/40 bg-bg-secondary px-3 py-2.5 text-sm text-accent transition-colors"
         >
           <span>{activeLabel}</span>
           <svg
@@ -103,7 +103,7 @@ export function CommunityNav() {
                   role="menuitem"
                   aria-current={isActive ? "page" : undefined}
                   onClick={() => setMenuOpen(false)}
-                  className={`block rounded-md px-3 py-2 font-mono text-sm transition-colors ${
+                  className={`block rounded-md px-3 py-2 text-sm transition-colors ${
                     isActive
                       ? "bg-bg-primary text-accent"
                       : "text-text-secondary hover:bg-white/5 hover:text-text-primary"
@@ -125,10 +125,10 @@ export function CommunityNav() {
               key={link.href}
               href={link.href}
               aria-current={isActive ? "page" : undefined}
-              className={`tab-shape shrink-0 border border-b-0 px-3 pb-2 pt-2.5 font-mono text-xs uppercase tracking-widest transition-colors ${
+              className={`shrink-0 border-b-[3px] px-3 pb-2 pt-2.5 font-display text-base uppercase tracking-wide transition-colors ${
                 isActive
-                  ? "border-accent/40 bg-bg-secondary text-accent"
-                  : "border-white/10 bg-transparent text-text-secondary hover:text-text-primary"
+                  ? "border-accent text-accent"
+                  : "border-transparent text-text-secondary hover:text-text-primary"
               }`}
             >
               {link.label}

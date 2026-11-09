@@ -41,7 +41,7 @@ export function CreateRoomForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-      <label htmlFor="host-name" className="font-mono text-xs uppercase tracking-widest text-text-secondary">
+      <label htmlFor="host-name" className="text-sm font-bold text-text-secondary">
         {t("nameLabel")}
       </label>
       <input
@@ -50,9 +50,9 @@ export function CreateRoomForm() {
         onChange={(e) => setName(e.target.value)}
         placeholder={t("namePlaceholder")}
         maxLength={24}
-        className="rounded-md border border-white/10 bg-bg-primary px-3 py-2.5 font-mono text-sm text-text-primary placeholder:text-text-secondary/60 focus:border-accent-muted"
+        className="rounded-lg border-2 border-border bg-bg-primary px-3 py-2.5 text-base text-text-primary placeholder:text-text-secondary/60 focus:border-accent"
       />
-      {error && <p className="font-mono text-xs text-danger">{error}</p>}
+      {error && <p className="text-xs text-danger">{error}</p>}
       <Button type="submit" disabled={isSubmitting || !name.trim()}>
         {isSubmitting ? t("submitting") : t("submit")}
       </Button>

@@ -70,24 +70,28 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
             <p className="max-w-[28em] text-xl font-medium leading-normal">{t("lead")}</p>
             <CreateRoomForm />
           </div>
-          <div className="relative hidden min-h-[420px] min-w-0 flex-[1_1_360px] items-end justify-center md:flex">
-            {/* Detective silhouette: shoulders, neck, head, then the fedora
-                (crown with a pinched top, red band, brim) drawn over it. The
-                speech bubble is anchored to the drawing itself, centered on
-                its top edge, so it always sits above the hat at any width. */}
+          <div className="relative hidden min-h-[420px] min-w-0 flex-[1_1_360px] items-center justify-center self-stretch pb-11 pt-6 lg:flex">
+            {/* The two classic detective props, big and tilted: a fedora
+                (red band) and a magnifying glass. No figure — a person built
+                from simple shapes reads as clumsy. The speech bubble is
+                anchored to the drawing's top edge, so it never covers it. */}
             <div className="relative w-full max-w-[440px]">
               <svg aria-hidden="true" viewBox="0 0 400 400" className="block h-auto w-full max-w-[440px]">
-                <path d="M60 400c4-80 60-130 140-130s136 50 140 130Z" fill="var(--ink)" />
-                <rect x="178" y="236" width="44" height="44" fill="var(--ink)" />
-                <circle cx="200" cy="198" r="54" fill="var(--ink)" />
-                <path
-                  d="M145 140 L152 92 Q158 76 182 79 Q200 90 218 79 Q242 76 248 92 L255 140 Z"
-                  fill="var(--ink)"
-                />
-                <path d="M149.3 110 L250.7 110 L253 127 L147 127 Z" fill="var(--danger)" />
-                <ellipse cx="200" cy="140" rx="92" ry="15" fill="var(--ink)" />
+                <g transform="rotate(-8 200 200)">
+                  <path
+                    d="M120 210 L134 120 Q142 94 180 98 Q200 112 220 98 Q258 94 266 120 L280 210 Z"
+                    fill="var(--ink)"
+                  />
+                  <path d="M126 172 L274 172 L278 200 L122 200 Z" fill="var(--danger)" />
+                  <ellipse cx="200" cy="212" rx="150" ry="26" fill="var(--ink)" />
+                </g>
+                <g transform="rotate(35 290 300)">
+                  <circle cx="290" cy="270" r="46" fill="rgba(255, 255, 255, 0.55)" />
+                  <circle cx="290" cy="270" r="54" fill="none" stroke="var(--ink)" strokeWidth="16" />
+                  <rect x="280" y="324" width="20" height="74" rx="8" fill="var(--ink)" />
+                </g>
               </svg>
-              <p className="absolute left-0 top-0 max-w-[258px] -translate-y-1/2 rounded-[18px] border-[3px] border-ink bg-white px-4 py-3 text-base font-bold shadow-[4px_4px_0_var(--ink)]">
+              <p className="absolute left-0 top-[8%] max-w-[258px] -translate-y-1/2 rounded-[18px] border-[3px] border-ink bg-white px-4 py-3 text-base font-bold shadow-[4px_4px_0_var(--ink)]">
                 {t("exampleQuote")}
               </p>
             </div>

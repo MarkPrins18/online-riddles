@@ -97,7 +97,7 @@ export function ShareRecapButton({
       {open && (
         <Modal onClose={() => setOpen(false)} className="mx-auto w-full max-w-md">
           <div className="flex items-center justify-between gap-3 border-b border-white/5 p-4">
-            <p className="font-mono text-sm uppercase tracking-widest text-text-secondary">
+            <p className="text-sm font-bold text-text-secondary">
               {t("caseClosed")}
             </p>
             <Button variant="ghost" onClick={() => setOpen(false)}>
@@ -106,9 +106,9 @@ export function ShareRecapButton({
           </div>
           <div className="flex min-h-0 flex-1 flex-col items-center gap-4 overflow-y-auto p-5">
             {isGenerating && (
-              <p className="font-mono text-sm text-text-secondary">{t("generating")}</p>
+              <p className="text-sm text-text-secondary">{t("generating")}</p>
             )}
-            {error && <p className="font-mono text-sm text-danger">{error}</p>}
+            {error && <p className="text-sm text-danger">{error}</p>}
             {imageUrl && (
               // eslint-disable-next-line @next/next/no-img-element -- a generated blob: URL, not an optimizable remote/static asset
               <img

@@ -28,7 +28,7 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
     <div
       role="group"
       aria-label="Language"
-      className={`inline-flex items-center gap-1 font-mono text-xs uppercase tracking-widest text-text-secondary ${className}`}
+      className={`inline-flex items-center gap-1 text-sm font-bold text-text-secondary ${className}`}
     >
       {locales.map((option) => (
         <button

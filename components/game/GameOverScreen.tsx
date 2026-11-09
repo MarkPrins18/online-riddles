@@ -33,17 +33,17 @@ export function GameOverScreen({
       className="redact-reveal rounded-lg border border-danger/40 bg-bg-secondary p-8 shadow-lg shadow-danger/10 sm:p-10"
       style={{ animation: "reveal-in 420ms cubic-bezier(0.16, 1, 0.3, 1)" }}
     >
-      <p className="font-mono text-xs uppercase tracking-widest text-danger">{t("gameOver")}</p>
-      <h2 className="mt-3 font-serif text-3xl text-text-primary">{t("heading")}</h2>
-      <p className="mt-2 font-mono text-sm text-text-secondary">{t("subtitle")}</p>
+      <p className="text-sm font-bold text-danger">{t("gameOver")}</p>
+      <h2 className="mt-3 font-display uppercase text-3xl text-text-primary">{t("heading")}</h2>
+      <p className="mt-2 text-sm text-text-secondary">{t("subtitle")}</p>
 
       <ul className="mt-6 flex flex-col divide-y divide-white/5">
         {ranked.map((player, index) => (
           <li key={player.id} className="flex items-center justify-between py-3">
-            <span className="font-mono text-sm text-text-primary">
+            <span className="text-sm text-text-primary">
               {medalForRank(index) ?? `${index + 1}.`} {player.name}
             </span>
-            <span className="font-mono text-sm font-semibold text-danger">{player.score}</span>
+            <span className="text-sm font-semibold text-danger">{player.score}</span>
           </li>
         ))}
       </ul>

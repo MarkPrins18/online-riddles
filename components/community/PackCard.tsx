@@ -22,16 +22,16 @@ export function PackCard({
     <Link href={`/community/${pack.id}`}>
       <Card tone="case" className="flex flex-col gap-2 transition-colors hover:border-accent/40">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="font-serif text-xl italic text-text-primary">{pack.name}</h3>
+          <h3 className="font-display text-xl uppercase text-text-primary">{pack.name}</h3>
           <div className="flex shrink-0 items-center gap-2">
             {typeof score === "number" && (
-              <span className="font-mono text-xs text-text-secondary">score: {score}</span>
+              <span className="text-xs text-text-secondary">score: {score}</span>
             )}
             <FavoriteButton packId={pack.id} initialFavorited={initialFavorited} />
           </div>
         </div>
         {authorName && (
-          <p className="font-mono text-xs text-text-secondary">{t("by", { name: authorName })}</p>
+          <p className="text-xs text-text-secondary">{t("by", { name: authorName })}</p>
         )}
         <div className="flex flex-wrap gap-2">
           <Badge tone="accent">{pack.theme}</Badge>

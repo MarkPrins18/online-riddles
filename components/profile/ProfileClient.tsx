@@ -60,7 +60,7 @@ export function ProfileClient() {
   }, []);
 
   if (status === undefined) {
-    return <p className="font-mono text-sm text-text-secondary">{t("loading")}</p>;
+    return <p className="text-sm text-text-secondary">{t("loading")}</p>;
   }
 
   const isRegistered = !!status && !status.isAnonymous;
@@ -70,45 +70,45 @@ export function ProfileClient() {
       <Card tone="chrome" className="max-w-md">
         {isRegistered ? (
           <>
-            <h1 className="font-serif text-xl text-text-primary">{t("statsTitle")}</h1>
-            <p className="mt-1 font-mono text-xs text-text-secondary">{status.email}</p>
+            <h1 className="font-display uppercase text-xl text-text-primary">{t("statsTitle")}</h1>
+            <p className="mt-1 text-xs text-text-secondary">{status.email}</p>
 
             <dl className="mt-5 grid grid-cols-2 gap-4">
               <div>
-                <dt className="font-mono text-xs uppercase tracking-widest text-text-secondary">
+                <dt className="text-sm font-bold text-text-secondary">
                   {t("gamesPlayed")}
                 </dt>
-                <dd className="font-serif text-2xl text-text-primary">
+                <dd className="font-display text-2xl text-text-primary">
                   {(stats ?? EMPTY_STATS).games_played}
                 </dd>
               </div>
               <div>
-                <dt className="font-mono text-xs uppercase tracking-widest text-text-secondary">
+                <dt className="text-sm font-bold text-text-secondary">
                   {t("roundsSolved")}
                 </dt>
-                <dd className="font-serif text-2xl text-text-primary">
+                <dd className="font-display text-2xl text-text-primary">
                   {(stats ?? EMPTY_STATS).rounds_solved}
                 </dd>
               </div>
               <div>
-                <dt className="font-mono text-xs uppercase tracking-widest text-text-secondary">
+                <dt className="text-sm font-bold text-text-secondary">
                   {t("roundsNarrated")}
                 </dt>
-                <dd className="font-serif text-2xl text-text-primary">
+                <dd className="font-display text-2xl text-text-primary">
                   {(stats ?? EMPTY_STATS).rounds_narrated}
                 </dd>
               </div>
               <div>
-                <dt className="font-mono text-xs uppercase tracking-widest text-text-secondary">
+                <dt className="text-sm font-bold text-text-secondary">
                   {t("lifetimeScore")}
                 </dt>
-                <dd className="font-serif text-2xl text-text-primary">
+                <dd className="font-display text-2xl text-text-primary">
                   {(stats ?? EMPTY_STATS).lifetime_score}
                 </dd>
               </div>
             </dl>
 
-            {!stats && <p className="mt-4 font-mono text-xs text-text-secondary">{t("noStatsYet")}</p>}
+            {!stats && <p className="mt-4 text-xs text-text-secondary">{t("noStatsYet")}</p>}
 
             <Button variant="ghost" className="mt-5" onClick={() => setAccountModalOpen(true)}>
               {t("manageAccount")}
@@ -116,8 +116,8 @@ export function ProfileClient() {
           </>
         ) : (
           <>
-            <h1 className="font-serif text-xl text-text-primary">{t("upgradeTitle")}</h1>
-            <p className="mt-2 font-mono text-sm leading-relaxed text-text-secondary">
+            <h1 className="font-display uppercase text-xl text-text-primary">{t("upgradeTitle")}</h1>
+            <p className="mt-2 text-sm leading-relaxed text-text-secondary">
               {t("upgradeBody")}
             </p>
             <Button variant="secondary" className="mt-4" onClick={() => setAccountModalOpen(true)}>
@@ -127,7 +127,7 @@ export function ProfileClient() {
         )}
 
         {error && (
-          <p role="alert" className="mt-4 font-mono text-xs text-danger">
+          <p role="alert" className="mt-4 text-xs text-danger">
             {error}
           </p>
         )}

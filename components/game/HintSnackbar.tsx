@@ -52,13 +52,13 @@ export function HintSnackbar({ latestHint }: { latestHint: Hint | null }) {
       <div
         role="status"
         aria-live="polite"
-        className="max-w-md rounded-lg border border-l-4 border-white/10 border-l-[#3d2609] bg-bg-case/95 px-4 py-3 shadow-xl shadow-black/50"
+        className="max-w-md rounded-xl border-2 border-accent bg-bg-secondary/95 px-4 py-3 shadow-xl shadow-black/50"
         style={{ animation: "reveal-in 180ms ease-out" }}
       >
-        <p className="font-mono text-[11px] uppercase tracking-widest text-accent">
+        <p className="text-xs font-bold text-accent">
           {t("label", { name: visibleHint.player_name })}
         </p>
-        <p className="mt-1 font-serif text-sm text-text-primary">{visibleHint.text}</p>
+        <p className="mt-1 text-sm text-text-primary">{visibleHint.text}</p>
       </div>
     </div>
   );

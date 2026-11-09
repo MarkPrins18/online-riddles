@@ -47,7 +47,7 @@ export function CorkboardListView({
   return (
     <div className="min-h-0 flex-1 overflow-y-auto p-4">
       {items.length === 0 ? (
-        <p className="font-mono text-sm text-text-secondary">{t("empty")}</p>
+        <p className="text-sm text-text-secondary">{t("empty")}</p>
       ) : (
         <ul className="flex flex-col gap-3">
           {items.map((item) => {
@@ -81,11 +81,11 @@ export function CorkboardListView({
                         style={{ backgroundColor: NOTE_DOT_COLORS[item.color] }}
                       />
                     ) : (
-                      <span className="mt-0.5 shrink-0 font-mono text-[10px] uppercase tracking-widest text-accent">
+                      <span className="mt-0.5 shrink-0 text-xs font-bold text-accent">
                         {t("questionBadge")}
                       </span>
                     )}
-                    <p className="font-serif text-sm leading-snug text-text-primary">
+                    <p className="text-sm leading-snug text-text-primary">
                       {itemLabel(item, questions, notFound)}
                     </p>
                   </div>
@@ -94,7 +94,7 @@ export function CorkboardListView({
                       type="button"
                       onClick={() => onDeleteItem(item.id)}
                       aria-label={t("deleteItemAriaLabel")}
-                      className="shrink-0 font-mono text-xs text-text-secondary hover:text-danger"
+                      className="shrink-0 text-xs text-text-secondary hover:text-danger"
                     >
                       {t("remove")}
                     </button>
@@ -108,7 +108,7 @@ export function CorkboardListView({
                       return (
                         <li
                           key={connection.id}
-                          className="flex items-center gap-1 rounded-full border border-white/10 bg-bg-primary px-2 py-0.5 font-mono text-[11px] text-text-secondary"
+                          className="flex items-center gap-1 rounded-full border border-white/10 bg-bg-primary px-2 py-0.5 text-[11px] text-text-secondary"
                         >
                           <span>{other ? itemLabel(other, questions, notFound) : ""}</span>
                           {canDeleteConnection && (
@@ -134,7 +134,7 @@ export function CorkboardListView({
                       if (e.target.value) onAddConnection(item.id, e.target.value);
                     }}
                     aria-label={t("addLinkAriaLabel")}
-                    className="mt-2 w-full rounded-md border border-white/10 bg-bg-primary px-2 py-1.5 font-mono text-xs text-text-secondary focus:border-accent-muted"
+                    className="mt-2 w-full rounded-md border border-white/10 bg-bg-primary px-2 py-1.5 text-xs text-text-secondary focus:border-accent-muted"
                   >
                     <option value="">{t("linkTo")}</option>
                     {linkableItems.map((other) => (

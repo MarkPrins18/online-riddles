@@ -58,14 +58,14 @@ export function AccountNudgeBanner({
   return (
     <>
       <Card tone="case" className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="font-mono text-sm text-text-primary">{t("body")}</p>
+        <p className="text-sm text-text-primary">{t("body")}</p>
         <div className="flex shrink-0 items-center gap-3">
           <Button onClick={() => setIsModalOpen(true)}>{t("cta")}</Button>
           <button
             type="button"
             onClick={dismiss}
             aria-label={t("dismissAriaLabel")}
-            className="font-mono text-sm text-text-secondary hover:text-text-primary"
+            className="text-sm text-text-secondary hover:text-text-primary"
           >
             ×
           </button>

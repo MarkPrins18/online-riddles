@@ -8,26 +8,28 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   iconOnly?: boolean;
 };
 
+// Primary/danger/secondary are the loud paperback-cover buttons (Anton,
+// uppercase); ghost and tab are quiet text controls in the body face.
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   primary:
-    "rounded-sm bg-accent text-bg-primary hover:bg-accent-muted disabled:bg-accent-muted/50",
+    "rounded-lg border-2 border-accent bg-accent font-display uppercase tracking-wide text-ink hover:border-accent-muted hover:bg-accent-muted disabled:hover:border-accent disabled:hover:bg-accent",
   secondary:
-    "rounded-sm bg-bg-secondary text-text-primary border border-white/10 hover:border-accent-muted",
-  ghost: "rounded-sm bg-transparent text-text-secondary hover:text-text-primary",
-  danger: "rounded-sm bg-danger text-text-primary hover:brightness-110",
-  // A manila-folder tab, not an icon button — the trigger for on-demand
-  // drawers (Spelers/Verhoor). Meaning comes from the label, never an
-  // emoji glyph standing in for it.
-  tab: "tab-shape bg-bg-secondary text-text-secondary border border-white/10 border-b-0 hover:text-accent hover:border-accent/40",
+    "rounded-lg border-2 border-text-primary bg-transparent font-display uppercase tracking-wide text-text-primary hover:bg-text-primary hover:text-ink",
+  ghost: "rounded-lg bg-transparent font-bold text-text-secondary hover:text-text-primary",
+  danger:
+    "rounded-lg border-2 border-danger bg-danger font-display uppercase tracking-wide text-ink hover:brightness-110",
+  // Trigger for on-demand drawers (Spelers/Verhoor) — a labelled pill,
+  // never an emoji glyph standing in for the meaning.
+  tab: "rounded-full border-2 border-border bg-bg-secondary font-bold text-text-secondary hover:border-accent hover:text-accent",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   function Button({ variant = "primary", iconOnly = false, className = "", ...props }, ref) {
-    const sizeClasses = iconOnly ? "p-2.5" : variant === "tab" ? "px-4 pb-2 pt-2.5" : "px-4 py-2.5";
+    const sizeClasses = iconOnly ? "p-2.5" : variant === "tab" ? "px-4 py-2" : "px-4 py-2.5";
     return (
       <button
         ref={ref}
-        className={`inline-flex items-center justify-center gap-2 font-mono text-sm font-medium tracking-wide transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${sizeClasses} ${VARIANT_CLASSES[variant]} ${className}`}
+        className={`inline-flex items-center justify-center gap-2 text-base transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${sizeClasses} ${VARIANT_CLASSES[variant]} ${className}`}
         {...props}
       />
     );

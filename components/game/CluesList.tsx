@@ -24,7 +24,7 @@ export function CluesList({
 
   if (clues.length === 0) {
     return (
-      <p className="font-mono text-sm text-text-secondary">{t("empty")}</p>
+      <p className="text-sm text-text-secondary">{t("empty")}</p>
     );
   }
 
@@ -42,18 +42,18 @@ export function CluesList({
 
   return (
     <div className="flex flex-col gap-2">
-      {pinError && <p className="font-mono text-xs text-danger">{pinError}</p>}
+      {pinError && <p className="text-xs text-danger">{pinError}</p>}
       {clues.map((clue) => (
         <div
           key={clue.id}
-          className="w-full rounded-md border-l-4 border-l-[#3d2609] bg-paper p-3 text-ink shadow-sm"
+          className="w-full rounded-xl border-2 border-ink bg-paper p-3 text-ink"
         >
-          <p className="font-serif text-base font-medium leading-snug">
+          <p className="text-base font-medium leading-snug">
             {clue.text}
           </p>
-          <div className="mt-2 flex items-center justify-between gap-2 border-t border-black/10 pt-2">
-            <p className="font-mono text-[11px] text-black/55">
-              · {clue.player_name}
+          <div className="mt-2 flex items-center justify-between gap-2 border-t border-ink/15 pt-2">
+            <p className="text-xs font-bold text-ink/70">
+              {clue.player_name}
             </p>
             {onPinToBoard && (
               // Prikbord itself is desktop-only (see GamePlayClient) — this
@@ -62,7 +62,7 @@ export function CluesList({
                 type="button"
                 onClick={() => handlePin(clue.id)}
                 disabled={pinningId === clue.id}
-                className="hidden font-mono text-[11px] uppercase tracking-widest text-[#3d2609] hover:text-black disabled:opacity-50 xl:inline"
+                className="hidden text-xs font-extrabold text-ink underline decoration-2 underline-offset-2 hover:text-[#b33a28] disabled:opacity-50 xl:inline"
               >
                 {pinningId === clue.id ? t("pinning") : t("pin")}
               </button>

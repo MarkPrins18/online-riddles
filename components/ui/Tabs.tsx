@@ -40,7 +40,7 @@ export function Tabs({
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="sticky top-0 z-10 flex shrink-0 gap-1 border-b border-white/10 bg-bg-primary/95 backdrop-blur-sm">
+      <div className="sticky top-0 z-10 flex shrink-0 gap-1 border-b-2 border-border bg-bg-primary/95 backdrop-blur-sm">
         {tabs.map((tab) => {
           const isActive = tab.key === active?.key;
           return (
@@ -52,17 +52,17 @@ export function Tabs({
                 onTabChange?.(tab.key);
               }}
               aria-pressed={isActive}
-              className={`tab-shape flex items-center gap-1.5 border border-b-0 px-2.5 pb-1.5 pt-2 font-mono text-xs tracking-wide transition-colors sm:px-3 sm:pb-2 sm:pt-2.5 ${
+              className={`-mb-0.5 flex items-center gap-1.5 border-b-[3px] px-2.5 pb-2 pt-2 font-display text-base uppercase tracking-wide transition-colors sm:px-3 ${
                 isActive
-                  ? "border-accent/40 bg-bg-secondary text-accent"
-                  : "border-white/10 bg-transparent text-text-secondary hover:text-text-primary"
+                  ? "border-accent text-accent"
+                  : "border-transparent text-text-secondary hover:text-text-primary"
               }`}
             >
               {tab.label}
               {typeof tab.badge === "number" && tab.badge > 0 && (
                 <span
-                  className={`inline-flex min-w-[1.25rem] justify-center rounded-full px-1 text-[10px] ${
-                    isActive ? "bg-accent/20 text-accent" : "bg-white/10 text-text-secondary"
+                  className={`inline-flex min-w-[1.25rem] justify-center rounded-full px-1 font-sans text-[11px] font-extrabold ${
+                    isActive ? "bg-accent text-ink" : "bg-border text-text-primary"
                   }`}
                 >
                   {tab.badge}

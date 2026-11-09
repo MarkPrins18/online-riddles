@@ -13,23 +13,23 @@ import {
 } from "@/lib/supabase/questions";
 import { Button } from "@/components/ui/Button";
 
-// Flat left-edge color per status — scannable at a glance without reading
-// the text, and (unlike the old rotated "pinned note" look) never tilts
-// the text itself, which is what made a long list hard to read.
+// Only an unanswered question gets a highlighted outline (it's the one
+// that still needs the Verteller's attention); answered ones are read via
+// their answer label, never by color alone.
 const STATUS_BORDER: Record<string, string> = {
-  yes: "border-l-[#3d2609]",
-  no: "border-l-[#5a1e13]",
-  irrelevant: "border-l-black/25",
-  custom: "border-l-[#3d2609]",
-  unanswered: "border-l-accent-muted",
+  yes: "border-border",
+  no: "border-border",
+  irrelevant: "border-border",
+  custom: "border-border",
+  unanswered: "border-accent",
 };
 
 function AnswerBadge({ answer }: { answer: "yes" | "no" | "irrelevant" }) {
   const t = useTranslations("QuestionCard");
   const styles: Record<typeof answer, string> = {
-    yes: "bg-[#3d2609] text-paper",
-    no: "bg-[#5a1e13] text-paper",
-    irrelevant: "bg-black/15 text-black/70",
+    yes: "border-2 border-accent bg-accent text-ink",
+    no: "border-2 border-danger bg-danger text-ink",
+    irrelevant: "border-2 border-border text-text-secondary",
   };
   const labels: Record<typeof answer, string> = {
     yes: t("answerYes"),
@@ -38,7 +38,7 @@ function AnswerBadge({ answer }: { answer: "yes" | "no" | "irrelevant" }) {
   };
   return (
     <span
-      className={`shrink-0 rounded px-2 py-0.5 font-mono text-[11px] font-bold uppercase tracking-widest ${styles[answer]}`}
+      className={`shrink-0 rounded px-2 py-0.5 text-xs font-extrabold uppercase tracking-wide ${styles[answer]}`}
     >
       {labels[answer]}
     </span>
@@ -50,8 +50,8 @@ function AnswerBadge({ answer }: { answer: "yes" | "no" | "irrelevant" }) {
 function Star({ isBest, onClick }: { isBest: boolean; onClick?: () => void }) {
   const t = useTranslations("QuestionCard");
   const className = `shrink-0 rounded text-lg leading-none transition-colors ${
-    isBest ? "text-accent-muted" : "text-black/25"
-  } ${onClick ? "p-1 hover:text-accent-muted" : ""}`;
+    isBest ? "text-accent" : "text-text-secondary/50"
+  } ${onClick ? "p-1 hover:text-accent" : ""}`;
 
   if (!onClick) {
     if (!isBest) return null;
@@ -124,12 +124,12 @@ export function QuestionCard({
 
   return (
     <div
-      className={`w-full rounded-md border-l-4 bg-paper p-4 text-ink shadow-sm ${STATUS_BORDER[statusKey]}`}
+      className={`w-full rounded-xl border-2 bg-bg-secondary p-4 text-text-primary ${STATUS_BORDER[statusKey]}`}
       style={{ animation: "reveal-in 180ms ease-out" }}
     >
       <div className="flex items-start justify-between gap-3">
-        <p className="font-mono text-[11px] uppercase tracking-widest text-black/55">
-          · {question.player_name}
+        <p className="text-xs font-bold text-text-secondary">
+          {question.player_name}
         </p>
         <div className="flex shrink-0 items-center gap-2">
           {isAnswered && question.answer !== "custom" && (
@@ -142,21 +142,21 @@ export function QuestionCard({
           )}
         </div>
       </div>
-      <p className="mt-1.5 font-serif text-base font-medium leading-snug">{question.text}</p>
+      <p className="mt-1.5 text-base font-medium leading-snug">{question.text}</p>
 
       {isAnswered && question.answer === "custom" && (
-        <div className="mt-3 border-t border-black/10 pt-3">
-          <p className="font-mono text-[11px] uppercase tracking-widest text-black/55">
+        <div className="mt-3 border-t border-border pt-3">
+          <p className="text-xs font-bold text-text-secondary">
             {t("answerHeading")}
           </p>
-          <p className="mt-1 font-serif text-base font-medium italic leading-snug">
+          <p className="mt-1 text-base font-medium italic leading-snug">
             {question.custom_response}
           </p>
         </div>
       )}
 
       {narrating && !isAnswered && (
-        <div className="mt-3 flex flex-col gap-2 border-t border-black/10 pt-3">
+        <div className="mt-3 flex flex-col gap-2 border-t border-border pt-3">
           <div className="flex flex-wrap gap-2">
             <Button variant="primary" onClick={() => handleQuickAnswer("yes")}>
               {t("quickYes")}
@@ -180,7 +180,7 @@ export function QuestionCard({
                 aria-label={t("customAriaLabel")}
                 maxLength={200}
                 autoFocus
-                className="flex-1 rounded-md border border-black/15 bg-white/50 px-3 py-2 font-mono text-sm text-ink placeholder:text-black/40 focus:border-accent-muted"
+                className="flex-1 rounded-lg border-2 border-border bg-bg-primary px-3 py-2 text-sm text-text-primary placeholder:text-text-secondary/60 focus:border-accent"
               />
               <Button type="submit" disabled={!customDraft.trim()}>
                 {t("submit")}

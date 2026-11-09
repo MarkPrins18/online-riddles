@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, IBM_Plex_Mono } from "next/font/google";
+import { Anton, Figtree } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
@@ -7,17 +7,18 @@ import { CookieNoticeBanner } from "@/components/CookieNoticeBanner";
 import { Link } from "@/i18n/navigation";
 import "./globals.css";
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+// Anton: condensed paperback-cover display face, for headings and the big
+// action buttons only. Figtree: everything people actually read.
+const anton = Anton({
+  variable: "--font-anton",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
+  weight: "400",
 });
 
-const plexMono = IBM_Plex_Mono({
-  variable: "--font-plex-mono",
+const figtree = Figtree({
+  variable: "--font-figtree",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "700", "800"],
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -81,7 +82,7 @@ function websiteJsonLd(siteUrl: string, name: string, description: string) {
 // match when installed as a PWA.
 export const viewport: Viewport = {
   colorScheme: "dark",
-  themeColor: "#241a10",
+  themeColor: "#111111",
 };
 
 export default async function RootLayout({
@@ -96,7 +97,7 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      className={`${fraunces.variable} ${plexMono.variable} h-full antialiased`}
+      className={`${anton.variable} ${figtree.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-bg-primary text-text-primary">
         <script
@@ -110,12 +111,12 @@ export default async function RootLayout({
         <NextIntlClientProvider>
           <a
             href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:text-bg-primary"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:text-bg-primary"
           >
             {t("skipToContent")}
           </a>
           {children}
-          <footer className="px-6 py-6 text-center font-mono text-xs uppercase tracking-widest text-text-secondary">
+          <footer className="px-6 py-6 text-center text-sm font-bold text-text-secondary">
             <Link href="/privacy" className="underline decoration-accent/60 hover:text-accent">
               {t("privacyLink")}
             </Link>

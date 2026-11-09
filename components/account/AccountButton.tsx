@@ -48,13 +48,13 @@ export function AccountButton() {
 
   if (status && !status.isAnonymous) {
     return (
-      <div className="ml-auto flex items-center gap-2 self-center font-mono text-xs text-text-secondary">
+      <div className="ml-auto flex items-center gap-2 self-center text-xs text-text-secondary">
         <span className="hidden sm:inline">{status.email}</span>
         <button
           type="button"
           onClick={handleSignOut}
           disabled={isSigningOut}
-          className="uppercase tracking-widest underline decoration-accent/60 hover:text-accent disabled:cursor-not-allowed disabled:opacity-60"
+          className="font-bold underline decoration-accent/60 hover:text-accent disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSigningOut ? t("signingOut") : t("signOut")}
         </button>
@@ -72,7 +72,7 @@ export function AccountButton() {
       <button
         type="button"
         onClick={() => setIsModalOpen(true)}
-        className="ml-auto self-center font-mono text-xs uppercase tracking-widest text-text-secondary underline decoration-accent/60 hover:text-accent"
+        className="ml-auto self-center text-sm font-bold text-text-secondary underline decoration-accent/60 hover:text-accent"
       >
         {t("trigger")}
       </button>

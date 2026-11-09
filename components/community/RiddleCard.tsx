@@ -23,14 +23,14 @@ export function RiddleCard({
     <Card tone="chrome" className="flex flex-col gap-2">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h3 className="font-serif text-lg italic text-text-primary">{puzzle.title}</h3>
+          <h3 className="font-display text-lg uppercase text-text-primary">{puzzle.title}</h3>
           {authorName && (
-            <p className="font-mono text-xs text-text-secondary">{t("by", { name: authorName })}</p>
+            <p className="text-xs text-text-secondary">{t("by", { name: authorName })}</p>
           )}
         </div>
         <VoteButtons puzzleId={puzzle.id} score={score} myVote={myVote} />
       </div>
-      <p className="font-mono text-sm text-text-secondary">{puzzle.scenario}</p>
+      <p className="text-sm text-text-secondary">{puzzle.scenario}</p>
       <div className="flex flex-wrap gap-2">
         <Badge>{tDifficulty(puzzle.difficulty)}</Badge>
         {puzzle.category && <Badge tone="accent">{puzzle.category}</Badge>}

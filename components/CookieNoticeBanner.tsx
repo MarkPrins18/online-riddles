@@ -44,7 +44,7 @@ export function CookieNoticeBanner() {
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 flex items-center justify-between gap-4 border-t border-white/[0.08] bg-bg-secondary px-4 py-3">
-      <p className="font-mono text-xs text-text-secondary">
+      <p className="text-xs text-text-secondary">
         {t("message")}{" "}
         <Link href="/privacy" className="underline decoration-accent/60 hover:text-accent">
           {t("linkLabel")}
@@ -54,7 +54,7 @@ export function CookieNoticeBanner() {
         type="button"
         onClick={dismiss}
         aria-label={t("dismissAriaLabel")}
-        className="shrink-0 font-mono text-xs uppercase tracking-widest text-text-secondary hover:text-accent"
+        className="shrink-0 text-sm font-bold text-text-secondary hover:text-accent"
       >
         {t("dismiss")}
       </button>

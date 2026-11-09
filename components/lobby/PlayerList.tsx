@@ -15,7 +15,7 @@ export function PlayerList({
 
   if (players.length === 0) {
     return (
-      <p className="font-mono text-sm text-text-secondary">{t("empty")}</p>
+      <p className="text-sm text-text-secondary">{t("empty")}</p>
     );
   }
 
@@ -26,7 +26,7 @@ export function PlayerList({
           key={player.id}
           className="flex items-center justify-between py-2.5"
         >
-          <span className="flex items-center gap-2 font-mono text-sm text-text-primary">
+          <span className="flex items-center gap-2 text-sm text-text-primary">
             {onlinePlayerIds && (
               <span
                 className={`h-1.5 w-1.5 shrink-0 rounded-full ${
@@ -49,7 +49,7 @@ export function PlayerList({
                 type="button"
                 onClick={() => onKick(player.id)}
                 aria-label={t("removeAriaLabel", { name: player.name })}
-                className="rounded p-2.5 font-mono text-xs text-text-secondary transition-colors hover:text-danger"
+                className="rounded p-2.5 text-xs text-text-secondary transition-colors hover:text-danger"
               >
                 ✕
               </button>

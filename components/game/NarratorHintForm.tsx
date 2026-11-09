@@ -64,10 +64,10 @@ export function NarratorHintForm({
         aria-label={t("ariaLabel")}
         rows={2}
         maxLength={300}
-        className="w-full resize-none rounded-md border border-white/10 bg-bg-primary px-3 py-2.5 font-mono text-sm text-text-primary placeholder:text-text-secondary/60 focus:border-accent-muted"
+        className="w-full resize-none rounded-lg border-2 border-border bg-bg-primary px-3 py-2.5 text-base text-text-primary placeholder:text-text-secondary/60 focus:border-accent"
       />
       {error && (
-        <p role="alert" className="font-mono text-xs text-danger">
+        <p role="alert" className="text-xs text-danger">
           {error}
         </p>
       )}

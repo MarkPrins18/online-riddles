@@ -69,13 +69,13 @@ export function CommunityMineClient() {
   }
 
   if (isLoading) {
-    return <p className="font-mono text-sm text-text-secondary">{t("loading")}</p>;
+    return <p className="text-sm text-text-secondary">{t("loading")}</p>;
   }
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between gap-4">
-        <h1 className="font-serif text-3xl italic text-text-primary">{t("heading")}</h1>
+        <h1 className="font-display text-3xl uppercase text-text-primary">{t("heading")}</h1>
         <Link href="/community/nieuw">
           <Button>{t("submitButton")}</Button>
         </Link>
@@ -84,7 +84,7 @@ export function CommunityMineClient() {
       <AccountNudgeBanner packs={packs} puzzles={puzzles} />
 
       {packs.length === 0 ? (
-        <p className="font-mono text-sm text-text-secondary">{t("noPacksYet")}</p>
+        <p className="text-sm text-text-secondary">{t("noPacksYet")}</p>
       ) : (
         <div className="flex flex-col gap-4">
           {packs.map((pack) => {
@@ -93,7 +93,7 @@ export function CommunityMineClient() {
               <Card key={pack.id} tone="chrome" className="flex flex-col gap-3">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <h2 className="font-serif text-xl italic text-text-primary">{pack.name}</h2>
+                    <h2 className="font-display text-xl uppercase text-text-primary">{pack.name}</h2>
                     <Badge tone="accent" className="mt-1">
                       {pack.theme}
                     </Badge>
@@ -104,7 +104,7 @@ export function CommunityMineClient() {
                 </div>
 
                 {packPuzzles.length === 0 ? (
-                  <p className="font-mono text-xs text-text-secondary">{t("noPuzzlesYet")}</p>
+                  <p className="text-xs text-text-secondary">{t("noPuzzlesYet")}</p>
                 ) : (
                   <ul className="flex flex-col gap-3">
                     {packPuzzles.map((puzzle) => (
@@ -122,7 +122,7 @@ export function CommunityMineClient() {
                             onCancel={() => setEditingPuzzleId(null)}
                           />
                         ) : (
-                          <div className="flex items-center justify-between gap-3 font-mono text-sm">
+                          <div className="flex items-center justify-between gap-3 text-sm">
                             <span className="text-text-primary">{puzzle.title}</span>
                             <span className="flex items-center gap-3">
                               <span className="text-text-secondary">

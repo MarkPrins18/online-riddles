@@ -15,11 +15,11 @@ export function NarratorPicker({
 
   return (
     <fieldset className="flex flex-col gap-2">
-      <legend className="mb-1 font-mono text-xs uppercase tracking-widest text-text-secondary">
+      <legend className="mb-1 text-sm font-bold text-text-secondary">
         {t("legend")}
       </legend>
 
-      <label className="flex items-center gap-2 rounded-md border border-white/10 bg-bg-primary/60 px-3 py-2 font-mono text-sm text-text-primary">
+      <label className="flex items-center gap-2 rounded-md border border-white/10 bg-bg-primary/60 px-3 py-2 text-sm text-text-primary">
         <input
           type="radio"
           name="narrator"
@@ -33,7 +33,7 @@ export function NarratorPicker({
       {players.map((player) => (
         <label
           key={player.id}
-          className="flex items-center gap-2 rounded-md border border-white/10 bg-bg-primary/60 px-3 py-2 font-mono text-sm text-text-primary"
+          className="flex items-center gap-2 rounded-md border border-white/10 bg-bg-primary/60 px-3 py-2 text-sm text-text-primary"
         >
           <input
             type="radio"

@@ -11,8 +11,8 @@ import { Card } from "@/components/ui/Card";
 import { AccountModal } from "@/components/account/AccountModal";
 
 const inputClasses =
-  "rounded-md border border-white/10 bg-bg-primary px-3 py-2.5 font-mono text-sm text-text-primary placeholder:text-text-secondary/60 focus:border-accent-muted";
-const labelClasses = "font-mono text-xs uppercase tracking-widest text-text-secondary";
+  "rounded-lg border-2 border-border bg-bg-primary px-3 py-2.5 text-base text-text-primary placeholder:text-text-secondary/60 focus:border-accent";
+const labelClasses = "text-sm font-bold text-text-secondary";
 
 /**
  * Shown once, before someone's first pack/riddle, so submissions have an
@@ -59,10 +59,10 @@ export function SetNameForm({
 
   const content = (
     <>
-      <p className="mb-4 font-mono text-xs uppercase tracking-widest text-accent">
+      <p className="mb-4 text-sm font-bold text-accent">
         {t(variant === "account" ? "headingAccount" : "heading")}
       </p>
-      <p className="mb-4 font-mono text-sm text-text-secondary">
+      <p className="mb-4 text-sm text-text-secondary">
         {t(variant === "account" ? "subtitleAccount" : "subtitle")}
       </p>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
@@ -77,13 +77,13 @@ export function SetNameForm({
           maxLength={24}
           className={inputClasses}
         />
-        {error && <p className="font-mono text-xs text-danger">{error}</p>}
+        {error && <p className="text-xs text-danger">{error}</p>}
         <Button type="submit" disabled={isSubmitting || !name.trim()}>
           {isSubmitting ? t("saving") : t("submit")}
         </Button>
       </form>
       {showAccountNudge && (
-        <p className="mt-3 font-mono text-xs text-text-secondary">
+        <p className="mt-3 text-xs text-text-secondary">
           {t("accountNudge")}{" "}
           <button
             type="button"

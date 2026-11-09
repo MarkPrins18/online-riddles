@@ -21,7 +21,7 @@ export function HowToPlayButton({ className = "" }: { className?: string }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className={`font-mono text-xs uppercase tracking-widest text-text-secondary underline decoration-accent/60 hover:text-accent ${className}`}
+        className={`text-sm font-bold text-text-secondary underline decoration-accent/60 hover:text-accent ${className}`}
       >
         {t("trigger")}
       </button>
@@ -29,7 +29,7 @@ export function HowToPlayButton({ className = "" }: { className?: string }) {
       {open && (
         <Modal onClose={() => setOpen(false)} className="mx-auto w-full max-w-xl">
           <div className="flex items-center justify-between gap-3 border-b border-white/5 p-4">
-            <p className="font-mono text-sm uppercase tracking-widest text-text-secondary">
+            <p className="text-sm font-bold text-text-secondary">
               {t("trigger")}
             </p>
             <Button variant="ghost" onClick={() => setOpen(false)}>
@@ -39,59 +39,59 @@ export function HowToPlayButton({ className = "" }: { className?: string }) {
 
           <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto p-5">
             <section>
-              <p className="font-serif text-lg italic text-text-primary">{t("ideaTitle")}</p>
-              <p className="mt-1 font-mono text-sm leading-relaxed text-text-secondary">
+              <p className="font-display text-lg uppercase text-text-primary">{t("ideaTitle")}</p>
+              <p className="mt-1 text-sm leading-relaxed text-text-secondary">
                 {t("ideaBody")}
               </p>
             </section>
 
             <section>
-              <p className="font-serif text-lg italic text-text-primary">{t("narratorTitle")}</p>
-              <p className="mt-1 font-mono text-sm leading-relaxed text-text-secondary">
+              <p className="font-display text-lg uppercase text-text-primary">{t("narratorTitle")}</p>
+              <p className="mt-1 text-sm leading-relaxed text-text-secondary">
                 {t("narratorBody")}
               </p>
             </section>
 
             <section>
-              <p className="font-serif text-lg italic text-text-primary">
+              <p className="font-display text-lg uppercase text-text-primary">
                 {t("questionsTitle")}
               </p>
-              <p className="mt-1 font-mono text-sm leading-relaxed text-text-secondary">
+              <p className="mt-1 text-sm leading-relaxed text-text-secondary">
                 {t("questionsBody")}
               </p>
             </section>
 
             <section>
-              <p className="font-serif text-lg italic text-text-primary">{t("solveTitle")}</p>
-              <p className="mt-1 font-mono text-sm leading-relaxed text-text-secondary">
+              <p className="font-display text-lg uppercase text-text-primary">{t("solveTitle")}</p>
+              <p className="mt-1 text-sm leading-relaxed text-text-secondary">
                 {t("solveBody")}
               </p>
             </section>
 
             <section>
-              <p className="font-serif text-lg italic text-text-primary">{t("pointsTitle")}</p>
-              <p className="mt-1 font-mono text-sm leading-relaxed text-text-secondary">
+              <p className="font-display text-lg uppercase text-text-primary">{t("pointsTitle")}</p>
+              <p className="mt-1 text-sm leading-relaxed text-text-secondary">
                 {t("pointsBody")}
               </p>
             </section>
 
             <section>
-              <p className="font-serif text-lg italic text-text-primary">{t("hardcoreTitle")}</p>
-              <p className="mt-1 font-mono text-sm leading-relaxed text-text-secondary">
+              <p className="font-display text-lg uppercase text-text-primary">{t("hardcoreTitle")}</p>
+              <p className="mt-1 text-sm leading-relaxed text-text-secondary">
                 {t("hardcoreBody")}
               </p>
             </section>
 
             <section>
-              <p className="font-serif text-lg italic text-text-primary">{t("saboteurTitle")}</p>
-              <p className="mt-1 font-mono text-sm leading-relaxed text-text-secondary">
+              <p className="font-display text-lg uppercase text-text-primary">{t("saboteurTitle")}</p>
+              <p className="mt-1 text-sm leading-relaxed text-text-secondary">
                 {t("saboteurBody")}
               </p>
             </section>
 
             <section>
-              <p className="font-serif text-lg italic text-text-primary">{t("corkboardTitle")}</p>
-              <p className="mt-1 font-mono text-sm leading-relaxed text-text-secondary">
+              <p className="font-display text-lg uppercase text-text-primary">{t("corkboardTitle")}</p>
+              <p className="mt-1 text-sm leading-relaxed text-text-secondary">
                 {t("corkboardBody")}
               </p>
             </section>

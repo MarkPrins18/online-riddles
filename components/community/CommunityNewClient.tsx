@@ -65,7 +65,7 @@ export function CommunityNewClient() {
   }, [locale]);
 
   if (hasName === null) {
-    return <p className="font-mono text-sm text-text-secondary">{t("loading")}</p>;
+    return <p className="text-sm text-text-secondary">{t("loading")}</p>;
   }
 
   if (!hasName) {
@@ -83,10 +83,10 @@ export function CommunityNewClient() {
 
     return (
       <Card tone="case">
-        <p className="mb-4 font-mono text-xs uppercase tracking-widest text-accent">
+        <p className="mb-4 text-sm font-bold text-accent">
           {t("chooseHeading")}
         </p>
-        <p className="mb-4 font-mono text-sm text-text-secondary">{t("chooseSubtitle")}</p>
+        <p className="mb-4 text-sm text-text-secondary">{t("chooseSubtitle")}</p>
         <div className="flex flex-col gap-3">
           <Button type="button" onClick={() => setAccountModalOpen(true)}>
             {t("createAccountButton")}
@@ -94,7 +94,7 @@ export function CommunityNewClient() {
           <button
             type="button"
             onClick={() => setShowNameOnlyForm(true)}
-            className="font-mono text-xs uppercase tracking-widest text-text-secondary underline decoration-accent/60 hover:text-accent"
+            className="text-sm font-bold text-text-secondary underline decoration-accent/60 hover:text-accent"
           >
             {t("skipToNameOnly")}
           </button>
@@ -113,10 +113,10 @@ export function CommunityNewClient() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="font-serif text-3xl italic text-text-primary">{t("heading")}</h1>
+      <h1 className="font-display text-3xl uppercase text-text-primary">{t("heading")}</h1>
 
       <Card tone="chrome">
-        <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-secondary">
+        <p className="mb-3 text-sm font-bold text-text-secondary">
           {t("packHeading")}
         </p>
         {packs.length > 0 && !showNewPackForm && (
@@ -124,7 +124,7 @@ export function CommunityNewClient() {
             <select
               value={selectedPackId ?? ""}
               onChange={(e) => setSelectedPackId(e.target.value)}
-              className="flex-1 rounded-md border border-white/10 bg-bg-primary px-3 py-2 font-mono text-sm text-text-primary focus:border-accent-muted"
+              className="flex-1 rounded-lg border-2 border-border bg-bg-primary px-3 py-2 text-base text-text-primary focus:border-accent"
             >
               {packs.map((pack) => (
                 <option key={pack.id} value={pack.id}>
@@ -162,7 +162,7 @@ export function CommunityNewClient() {
             onSaved={(puzzle: Puzzle) => setJustAdded(puzzle.title)}
           />
           {justAdded && (
-            <p className="mt-3 font-mono text-xs text-accent">
+            <p className="mt-3 text-xs text-accent">
               {t("addedNoticePrefix", { title: justAdded })}{" "}
               <Link href="/community/mijn" className="underline">
                 {t("myPacksLink")}

@@ -273,7 +273,7 @@ export function GamePlayClient({ code }: { code: string }) {
 
   if (state.error) {
     return (
-      <p className="font-mono text-sm text-danger">
+      <p className="text-sm text-danger">
         {t("errorPrefix", { error: state.error })}
       </p>
     );
@@ -281,7 +281,7 @@ export function GamePlayClient({ code }: { code: string }) {
 
   if (!state.room || !state.puzzle || !playerId) {
     return (
-      <p className="font-mono text-sm text-text-secondary">{t("loadingCase")}</p>
+      <p className="text-sm text-text-secondary">{t("loadingCase")}</p>
     );
   }
 
@@ -465,7 +465,7 @@ export function GamePlayClient({ code }: { code: string }) {
 
       <div className="desk-layout w-full max-w-[72rem]">
         <div className="flex flex-nowrap items-center justify-between gap-2 overflow-x-auto [grid-area:status]">
-          <div className="flex shrink-0 flex-nowrap items-center gap-2 whitespace-nowrap font-mono text-sm text-text-secondary sm:gap-3">
+          <div className="flex shrink-0 flex-nowrap items-center gap-2 whitespace-nowrap text-sm text-text-secondary sm:gap-3">
             <span>{t("roundLabel", { round: room.round + 1 })}</span>
             {narrating && (
               <span className="hidden text-accent sm:inline">{t("youAreNarrator")}</span>
@@ -516,28 +516,26 @@ export function GamePlayClient({ code }: { code: string }) {
               scenario actively (to ask questions), so theirs stays inline
               and open/closed as before at every width. */}
           <div className={narrating ? "hidden xl:block" : undefined}>
-            <div className="relative -rotate-[0.4deg]">
-              <span className="absolute -top-3 left-6 -rotate-2 rounded-[2px_8px_2px_8px] border-2 border-accent/60 bg-bg-primary px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-accent">
-                {t("caseDossierLabel")}
-              </span>
-              <Card tone="case" className="!p-4 sm:!p-6">
-                <button
-                  type="button"
-                  onClick={() => setDossierOpen((v) => !v)}
-                  aria-expanded={dossierOpen}
-                  className="flex w-full items-center justify-between gap-3 text-left"
-                >
-                  <h1 className="font-serif text-xl text-text-primary sm:text-2xl">{puzzle.title}</h1>
-                  <span className="shrink-0 font-mono text-xs text-text-secondary" aria-hidden="true">
-                    {dossierOpen ? "▾" : "▸"}
-                  </span>
-                </button>
-                {dossierOpen && (
-                  <p className="mt-3 font-serif text-base leading-relaxed text-text-primary/90">
-                    {puzzle.scenario}
-                  </p>
-                )}
-              </Card>
+            {/* The case itself is the one loud surface on the screen: a
+                yellow paperback cover with ink text. */}
+            <div className="rounded-xl bg-accent p-4 text-ink sm:p-6">
+              <p className="text-sm font-extrabold">{t("caseDossierLabel")}</p>
+              <button
+                type="button"
+                onClick={() => setDossierOpen((v) => !v)}
+                aria-expanded={dossierOpen}
+                className="mt-1 flex w-full items-center justify-between gap-3 text-left"
+              >
+                <h1 className="font-display text-2xl uppercase leading-none text-ink sm:text-4xl">{puzzle.title}</h1>
+                <span className="shrink-0 text-sm text-ink" aria-hidden="true">
+                  {dossierOpen ? "▾" : "▸"}
+                </span>
+              </button>
+              {dossierOpen && (
+                <p className="mt-3 text-base font-medium leading-relaxed text-ink sm:text-lg">
+                  {puzzle.scenario}
+                </p>
+              )}
             </div>
           </div>
 
@@ -627,7 +625,7 @@ export function GamePlayClient({ code }: { code: string }) {
             <div className="mt-1 xl:hidden">
               {isSpectator ? (
                 <Card>
-                  <p className="font-mono text-sm text-text-secondary">{t("spectatorWaiting")}</p>
+                  <p className="text-sm text-text-secondary">{t("spectatorWaiting")}</p>
                 </Card>
               ) : (
                 <Tabs
@@ -681,7 +679,7 @@ export function GamePlayClient({ code }: { code: string }) {
 
           {!narrating && !isRevealed && !isSpectator && (
             <Card className="hidden xl:block">
-              <p className="mb-3 font-mono text-xs text-text-secondary">{t("solveCaseLabel")}</p>
+              <p className="mb-3 text-xs text-text-secondary">{t("solveCaseLabel")}</p>
               <GuessForm
                 supabase={supabase}
                 roomId={room.id}
@@ -718,7 +716,7 @@ export function GamePlayClient({ code }: { code: string }) {
                     label: t("inboxTab"),
                     badge: unansweredCount + pendingGuessCount,
                     content: isRevealed ? (
-                      <p className="font-mono text-sm text-text-secondary">{t("caseClosedLabel")}</p>
+                      <p className="text-sm text-text-secondary">{t("caseClosedLabel")}</p>
                     ) : (
                       <NarratorInbox
                         supabase={supabase}
@@ -796,7 +794,7 @@ export function GamePlayClient({ code }: { code: string }) {
                     label: t("inboxTab"),
                     badge: unansweredCount + pendingGuessCount,
                     content: isRevealed ? (
-                      <p className="font-mono text-sm text-text-secondary">{t("caseClosedLabel")}</p>
+                      <p className="text-sm text-text-secondary">{t("caseClosedLabel")}</p>
                     ) : (
                       <NarratorInbox
                         supabase={supabase}
@@ -894,7 +892,7 @@ export function GamePlayClient({ code }: { code: string }) {
         {!narrating && !isRevealed && !isSpectator && (
           <div className="hidden [grid-area:side] xl:block">
             <Card tone="paper" className="w-full p-4">
-              <p className="font-mono text-[11px] uppercase tracking-widest text-black/60">
+              <p className="text-sm font-extrabold text-ink">
                 {t("askQuestionTab")}
               </p>
               <div className="mt-2">
@@ -914,13 +912,13 @@ export function GamePlayClient({ code }: { code: string }) {
         {isRevealed && hasMoreRounds(room.round, room.max_rounds) && isHost && (
           <div className="[grid-area:footer]">
             <Card>
-              <p className="mb-3 font-mono text-xs text-text-secondary">
+              <p className="mb-3 text-xs text-text-secondary">
                 {nextNarrator
                   ? t("nextNarratorLabel", { name: nextNarrator.name })
                   : t("notEnoughPlayers")}
               </p>
               {nextCaseError && (
-                <p className="mb-3 font-mono text-xs text-danger">{nextCaseError}</p>
+                <p className="mb-3 text-xs text-danger">{nextCaseError}</p>
               )}
               <Button
                 className="w-full"
@@ -958,7 +956,7 @@ export function GamePlayClient({ code }: { code: string }) {
             onNewGame={() => router.push("/")}
           />
           {isHost && nextCaseError && (
-            <p className="mt-2 font-mono text-xs text-danger">{nextCaseError}</p>
+            <p className="mt-2 text-xs text-danger">{nextCaseError}</p>
           )}
         </Dialog>
       )}

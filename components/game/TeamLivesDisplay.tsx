@@ -12,7 +12,7 @@ export function TeamLivesDisplay({
   const t = useTranslations("TeamLivesDisplay");
 
   return (
-    <span className="font-mono text-sm tracking-wide" aria-label={t("ariaLabel", { remaining, total })}>
+    <span className="text-sm tracking-wide" aria-label={t("ariaLabel", { remaining, total })}>
       {hearts.map((filled, i) => (
         <span key={i} className={filled ? "text-danger" : "text-text-secondary/30"}>
           {filled ? "❤" : "🖤"}

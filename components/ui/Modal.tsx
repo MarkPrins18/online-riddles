@@ -25,7 +25,11 @@ export function Modal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex flex-col bg-bg-primary/95 p-4 backdrop-blur-sm"
+      // Typography is reset here: a modal is rendered wherever its trigger
+      // lives (e.g. inside a bold nav), and would otherwise inherit that
+      // styling — bold body text and a faux-bold, smeared Anton heading.
+      // No backdrop blur either: it can soften all text inside on Windows.
+      className="fixed inset-0 z-50 flex flex-col bg-bg-primary/95 p-4 text-left text-base font-normal normal-case tracking-normal text-text-primary"
       onPointerDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}

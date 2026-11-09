@@ -52,7 +52,7 @@ export function Drawer({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex justify-end bg-black/50 backdrop-blur-[2px] transition-opacity duration-200"
+      className="fixed inset-0 z-50 flex justify-end bg-black/60 transition-opacity duration-200 text-left text-base font-normal normal-case tracking-normal text-text-primary"
       style={{ opacity: entered ? 1 : 0 }}
       onPointerDown={(e) => {
         if (e.target === e.currentTarget) close();

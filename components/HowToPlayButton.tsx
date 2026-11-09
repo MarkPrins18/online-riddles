@@ -40,70 +40,70 @@ export function HowToPlayButton({
 
       {open && (
         <Modal onClose={() => setOpen(false)} className="mx-auto w-full max-w-xl">
-          <div className="flex items-center justify-between gap-3 border-b border-white/5 p-4">
-            <p className="text-sm font-bold text-text-secondary">
+          <div className="flex items-center justify-between gap-3 border-b-2 border-border px-6 py-4">
+            <h2 className="font-display text-3xl uppercase tracking-wide text-accent">
               {t("trigger")}
-            </p>
+            </h2>
             <Button variant="ghost" onClick={() => setOpen(false)}>
               {t("close")}
             </Button>
           </div>
 
-          <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto p-5">
+          <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-6 py-6">
             <section>
-              <p className="font-display text-lg uppercase text-text-primary">{t("ideaTitle")}</p>
-              <p className="mt-1 text-sm leading-relaxed text-text-secondary">
+              <h3 className="font-display text-xl uppercase tracking-wide text-accent">{t("ideaTitle")}</h3>
+              <p className="mt-1.5 text-base leading-relaxed text-text-primary/90">
                 {t("ideaBody")}
               </p>
             </section>
 
             <section>
-              <p className="font-display text-lg uppercase text-text-primary">{t("narratorTitle")}</p>
-              <p className="mt-1 text-sm leading-relaxed text-text-secondary">
+              <h3 className="font-display text-xl uppercase tracking-wide text-accent">{t("narratorTitle")}</h3>
+              <p className="mt-1.5 text-base leading-relaxed text-text-primary/90">
                 {t("narratorBody")}
               </p>
             </section>
 
             <section>
-              <p className="font-display text-lg uppercase text-text-primary">
+              <h3 className="font-display text-xl uppercase tracking-wide text-accent">
                 {t("questionsTitle")}
-              </p>
-              <p className="mt-1 text-sm leading-relaxed text-text-secondary">
+              </h3>
+              <p className="mt-1.5 text-base leading-relaxed text-text-primary/90">
                 {t("questionsBody")}
               </p>
             </section>
 
             <section>
-              <p className="font-display text-lg uppercase text-text-primary">{t("solveTitle")}</p>
-              <p className="mt-1 text-sm leading-relaxed text-text-secondary">
+              <h3 className="font-display text-xl uppercase tracking-wide text-accent">{t("solveTitle")}</h3>
+              <p className="mt-1.5 text-base leading-relaxed text-text-primary/90">
                 {t("solveBody")}
               </p>
             </section>
 
             <section>
-              <p className="font-display text-lg uppercase text-text-primary">{t("pointsTitle")}</p>
-              <p className="mt-1 text-sm leading-relaxed text-text-secondary">
+              <h3 className="font-display text-xl uppercase tracking-wide text-accent">{t("pointsTitle")}</h3>
+              <p className="mt-1.5 text-base leading-relaxed text-text-primary/90">
                 {t("pointsBody")}
               </p>
             </section>
 
             <section>
-              <p className="font-display text-lg uppercase text-text-primary">{t("hardcoreTitle")}</p>
-              <p className="mt-1 text-sm leading-relaxed text-text-secondary">
+              <h3 className="font-display text-xl uppercase tracking-wide text-accent">{t("hardcoreTitle")}</h3>
+              <p className="mt-1.5 text-base leading-relaxed text-text-primary/90">
                 {t("hardcoreBody")}
               </p>
             </section>
 
             <section>
-              <p className="font-display text-lg uppercase text-text-primary">{t("saboteurTitle")}</p>
-              <p className="mt-1 text-sm leading-relaxed text-text-secondary">
+              <h3 className="font-display text-xl uppercase tracking-wide text-accent">{t("saboteurTitle")}</h3>
+              <p className="mt-1.5 text-base leading-relaxed text-text-primary/90">
                 {t("saboteurBody")}
               </p>
             </section>
 
             <section>
-              <p className="font-display text-lg uppercase text-text-primary">{t("corkboardTitle")}</p>
-              <p className="mt-1 text-sm leading-relaxed text-text-secondary">
+              <h3 className="font-display text-xl uppercase tracking-wide text-accent">{t("corkboardTitle")}</h3>
+              <p className="mt-1.5 text-base leading-relaxed text-text-primary/90">
                 {t("corkboardBody")}
               </p>
             </section>

@@ -54,7 +54,7 @@ export function InterrogationLog({
   ].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col">
       {timeline.map((entry) =>
         entry.kind === "question" ? (
           <QuestionCard
@@ -66,7 +66,9 @@ export function InterrogationLog({
             narrating={narrating}
           />
         ) : (
-          <HintCard key={entry.hint.id} hint={entry.hint.text} />
+          <div key={entry.hint.id} className="my-2">
+            <HintCard hint={entry.hint.text} />
+          </div>
         )
       )}
     </div>

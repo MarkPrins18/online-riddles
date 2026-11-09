@@ -6,6 +6,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import { askQuestion } from "@/lib/supabase/questions";
 import { getErrorMessage } from "@/lib/errors";
+import type { ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
 
 export function QuestionForm({
@@ -15,6 +16,8 @@ export function QuestionForm({
   playerId,
   playerName,
   round,
+  variant = "stacked",
+  trailing,
 }: {
   supabase: SupabaseClient<Database>;
   roomId: string;
@@ -22,6 +25,10 @@ export function QuestionForm({
   playerId: string;
   playerName: string;
   round: number;
+  /** "bar": one row — input, submit, then `trailing` — as on the game
+   * screen's action bar. "stacked" (default): input above a full-width button. */
+  variant?: "stacked" | "bar";
+  trailing?: ReactNode;
 }) {
   const [text, setText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -48,6 +55,34 @@ export function QuestionForm({
       setError(getErrorMessage(err, t("error")));
     }
     setIsSubmitting(false);
+  }
+
+  if (variant === "bar") {
+    return (
+      <form onSubmit={handleSubmit} className="flex flex-wrap gap-3">
+        <input
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder={t("placeholder")}
+          aria-label={t("ariaLabel")}
+          maxLength={140}
+          className="min-w-0 flex-[1_1_320px] rounded-[10px] border-[3px] border-text-primary bg-bg-secondary px-4 py-[15px] text-lg text-text-primary placeholder:text-text-secondary/70 focus:border-accent focus:outline-none"
+        />
+        <button
+          type="submit"
+          disabled={isSubmitting || !text.trim()}
+          className="cursor-pointer rounded-[10px] border-[3px] bg-text-primary border-text-primary px-6 py-[11px] font-display text-[22px] uppercase tracking-[0.03em] text-ink disabled:cursor-not-allowed"
+        >
+          {t("submit")}
+        </button>
+        {trailing}
+        {error && (
+          <p role="alert" className="basis-full text-sm text-danger">
+            {error}
+          </p>
+        )}
+      </form>
+    );
   }
 
   return (

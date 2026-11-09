@@ -8,8 +8,8 @@ const LOCALE_LABELS: Record<Locale, string> = {
 };
 
 /**
- * Same look as LanguageSwitcher, for pages under app/[locale] (see
- * i18n/routing.ts). Switching language here means navigating to this same
+ * Language link for pages under app/[locale] (see i18n/routing.ts), styled
+ * as a plain nav link. Switching language here means navigating to this same
  * page under the other locale's URL prefix, not re-rendering with a new
  * cookie — a [locale]-segment page's language comes from the URL, not the
  * cookie, so a cookie flip alone wouldn't change anything here. Not shared
@@ -37,31 +37,23 @@ export async function LocalizedLanguageSwitcher({
 }) {
   const locale = await getLocale();
 
+  // Only the language(s) you can switch *to* — the current one is already
+  // obvious from the page itself.
   return (
-    <div
-      role="group"
-      aria-label="Language"
-      className={`inline-flex items-center gap-1 text-sm font-bold text-text-secondary ${className}`}
-    >
-      {locales.map((option) =>
-        option === locale ? (
-          <span
-            key={option}
-            aria-current="true"
-            className="rounded-sm bg-accent px-2 py-1 text-bg-primary"
-          >
-            {LOCALE_LABELS[option]}
-          </span>
-        ) : (
+    <span className={`inline-flex items-center gap-3 ${className}`}>
+      {locales
+        .filter((option) => option !== locale)
+        .map((option) => (
           <a
             key={option}
             href={getPathname({ href: pathname, locale: option })}
-            className="rounded-sm px-2 py-1 transition-colors hover:text-accent"
+            hrefLang={option}
+            lang={option}
+            className="text-[15px] font-bold text-text-secondary transition-colors hover:text-accent"
           >
             {LOCALE_LABELS[option]}
           </a>
-        )
-      )}
-    </div>
+        ))}
+    </span>
   );
 }

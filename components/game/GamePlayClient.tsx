@@ -29,12 +29,13 @@ import { getErrorMessage } from "@/lib/errors";
 import { logCaseOutcome } from "@/lib/supabase/caseLog";
 import { pinQuestion } from "@/lib/supabase/board";
 import { Card } from "@/components/ui/Card";
+import { CaseActionBar } from "./CaseActionBar";
+import { PlayersPanel } from "./PlayersPanel";
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
 import { Tabs } from "@/components/ui/Tabs";
 import { InterrogationLog } from "./InterrogationLog";
 import { CluesList } from "./CluesList";
-import { QuestionForm } from "./QuestionForm";
 import { ChatPanel } from "./ChatPanel";
 import { ChatDrawer } from "./ChatDrawer";
 import { NarratorCaseDrawer } from "./NarratorCaseDrawer";
@@ -44,8 +45,6 @@ import { AccusationPanel } from "./AccusationPanel";
 import { AccusationReveal } from "./AccusationReveal";
 import { ChatIconButton } from "./ChatIconButton";
 import { ClaimHostBanner } from "@/components/ClaimHostBanner";
-import { GuessForm } from "./GuessForm";
-import { MyGuessFeedback } from "./MyGuessFeedback";
 import { NarratorInbox } from "./NarratorInbox";
 import { NarratorArchive } from "./NarratorArchive";
 import { CorkboardButton } from "./CorkboardButton";
@@ -110,24 +109,6 @@ export function GamePlayClient({ code }: { code: string }) {
   // which a second, slower actor (e.g. the same host open in another tab)
   // could still race the server.
   const [isAdvancingRound, setIsAdvancingRound] = useState(false);
-
-  // Measures "vast" (dossier + los-de-zaak-op/spanningspaneel) so the
-  // Overleg column (xl up) can be pinned to that exact pixel height instead
-  // of growing forever with the message count. Re-runs once the guarded
-  // early-return below stops blocking the vast div from existing, and again
-  // whenever its content changes shape (new puzzle, revealed, etc).
-  const vastRef = useRef<HTMLDivElement>(null);
-  const [vastHeight, setVastHeight] = useState<number | null>(null);
-  useEffect(() => {
-    const el = vastRef.current;
-    if (!el) return;
-    const observer = new ResizeObserver((entries) => {
-      const height = entries[0]?.contentRect.height;
-      if (height) setVastHeight(height);
-    });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [state.room?.id, state.room?.status, state.puzzle?.id]);
 
   useEffect(() => {
     if (state.room?.status === "lobby") {
@@ -311,6 +292,7 @@ export function GamePlayClient({ code }: { code: string }) {
   const isHost = playerId === room.host_id;
   const isRevealed = room.status === "revealed";
   const isSpectator = currentPlayer?.is_spectator ?? false;
+  const narratorName = players.find((p) => p.id === room.narrator_id)?.name ?? null;
 
   const needsBriefing = narrating && !isRevealed && puzzle.id !== briefingSeenPuzzleId;
   const solver = guesses.find((g) => g.status === "correct");
@@ -452,7 +434,7 @@ export function GamePlayClient({ code }: { code: string }) {
         </Dialog>
       )}
 
-      <div className="mb-4 flex w-full max-w-[72rem] flex-col gap-3">
+      <div className="mb-4 flex w-full max-w-[1220px] flex-col gap-3">
         <ClaimHostBanner
           supabase={supabase}
           roomId={room.id}
@@ -463,34 +445,34 @@ export function GamePlayClient({ code }: { code: string }) {
         />
       </div>
 
-      <div className="desk-layout w-full max-w-[72rem]">
-        <div className="flex flex-nowrap items-center justify-between gap-2 overflow-x-auto [grid-area:status]">
-          <div className="flex shrink-0 flex-nowrap items-center gap-2 whitespace-nowrap text-sm text-text-secondary sm:gap-3">
-            <span>{t("roundLabel", { round: room.round + 1 })}</span>
-            {narrating && (
-              <span className="hidden text-accent sm:inline">{t("youAreNarrator")}</span>
+      <div className="desk-layout w-full max-w-[1220px]">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-1 [grid-area:status]">
+          <h2 className="font-display text-[26px] uppercase leading-none">
+            {t("caseOf", { round: room.round + 1 })}
+            {room.max_rounds > 0 && (
+              <span className="text-[#8c8578]"> {t("caseOfTotal", { total: room.max_rounds })}</span>
             )}
-            {isSpectator && <span>{t("spectator")}</span>}
-            {narrating && !isRevealed && (
-              <span className="hidden sm:inline">
-                {incorrectGuessCount > 0 && (
-                  <span className="text-danger">{t("wrongCount", { count: incorrectGuessCount })} · </span>
-                )}
-                {t("answeredCountLabel", { count: answeredCount })}
-              </span>
-            )}
+          </h2>
+          <span className="rounded-md border-2 border-[#3a3a3a] px-2.5 py-0.5 text-[13px] font-extrabold tracking-[0.14em] text-[#cfc7b5]">
+            {room.code}
+          </span>
+          {narrating && <span className="text-sm font-bold text-accent">{t("youAreNarrator")}</span>}
+          {isSpectator && <span className="text-sm font-bold text-text-secondary">{t("spectator")}</span>}
+          {narrating && !isRevealed && (
+            <span className="hidden text-sm text-text-secondary sm:inline">
+              {incorrectGuessCount > 0 && (
+                <span className="text-danger">{t("wrongCount", { count: incorrectGuessCount })} · </span>
+              )}
+              {t("answeredCountLabel", { count: answeredCount })}
+            </span>
+          )}
+          <span className="flex-1" />
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="xl:hidden">
+              <PlayersStrip players={players} narratorId={room.narrator_id} onOpen={() => setPlayersOpen(true)} />
+            </div>
             {room.hardcore_mode && room.team_lives_remaining !== null && room.team_lives_total !== null && (
               <TeamLivesDisplay remaining={room.team_lives_remaining} total={room.team_lives_total} />
-            )}
-          </div>
-          <div className="flex shrink-0 flex-nowrap items-center gap-1.5 whitespace-nowrap sm:gap-3">
-            <PlayersStrip players={players} narratorId={room.narrator_id} onOpen={() => setPlayersOpen(true)} />
-            {room.round_started_at && (
-              <Timer
-                startedAt={room.round_started_at}
-                now={now}
-                durationSeconds={room.round_duration_seconds}
-              />
             )}
             {/* CorkboardOverlay itself switches between the freeform
                 drag-and-connect canvas (xl+, where fixed-width 180-200px
@@ -500,13 +482,20 @@ export function GamePlayClient({ code }: { code: string }) {
             {!narrating && !isSpectator && (
               <CorkboardButton onClick={() => setCorkboardOpen(true)} />
             )}
+            {room.round_started_at && (
+              <Timer
+                startedAt={room.round_started_at}
+                now={now}
+                durationSeconds={room.round_duration_seconds}
+              />
+            )}
           </div>
         </div>
 
         {/* "Vast": never grows with the game — the dossier, the private
             Verteller panel, and (for raders) the ask/solve forms all live
             here so they're never at the mercy of a long Verhoor/Postvak. */}
-        <div ref={vastRef} className="flex flex-col gap-3 [grid-area:vast] sm:gap-4">
+        <div className="flex flex-col gap-4 [grid-area:vast] sm:gap-5">
           {/* Verteller already knows the case and the solution — pinning
               both open here is what was pushing Postvak (the thing that
               actually needs attention) off the bottom of the screen below
@@ -518,21 +507,25 @@ export function GamePlayClient({ code }: { code: string }) {
           <div className={narrating ? "hidden xl:block" : undefined}>
             {/* The case itself is the one loud surface on the screen: a
                 yellow paperback cover with ink text. */}
-            <div className="rounded-xl bg-accent p-4 text-ink sm:p-6">
-              <p className="text-sm font-extrabold">{t("caseDossierLabel")}</p>
+            <div className="relative overflow-hidden rounded-md bg-accent px-5 py-5 text-ink sm:px-[30px] sm:py-[26px]">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -bottom-20 -right-[60px] h-[280px] w-[280px] rounded-full bg-[radial-gradient(var(--ink)_2px,transparent_2.4px)] bg-[length:11px_11px] opacity-[0.16]"
+              />
+              <p className="relative text-sm font-extrabold">
+                {narratorName ? t("narratorIs", { name: narratorName }) : t("caseDossierLabel")}
+                {puzzle.category && ` · ${puzzle.category}`}
+              </p>
               <button
                 type="button"
                 onClick={() => setDossierOpen((v) => !v)}
                 aria-expanded={dossierOpen}
-                className="mt-1 flex w-full items-center justify-between gap-3 text-left"
+                className="relative mt-2 block w-full cursor-pointer text-left"
               >
-                <h1 className="font-display text-2xl uppercase leading-none text-ink sm:text-4xl">{puzzle.title}</h1>
-                <span className="shrink-0 text-sm text-ink" aria-hidden="true">
-                  {dossierOpen ? "▾" : "▸"}
-                </span>
+                <h1 className="font-display text-[32px] uppercase leading-[0.95] sm:text-[46px]">{puzzle.title}</h1>
               </button>
               {dossierOpen && (
-                <p className="mt-3 text-base font-medium leading-relaxed text-ink sm:text-lg">
+                <p className="relative mt-3 max-w-[40em] text-base font-medium leading-[1.55] sm:text-lg">
                   {puzzle.scenario}
                 </p>
               )}
@@ -559,7 +552,7 @@ export function GamePlayClient({ code }: { code: string }) {
               Stel-een-vraag/Los-de-zaak-op tab bar just below (via `trailing`)
               so it doesn't cost its own row — narrator and spectator have no
               such tab bar here, so they keep the standalone row. */}
-          {!isRevealed && (narrating || isSpectator) && (
+          {!isRevealed && (
             <div className="flex justify-end xl:hidden">
               <ChatIconButton
                 onClick={() => {
@@ -617,78 +610,22 @@ export function GamePlayClient({ code }: { code: string }) {
             </>
           )}
 
-          {/* Below xl: one tab pair instead of two stacked cards, so
-              Aanwijzingen/Verhoor/Overleg get more of the screen. From xl
-              up these split apart again — "Los de zaak op" stays here,
-              "Stel een vraag" moves to the "side" column next to Overleg. */}
           {!narrating && !isRevealed && (
-            <div className="mt-1 xl:hidden">
-              {isSpectator ? (
-                <Card>
-                  <p className="text-sm text-text-secondary">{t("spectatorWaiting")}</p>
-                </Card>
-              ) : (
-                <Tabs
-                  trailing={
-                    <ChatIconButton
-                      onClick={() => {
-                        setChatDrawerOpen(true);
-                        setChatSeenCount(chatMessages.length);
-                      }}
-                      unreadCount={unreadChatCount}
-                    />
-                  }
-                  tabs={[
-                    {
-                      key: "vraag",
-                      label: t("askQuestionTab"),
-                      content: (
-                        <Card tone="paper" className="w-full p-4">
-                          <QuestionForm
-                            supabase={supabase}
-                            roomId={room.id}
-                            puzzleId={puzzle.id}
-                            playerId={playerId}
-                            playerName={currentPlayer?.name ?? ""}
-                            round={room.round}
-                          />
-                        </Card>
-                      ),
-                    },
-                    {
-                      key: "oplossing",
-                      label: t("solveTab"),
-                      content: (
-                        <Card>
-                          <GuessForm
-                            supabase={supabase}
-                            roomId={room.id}
-                            puzzleId={puzzle.id}
-                            playerId={playerId}
-                            playerName={currentPlayer?.name ?? ""}
-                          />
-                          <MyGuessFeedback guesses={guesses} playerId={playerId} />
-                        </Card>
-                      ),
-                    },
-                  ]}
-                />
-              )}
-            </div>
-          )}
-
-          {!narrating && !isRevealed && !isSpectator && (
-            <Card className="hidden xl:block">
-              <p className="mb-3 text-xs text-text-secondary">{t("solveCaseLabel")}</p>
-              <GuessForm
+            isSpectator ? (
+              <Card>
+                <p className="text-sm text-text-secondary">{t("spectatorWaiting")}</p>
+              </Card>
+            ) : (
+              <CaseActionBar
                 supabase={supabase}
                 roomId={room.id}
                 puzzleId={puzzle.id}
                 playerId={playerId}
                 playerName={currentPlayer?.name ?? ""}
+                round={room.round}
+                guesses={guesses}
               />
-              <MyGuessFeedback guesses={guesses} playerId={playerId} />
-            </Card>
+            )
           )}
         </div>
 
@@ -705,7 +642,7 @@ export function GamePlayClient({ code }: { code: string }) {
             pane — a `height:100%` chain breaks silently the moment any
             link in it doesn't have a spec-definite height; flex-grow
             doesn't have that failure mode. */}
-        <div className="flex min-h-0 flex-col overflow-y-auto [grid-area:main] lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)]">
+        <div className="flex min-h-0 flex-col overflow-y-auto [grid-area:main] lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] xl:static xl:max-h-none xl:overflow-visible">
           <div className="flex min-h-0 flex-1 flex-col xl:hidden">
             {narrating ? (
               <Tabs
@@ -769,14 +706,16 @@ export function GamePlayClient({ code }: { code: string }) {
                     label: t("interrogationTab"),
                     badge: unansweredCount,
                     content: (
-                      <InterrogationLog
-                        supabase={supabase}
-                        roomId={room.id}
-                        round={room.round}
-                        questions={questions}
-                        narrating={narrating}
-                        hints={hints}
-                      />
+                      <div className="rounded-[10px] border-2 border-border bg-bg-secondary px-4 py-1.5">
+                        <InterrogationLog
+                          supabase={supabase}
+                          roomId={room.id}
+                          round={room.round}
+                          questions={questions}
+                          narrating={narrating}
+                          hints={hints}
+                        />
+                      </div>
                     ),
                   },
                 ]}
@@ -828,52 +767,43 @@ export function GamePlayClient({ code }: { code: string }) {
                 ]}
               />
             ) : (
-              <Tabs
-                defaultTab="aanwijzingen"
-                tabs={[
-                  {
-                    key: "aanwijzingen",
-                    label: t("cluesTab"),
-                    badge: clueCount,
-                    content: (
-                      <CluesList
-                        questions={questions}
-                        onPinToBoard={isSpectator ? undefined : handlePinToBoard}
-                      />
-                    ),
-                  },
-                  {
-                    key: "verhoor",
-                    label: t("interrogationTab"),
-                    badge: unansweredCount,
-                    content: (
-                      <InterrogationLog
-                        supabase={supabase}
-                        roomId={room.id}
-                        round={room.round}
-                        questions={questions}
-                        narrating={narrating}
-                        hints={hints}
-                      />
-                    ),
-                  },
-                ]}
-              />
+              // Wide screens have room for both at once, side by side, as
+              // in the design: the full Verhoor next to the confirmed facts.
+              <div className="flex flex-wrap items-start gap-5">
+                <section className="min-w-0 flex-[3_1_340px] rounded-[10px] border-2 border-border bg-bg-secondary px-5 pb-2 pt-5">
+                  <h2 className="mb-1.5 font-display text-[22px] uppercase text-accent">
+                    {t("interrogationHeading", { count: questions.length })}
+                  </h2>
+                  <InterrogationLog
+                    supabase={supabase}
+                    roomId={room.id}
+                    round={room.round}
+                    questions={questions}
+                    narrating={narrating}
+                    hints={hints}
+                  />
+                </section>
+                <div className="min-w-0 flex-[2_1_240px]">
+                  <CluesList
+                    questions={questions}
+                    onPinToBoard={isSpectator ? undefined : handlePinToBoard}
+                  />
+                </div>
+              </div>
             )}
           </div>
         </div>
 
-        {/* Overleg's permanent column from xl up — always visible, so it
-            never needs an unread badge the way the narrow tab does. Its
-            height is pinned to the measured height of "vast" (via
-            `vastHeight`, a ResizeObserver reading), not to its own content
-            — so its bottom edge lands on the same line as "Los de zaak op"
-            and it never grows past that no matter how many messages come
-            in; messages scroll inside it instead. */}
-        <div
-          className="hidden [grid-area:chat] xl:flex xl:flex-col xl:overflow-hidden"
-          style={vastHeight ? { height: vastHeight } : undefined}
-        >
+        {/* Right-hand column from xl up, spanning both rows: standings,
+            then Overleg. Sticky, with Overleg's message list scrolling
+            inside a capped height, so a long chat never stretches the page. */}
+        <aside className="hidden flex-col gap-5 [grid-area:aside] xl:sticky xl:top-6 xl:flex xl:max-h-[calc(100vh-3rem)]">
+          <PlayersPanel
+            players={players}
+            narratorId={room.narrator_id}
+            playerId={playerId}
+            onOpenDetails={() => setPlayersOpen(true)}
+          />
           <ChatPanel
             supabase={supabase}
             roomId={room.id}
@@ -882,32 +812,9 @@ export function GamePlayClient({ code }: { code: string }) {
             chatMessages={chatMessages}
             chatReactions={state.chatReactions}
             narrating={narrating}
-            className="xl:min-h-0 xl:flex-1"
+            className="min-h-0"
           />
-        </div>
-
-        {/* Directly under Overleg: what overleg usually leads to. Moving
-            it out of "vast" frees that column up, so Aanwijzingen/Verhoor
-            gets the full column height on the left. */}
-        {!narrating && !isRevealed && !isSpectator && (
-          <div className="hidden [grid-area:side] xl:block">
-            <Card tone="paper" className="w-full p-4">
-              <p className="text-sm font-extrabold text-ink">
-                {t("askQuestionTab")}
-              </p>
-              <div className="mt-2">
-                <QuestionForm
-                  supabase={supabase}
-                  roomId={room.id}
-                  puzzleId={puzzle.id}
-                  playerId={playerId}
-                  playerName={currentPlayer?.name ?? ""}
-                  round={room.round}
-                />
-              </div>
-            </Card>
-          </div>
-        )}
+        </aside>
 
         {isRevealed && hasMoreRounds(room.round, room.max_rounds) && isHost && (
           <div className="[grid-area:footer]">

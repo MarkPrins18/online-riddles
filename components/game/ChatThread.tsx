@@ -29,6 +29,7 @@ export function ChatThread({
         <ChatMessageRow
           key={message.id}
           message={message}
+          isOwn={message.player_id === playerId}
           summaries={summarizeReactions(chatReactions, message.id, playerId)}
           onToggleReaction={(emoji) => onToggleReaction(message.id, emoji)}
         />

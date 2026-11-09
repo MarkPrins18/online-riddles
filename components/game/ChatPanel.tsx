@@ -10,7 +10,6 @@ import {
   addChatMessageReaction,
   removeChatMessageReaction,
 } from "@/lib/supabase/chatMessageReactions";
-import { Card } from "@/components/ui/Card";
 import { ChatForm } from "./ChatForm";
 import { ChatThread } from "./ChatThread";
 
@@ -60,10 +59,10 @@ export function ChatPanel({
   }
 
   return (
-    <Card className={`flex h-full min-h-0 flex-col ${className}`}>
-      <p className="mb-3 shrink-0 text-sm font-bold text-text-secondary">
-        {t("heading")}
-      </p>
+    <section
+      className={`flex h-full min-h-0 flex-col rounded-[10px] border-2 border-border bg-bg-secondary px-5 py-[18px] ${className}`}
+    >
+      <h2 className="mb-3 shrink-0 font-display text-xl uppercase text-accent">{t("heading")}</h2>
       <div ref={chatScrollRef} className="min-h-0 flex-1 overflow-y-auto pr-1">
         <ChatThread
           messages={chatMessages}
@@ -73,14 +72,14 @@ export function ChatPanel({
         />
       </div>
       {narrating ? (
-        <p className="mt-3 shrink-0 border-t border-white/5 pt-3 text-xs text-text-secondary">
+        <p className="mt-3 shrink-0 text-xs text-text-secondary">
           {t("narratorNotice")}
         </p>
       ) : (
-        <div className="mt-3 shrink-0 border-t border-white/5 pt-3">
+        <div className="mt-3 shrink-0">
           <ChatForm supabase={supabase} roomId={roomId} playerId={playerId} playerName={playerName} />
         </div>
       )}
-    </Card>
+    </section>
   );
 }

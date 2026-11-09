@@ -13,23 +13,15 @@ import {
 } from "@/lib/supabase/questions";
 import { Button } from "@/components/ui/Button";
 
-// Only an unanswered question gets a highlighted outline (it's the one
-// that still needs the Verteller's attention); answered ones are read via
-// their answer label, never by color alone.
-const STATUS_BORDER: Record<string, string> = {
-  yes: "border-border",
-  no: "border-border",
-  irrelevant: "border-border",
-  custom: "border-border",
-  unanswered: "border-accent",
-};
-
+// Anton label, as on a paperback cover: yellow for yes, red for no, an
+// outline for "not relevant". The word itself always carries the meaning,
+// never the color alone.
 function AnswerBadge({ answer }: { answer: "yes" | "no" | "irrelevant" }) {
   const t = useTranslations("QuestionCard");
   const styles: Record<typeof answer, string> = {
-    yes: "border-2 border-accent bg-accent text-ink",
-    no: "border-2 border-danger bg-danger text-ink",
-    irrelevant: "border-2 border-border text-text-secondary",
+    yes: "bg-accent px-2.5 py-[3px] text-ink",
+    no: "bg-danger px-2.5 py-[3px] text-ink",
+    irrelevant: "border-2 border-[#5a5a5a] px-2 py-px text-text-secondary",
   };
   const labels: Record<typeof answer, string> = {
     yes: t("answerYes"),
@@ -38,7 +30,7 @@ function AnswerBadge({ answer }: { answer: "yes" | "no" | "irrelevant" }) {
   };
   return (
     <span
-      className={`shrink-0 rounded px-2 py-0.5 text-xs font-extrabold uppercase tracking-wide ${styles[answer]}`}
+      className={`shrink-0 font-display text-[15px] uppercase tracking-[0.04em] ${styles[answer]}`}
     >
       {labels[answer]}
     </span>
@@ -120,43 +112,48 @@ export function QuestionCard({
     }
   }
 
-  const statusKey = question.answer === "custom" ? "custom" : (question.answer ?? "unanswered");
-
   return (
     <div
-      className={`w-full rounded-xl border-2 bg-bg-secondary p-4 text-text-primary ${STATUS_BORDER[statusKey]}`}
+      className="w-full border-b border-dashed border-[#3a3a3a] py-2.5 text-text-primary last:border-b-0"
       style={{ animation: "reveal-in 180ms ease-out" }}
     >
-      <div className="flex items-start justify-between gap-3">
-        <p className="text-xs font-bold text-text-secondary">
-          {question.player_name}
+      <div className="flex items-center gap-3">
+        <p
+          className={`min-w-0 flex-1 text-base ${
+            question.answer === "irrelevant" ? "text-text-secondary" : ""
+          }`}
+        >
+          {question.text}{" "}
+          <span className="text-[13px] text-[#8c8578]">— {question.player_name}</span>
         </p>
-        <div className="flex shrink-0 items-center gap-2">
-          {isAnswered && question.answer !== "custom" && (
-            <AnswerBadge answer={question.answer as "yes" | "no" | "irrelevant"} />
-          )}
-          {narrating ? (
-            <Star isBest={question.is_best_question} onClick={toggleBestQuestion} />
-          ) : (
-            <Star isBest={question.is_best_question} />
-          )}
-        </div>
+        {narrating ? (
+          <Star isBest={question.is_best_question} onClick={toggleBestQuestion} />
+        ) : (
+          <Star isBest={question.is_best_question} />
+        )}
+        {isAnswered && question.answer !== "custom" && (
+          <AnswerBadge answer={question.answer as "yes" | "no" | "irrelevant"} />
+        )}
+        {!isAnswered && (
+          <span className="shrink-0 border-2 border-accent px-2 py-px font-display text-[15px] text-accent">
+            ?
+          </span>
+        )}
       </div>
-      <p className="mt-1.5 text-base font-medium leading-snug">{question.text}</p>
 
       {isAnswered && question.answer === "custom" && (
-        <div className="mt-3 border-t border-border pt-3">
+        <div className="mt-2 rounded-md bg-bg-primary px-3 py-2">
           <p className="text-xs font-bold text-text-secondary">
             {t("answerHeading")}
           </p>
-          <p className="mt-1 text-base font-medium italic leading-snug">
+          <p className="mt-0.5 text-base font-medium leading-snug">
             {question.custom_response}
           </p>
         </div>
       )}
 
       {narrating && !isAnswered && (
-        <div className="mt-3 flex flex-col gap-2 border-t border-border pt-3">
+        <div className="mt-2.5 flex flex-col gap-2">
           <div className="flex flex-wrap gap-2">
             <Button variant="primary" onClick={() => handleQuickAnswer("yes")}>
               {t("quickYes")}

@@ -31,14 +31,13 @@ describe("Timer", () => {
     const now = new Date(startedAt).getTime() + 40_000;
     renderWithIntl(<Timer startedAt={startedAt} now={now} durationSeconds={90} />);
     const timer = screen.getByText("⚠ 00:50");
-    expect(timer).toHaveClass("text-danger");
-    expect(timer).toHaveClass("font-bold");
+    expect(timer).toHaveClass("bg-danger");
   });
 
   it("stays in the neutral color while there's plenty of time left", () => {
     const startedAt = "2026-01-01T00:00:00.000Z";
     const now = new Date(startedAt).getTime();
     renderWithIntl(<Timer startedAt={startedAt} now={now} durationSeconds={600} />);
-    expect(screen.getByText("10:00")).toHaveClass("text-text-secondary");
+    expect(screen.getByText("10:00")).toHaveClass("bg-accent");
   });
 });

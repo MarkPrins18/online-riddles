@@ -5,7 +5,7 @@ export function HintCard({ hint }: { hint: string }) {
 
   return (
     <div
-      className="w-full rounded-xl border-2 border-ink bg-accent p-4 text-ink"
+      className="w-full rounded-[10px] bg-accent p-4 text-ink"
       style={{ animation: "reveal-in 180ms ease-out" }}
     >
       <p className="font-display text-base uppercase tracking-wide text-ink">{t("label")}</p>

@@ -29,7 +29,7 @@ export function Timer({
 
   if (durationSeconds == null) {
     return (
-      <span className="text-sm tabular-nums text-text-secondary">
+      <span className="rounded bg-accent px-3.5 py-0.5 font-display text-[26px] tabular-nums text-ink">
         {formatDuration(elapsedSeconds)}
       </span>
     );
@@ -41,10 +41,12 @@ export function Timer({
 
   return (
     <span
-      className={`text-sm tabular-nums ${isUrgent ? "font-bold text-danger" : "text-text-secondary"}`}
+      className={`rounded px-3.5 py-0.5 font-display text-[26px] tabular-nums text-ink ${
+        isUrgent ? "bg-danger" : "bg-accent"
+      }`}
     >
-      {/* Urgency isn't color-only: the bold weight above and this prefix
-          both carry the signal for users who can't perceive the color change. */}
+      {/* Urgency isn't color-only: this prefix carries the signal for users
+          who can't perceive the yellow-to-red change. */}
       {isUrgent && !isUp && "⚠ "}
       {isUp ? t("timeUp") : formatDuration(remainingSeconds)}
     </span>

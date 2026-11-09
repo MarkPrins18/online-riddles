@@ -12,12 +12,20 @@ export function TeamLivesDisplay({
   const t = useTranslations("TeamLivesDisplay");
 
   return (
-    <span className="text-sm tracking-wide" aria-label={t("ariaLabel", { remaining, total })}>
+    <span
+      className="inline-flex items-center gap-1.5 text-sm font-bold text-[#cfc7b5]"
+      aria-label={t("ariaLabel", { remaining, total })}
+    >
       {hearts.map((filled, i) => (
-        <span key={i} className={filled ? "text-danger" : "text-text-secondary/30"}>
-          {filled ? "❤" : "🖤"}
-        </span>
+        <span
+          key={i}
+          aria-hidden="true"
+          className={`h-4 w-4 rotate-45 ${filled ? "bg-danger" : "border-2 border-[#5a5a5a]"}`}
+        />
       ))}
+      <span aria-hidden="true" className="ml-1.5">
+        {t("label", { remaining, total })}
+      </span>
     </span>
   );
 }

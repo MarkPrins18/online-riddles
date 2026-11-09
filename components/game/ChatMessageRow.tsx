@@ -18,10 +18,15 @@ import { ChatReactionPicker } from "./ChatReactionPicker";
  */
 export function ChatMessageRow({
   message,
+  isOwn = false,
   summaries,
   onToggleReaction,
 }: {
   message: ChatMessage;
+  /** Your own messages sit on the right in yellow, everyone else's on the
+   * left in cream — like any messaging app, so you never read your own
+   * line as someone else's. */
+  isOwn?: boolean;
   summaries: ReactionSummary[];
   onToggleReaction: (emoji: string) => Promise<void>;
 }) {
@@ -35,16 +40,29 @@ export function ChatMessageRow({
   }
 
   return (
-    <li className="group relative flex flex-col gap-0.5">
-      <div {...pressHold} className="flex select-none items-baseline gap-2">
-        <span className="text-xs text-text-secondary">{message.player_name}:</span>
-        <span className="text-sm text-text-primary">{message.text}</span>
+    <li className={`group relative flex flex-col gap-0.5 ${isOwn ? "items-end" : "items-start"}`}>
+      <div className={`flex max-w-full items-center gap-1 ${isOwn ? "flex-row-reverse" : ""}`}>
+        <p
+          {...pressHold}
+          className={`min-w-0 select-none break-words px-3 py-2 text-[15px] text-ink ${
+            isOwn
+              ? "rounded-[16px_16px_4px_16px] bg-accent font-medium"
+              : "rounded-[16px_16px_16px_4px] border-2 border-ink bg-paper"
+          }`}
+        >
+          {isOwn ? (
+            <span className="sr-only">{message.player_name}: </span>
+          ) : (
+            <b>{message.player_name} </b>
+          )}
+          {message.text}
+        </p>
         <button
           type="button"
           onClick={() => setPickerOpen((v) => !v)}
           aria-expanded={pickerOpen}
           aria-label={reactionsT("openPicker")}
-          className="shrink-0 rounded-full px-1 text-xs leading-none text-text-secondary opacity-0 transition-opacity group-hover:opacity-60 focus:opacity-100 hover:!opacity-100"
+          className="sr-only shrink-0 rounded-full px-1 text-xs leading-none text-text-secondary hover:text-text-primary focus:not-sr-only group-hover:not-sr-only"
         >
           ☺+
         </button>

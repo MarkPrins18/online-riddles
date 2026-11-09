@@ -21,7 +21,7 @@ export default async function PlayPage({
   const { code } = await params;
 
   return (
-    <main id="main-content" className="flex flex-1 flex-col items-center px-4 pt-4 pb-10 sm:px-6 sm:pt-10">
+    <main id="main-content" className="flex flex-1 flex-col items-center px-4 pt-4 pb-10 sm:px-6 sm:pt-4">
       <GamePlayClient code={code.toUpperCase()} />
     </main>
   );

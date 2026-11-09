@@ -12,7 +12,15 @@ import { Button } from "@/components/ui/Button";
  * JoinRoomForm on the homepage without losing their in-progress local
  * state on navigation, and be reused as-is in the room lobby.
  */
-export function HowToPlayButton({ className = "" }: { className?: string }) {
+export function HowToPlayButton({
+  className = "",
+  variant = "underlined",
+}: {
+  className?: string;
+  /** "plain": a nav-style text link (homepage header) instead of the
+   * underlined inline link used in the room lobby. */
+  variant?: "underlined" | "plain";
+}) {
   const [open, setOpen] = useState(false);
   const t = useTranslations("HowToPlay");
 
@@ -21,7 +29,11 @@ export function HowToPlayButton({ className = "" }: { className?: string }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className={`text-sm font-bold text-text-secondary underline decoration-accent/60 hover:text-accent ${className}`}
+        className={`cursor-pointer font-bold hover:text-accent ${
+          variant === "plain"
+            ? "text-[15px] text-text-primary"
+            : "text-sm text-text-secondary underline decoration-accent/60"
+        } ${className}`}
       >
         {t("trigger")}
       </button>

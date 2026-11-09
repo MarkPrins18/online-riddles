@@ -22,12 +22,6 @@ export function CluesList({
   const [pinError, setPinError] = useState<string | null>(null);
   const t = useTranslations("CluesList");
 
-  if (clues.length === 0) {
-    return (
-      <p className="text-sm text-text-secondary">{t("empty")}</p>
-    );
-  }
-
   async function handlePin(questionId: string) {
     if (!onPinToBoard) return;
     setPinningId(questionId);
@@ -40,36 +34,42 @@ export function CluesList({
     setPinningId(null);
   }
 
+  // One cream "sheet" listing everything confirmed so far, numbered like a
+  // case summary — the counterpart to Verhoor's full back-and-forth.
   return (
-    <div className="flex flex-col gap-2">
-      {pinError && <p className="text-xs text-danger">{pinError}</p>}
-      {clues.map((clue) => (
-        <div
-          key={clue.id}
-          className="w-full rounded-xl border-2 border-ink bg-paper p-3 text-ink"
-        >
-          <p className="text-base font-medium leading-snug">
-            {clue.text}
-          </p>
-          <div className="mt-2 flex items-center justify-between gap-2 border-t border-ink/15 pt-2">
-            <p className="text-xs font-bold text-ink/70">
-              {clue.player_name}
-            </p>
-            {onPinToBoard && (
-              // Prikbord itself is desktop-only (see GamePlayClient) — this
-              // is the only other way to open it, so it needs the same gate.
-              <button
-                type="button"
-                onClick={() => handlePin(clue.id)}
-                disabled={pinningId === clue.id}
-                className="hidden text-xs font-extrabold text-ink underline decoration-2 underline-offset-2 hover:text-[#b33a28] disabled:opacity-50 xl:inline"
-              >
-                {pinningId === clue.id ? t("pinning") : t("pin")}
-              </button>
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
+    <section className="rounded-[10px] border-[3px] border-ink bg-paper p-5 text-ink shadow-[5px_5px_0_var(--accent)]">
+      <h2 className="mb-3 font-display text-[22px] uppercase">{t("heading")}</h2>
+      {pinError && <p className="mb-2 text-xs font-bold text-[#b33a28]">{pinError}</p>}
+      {clues.length === 0 ? (
+        <p className="text-sm font-medium text-ink/75">{t("empty")}</p>
+      ) : (
+        <ol className="flex flex-col gap-2.5">
+          {clues.map((clue, index) => (
+            <li key={clue.id} className="flex items-baseline gap-2.5 text-[17px] font-bold">
+              <span className="font-display font-normal text-[#b33a28]">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <span className="min-w-0 flex-1">{clue.text}</span>
+              {onPinToBoard && (
+                // Prikbord itself is desktop-only (see GamePlayClient) — this
+                // is the only other way to open it, so it needs the same gate.
+                <button
+                  type="button"
+                  onClick={() => handlePin(clue.id)}
+                  disabled={pinningId === clue.id}
+                  aria-label={pinningId === clue.id ? t("pinning") : t("pin")}
+                  title={t("pin")}
+                  className="hidden h-7 w-7 shrink-0 cursor-pointer items-center justify-center self-center rounded text-ink/40 transition-colors hover:bg-ink/10 hover:text-[#b33a28] disabled:opacity-50 xl:inline-flex"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M12 17v5M9 3h6l-1 6 3 3v2H7v-2l3-3-1-6Z" />
+                  </svg>
+                </button>
+              )}
+            </li>
+          ))}
+        </ol>
+      )}
+    </section>
   );
 }

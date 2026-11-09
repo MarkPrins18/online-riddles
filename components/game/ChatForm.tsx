@@ -6,7 +6,6 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import { sendChatMessage } from "@/lib/supabase/chatMessages";
 import { getErrorMessage } from "@/lib/errors";
-import { Button } from "@/components/ui/Button";
 
 export function ChatForm({
   supabase,
@@ -45,23 +44,30 @@ export function ChatForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+    <form onSubmit={handleSubmit} className="flex flex-wrap gap-2">
       <input
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder={t("placeholder")}
         aria-label={t("ariaLabel")}
         maxLength={300}
-        className="w-full rounded-lg border-2 border-border bg-bg-primary px-3 py-2.5 text-base text-text-primary placeholder:text-text-secondary/60 focus:border-accent"
+        className="min-w-0 flex-1 rounded-lg border-2 border-[#5a5a5a] bg-bg-primary px-3 py-2.5 text-[15px] text-text-primary placeholder:text-text-secondary/60 focus:border-accent focus:outline-none"
       />
       {error && (
-        <p role="alert" className="text-xs text-danger">
+        <p role="alert" className="order-last basis-full text-xs text-danger">
           {error}
         </p>
       )}
-      <Button type="submit" variant="secondary" className="w-full" disabled={isSubmitting || !text.trim()}>
-        {t("submit")}
-      </Button>
+      <button
+        type="submit"
+        aria-label={t("submit")}
+        disabled={isSubmitting || !text.trim()}
+        className="inline-flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-lg bg-accent disabled:cursor-not-allowed"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </button>
     </form>
   );
 }

@@ -111,12 +111,9 @@ select {
  * "The desk": a "vast" zone (status bar, dossier, ask/solve forms) that
  * never changes height, stacked above a "main" zone that holds whatever
  * grows with the game (Verhoor/Aanwijzingen or Postvak/Archief, as tabs).
- * From xl (1280px) up, Overleg gets its own permanent column next to
- * "vast" (not "main") — GamePlayClient measures "vast" with a
- * ResizeObserver and pins Overleg's height to match it exactly, so it has
- * a real fixed height instead of growing forever, its bottom edge landing
- * on the same line as "vast"'s last card. "Stel een vraag" moves to a
- * "side" area next to "main" instead, directly under Overleg.
+ * From xl (1280px) up, a permanent right-hand "aside" column spans both
+ * rows: the Spelers standings, then Overleg (sticky, its message list
+ * scrolling inside a capped height so it never grows past the screen).
  *
  * Below xl, "main" gets the *opposite* treatment: `minmax(0, 1fr)` on its
  * row (plus the default grid `stretch` alignment) makes it fill whatever
@@ -124,8 +121,7 @@ select {
  * (dossier collapsed) instead of shrink-wrapping to its own content. The
  * `min-height` gives the grid something to have "leftover" space *of* —
  * without it 1fr has nothing to distribute and just falls back to content
- * size. Both are reset at xl, which uses its own sticky/max-height
- * technique on "main" instead (see GamePlayClient).
+ * size. Both are reset at xl, where "main" simply grows with its content.
  */
 .desk-layout {
   display: grid;
@@ -142,14 +138,15 @@ select {
 
 @media (min-width: 1280px) {
   .desk-layout {
-    grid-template-columns: minmax(0, 1fr) 340px;
-    grid-template-rows: none;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    grid-template-rows: auto auto 1fr auto;
     min-height: 0;
     align-items: start;
+    column-gap: 1.5rem;
     grid-template-areas:
       "status status"
-      "vast   chat"
-      "main   side"
+      "vast   aside"
+      "main   aside"
       "footer footer";
   }
 }

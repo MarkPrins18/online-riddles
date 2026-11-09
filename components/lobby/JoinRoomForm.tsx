@@ -3,10 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { createClient } from "@/lib/supabase/client";
-import { ensureAnonymousSession } from "@/lib/supabase/authSession";
-import { getRoomByCode } from "@/lib/supabase/rooms";
-import { joinRoom } from "@/lib/supabase/players";
+import { joinRoomByCode } from "@/lib/lobby/joinByCode";
 import { storePlayerId } from "@/lib/session";
 import { getErrorMessage } from "@/lib/errors";
 import { Button } from "@/components/ui/Button";
@@ -43,20 +40,15 @@ export function JoinRoomForm({
     setError(null);
 
     try {
-      const supabase = createClient();
-      const userId = await ensureAnonymousSession(supabase);
-      const room = await getRoomByCode(supabase, code.trim());
-      if (!room) {
-        setError(t("noRoomFound"));
-        setIsSubmitting(false);
+      const result = await joinRoomByCode(name.trim(), code.trim());
+      if (result.status === "joined") {
+        finishJoin(result.room, result.playerId);
         return;
       }
-
-      const player = await joinRoom(supabase, room.id, name.trim(), false, userId);
-      finishJoin(room, player.id);
+      setError(result.status === "full" ? t("roomFull") : t("noRoomFound"));
+      setIsSubmitting(false);
     } catch (err) {
-      const code = (err as { code?: string } | null)?.code;
-      setError(code === "RM001" ? t("roomFull") : getErrorMessage(err, t("error")));
+      setError(getErrorMessage(err, t("error")));
       setIsSubmitting(false);
     }
   }

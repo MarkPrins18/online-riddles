@@ -32,19 +32,19 @@
   "HomePage": {
     "title": "DetectiveNights",
     "badge": "Party game · 3 to 12 players",
-    "heading": "Who cracks the case?",
+    "heading": "Who cracks\nthe case?",
     "lead": "One player knows the solution. Everyone else asks yes/no questions until someone gets it.",
     "exampleQuote": "“Every Sunday he spends exactly an hour in an empty storage unit…”",
     "newFile": "New game",
     "existingFile": "Join with a code",
-    "step1Title": "1. Start a room",
+    "step1Title": "1. Open a case",
     "step1Body": "Share the code with your friends. No account needed.",
     "step2Title": "2. Question the Narrator",
     "step2Body": "Only yes or no. Every 'yes' becomes a clue.",
-    "step3Title": "3. Crack the case",
+    "step3Title": "3. Close the case",
     "step3Body": "First to guess it scores. Then someone else narrates.",
-    "communityLink": "Community riddles",
-    "profileLink": "My stats"
+    "communityLink": "Riddles",
+    "profileLink": "Stats"
   },
   "HowToPlay": {
     "trigger": "How to play",
@@ -90,11 +90,15 @@
     "autoRotate": "Rotate automatically"
   },
   "CreateRoomForm": {
-    "nameLabel": "Your name",
+    "nameLabel": "What's your name?",
     "namePlaceholder": "E.g. Sam",
     "submitting": "Creating room...",
     "submit": "Start a room",
-    "error": "Couldn't create a room. Please try again."
+    "error": "Couldn't create a room. Please try again.",
+    "joinPrompt": "Got a code?",
+    "joinLink": "Join a room",
+    "createPrompt": "Rather start your own?",
+    "createLink": "Start a new room"
   },
   "JoinRoomForm": {
     "nameLabel": "Your name",
@@ -319,7 +323,8 @@
     "incorrect": "Not quite"
   },
   "TeamLivesDisplay": {
-    "ariaLabel": "{remaining} of {total} lives left"
+    "ariaLabel": "{remaining} of {total} lives left",
+    "label": "{remaining} of {total} lives"
   },
   "NarratorGuessControls": {
     "noPending": "No solutions submitted yet. Only you, as Narrator, see this.",
@@ -420,7 +425,8 @@
     "empty": "No clues yet. Every “yes” answer from the Narrator ends up here.",
     "error": "Couldn't pin this clue.",
     "pinning": "Working…",
-    "pin": "Pin to corkboard"
+    "pin": "Pin to corkboard",
+    "heading": "What we know"
   },
   "NarratorArchive": {
     "empty": "No answered questions or reviewed solutions yet.",
@@ -545,7 +551,16 @@
     "nextCase": "Next case",
     "skipConfirm": "Skip this case? All questions and guesses so far will be lost.",
     "nextCaseError": "Couldn't start a new case. Please try again.",
-    "skipPuzzleError": "Couldn't fetch another case. Please try again."
+    "skipPuzzleError": "Couldn't fetch another case. Please try again.",
+    "iKnowIt": "I know it!",
+    "backToQuestions": "Back to questions",
+    "caseOf": "Case {round}",
+    "caseOfTotal": "of {total}",
+    "narratorIs": "{name} is the Narrator",
+    "interrogationHeading": "Interrogation · {count}",
+    "playersHeading": "Players",
+    "playersDetails": "Details",
+    "youMarker": "(you)"
   },
   "NarratorBriefingScreen": {
     "newCase": "New case",

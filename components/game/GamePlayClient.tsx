@@ -819,13 +819,13 @@ export function GamePlayClient({ code }: { code: string }) {
         {isRevealed && hasMoreRounds(room.round, room.max_rounds) && isHost && (
           <div className="[grid-area:footer]">
             <Card>
-              <p className="mb-3 text-xs text-text-secondary">
+              <p className="mb-3 text-sm text-text-secondary">
                 {nextNarrator
                   ? t("nextNarratorLabel", { name: nextNarrator.name })
                   : t("notEnoughPlayers")}
               </p>
               {nextCaseError && (
-                <p className="mb-3 text-xs text-danger">{nextCaseError}</p>
+                <p className="mb-3 text-sm text-danger">{nextCaseError}</p>
               )}
               <Button
                 className="w-full"
@@ -863,7 +863,7 @@ export function GamePlayClient({ code }: { code: string }) {
             onNewGame={() => router.push("/")}
           />
           {isHost && nextCaseError && (
-            <p className="mt-2 text-xs text-danger">{nextCaseError}</p>
+            <p className="mt-2 text-sm text-danger">{nextCaseError}</p>
           )}
         </Dialog>
       )}

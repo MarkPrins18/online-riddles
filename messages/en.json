@@ -153,10 +153,12 @@
   "RoomLobbyClient": {
     "errorPrefix": "Something went wrong: {error}",
     "loadingRoom": "Loading room...",
-    "playersHeading": "Players ({count})",
+    "playersHeading": "Players · {count}",
     "settingsHeading": "Settings",
     "waitingForHost": "Waiting for the host to start the game...",
-    "joinHeading": "Join in"
+    "joinHeading": "Join in",
+    "coverTitle": "Who's playing?",
+    "coverBody": "Share the code or the link. Everyone plays on their own phone."
   },
   "PlayerList": {
     "empty": "Nobody here yet.",
@@ -651,5 +653,10 @@
     "linkLabel": "Read more",
     "dismiss": "Got it",
     "dismissAriaLabel": "Dismiss cookie notice"
+  },
+  "SiteHeader": {
+    "home": "DetectiveNights",
+    "riddles": "Riddles",
+    "stats": "Stats"
   }
 }

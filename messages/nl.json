@@ -73,8 +73,8 @@
     "error": "Kon de host-rol niet overnemen. Probeer het opnieuw."
   },
   "RoomCodeDisplay": {
-    "ariaLabel": "Kopieer roomcode",
-    "label": "Roomcode",
+    "ariaLabel": "Kopieer kamercode",
+    "label": "Kamercode",
     "copied": "Gekopieerd",
     "copyPrompt": "Klik om te kopiëren",
     "shareTitle": "Doe mee met mijn DetectiveNights kamer",
@@ -153,10 +153,12 @@
   "RoomLobbyClient": {
     "errorPrefix": "Er ging iets mis: {error}",
     "loadingRoom": "Kamer laden...",
-    "playersHeading": "Spelers ({count})",
+    "playersHeading": "Spelers · {count}",
     "settingsHeading": "Instellingen",
     "waitingForHost": "Wacht tot de host het spel start...",
-    "joinHeading": "Doe mee"
+    "joinHeading": "Doe mee",
+    "coverTitle": "Wie doet er mee?",
+    "coverBody": "Deel de code of de link. Iedereen speelt op zijn eigen telefoon."
   },
   "PlayerList": {
     "empty": "Nog niemand aanwezig.",
@@ -651,5 +653,10 @@
     "linkLabel": "Meer lezen",
     "dismiss": "Begrepen",
     "dismissAriaLabel": "Cookiemelding sluiten"
+  },
+  "SiteHeader": {
+    "home": "DetectiveNights",
+    "riddles": "Raadsels",
+    "stats": "Statistieken"
   }
 }

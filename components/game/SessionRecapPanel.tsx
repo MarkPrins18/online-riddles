@@ -40,7 +40,7 @@ export function SessionRecapPanel({
 
   const content = (
     <>
-      <p className="mb-4 text-sm font-bold text-accent">{t("heading")}</p>
+      <p className="mb-4 font-display text-xl uppercase text-accent">{t("heading")}</p>
       <ul className="flex flex-col gap-3 text-sm leading-relaxed text-text-primary">
         {recap.mvpNarrator && (
           <li>
@@ -80,7 +80,7 @@ export function SessionRecapPanel({
   );
 
   if (bare) {
-    return <div className="mt-8 border-t border-white/5 pt-6">{content}</div>;
+    return <div className="mt-8 border-t border-[#3a3a3a] pt-6">{content}</div>;
   }
 
   return <Card className="mt-4">{content}</Card>;

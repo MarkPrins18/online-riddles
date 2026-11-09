@@ -62,7 +62,7 @@ export function PlayersDrawer({
           )}
         </div>
         {caseLog.length > 0 && (
-          <div className="border-t border-white/5 pt-4">
+          <div className="border-t border-[#3a3a3a] pt-4">
             <CaseLog entries={caseLog} />
           </div>
         )}

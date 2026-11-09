@@ -14,15 +14,15 @@ export function NextRoundCountdown({ seconds }: { seconds: number }) {
       <div
         role="status"
         aria-live="polite"
-        className="rounded-lg border border-accent/30 bg-bg-case/95 px-8 py-3 text-center shadow-xl shadow-black/50"
+        className="rounded-[10px] border-[3px] border-ink bg-accent px-8 py-3 text-center text-ink shadow-[5px_5px_0_var(--ink)]"
       >
-        <p className="text-sm font-bold text-accent">
+        <p className="text-sm font-extrabold text-ink">
           {t("heading")}
         </p>
         {/* aria-hidden: the ticking number would otherwise re-trigger the
             live-region announcement every second — the static heading above
             already tells screen-reader users what's happening once. */}
-        <p aria-hidden="true" className="mt-2 font-display text-5xl text-text-primary">
+        <p aria-hidden="true" className="mt-1 font-display text-5xl text-ink">
           {seconds}
         </p>
       </div>

@@ -29,7 +29,7 @@ export function PlayersStrip({
     <button
       type="button"
       onClick={onOpen}
-      className="flex items-center gap-1.5 rounded-sm px-1 py-1 transition-opacity hover:opacity-80"
+      className="flex items-center gap-1.5 rounded-md px-1 py-1 transition-opacity hover:opacity-80"
       aria-label={t("ariaLabel", { count: players.length })}
     >
       <span className="flex -space-x-1.5">
@@ -39,7 +39,7 @@ export function PlayersStrip({
             className={`flex h-6 w-6 items-center justify-center rounded-full border ${
               player.id === narratorId
                 ? "border-accent bg-accent/20 text-accent"
-                : "border-white/15 bg-bg-secondary text-text-secondary"
+                : "border-border bg-bg-secondary text-text-secondary"
             } text-[10px]`}
             title={player.name}
           >
@@ -47,12 +47,12 @@ export function PlayersStrip({
           </span>
         ))}
         {overflow > 0 && (
-          <span className="flex h-6 w-6 items-center justify-center rounded-full border border-white/15 bg-bg-secondary text-[10px] text-text-secondary">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full border border-border bg-bg-secondary text-[10px] text-text-secondary">
             +{overflow}
           </span>
         )}
       </span>
-      <span className="hidden text-xs text-text-secondary sm:inline">
+      <span className="hidden text-sm text-text-secondary sm:inline">
         {t("count", { count: players.length })}
       </span>
     </button>

@@ -63,7 +63,7 @@ export function FavoriteButton({
       >
         {favorited ? "★" : "☆"}
       </Button>
-      {error && <p className="text-xs text-danger">{error}</p>}
+      {error && <p className="text-sm text-danger">{error}</p>}
     </div>
   );
 }

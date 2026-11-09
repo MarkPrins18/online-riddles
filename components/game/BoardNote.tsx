@@ -40,7 +40,7 @@ export function BoardNote({
       tabIndex={0}
       role="button"
       aria-label={item.text ?? ""}
-      className={`absolute w-[180px] -translate-x-1/2 -translate-y-1/2 touch-none select-none rounded-sm p-3 text-[#12141c] shadow-md shadow-black/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${connecting ? "ring-2 ring-accent" : ""}`}
+      className={`absolute w-[180px] -translate-x-1/2 -translate-y-1/2 touch-none select-none rounded-md p-3 text-[#12141c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${connecting ? "ring-2 ring-accent" : ""}`}
       style={{ left: `${x * 100}%`, top: `${y * 100}%`, backgroundColor: NOTE_COLORS[item.color] }}
       onPointerDown={onPointerDown}
       onPointerMove={handlePointerMove}

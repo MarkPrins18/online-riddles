@@ -34,18 +34,18 @@ export function NarratorArchive({
     <div className="flex flex-col gap-6">
       {resolvedGuesses.length > 0 && (
         <div>
-          <p className="mb-3 text-sm font-bold text-text-secondary">
+          <p className="mb-3 font-display text-xl uppercase text-accent">
             {t("solutionsHeading")}
           </p>
           <ul className="flex flex-col gap-3">
             {resolvedGuesses.map((guess) => (
               <li
                 key={guess.id}
-                className="flex flex-col gap-2 rounded-md border border-white/10 bg-bg-primary/60 p-3 sm:flex-row sm:items-center sm:justify-between"
+                className="flex flex-col gap-2 rounded-lg border-2 border-border bg-bg-primary p-3 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div>
                   <p className="text-sm text-text-primary">{guess.text}</p>
-                  <p className="text-xs text-text-secondary">· {guess.player_name}</p>
+                  <p className="text-sm text-text-secondary">· {guess.player_name}</p>
                 </div>
                 <Badge tone={guess.status === "correct" ? "accent" : "danger"}>
                   {guess.status === "correct" ? t("correct") : t("incorrect")}
@@ -58,7 +58,7 @@ export function NarratorArchive({
 
       {answered.length > 0 && (
         <div>
-          <p className="mb-3 text-sm font-bold text-text-secondary">
+          <p className="mb-3 font-display text-xl uppercase text-accent">
             {t("questionsHeading")}
           </p>
           <div className="flex flex-col gap-3">

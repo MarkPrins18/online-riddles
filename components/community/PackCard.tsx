@@ -20,18 +20,18 @@ export function PackCard({
 
   return (
     <Link href={`/community/${pack.id}`}>
-      <Card tone="case" className="flex flex-col gap-2 transition-colors hover:border-accent/40">
+      <Card tone="case" className="flex flex-col gap-2 transition-[transform,border-color] hover:-translate-y-0.5 hover:border-accent">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="font-display text-xl uppercase text-text-primary">{pack.name}</h3>
+          <h3 className="font-display text-2xl uppercase leading-tight text-text-primary">{pack.name}</h3>
           <div className="flex shrink-0 items-center gap-2">
             {typeof score === "number" && (
-              <span className="text-xs text-text-secondary">score: {score}</span>
+              <span className="text-sm font-extrabold text-text-primary">score: {score}</span>
             )}
             <FavoriteButton packId={pack.id} initialFavorited={initialFavorited} />
           </div>
         </div>
         {authorName && (
-          <p className="text-xs text-text-secondary">{t("by", { name: authorName })}</p>
+          <p className="text-sm text-text-secondary">{t("by", { name: authorName })}</p>
         )}
         <div className="flex flex-wrap gap-2">
           <Badge tone="accent">{pack.theme}</Badge>

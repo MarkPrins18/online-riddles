@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { RevealCard } from "@/components/ui/RevealCard";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { Puzzle } from "@/types/puzzle";
@@ -48,26 +49,18 @@ export function SolutionReveal({
   }, [supabase, puzzle.id]);
 
   return (
-    <div
-      className="redact-reveal rounded-lg border border-accent/40 bg-bg-secondary p-6 shadow-lg shadow-accent/10"
-      style={{ animation: "reveal-in 420ms cubic-bezier(0.16, 1, 0.3, 1)" }}
+    <RevealCard
+      label={t("caseClosed")}
+      title={puzzle.title}
+      subtitle={solverName ? t("solvedBy", { name: solverName }) : t("nobodySolved")}
     >
-      <p className="text-sm font-bold text-accent">
-        {t("caseClosed")}
-      </p>
-      <h2 className="mt-2 font-display uppercase text-2xl text-text-primary">{puzzle.title}</h2>
-      <p className="mt-1 text-sm text-accent">
-        {solverName ? t("solvedBy", { name: solverName }) : t("nobodySolved")}
-      </p>
-      <p className="mt-4 text-base leading-relaxed text-text-primary/90">
-        {puzzle.solution}
-      </p>
+      <p className="text-lg leading-relaxed text-text-primary/90">{puzzle.solution}</p>
       {voteState && (
-        <div className="mt-4 flex flex-col gap-3 border-t border-white/5 pt-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-text-secondary">{t("ratePrompt")}</p>
+        <div className="mt-5 flex flex-col gap-3 border-t-2 border-dashed border-[#3a3a3a] pt-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-base font-bold text-text-primary">{t("ratePrompt")}</p>
           <VoteButtons puzzleId={puzzle.id} score={voteState.score} myVote={voteState.myVote} />
         </div>
       )}
-    </div>
+    </RevealCard>
   );
 }

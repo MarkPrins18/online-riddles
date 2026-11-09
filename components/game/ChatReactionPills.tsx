@@ -39,7 +39,7 @@ export function ChatReactionPills({
           className={`flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-xs leading-none transition-colors disabled:cursor-not-allowed ${
             reactedByMe
               ? "border-accent bg-accent/15 text-accent"
-              : "border-white/15 text-text-secondary hover:border-accent-muted"
+              : "border-border text-text-secondary hover:border-accent-muted"
           }`}
         >
           <span aria-hidden="true">{emoji}</span>

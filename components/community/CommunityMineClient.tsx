@@ -75,7 +75,7 @@ export function CommunityMineClient() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between gap-4">
-        <h1 className="font-display text-3xl uppercase text-text-primary">{t("heading")}</h1>
+        <h1 className="font-display text-5xl uppercase leading-none text-accent">{t("heading")}</h1>
         <Link href="/community/nieuw">
           <Button>{t("submitButton")}</Button>
         </Link>
@@ -93,7 +93,7 @@ export function CommunityMineClient() {
               <Card key={pack.id} tone="chrome" className="flex flex-col gap-3">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <h2 className="font-display text-xl uppercase text-text-primary">{pack.name}</h2>
+                    <h2 className="font-display text-2xl uppercase leading-tight text-text-primary">{pack.name}</h2>
                     <Badge tone="accent" className="mt-1">
                       {pack.theme}
                     </Badge>
@@ -104,11 +104,11 @@ export function CommunityMineClient() {
                 </div>
 
                 {packPuzzles.length === 0 ? (
-                  <p className="text-xs text-text-secondary">{t("noPuzzlesYet")}</p>
+                  <p className="text-sm text-text-secondary">{t("noPuzzlesYet")}</p>
                 ) : (
                   <ul className="flex flex-col gap-3">
                     {packPuzzles.map((puzzle) => (
-                      <li key={puzzle.id} className="border-t border-white/5 pt-2">
+                      <li key={puzzle.id} className="border-t border-[#3a3a3a] pt-2">
                         {editingPuzzleId === puzzle.id ? (
                           <RiddleForm
                             packId={pack.id}

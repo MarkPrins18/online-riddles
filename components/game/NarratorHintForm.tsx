@@ -67,7 +67,7 @@ export function NarratorHintForm({
         className="w-full resize-none rounded-lg border-2 border-border bg-bg-primary px-3 py-2.5 text-base text-text-primary placeholder:text-text-secondary/60 focus:border-accent"
       />
       {error && (
-        <p role="alert" className="text-xs text-danger">
+        <p role="alert" className="text-sm text-danger">
           {error}
         </p>
       )}

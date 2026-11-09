@@ -24,28 +24,24 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
     });
   }
 
+  // Only the language(s) you can switch *to*, styled as a plain nav link —
+  // same look as LocalizedLanguageSwitcher on the [locale] pages.
   return (
-    <div
-      role="group"
-      aria-label="Language"
-      className={`inline-flex items-center gap-1 text-sm font-bold text-text-secondary ${className}`}
-    >
-      {locales.map((option) => (
-        <button
-          key={option}
-          type="button"
-          disabled={isPending}
-          onClick={() => handleChange(option)}
-          aria-pressed={option === locale}
-          className={`rounded-sm px-2 py-1 transition-colors disabled:opacity-60 ${
-            option === locale
-              ? "bg-accent text-bg-primary"
-              : "hover:text-accent"
-          }`}
-        >
-          {LOCALE_LABELS[option]}
-        </button>
-      ))}
-    </div>
+    <span className={`inline-flex items-center gap-3 ${className}`}>
+      {locales
+        .filter((option) => option !== locale)
+        .map((option) => (
+          <button
+            key={option}
+            type="button"
+            lang={option}
+            disabled={isPending}
+            onClick={() => handleChange(option)}
+            className="cursor-pointer text-[15px] font-bold text-text-secondary transition-colors hover:text-accent disabled:opacity-60"
+          >
+            {LOCALE_LABELS[option]}
+          </button>
+        ))}
+    </span>
   );
 }

@@ -48,7 +48,7 @@ export function NarratorTakeoverControl({
   }
 
   return (
-    <details className="mt-4 border-t border-white/5 pt-4">
+    <details className="mt-4 border-t border-[#3a3a3a] pt-4">
       <summary className="cursor-pointer text-sm font-bold text-text-secondary">
         {t("summary")}
       </summary>
@@ -64,7 +64,7 @@ export function NarratorTakeoverControl({
             {savingId === player.id ? t("switching") : t("switchTo", { name: player.name })}
           </Button>
         ))}
-        <p className="text-xs text-text-secondary">{t("note")}</p>
+        <p className="text-sm text-text-secondary">{t("note")}</p>
       </div>
     </details>
   );

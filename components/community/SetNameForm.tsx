@@ -12,7 +12,7 @@ import { AccountModal } from "@/components/account/AccountModal";
 
 const inputClasses =
   "rounded-lg border-2 border-border bg-bg-primary px-3 py-2.5 text-base text-text-primary placeholder:text-text-secondary/60 focus:border-accent";
-const labelClasses = "text-sm font-bold text-text-secondary";
+const labelClasses = "text-sm font-bold text-text-primary";
 
 /**
  * Shown once, before someone's first pack/riddle, so submissions have an
@@ -59,7 +59,7 @@ export function SetNameForm({
 
   const content = (
     <>
-      <p className="mb-4 text-sm font-bold text-accent">
+      <p className="mb-4 font-display text-xl uppercase text-accent">
         {t(variant === "account" ? "headingAccount" : "heading")}
       </p>
       <p className="mb-4 text-sm text-text-secondary">
@@ -77,13 +77,13 @@ export function SetNameForm({
           maxLength={24}
           className={inputClasses}
         />
-        {error && <p className="text-xs text-danger">{error}</p>}
+        {error && <p className="text-sm text-danger">{error}</p>}
         <Button type="submit" disabled={isSubmitting || !name.trim()}>
           {isSubmitting ? t("saving") : t("submit")}
         </Button>
       </form>
       {showAccountNudge && (
-        <p className="mt-3 text-xs text-text-secondary">
+        <p className="mt-3 text-sm text-text-secondary">
           {t("accountNudge")}{" "}
           <button
             type="button"

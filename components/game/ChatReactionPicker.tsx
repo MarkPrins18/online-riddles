@@ -63,7 +63,7 @@ export function ChatReactionPicker({
     <div
       ref={containerRef}
       role="menu"
-      className="absolute z-10 mt-1 rounded-lg border border-white/10 bg-bg-secondary p-2 shadow-lg"
+      className="absolute z-10 mt-1 rounded-lg border border-border bg-bg-secondary p-2"
     >
       {!expanded ? (
         <div className="flex items-center gap-1.5">
@@ -73,7 +73,7 @@ export function ChatReactionPicker({
               type="button"
               onClick={() => pick(emoji)}
               aria-label={t("addLabel", { emoji })}
-              className="rounded-full p-1 text-lg leading-none hover:bg-white/10"
+              className="rounded-full p-1 text-lg leading-none hover:bg-border"
             >
               {emoji}
             </button>
@@ -82,7 +82,7 @@ export function ChatReactionPicker({
             type="button"
             onClick={() => setExpanded(true)}
             aria-label={t("morePicker")}
-            className="rounded-full border border-white/15 px-2 py-1 text-xs leading-none text-text-secondary hover:border-accent-muted"
+            className="rounded-full border border-border px-2 py-1 text-xs leading-none text-text-secondary hover:border-accent-muted"
           >
             +
           </button>
@@ -101,7 +101,7 @@ export function ChatReactionPicker({
                     type="button"
                     onClick={() => pick(emoji)}
                     aria-label={t("addLabel", { emoji })}
-                    className="rounded-full p-1 text-base leading-none hover:bg-white/10"
+                    className="rounded-full p-1 text-base leading-none hover:bg-border"
                   >
                     {emoji}
                   </button>
@@ -109,7 +109,7 @@ export function ChatReactionPicker({
               </div>
             </div>
           ))}
-          <form onSubmit={handleCustomSubmit} className="flex items-center gap-1 border-t border-white/10 pt-2">
+          <form onSubmit={handleCustomSubmit} className="flex items-center gap-1 border-t border-border pt-2">
             <input
               value={customValue}
               onChange={(e) => {
@@ -119,12 +119,12 @@ export function ChatReactionPicker({
               placeholder={t("customPlaceholder")}
               aria-label={t("customLabel")}
               maxLength={8}
-              className="w-full rounded-md border border-white/10 bg-bg-primary px-1.5 py-1 text-xs text-text-primary placeholder:text-text-secondary/60 focus:border-accent-muted"
+              className="w-full rounded-md border border-border bg-bg-primary px-1.5 py-1 text-xs text-text-primary placeholder:text-text-secondary/60 focus:border-accent-muted"
             />
             <button
               type="submit"
               disabled={!customValue.trim()}
-              className="shrink-0 rounded-md border border-white/10 px-1.5 py-1 text-xs font-bold text-text-secondary hover:border-accent-muted disabled:opacity-50"
+              className="shrink-0 rounded-md border border-border px-1.5 py-1 text-xs font-bold text-text-secondary hover:border-accent-muted disabled:opacity-50"
             >
               {t("customSubmit")}
             </button>

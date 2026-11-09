@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { ProfileClient } from "@/components/profile/ProfileClient";
+import { SiteHeader } from "@/components/SiteHeader";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 // Per-player, session-bound content — nothing here is meant to rank.
 // `noindex` (rather than relying on robots.txt alone) is the correct tool:
@@ -23,8 +25,13 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function ProfilePage() {
   return (
-    <main id="main-content" className="flex flex-1 flex-col items-center justify-center px-6 py-16">
-      <ProfileClient />
+    <main id="main-content" className="flex flex-1 flex-col px-6 pb-14">
+      <div className="mx-auto w-full max-w-[1180px]">
+        <SiteHeader languageSwitcher={<LanguageSwitcher />} />
+        <div className="pt-6">
+          <ProfileClient />
+        </div>
+      </div>
     </main>
   );
 }

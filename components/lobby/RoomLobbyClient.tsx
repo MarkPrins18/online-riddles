@@ -9,9 +9,7 @@ import type { NarratorSelection } from "@/lib/game/roles";
 import type { RoomSettingsInput } from "@/types/room";
 import { createKickHandler } from "@/lib/game/membership";
 import { Card } from "@/components/ui/Card";
-import { HowToPlayButton } from "@/components/HowToPlayButton";
 import { ClaimHostBanner } from "@/components/ClaimHostBanner";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { RoomCodeDisplay } from "./RoomCodeDisplay";
 import { PlayerList } from "./PlayerList";
 import { JoinRoomForm } from "./JoinRoomForm";
@@ -20,7 +18,7 @@ import { NarratorPicker } from "./NarratorPicker";
 import { RoomSettingsForm } from "./RoomSettingsForm";
 import { LeaveRoomButton } from "./LeaveRoomButton";
 
-const CARD_TITLE_CLASS = "mb-3 text-sm font-bold text-text-secondary";
+const CARD_TITLE_CLASS = "mb-3 font-display text-xl uppercase text-accent";
 
 export function RoomLobbyClient({ code }: { code: string }) {
   const [playerId, setPlayerId] = useState(() => getStoredPlayerId(code));
@@ -64,85 +62,94 @@ export function RoomLobbyClient({ code }: { code: string }) {
   const isHost = playerId === state.room.host_id;
 
   return (
-    <div className="flex w-full max-w-md flex-col gap-6">
-      <div className="flex justify-end">
-        <LanguageSwitcher />
-      </div>
-      <RoomCodeDisplay code={state.room.code} />
-      <HowToPlayButton className="self-center" />
-
-      <ClaimHostBanner
-        supabase={supabase}
-        roomId={state.room.id}
-        players={state.players}
-        hostId={state.room.host_id}
-        onlinePlayerIds={state.onlinePlayerIds}
-        playerId={playerId}
-      />
-
-      <Card>
-        <p className={CARD_TITLE_CLASS}>
-          {t("playersHeading", { count: state.players.length })}
-        </p>
-        <PlayerList
-          players={state.players}
-          onKick={isHost ? createKickHandler(supabase, state.players) : undefined}
-          onlinePlayerIds={state.onlinePlayerIds}
+    <div className="flex flex-wrap items-start gap-6">
+      {/* Paperback cover: the room code is the one thing to hand out here. */}
+      <section className="relative flex min-w-0 flex-[1_1_420px] flex-col gap-6 overflow-hidden rounded-md bg-accent px-6 py-8 text-ink sm:px-10 sm:py-10">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-16 -top-16 h-[340px] w-[340px] rounded-full bg-[radial-gradient(var(--ink)_2.2px,transparent_2.6px)] bg-[length:12px_12px] opacity-[0.18]"
         />
-      </Card>
+        <div className="relative">
+          <h1 className="font-display text-5xl uppercase leading-[0.95] sm:text-6xl">{t("coverTitle")}</h1>
+          <p className="mt-3 max-w-[28em] text-lg font-medium">{t("coverBody")}</p>
+        </div>
+        <div className="relative">
+          <RoomCodeDisplay code={state.room.code} />
+        </div>
+      </section>
 
-      {playerId ? (
-        isHost ? (
-          <>
-            <Card>
-              <NarratorPicker
-                players={state.players}
-                selection={narratorSelection}
-                onChange={setNarratorSelection}
-              />
-            </Card>
-            <Card>
-              <RoomSettingsForm
-                supabase={supabase}
-                value={roomSettings}
-                onChange={setRoomSettings}
-                playerCount={state.players.length}
-              />
-            </Card>
-            <StartGameButton
-              supabase={supabase}
-              roomId={state.room.id}
-              roomCode={state.room.code}
-              players={state.players}
-              narratorSelection={narratorSelection}
-              playedPuzzleIds={state.room.played_puzzle_ids}
-              roomSettings={roomSettings}
-              locale={locale}
-            />
-          </>
-        ) : (
-          <p className="text-center text-sm text-text-secondary">
-            {t("waitingForHost")}
-          </p>
-        )
-      ) : (
-        <Card>
-          <p className={CARD_TITLE_CLASS}>
-            {t("joinHeading")}
-          </p>
-          <JoinRoomForm presetCode={code} onJoined={setPlayerId} />
-        </Card>
-      )}
-
-      {playerId && (
-        <LeaveRoomButton
+      <div className="flex min-w-0 flex-[1_1_380px] flex-col gap-5">
+        <ClaimHostBanner
           supabase={supabase}
           roomId={state.room.id}
-          roomCode={state.room.code}
           players={state.players}
+          hostId={state.room.host_id}
+          onlinePlayerIds={state.onlinePlayerIds}
           playerId={playerId}
         />
-      )}
+
+        <Card>
+          <h2 className={CARD_TITLE_CLASS}>
+            {t("playersHeading", { count: state.players.length })}
+          </h2>
+          <PlayerList
+            players={state.players}
+            onKick={isHost ? createKickHandler(supabase, state.players) : undefined}
+            onlinePlayerIds={state.onlinePlayerIds}
+          />
+        </Card>
+
+        {playerId ? (
+          isHost ? (
+            <>
+              <Card>
+                <NarratorPicker
+                  players={state.players}
+                  selection={narratorSelection}
+                  onChange={setNarratorSelection}
+                />
+              </Card>
+              <Card>
+                <RoomSettingsForm
+                  supabase={supabase}
+                  value={roomSettings}
+                  onChange={setRoomSettings}
+                  playerCount={state.players.length}
+                />
+              </Card>
+              <StartGameButton
+                supabase={supabase}
+                roomId={state.room.id}
+                roomCode={state.room.code}
+                players={state.players}
+                narratorSelection={narratorSelection}
+                playedPuzzleIds={state.room.played_puzzle_ids}
+                roomSettings={roomSettings}
+                locale={locale}
+              />
+            </>
+          ) : (
+            <Card>
+              <p className="text-base font-bold text-text-primary">{t("waitingForHost")}</p>
+            </Card>
+          )
+        ) : (
+          <Card>
+            <h2 className={CARD_TITLE_CLASS}>{t("joinHeading")}</h2>
+            <JoinRoomForm presetCode={code} onJoined={setPlayerId} />
+          </Card>
+        )}
+
+        {playerId && (
+          <LeaveRoomButton
+            supabase={supabase}
+            roomId={state.room.id}
+            roomCode={state.room.code}
+            players={state.players}
+            playerId={playerId}
+          />
+        )}
+      </div>
     </div>
   );
 }

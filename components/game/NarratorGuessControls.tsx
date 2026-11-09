@@ -134,11 +134,11 @@ export function NarratorGuessControls({
       {pending.map((guess) => (
         <li
           key={guess.id}
-          className="flex flex-col gap-2 rounded-md border border-white/10 bg-bg-primary/60 p-3 sm:flex-row sm:items-center sm:justify-between"
+          className="flex flex-col gap-2 rounded-lg border-2 border-border bg-bg-primary p-3 sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
             <p className="text-sm text-text-primary">{guess.text}</p>
-            <p className="text-xs text-text-secondary">· {guess.player_name}</p>
+            <p className="text-sm text-text-secondary">· {guess.player_name}</p>
           </div>
           <div className="flex gap-2">
             <Button

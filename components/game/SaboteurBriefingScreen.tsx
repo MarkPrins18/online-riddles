@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import { RevealCard } from "@/components/ui/RevealCard";
 import { Button } from "@/components/ui/Button";
 
 /**
@@ -20,24 +21,17 @@ export function SaboteurBriefingScreen({
   const t = useTranslations("SaboteurBriefingScreen");
 
   return (
-    <div
-      className="redact-reveal rounded-lg border border-danger/40 bg-bg-secondary p-6 shadow-lg shadow-danger/10 sm:p-8"
-      style={{ animation: "reveal-in 420ms cubic-bezier(0.16, 1, 0.3, 1)" }}
-    >
-      <p className="text-sm font-bold text-danger">{t("label")}</p>
-      <h2 className="mt-2 font-display uppercase text-2xl text-text-primary">{t("heading")}</h2>
-      <p className="mt-3 text-base leading-relaxed text-text-primary/90">
-        {t("instructions")}
-      </p>
+    <RevealCard tone="danger" label={t("label")} title={t("heading")}>
+      <p className="text-lg leading-relaxed text-text-primary/90">{t("instructions")}</p>
 
-      <p className="mt-6 border-t border-white/5 pt-4 text-sm font-bold text-text-secondary">
-        {t("solutionLabel")}
-      </p>
-      <p className="mt-2 text-base leading-relaxed text-text-primary/90">{solution}</p>
+      <div className="mt-6 rounded-[10px] border-[3px] border-ink bg-paper p-5 text-ink">
+        <p className="text-sm font-extrabold">{t("solutionLabel")}</p>
+        <p className="mt-1.5 text-lg font-medium leading-relaxed">{solution}</p>
+      </div>
 
-      <Button variant="secondary" className="mt-8 w-full" onClick={onAcknowledge}>
+      <Button variant="danger" className="mt-8 w-full py-3.5 text-xl" onClick={onAcknowledge}>
         {t("start")}
       </Button>
-    </div>
+    </RevealCard>
   );
 }

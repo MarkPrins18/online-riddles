@@ -64,7 +64,7 @@ export function AccusationReveal({
 
   return (
     <Card
-      className="border-accent/40"
+      tone="case"
       style={{ animation: "reveal-in 300ms ease-out" }}
     >
       <p className="text-sm font-bold text-accent">
@@ -79,15 +79,15 @@ export function AccusationReveal({
       <p className="mt-1 text-base text-text-primary">
         {t("actualSaboteur", { name: saboteurName })}
       </p>
-      {nearMiss && <p className="mt-1 text-xs text-text-secondary">{t("nearMiss")}</p>}
+      {nearMiss && <p className="mt-2 text-base text-text-secondary">{t("nearMiss")}</p>}
 
       {iAmSaboteur ? (
-        <p className="mt-3 text-xs text-text-secondary">
+        <p className="mt-3 text-sm text-text-secondary">
           {t("saboteurOutcome", { points: saboteurBonus })}
         </p>
       ) : (
         myVote && (
-          <p className="mt-3 text-xs text-text-secondary">
+          <p className="mt-3 text-sm text-text-secondary">
             {myVote.target_id === saboteurId
               ? t("yourVoteCorrect", { points: ACCUSATION_CORRECT_BONUS })
               : t("yourVoteWrong", { points: ACCUSATION_WRONG_PENALTY })}

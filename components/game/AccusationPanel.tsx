@@ -64,12 +64,10 @@ export function AccusationPanel({
   return (
     <Card>
       <div className="flex items-center justify-between gap-2">
-        <p className="text-sm font-bold text-text-secondary">
-          {t("heading")}
-        </p>
+        <h2 className="font-display text-xl uppercase text-accent">{t("heading")}</h2>
         {secondsLeft !== null && (
           <span
-            className={`text-sm tabular-nums ${isUrgent ? "font-bold text-danger" : "text-text-secondary"}`}
+            className={`rounded px-2.5 py-0.5 font-display text-lg tabular-nums text-ink ${isUrgent ? "bg-danger" : "bg-accent"}`}
           >
             {isUrgent && "⚠ "}
             {t("secondsLeft", { seconds: secondsLeft })}
@@ -83,8 +81,8 @@ export function AccusationPanel({
         </p>
       ) : (
         <>
-          <p className="mt-2 text-sm text-text-primary/90">{t("instructions")}</p>
-          <ul className="mt-3 flex flex-col gap-1.5">
+          <p className="mt-2 text-base text-text-primary/90">{t("instructions")}</p>
+          <ul className="mt-3 flex flex-col gap-2">
             {candidates.map((candidate) => {
               const isMyVote = myVote?.target_id === candidate.id;
               return (
@@ -94,10 +92,10 @@ export function AccusationPanel({
                     onClick={() => handleVote(candidate.id)}
                     disabled={isSubmitting}
                     aria-pressed={isMyVote}
-                    className={`w-full rounded-md border px-3 py-2 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
+                    className={`w-full cursor-pointer rounded-lg border-2 px-4 py-3 text-left text-base font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
                       isMyVote
-                        ? "border-accent bg-accent/15 text-accent"
-                        : "border-white/10 text-text-primary hover:border-accent-muted"
+                        ? "border-accent bg-accent text-ink"
+                        : "border-border bg-bg-primary text-text-primary hover:border-accent"
                     }`}
                   >
                     {candidate.name}
@@ -107,14 +105,14 @@ export function AccusationPanel({
             })}
           </ul>
           {myVote && (
-            <p className="mt-3 text-xs text-text-secondary">
+            <p className="mt-3 text-sm text-text-secondary">
               {t("youVotedFor", {
                 name: players.find((p) => p.id === myVote.target_id)?.name ?? "?",
               })}
             </p>
           )}
           {error && (
-            <p role="alert" className="mt-2 text-xs text-danger">
+            <p role="alert" className="mt-2 text-sm text-danger">
               {error}
             </p>
           )}

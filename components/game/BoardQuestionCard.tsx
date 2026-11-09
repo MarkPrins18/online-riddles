@@ -52,7 +52,7 @@ export function BoardQuestionCard({
       tabIndex={0}
       role="button"
       aria-label={question?.text ?? t("notFound")}
-      className={`absolute w-[200px] -translate-x-1/2 -translate-y-1/2 touch-none select-none rounded-sm bg-[#eae4d3] p-3 text-[#12141c] shadow-md shadow-black/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${connecting ? "ring-2 ring-accent" : ""}`}
+      className={`absolute w-[200px] -translate-x-1/2 -translate-y-1/2 touch-none select-none rounded-md bg-[#eae4d3] p-3 text-[#12141c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${connecting ? "ring-2 ring-accent" : ""}`}
       style={{ left: `${x * 100}%`, top: `${y * 100}%`, transform: `rotate(${rotate}deg)` }}
       onPointerDown={onPointerDown}
       onPointerMove={handlePointerMove}

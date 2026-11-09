@@ -365,7 +365,7 @@ export function CorkboardOverlay({
 
   return (
     <Modal onClose={onClose}>
-      <div className="flex items-center justify-between gap-3 border-b border-white/5 p-4">
+      <div className="flex items-center justify-between gap-3 border-b border-[#3a3a3a] p-4">
         <p className="text-sm font-bold text-text-secondary">{t("title")}</p>
         <div className="flex flex-wrap items-center gap-2">
           <Button
@@ -394,7 +394,7 @@ export function CorkboardOverlay({
       </div>
 
       {addingNote && (
-        <div className="flex flex-wrap items-center gap-2 border-b border-white/5 p-3">
+        <div className="flex flex-wrap items-center gap-2 border-b border-[#3a3a3a] p-3">
           <input
             value={noteDraft}
             onChange={(e) => setNoteDraft(e.target.value)}
@@ -426,13 +426,13 @@ export function CorkboardOverlay({
       )}
 
       {pickingQuestion && (
-        <div className="flex max-h-40 flex-col gap-1 overflow-y-auto border-b border-white/5 p-3">
+        <div className="flex max-h-40 flex-col gap-1 overflow-y-auto border-b border-[#3a3a3a] p-3">
           {unpinnedQuestions.map((q) => (
             <button
               key={q.id}
               type="button"
               onClick={() => handlePinQuestion(q.id)}
-              className="rounded-md border border-white/10 px-3 py-2 text-left text-sm text-text-primary hover:border-accent-muted"
+              className="rounded-md border border-border px-3 py-2 text-left text-sm text-text-primary hover:border-accent-muted"
             >
               {q.text}
             </button>
@@ -440,12 +440,12 @@ export function CorkboardOverlay({
         </div>
       )}
 
-      <p className="border-b border-white/5 px-4 py-2 text-xs text-text-secondary">
+      <p className="border-b border-[#3a3a3a] px-4 py-2 text-sm text-text-secondary">
         {isDesktop ? t("instructions") : t("instructionsList")}
       </p>
 
       {(actionError || state.error) && (
-        <p className="border-b border-white/5 px-4 py-2 text-xs text-danger">
+        <p className="border-b border-[#3a3a3a] px-4 py-2 text-sm text-danger">
           {actionError ?? state.error}
         </p>
       )}

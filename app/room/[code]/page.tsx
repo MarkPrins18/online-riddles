@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { RoomLobbyClient } from "@/components/lobby/RoomLobbyClient";
+import { SiteHeader } from "@/components/SiteHeader";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 // Just a browser-tab-friendly title — the room code itself is already
 // public/shareable (it's meant to be handed to friends to join), so there's
@@ -25,8 +27,13 @@ export default async function RoomPage({
   const { code } = await params;
 
   return (
-    <main id="main-content" className="flex flex-1 flex-col items-center justify-center gap-6 px-6 py-16">
-      <RoomLobbyClient code={code.toUpperCase()} />
+    <main id="main-content" className="flex flex-1 flex-col px-6 pb-14">
+      <div className="mx-auto w-full max-w-[1180px]">
+        <SiteHeader languageSwitcher={<LanguageSwitcher />} />
+        <div className="pt-6">
+          <RoomLobbyClient code={code.toUpperCase()} />
+        </div>
+      </div>
     </main>
   );
 }

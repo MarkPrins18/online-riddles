@@ -54,7 +54,7 @@ export function ChatForm({
         className="min-w-0 flex-1 rounded-lg border-2 border-[#5a5a5a] bg-bg-primary px-3 py-2.5 text-[15px] text-text-primary placeholder:text-text-secondary/60 focus:border-accent focus:outline-none"
       />
       {error && (
-        <p role="alert" className="order-last basis-full text-xs text-danger">
+        <p role="alert" className="order-last basis-full text-sm text-danger">
           {error}
         </p>
       )}

@@ -70,7 +70,7 @@ export function CommunityPackDetailClient({ packId }: { packId: string }) {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="font-display text-3xl uppercase text-text-primary">{pack.name}</h1>
+        <h1 className="font-display text-5xl uppercase leading-none text-accent">{pack.name}</h1>
         <div className="mt-2 flex gap-2">
           <Badge tone="accent">{pack.theme}</Badge>
         </div>

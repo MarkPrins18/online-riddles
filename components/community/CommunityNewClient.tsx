@@ -83,7 +83,7 @@ export function CommunityNewClient() {
 
     return (
       <Card tone="case">
-        <p className="mb-4 text-sm font-bold text-accent">
+        <p className="mb-4 font-display text-xl uppercase text-accent">
           {t("chooseHeading")}
         </p>
         <p className="mb-4 text-sm text-text-secondary">{t("chooseSubtitle")}</p>
@@ -113,10 +113,10 @@ export function CommunityNewClient() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="font-display text-3xl uppercase text-text-primary">{t("heading")}</h1>
+      <h1 className="font-display text-5xl uppercase leading-none text-accent">{t("heading")}</h1>
 
       <Card tone="chrome">
-        <p className="mb-3 text-sm font-bold text-text-secondary">
+        <p className="mb-3 font-display text-xl uppercase text-accent">
           {t("packHeading")}
         </p>
         {packs.length > 0 && !showNewPackForm && (
@@ -162,7 +162,7 @@ export function CommunityNewClient() {
             onSaved={(puzzle: Puzzle) => setJustAdded(puzzle.title)}
           />
           {justAdded && (
-            <p className="mt-3 text-xs text-accent">
+            <p className="mt-3 text-sm font-bold text-accent">
               {t("addedNoticePrefix", { title: justAdded })}{" "}
               <Link href="/community/mijn" className="underline">
                 {t("myPacksLink")}

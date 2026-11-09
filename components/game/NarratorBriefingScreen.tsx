@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import { RevealCard } from "@/components/ui/RevealCard";
 import { Button } from "@/components/ui/Button";
 
 /**
@@ -29,20 +30,15 @@ export function NarratorBriefingScreen({
   const t = useTranslations("NarratorBriefingScreen");
 
   return (
-    <div
-      className="redact-reveal rounded-lg border border-accent/40 bg-bg-secondary p-6 shadow-lg shadow-accent/10 sm:p-8"
-      style={{ animation: "reveal-in 420ms cubic-bezier(0.16, 1, 0.3, 1)" }}
-    >
-      <p className="text-sm font-bold text-accent">{t("newCase")}</p>
-      <h2 className="mt-2 font-display uppercase text-2xl text-text-primary">{title}</h2>
-      <p className="mt-3 text-base leading-relaxed text-text-primary/90">{scenario}</p>
+    <RevealCard label={t("newCase")} title={title}>
+      <p className="text-lg leading-relaxed text-text-primary/90">{scenario}</p>
 
-      <p className="mt-6 border-t border-white/5 pt-4 text-sm font-bold text-text-secondary">
-        {t("onlyForYou")}
-      </p>
-      <p className="mt-2 text-base leading-relaxed text-text-primary/90">{solution}</p>
+      <div className="mt-6 rounded-[10px] border-[3px] border-ink bg-paper p-5 text-ink">
+        <p className="text-sm font-extrabold">{t("onlyForYou")}</p>
+        <p className="mt-1.5 text-lg font-medium leading-relaxed">{solution}</p>
+      </div>
 
-      <Button variant="secondary" className="mt-8 w-full" onClick={onAcknowledge}>
+      <Button className="mt-8 w-full py-3.5 text-xl" onClick={onAcknowledge}>
         {t("start")}
       </Button>
       <Button
@@ -53,7 +49,7 @@ export function NarratorBriefingScreen({
       >
         {isSkipping ? t("skipping") : t("skip")}
       </Button>
-      {skipError && <p className="mt-2 text-xs text-danger">{skipError}</p>}
-    </div>
+      {skipError && <p className="mt-2 text-sm text-danger">{skipError}</p>}
+    </RevealCard>
   );
 }

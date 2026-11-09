@@ -48,7 +48,7 @@ export function NarratorInbox({
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <p className="mb-3 text-sm font-bold text-text-secondary">
+        <p className="mb-3 font-display text-xl uppercase text-accent">
           {t("giveHintHeading")}
         </p>
         <NarratorHintForm
@@ -62,7 +62,7 @@ export function NarratorInbox({
       </div>
 
       <div>
-        <p className="mb-3 text-sm font-bold text-text-secondary">
+        <p className="mb-3 font-display text-xl uppercase text-accent">
           {t("pendingSolutionsHeading")}
         </p>
         <NarratorGuessControls
@@ -80,7 +80,7 @@ export function NarratorInbox({
       </div>
 
       <div>
-        <p className="mb-3 text-sm font-bold text-text-secondary">
+        <p className="mb-3 font-display text-xl uppercase text-accent">
           {t("unansweredHeading", { count: unanswered.length })}
         </p>
         {unanswered.length === 0 ? (

@@ -20,17 +20,17 @@ export function PlayerList({
   }
 
   return (
-    <ul className="flex flex-col divide-y divide-white/5">
+    <ul className="flex flex-col divide-y divide-dashed divide-[#3a3a3a]">
       {players.map((player) => (
         <li
           key={player.id}
           className="flex items-center justify-between py-2.5"
         >
-          <span className="flex items-center gap-2 text-sm text-text-primary">
+          <span className="flex items-center gap-2.5 text-base text-text-primary">
             {onlinePlayerIds && (
               <span
-                className={`h-1.5 w-1.5 shrink-0 rounded-full ${
-                  onlinePlayerIds.has(player.id) ? "bg-accent" : "bg-text-secondary/30"
+                className={`h-2.5 w-2.5 shrink-0 rounded-full ${
+                  onlinePlayerIds.has(player.id) ? "bg-accent" : "border-2 border-[#5a5a5a]"
                 }`}
               >
                 <span className="sr-only">
@@ -49,7 +49,7 @@ export function PlayerList({
                 type="button"
                 onClick={() => onKick(player.id)}
                 aria-label={t("removeAriaLabel", { name: player.name })}
-                className="rounded p-2.5 text-xs text-text-secondary transition-colors hover:text-danger"
+                className="cursor-pointer rounded p-2.5 text-sm text-text-secondary transition-colors hover:text-danger"
               >
                 ✕
               </button>

@@ -21,12 +21,12 @@ export default async function NotFound() {
 
   return (
     <main id="main-content" className="flex min-h-[60vh] flex-1 items-center justify-center p-6">
-      <Card tone="chrome" className="max-w-md text-center">
-        <h1 className="font-display uppercase text-xl text-text-primary">{t("title")}</h1>
-        <p className="mt-2 text-sm text-text-secondary">{t("description")}</p>
+      <Card tone="case" className="max-w-lg text-center">
+        <h1 className="font-display text-4xl uppercase leading-none text-accent">{t("title")}</h1>
+        <p className="mt-3 text-base text-text-primary/90">{t("description")}</p>
         <Link
           href="/"
-          className="mt-5 inline-flex items-center justify-center gap-2 rounded-sm bg-accent px-4 py-2.5 text-sm font-medium tracking-wide text-bg-primary transition-colors hover:bg-accent-muted"
+          className="mt-6 inline-flex items-center justify-center rounded-lg border-2 border-accent bg-accent px-5 py-2.5 font-display text-lg uppercase tracking-wide text-ink transition-colors hover:bg-accent-muted"
         >
           {t("home")}
         </Link>

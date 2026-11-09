@@ -39,7 +39,7 @@ export function ChatIconButton({
         />
       </svg>
       {unreadCount > 0 && (
-        <span className="absolute -right-1 -top-1 flex min-w-[1.15rem] items-center justify-center rounded-full bg-accent px-1 text-[10px] leading-[1.15rem] text-bg-primary">
+        <span className="absolute -right-1 -top-1 flex min-w-[1.15rem] items-center justify-center rounded-full bg-accent px-1 text-[11px] font-extrabold leading-[1.15rem] text-ink">
           {unreadCount}
         </span>
       )}

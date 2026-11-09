@@ -96,8 +96,8 @@ export function ShareRecapButton({
 
       {open && (
         <Modal onClose={() => setOpen(false)} className="mx-auto w-full max-w-md">
-          <div className="flex items-center justify-between gap-3 border-b border-white/5 p-4">
-            <p className="text-sm font-bold text-text-secondary">
+          <div className="flex items-center justify-between gap-3 border-b-2 border-border px-6 py-4">
+            <p className="font-display text-3xl uppercase tracking-wide text-accent">
               {t("caseClosed")}
             </p>
             <Button variant="ghost" onClick={() => setOpen(false)}>
@@ -114,7 +114,7 @@ export function ShareRecapButton({
               <img
                 src={imageUrl}
                 alt={t("recapImageAlt")}
-                className="w-full max-w-xs rounded-md border border-white/10"
+                className="w-full max-w-xs rounded-md border border-border"
               />
             )}
             {imageBlob && (

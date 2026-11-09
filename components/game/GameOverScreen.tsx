@@ -1,9 +1,9 @@
 import { useTranslations } from "next-intl";
+import { RevealCard, StandingsList } from "@/components/ui/RevealCard";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import type { Player } from "@/types/player";
 import { Button } from "@/components/ui/Button";
-import { medalForRank } from "@/lib/game/ranking";
 import { SessionRecapPanel } from "./SessionRecapPanel";
 import { ShareRecapButton } from "./ShareRecapButton";
 
@@ -29,24 +29,8 @@ export function GameOverScreen({
   const t = useTranslations("GameOverScreen");
 
   return (
-    <div
-      className="redact-reveal rounded-lg border border-danger/40 bg-bg-secondary p-8 shadow-lg shadow-danger/10 sm:p-10"
-      style={{ animation: "reveal-in 420ms cubic-bezier(0.16, 1, 0.3, 1)" }}
-    >
-      <p className="text-sm font-bold text-danger">{t("gameOver")}</p>
-      <h2 className="mt-3 font-display uppercase text-3xl text-text-primary">{t("heading")}</h2>
-      <p className="mt-2 text-sm text-text-secondary">{t("subtitle")}</p>
-
-      <ul className="mt-6 flex flex-col divide-y divide-white/5">
-        {ranked.map((player, index) => (
-          <li key={player.id} className="flex items-center justify-between py-3">
-            <span className="text-sm text-text-primary">
-              {medalForRank(index) ?? `${index + 1}.`} {player.name}
-            </span>
-            <span className="text-sm font-semibold text-danger">{player.score}</span>
-          </li>
-        ))}
-      </ul>
+    <RevealCard tone="danger" label={t("gameOver")} title={t("heading")} subtitle={t("subtitle")}>
+      <StandingsList players={ranked} tone="danger" />
 
       <SessionRecapPanel supabase={supabase} roomId={roomId} bare />
 
@@ -55,10 +39,10 @@ export function GameOverScreen({
       </div>
 
       {isHost && (
-        <Button variant="secondary" className="mt-3 w-full" onClick={onNewGame}>
+        <Button variant="secondary" className="mt-3 w-full py-3" onClick={onNewGame}>
           {t("newGame")}
         </Button>
       )}
-    </div>
+    </RevealCard>
   );
 }

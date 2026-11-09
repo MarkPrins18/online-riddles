@@ -76,7 +76,7 @@ export function VoteButtons({
           {myVote === -1 ? "▼" : "▽"}
         </Button>
       </div>
-      {error && <p className="text-xs text-danger">{error}</p>}
+      {error && <p className="text-sm text-danger">{error}</p>}
     </div>
   );
 }

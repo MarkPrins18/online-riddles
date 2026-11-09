@@ -52,7 +52,7 @@ export function HintSnackbar({ latestHint }: { latestHint: Hint | null }) {
       <div
         role="status"
         aria-live="polite"
-        className="max-w-md rounded-xl border-2 border-accent bg-bg-secondary/95 px-4 py-3 shadow-xl shadow-black/50"
+        className="max-w-md rounded-xl border-2 border-accent bg-bg-secondary/95 px-4 py-3"
         style={{ animation: "reveal-in 180ms ease-out" }}
       >
         <p className="text-xs font-bold text-accent">

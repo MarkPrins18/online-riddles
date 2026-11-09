@@ -20,7 +20,7 @@ export function MyGuessFeedback({
   if (!latest) return null;
 
   return (
-    <p className="mt-2 text-xs text-text-secondary">
+    <p className="mt-2 text-sm text-text-secondary">
       {t("latestGuess", { text: latest.text })}{" "}
       {latest.status === "pending" && <Badge tone="neutral">{t("pending")}</Badge>}
       {latest.status === "incorrect" && <Badge tone="danger">{t("incorrect")}</Badge>}

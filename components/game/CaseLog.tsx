@@ -12,12 +12,12 @@ export function CaseLog({ entries }: { entries: CaseLogEntry[] }) {
 
   return (
     <div>
-      <p className="mb-4 text-sm font-bold text-text-secondary">
+      <p className="mb-4 font-display text-xl uppercase text-accent">
         {t("heading")}
       </p>
       <ul className="flex max-h-48 flex-col gap-6 overflow-y-auto">
         {ordered.map((entry) => (
-          <li key={entry.id} className="text-xs">
+          <li key={entry.id} className="text-sm">
             <span className="text-text-primary">
               {t("caseLabel", { round: entry.round + 1, difficulty: tDifficulty(entry.difficulty) })}
             </span>

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Button } from "@/components/ui/Button";
 
 export function RoomCodeDisplay({ code }: { code: string }) {
   const [copied, setCopied] = useState(false);
@@ -35,26 +34,26 @@ export function RoomCodeDisplay({ code }: { code: string }) {
   }
 
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex flex-col items-start gap-4">
       <button
         type="button"
         onClick={handleCopy}
-        className="group flex flex-col items-center gap-1 rounded-md border border-white/10 bg-bg-primary/60 px-6 py-4 transition-colors hover:border-accent-muted"
+        className="group flex cursor-pointer flex-col items-start gap-1 text-left"
         aria-label={t("ariaLabel")}
       >
-        <span className="text-sm font-bold text-text-secondary">
-          {t("label")}
-        </span>
-        <span className="text-3xl font-semibold tracking-[0.3em] text-accent">
-          {code}
-        </span>
-        <span className="text-xs text-text-secondary">
+        <span className="text-sm font-extrabold">{t("label")}</span>
+        <span className="font-display text-7xl leading-none tracking-[0.08em] sm:text-8xl">{code}</span>
+        <span className="text-sm font-bold underline decoration-2 underline-offset-2 group-hover:no-underline">
           {copied ? t("copied") : t("copyPrompt")}
         </span>
       </button>
-      <Button variant="secondary" onClick={handleShare}>
+      <button
+        type="button"
+        onClick={handleShare}
+        className="cursor-pointer rounded-[10px] border-[3px] border-ink bg-ink px-5 py-2.5 font-display text-xl uppercase tracking-[0.03em] text-accent transition-colors hover:bg-transparent hover:text-ink"
+      >
         {linkCopied ? t("linkCopied") : t("shareLink")}
-      </Button>
+      </button>
     </div>
   );
 }

@@ -71,8 +71,8 @@ export function AccountModal({ onClose }: { onClose: () => void }) {
 
   return (
     <Modal onClose={onClose} className="mx-auto w-full max-w-md">
-      <div className="flex items-center justify-between gap-3 border-b border-white/5 p-4">
-        <p className="text-sm font-bold text-text-secondary">
+      <div className="flex items-center justify-between gap-3 border-b-2 border-border px-6 py-4">
+        <p className="font-display text-3xl uppercase tracking-wide text-accent">
           {t("title")}
         </p>
         <Button variant="ghost" onClick={onClose}>
@@ -100,7 +100,7 @@ export function AccountModal({ onClose }: { onClose: () => void }) {
               {t("signedInAs", { email: phase.email ?? "" })}
             </p>
             {signOutError && (
-              <p role="alert" className="text-xs text-danger">
+              <p role="alert" className="text-sm text-danger">
                 {signOutError}
               </p>
             )}

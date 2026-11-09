@@ -57,7 +57,7 @@ export function CommunityNav() {
   }, [menuOpen]);
 
   return (
-    <div className="flex items-center gap-2 border-b border-white/10 pb-3 sm:gap-0 sm:pb-0">
+    <div className="flex items-center gap-2 border-b-2 border-border pb-3 sm:gap-0 sm:pb-0">
       {/* Four tab labels plus the account trigger don't fit a phone
           screen — a dropdown keeps every destination equally reachable
           with one tap, instead of some of them requiring a horizontal
@@ -70,7 +70,7 @@ export function CommunityNav() {
           onClick={() => setMenuOpen((open) => !open)}
           aria-haspopup="menu"
           aria-expanded={menuOpen}
-          className="flex w-full items-center justify-between gap-2 rounded-sm border border-accent/40 bg-bg-secondary px-3 py-2.5 text-sm text-accent transition-colors"
+          className="flex w-full items-center justify-between gap-2 rounded-lg border-2 border-accent bg-bg-secondary px-3 py-2.5 font-display text-lg uppercase tracking-wide text-accent transition-colors"
         >
           <span>{activeLabel}</span>
           <svg
@@ -92,7 +92,7 @@ export function CommunityNav() {
         {menuOpen && (
           <div
             role="menu"
-            className="absolute z-10 mt-1 w-full rounded-lg border border-white/10 bg-bg-secondary p-1 shadow-lg"
+            className="absolute z-10 mt-1 w-full rounded-lg border-2 border-border bg-bg-secondary p-1"
           >
             {LINKS.map((link) => {
               const isActive = link.href === activeHref;
@@ -103,10 +103,10 @@ export function CommunityNav() {
                   role="menuitem"
                   aria-current={isActive ? "page" : undefined}
                   onClick={() => setMenuOpen(false)}
-                  className={`block rounded-md px-3 py-2 text-sm transition-colors ${
+                  className={`block rounded-md px-3 py-2.5 text-base font-bold transition-colors ${
                     isActive
-                      ? "bg-bg-primary text-accent"
-                      : "text-text-secondary hover:bg-white/5 hover:text-text-primary"
+                      ? "bg-accent text-ink"
+                      : "text-text-primary hover:bg-bg-primary hover:text-accent"
                   }`}
                 >
                   {link.label}
@@ -125,7 +125,7 @@ export function CommunityNav() {
               key={link.href}
               href={link.href}
               aria-current={isActive ? "page" : undefined}
-              className={`shrink-0 border-b-[3px] px-3 pb-2 pt-2.5 font-display text-base uppercase tracking-wide transition-colors ${
+              className={`-mb-0.5 shrink-0 border-b-[3px] px-3 pb-2 pt-2.5 font-display text-lg uppercase tracking-wide transition-colors ${
                 isActive
                   ? "border-accent text-accent"
                   : "border-transparent text-text-secondary hover:text-text-primary"

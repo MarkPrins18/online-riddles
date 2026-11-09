@@ -70,7 +70,7 @@ export function CorkboardListView({
             return (
               <li
                 key={item.id}
-                className="rounded-sm border border-white/10 bg-bg-secondary p-3"
+                className="rounded-md border border-border bg-bg-secondary p-3"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-start gap-2">
@@ -94,7 +94,7 @@ export function CorkboardListView({
                       type="button"
                       onClick={() => onDeleteItem(item.id)}
                       aria-label={t("deleteItemAriaLabel")}
-                      className="shrink-0 text-xs text-text-secondary hover:text-danger"
+                      className="shrink-0 text-sm text-text-secondary hover:text-danger"
                     >
                       {t("remove")}
                     </button>
@@ -108,7 +108,7 @@ export function CorkboardListView({
                       return (
                         <li
                           key={connection.id}
-                          className="flex items-center gap-1 rounded-full border border-white/10 bg-bg-primary px-2 py-0.5 text-[11px] text-text-secondary"
+                          className="flex items-center gap-1 rounded-full border border-border bg-bg-primary px-2 py-0.5 text-[11px] text-text-secondary"
                         >
                           <span>{other ? itemLabel(other, questions, notFound) : ""}</span>
                           {canDeleteConnection && (
@@ -134,7 +134,7 @@ export function CorkboardListView({
                       if (e.target.value) onAddConnection(item.id, e.target.value);
                     }}
                     aria-label={t("addLinkAriaLabel")}
-                    className="mt-2 w-full rounded-md border border-white/10 bg-bg-primary px-2 py-1.5 text-xs text-text-secondary focus:border-accent-muted"
+                    className="mt-2 w-full rounded-md border border-border bg-bg-primary px-2 py-1.5 text-sm text-text-secondary focus:border-accent-muted"
                   >
                     <option value="">{t("linkTo")}</option>
                     {linkableItems.map((other) => (

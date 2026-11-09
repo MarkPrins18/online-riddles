@@ -1,12 +1,10 @@
 import { use } from "react";
 import type { Metadata } from "next";
-import NextLink from "next/link";
 import { useTranslations } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { CreateRoomForm } from "@/components/lobby/CreateRoomForm";
-import { HowToPlayButton } from "@/components/HowToPlayButton";
+import { SiteHeader } from "@/components/SiteHeader";
 import { LocalizedLanguageSwitcher } from "@/components/LocalizedLanguageSwitcher";
-import { Link } from "@/i18n/navigation";
 import { isLocale } from "@/lib/i18n/locales";
 
 // No title/description override — the root layout's default ("DetectiveNights"
@@ -38,21 +36,7 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
   return (
     <main id="main-content" className="flex flex-1 flex-col px-6 pb-14">
       <div className="mx-auto w-full max-w-[1180px]">
-        <header className="flex flex-wrap items-center justify-between gap-4 py-[22px]">
-          <Link href="/" className="font-display text-[28px] uppercase tracking-[0.02em] text-text-primary">
-            Detective<span className="text-accent">Nights</span>
-          </Link>
-          <nav className="flex flex-wrap items-center gap-[22px] text-[15px] font-bold">
-            <Link href="/community" className="text-text-primary hover:text-accent">
-              {t("communityLink")}
-            </Link>
-            <HowToPlayButton variant="plain" />
-            <NextLink href="/profile" className="text-text-primary hover:text-accent">
-              {t("profileLink")}
-            </NextLink>
-            <LocalizedLanguageSwitcher pathname="/" />
-          </nav>
-        </header>
+        <SiteHeader languageSwitcher={<LocalizedLanguageSwitcher pathname="/" />} />
 
         {/* Paperback cover: the one big yellow surface on the page. */}
         <section className="relative flex flex-wrap items-end gap-8 overflow-hidden rounded-md bg-accent px-6 pt-12 text-ink sm:px-11">

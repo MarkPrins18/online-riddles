@@ -1,6 +1,5 @@
 import type { Player } from "@/types/player";
 import type { SessionRecap } from "./recap";
-import { medalForRank } from "./ranking";
 
 const WIDTH = 1080;
 const MIN_HEIGHT = 1350;
@@ -216,7 +215,7 @@ export async function generateRecapImage(
   ctx.textAlign = "left";
   ctx.font = `400 30px ${body}`;
   for (const [index, player] of ranked.slice(0, MAX_SCOREBOARD_ROWS).entries()) {
-    const label = medalForRank(index) ?? `${index + 1}.`;
+    const label = `${index + 1}.`;
     ctx.fillStyle = COLORS.textPrimary;
     ctx.fillText(`${label}  ${player.name}`, PAD, y);
     ctx.textAlign = "right";

@@ -72,7 +72,7 @@ export function ChatPanel({
         />
       </div>
       {narrating ? (
-        <p className="mt-3 shrink-0 text-xs text-text-secondary">
+        <p className="mt-3 shrink-0 text-sm text-text-secondary">
           {t("narratorNotice")}
         </p>
       ) : (

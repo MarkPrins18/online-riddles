@@ -106,8 +106,8 @@ export function RoomSettingsForm({
     }
   }
 
-  const groupLegendClass = "mb-3 text-sm font-bold text-text-primary";
-  const fieldLegendClass = "mb-1 text-sm font-bold text-text-secondary";
+  const groupLegendClass = "mb-3 font-display text-xl uppercase text-accent";
+  const fieldLegendClass = "mb-2 text-sm font-bold text-text-primary";
 
   return (
     <div className="flex flex-col gap-6">
@@ -163,20 +163,20 @@ export function RoomSettingsForm({
         </div>
       </fieldset>
 
-      <div className="border-t border-white/5 pt-4">
+      <div className="border-t-2 border-dashed border-[#3a3a3a] pt-4">
         <fieldset>
           <legend className={groupLegendClass}>{t("puzzlesLegend")}</legend>
 
           <fieldset>
             <legend className={fieldLegendClass}>{t("themesLegend")}</legend>
             {officialThemes === null ? (
-              <p className="text-xs text-text-secondary">{t("themesLoading")}</p>
+              <p className="text-sm text-text-secondary">{t("themesLoading")}</p>
             ) : officialThemes.length === 0 ? (
-              <p className="text-xs text-text-secondary">{t("themesEmpty")}</p>
+              <p className="text-sm text-text-secondary">{t("themesEmpty")}</p>
             ) : (
               <div className="flex flex-col gap-1.5">
                 {officialThemes.map((theme) => (
-                  <label key={theme.id} className="flex items-center gap-2 text-sm text-text-primary">
+                  <label key={theme.id} className="flex cursor-pointer items-center gap-2.5 text-base text-text-primary">
                     <input
                       type="checkbox"
                       className="accent-accent"
@@ -190,17 +190,17 @@ export function RoomSettingsForm({
             )}
           </fieldset>
 
-          <div className="mt-3 border-t border-white/5 pt-3">
+          <div className="mt-3 border-t-2 border-dashed border-[#3a3a3a] pt-3">
             <fieldset>
               <legend className={fieldLegendClass}>{t("communityLegend")}</legend>
               {communityPackCount === null ? (
-                <p className="text-xs text-text-secondary">{t("communityLoading")}</p>
+                <p className="text-sm text-text-secondary">{t("communityLoading")}</p>
               ) : communityPackCount === 0 ? (
-                <p className="text-xs text-text-secondary">{t("communityEmpty")}</p>
+                <p className="text-sm text-text-secondary">{t("communityEmpty")}</p>
               ) : (
                 <>
                   <div className="flex flex-col gap-1.5">
-                    <label className="flex items-center gap-2 text-sm text-text-primary">
+                    <label className="flex cursor-pointer items-center gap-2.5 text-base text-text-primary">
                       <input
                         type="radio"
                         name="community-mode"
@@ -210,7 +210,7 @@ export function RoomSettingsForm({
                       />
                       {t("communityOff")}
                     </label>
-                    <label className="flex items-center gap-2 text-sm text-text-primary">
+                    <label className="flex cursor-pointer items-center gap-2.5 text-base text-text-primary">
                       <input
                         type="radio"
                         name="community-mode"
@@ -219,9 +219,9 @@ export function RoomSettingsForm({
                         onChange={() => setCommunityMode("all")}
                       />
                       {t("communityToggle")}
-                      <span className="text-xs text-text-secondary">({communityPackCount})</span>
+                      <span className="text-sm text-text-secondary">({communityPackCount})</span>
                     </label>
-                    <label className="flex items-center gap-2 text-sm text-text-primary">
+                    <label className="flex cursor-pointer items-center gap-2.5 text-base text-text-primary">
                       <input
                         type="radio"
                         name="community-mode"
@@ -232,18 +232,18 @@ export function RoomSettingsForm({
                       />
                       {t("communityFavorites")}
                       {favoritePackIds && (
-                        <span className="text-xs text-text-secondary">
+                        <span className="text-sm text-text-secondary">
                           ({favoritePackIds.size})
                         </span>
                       )}
                     </label>
                   </div>
                   {favoritePackIds && favoritePackIds.size === 0 && (
-                    <p className="mt-1 text-xs text-text-secondary">
+                    <p className="mt-2 text-base text-text-secondary">
                       {t("communityFavoritesEmpty")}
                     </p>
                   )}
-                  <p className="mt-1 text-xs text-text-secondary">{t("communityHint")}</p>
+                  <p className="mt-2 text-base text-text-secondary">{t("communityHint")}</p>
                 </>
               )}
             </fieldset>
@@ -254,17 +254,17 @@ export function RoomSettingsForm({
             officialThemes.length + communityPackCount > 0 &&
             value.packThemeFilter.length === 0 &&
             (value.communityPackIds === null ? communityPackCount === 0 : value.communityPackIds.length === 0) && (
-              <p className="mt-3 text-xs text-danger">{t("chooseThemeOrPack")}</p>
+              <p className="mt-3 text-sm text-danger">{t("chooseThemeOrPack")}</p>
             )}
         </fieldset>
       </div>
 
-      <div className="border-t border-white/5 pt-4">
+      <div className="border-t-2 border-dashed border-[#3a3a3a] pt-4">
         <fieldset>
           <legend className={groupLegendClass}>{t("modesLegend")}</legend>
-          <div className="flex flex-col divide-y divide-white/5">
+          <div className="flex flex-col divide-y divide-dashed divide-[#3a3a3a]">
             <div className="pb-3">
-              <label className="flex items-center gap-2 text-sm text-text-primary">
+              <label className="flex cursor-pointer items-center gap-2.5 text-base text-text-primary">
                 <input
                   type="checkbox"
                   className="accent-accent"
@@ -273,7 +273,7 @@ export function RoomSettingsForm({
                 />
                 {t("hardcoreToggle")}
               </label>
-              <p className="mt-1 text-xs text-text-secondary">{t("hardcoreHint")}</p>
+              <p className="mt-2 text-base text-text-secondary">{t("hardcoreHint")}</p>
 
               {value.hardcoreMode && (
                 <div className="mt-3">
@@ -300,7 +300,7 @@ export function RoomSettingsForm({
             </div>
 
             <div className="pt-3">
-              <label className="flex items-center gap-2 text-sm text-text-primary">
+              <label className="flex cursor-pointer items-center gap-2.5 text-base text-text-primary">
                 <input
                   type="checkbox"
                   className="accent-accent"
@@ -309,11 +309,11 @@ export function RoomSettingsForm({
                 />
                 {t("saboteurToggle")}
               </label>
-              <p className="mt-1 text-xs text-text-secondary">{t("saboteurHint")}</p>
+              <p className="mt-2 text-base text-text-secondary">{t("saboteurHint")}</p>
               {value.saboteurMode &&
                 playerCount !== undefined &&
                 playerCount < MIN_PLAYERS_FOR_SABOTEUR_MODE && (
-                  <p className="mt-1 text-xs text-danger">
+                  <p className="mt-1 text-sm text-danger">
                     {t("saboteurNeedsMorePlayers", { count: MIN_PLAYERS_FOR_SABOTEUR_MODE })}
                   </p>
                 )}

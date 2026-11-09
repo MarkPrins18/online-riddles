@@ -82,7 +82,7 @@ export function JoinRoomForm({
         </>
       )}
       {error && (
-        <p role="alert" className="text-xs text-danger">
+        <p role="alert" className="text-sm text-danger">
           {error}
         </p>
       )}

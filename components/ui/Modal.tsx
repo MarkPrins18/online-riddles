@@ -39,7 +39,7 @@ export function Modal({
         role="dialog"
         aria-modal="true"
         tabIndex={-1}
-        className={`flex min-h-0 flex-1 flex-col rounded-lg border border-white/5 bg-bg-secondary ${className}`}
+        className={`flex min-h-0 flex-1 flex-col rounded-lg border border-[#3a3a3a] bg-bg-secondary ${className}`}
       >
         {children}
       </div>

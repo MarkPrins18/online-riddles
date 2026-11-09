@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/Button";
 
 const inputClasses =
   "rounded-lg border-2 border-border bg-bg-primary px-3 py-2.5 text-base text-text-primary placeholder:text-text-secondary/60 focus:border-accent";
-const labelClasses = "text-sm font-bold text-text-secondary";
+const labelClasses = "text-sm font-bold text-text-primary";
 
 // Not a real rate limiter — the shared 2-emails/hour Supabase quota is
 // enforced server-side regardless. This is pure UX friction to stop
@@ -86,7 +86,7 @@ export function MagicLinkTab({ onSuccess }: { onSuccess: () => void }) {
         }}
         className="flex flex-col gap-3"
       >
-        <p className="text-xs text-text-secondary">{t("intro")}</p>
+        <p className="text-sm text-text-secondary">{t("intro")}</p>
         <label htmlFor="magic-link-email" className={labelClasses}>
           {t("emailLabel")}
         </label>
@@ -100,7 +100,7 @@ export function MagicLinkTab({ onSuccess }: { onSuccess: () => void }) {
           className={inputClasses}
         />
         {error && (
-          <p role="alert" className="text-xs text-danger">
+          <p role="alert" className="text-sm text-danger">
             {error}
           </p>
         )}
@@ -113,7 +113,7 @@ export function MagicLinkTab({ onSuccess }: { onSuccess: () => void }) {
 
   return (
     <form onSubmit={handleVerify} className="flex flex-col gap-3">
-      <p className="text-xs text-text-secondary">{t("codeSentIntro", { email })}</p>
+      <p className="text-sm text-text-secondary">{t("codeSentIntro", { email })}</p>
       <label htmlFor="magic-link-code" className={labelClasses}>
         {t("codeLabel")}
       </label>
@@ -131,7 +131,7 @@ export function MagicLinkTab({ onSuccess }: { onSuccess: () => void }) {
         className={inputClasses}
       />
       {error && (
-        <p role="alert" className="text-xs text-danger">
+        <p role="alert" className="text-sm text-danger">
           {error}
         </p>
       )}

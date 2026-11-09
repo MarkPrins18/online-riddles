@@ -64,10 +64,10 @@ export function Drawer({
         aria-modal="true"
         aria-labelledby={titleId}
         tabIndex={-1}
-        className={`flex h-full w-full max-w-[420px] flex-col border-l border-white/10 bg-bg-secondary shadow-2xl shadow-black/60 transition-transform duration-200 ease-out ${className}`}
+        className={`flex h-full w-full max-w-[420px] flex-col border-l border-border bg-bg-secondary transition-transform duration-200 ease-out ${className}`}
         style={{ transform: entered ? "translateX(0)" : "translateX(100%)" }}
       >
-        <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+        <div className="flex items-center justify-between border-b border-border px-5 py-4">
           <p
             id={titleId}
             className="font-display text-xl uppercase tracking-wide text-text-primary"

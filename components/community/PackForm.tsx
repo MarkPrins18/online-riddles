@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/Button";
 
 const inputClasses =
   "rounded-lg border-2 border-border bg-bg-primary px-3 py-2.5 text-base text-text-primary placeholder:text-text-secondary/60 focus:border-accent";
-const labelClasses = "text-sm font-bold text-text-secondary";
+const labelClasses = "text-sm font-bold text-text-primary";
 
 export function PackForm({ onCreated }: { onCreated: (pack: StoryPack) => void }) {
   const [name, setName] = useState("");
@@ -82,7 +82,7 @@ export function PackForm({ onCreated }: { onCreated: (pack: StoryPack) => void }
           </option>
         ))}
       </select>
-      {error && <p className="text-xs text-danger">{error}</p>}
+      {error && <p className="text-sm text-danger">{error}</p>}
       <Button type="submit" variant="secondary" disabled={isSubmitting || !name.trim() || !themeId}>
         {isSubmitting ? t("submitting") : t("submit")}
       </Button>

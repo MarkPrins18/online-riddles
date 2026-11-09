@@ -48,7 +48,7 @@ export function AccountButton() {
 
   if (status && !status.isAnonymous) {
     return (
-      <div className="ml-auto flex items-center gap-2 self-center text-xs text-text-secondary">
+      <div className="ml-auto flex items-center gap-2 self-center text-sm text-text-secondary">
         <span className="hidden sm:inline">{status.email}</span>
         <button
           type="button"

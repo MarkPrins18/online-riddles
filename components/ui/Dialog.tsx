@@ -13,7 +13,7 @@ export function Dialog({ children, className = "" }: { children: ReactNode; clas
   const dialogRef = useDialog<HTMLDivElement>();
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/65 p-6 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/75 p-6 text-left text-base font-normal normal-case tracking-normal text-text-primary">
       <div
         ref={dialogRef}
         role="dialog"

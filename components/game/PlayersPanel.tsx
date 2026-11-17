@@ -46,7 +46,7 @@ export function PlayersPanel({
           return (
             <li key={player.id} className="flex items-baseline gap-2.5">
               <span
-                className={`w-[18px] shrink-0 font-display ${index === 0 ? "text-accent" : "text-[#8c8578]"}`}
+                className={`w-[18px] shrink-0 font-display ${index === 0 ? "text-text-primary" : "text-[#8c8578]"}`}
               >
                 {index + 1}
               </span>
@@ -63,7 +63,7 @@ export function PlayersPanel({
             <span className="min-w-0 flex-1 truncate">
               {narrator.name} {narrator.id === playerId && t("youMarker")}
             </span>
-            <span className="bg-accent px-2 py-px text-xs font-extrabold uppercase text-ink">
+            <span className="rounded border-2 border-text-primary px-2 py-px text-xs font-extrabold uppercase text-text-primary">
               {tList("narratorBadge")}
             </span>
           </li>

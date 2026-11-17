@@ -19,13 +19,13 @@ export function ScoreBoard({
       {ranked.map((player, index) => (
         <li key={player.id} className="flex items-center justify-between gap-2 py-2.5">
           <div className="flex min-w-0 items-center gap-2">
-            <span className={`w-5 shrink-0 font-display ${index === 0 ? "text-accent" : "text-[#8c8578]"}`}>
+            <span className={`w-5 shrink-0 font-display ${index === 0 ? "text-text-primary" : "text-[#8c8578]"}`}>
               {index + 1}
             </span>
             {onlinePlayerIds && (
               <span
                 className={`h-2.5 w-2.5 shrink-0 rounded-full ${
-                  onlinePlayerIds.has(player.id) ? "bg-accent" : "border-2 border-[#5a5a5a]"
+                  onlinePlayerIds.has(player.id) ? "bg-text-primary" : "border-2 border-[#5a5a5a]"
                 }`}
               >
                 <span className="sr-only">

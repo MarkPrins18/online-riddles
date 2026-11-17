@@ -5,9 +5,16 @@
      Chrome/Edge "force dark" auto-inversion leaves it alone. */
   color-scheme: dark;
 
-  /* Pulp-paperback palette: ink black, a loud paperback yellow, cover red,
-     and cream for paper. Yellow means "act here / this is the case", red
-     means "no / danger", cream is everything you read. */
+  /* Color roles — each color means exactly one thing, everywhere:
+     - yellow (accent): what YOU do. The main button of a screen, the
+       active tab, your own selection (checked box, your vote). Plus the
+       logo. Never a label, heading or decoration.
+     - cream (paper): what is CONFIRMED. "Wat we weten", the solution,
+       a "Ja" answer, a correct guess.
+     - red (danger): no / wrong / at stake. "Nee", wrong guesses, lives,
+       time running out, the saboteur.
+     - grey (text-secondary): information. Labels, roles, counts, who
+       asked what. Headings and body text are plain cream text. */
   --bg-primary: #111111;
   --bg-secondary: #1c1c1c;
   --bg-case: #1c1c1c;

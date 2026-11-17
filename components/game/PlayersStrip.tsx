@@ -38,7 +38,7 @@ export function PlayersStrip({
             key={player.id}
             className={`flex h-6 w-6 items-center justify-center rounded-full border ${
               player.id === narratorId
-                ? "border-accent bg-accent/20 text-accent"
+                ? "border-text-primary bg-bg-primary text-text-primary"
                 : "border-border bg-bg-secondary text-text-secondary"
             } text-[10px]`}
             title={player.name}

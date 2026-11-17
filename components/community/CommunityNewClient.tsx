@@ -162,7 +162,7 @@ export function CommunityNewClient() {
             onSaved={(puzzle: Puzzle) => setJustAdded(puzzle.title)}
           />
           {justAdded && (
-            <p className="mt-3 text-sm font-bold text-accent">
+            <p className="mt-3 text-sm font-bold text-text-primary">
               {t("addedNoticePrefix", { title: justAdded })}{" "}
               <Link href="/community/mijn" className="underline">
                 {t("myPacksLink")}

@@ -12,10 +12,10 @@ import { storePlayerId } from "@/lib/session";
 import { getErrorMessage } from "@/lib/errors";
 
 const INPUT_CLASSES =
-  "min-w-0 flex-[1_1_180px] rounded-[10px] border-[3px] border-ink bg-white px-3.5 py-3 text-[17px] text-ink placeholder:text-ink/45 focus:outline-none focus-visible:shadow-[0_0_0_3px_var(--danger)]";
+  "min-w-0 flex-[1_1_180px] rounded-[10px] border-2 border-border bg-bg-primary px-3.5 py-3 text-[17px] text-text-primary placeholder:text-text-secondary/60 focus:border-accent focus:outline-none";
 
 const BUTTON_CLASSES =
-  "shrink-0 cursor-pointer rounded-[10px] border-[3px] border-ink bg-danger px-5 py-3 font-display text-xl uppercase tracking-[0.03em] text-ink transition-[filter] hover:brightness-110 disabled:cursor-not-allowed";
+  "shrink-0 cursor-pointer rounded-[10px] border-2 border-accent bg-accent px-5 py-3 font-display text-xl uppercase tracking-[0.03em] text-ink transition-colors hover:bg-accent-muted disabled:cursor-not-allowed";
 
 /**
  * The homepage's single start form: a name, then either "start a room"
@@ -77,7 +77,7 @@ export function CreateRoomForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex max-w-[516px] flex-col gap-3 rounded-[14px] border-[3px] border-ink bg-paper p-5 text-ink"
+      className="flex max-w-[516px] flex-col gap-3 rounded-[14px] border-2 border-border bg-bg-primary p-5 text-text-primary"
     >
       <label htmlFor="home-name" className="text-[15px] font-extrabold">
         {t("nameLabel")}
@@ -124,17 +124,17 @@ export function CreateRoomForm() {
       )}
 
       {error && (
-        <p role="alert" className="text-sm font-bold text-[#b33a28]">
+        <p role="alert" className="text-sm font-bold text-danger">
           {error}
         </p>
       )}
 
-      <p className="text-[15px] font-medium">
+      <p className="text-[15px] font-medium text-text-secondary">
         {mode === "create" ? t("joinPrompt") : t("createPrompt")}{" "}
         <button
           type="button"
           onClick={() => switchMode(mode === "create" ? "join" : "create")}
-          className="cursor-pointer font-extrabold underline underline-offset-[3px] hover:text-[#b33a28]"
+          className="cursor-pointer font-extrabold underline underline-offset-[3px] hover:text-accent"
         >
           {mode === "create" ? t("joinLink") : t("createLink")}
         </button>

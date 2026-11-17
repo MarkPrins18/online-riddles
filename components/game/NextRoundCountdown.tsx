@@ -16,7 +16,7 @@ export function NextRoundCountdown({ seconds }: { seconds: number }) {
         aria-live="polite"
         className="rounded-[10px] border-2 border-border bg-bg-secondary px-8 py-3 text-center text-text-primary"
       >
-        <p className="text-sm font-extrabold text-accent">
+        <p className="text-sm font-extrabold text-text-secondary">
           {t("heading")}
         </p>
         {/* aria-hidden: the ticking number would otherwise re-trigger the

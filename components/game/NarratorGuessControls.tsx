@@ -142,7 +142,7 @@ export function NarratorGuessControls({
           </div>
           <div className="flex gap-2">
             <Button
-              variant="primary"
+              variant="fact"
               onClick={() => handleCorrect(guess)}
               disabled={reviewingId !== null}
             >

@@ -67,7 +67,7 @@ export function AccusationPanel({
         <h2 className="font-display text-xl uppercase text-text-primary">{t("heading")}</h2>
         {secondsLeft !== null && (
           <span
-            className={`rounded px-2.5 py-0.5 font-display text-lg tabular-nums text-ink ${isUrgent ? "bg-danger" : "bg-accent"}`}
+            className={`rounded border-2 px-2.5 font-display text-lg tabular-nums ${isUrgent ? "border-danger bg-danger text-ink" : "border-[#3a3a3a] text-text-primary"}`}
           >
             {isUrgent && "⚠ "}
             {t("secondsLeft", { seconds: secondsLeft })}

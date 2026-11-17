@@ -41,7 +41,7 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
         {/* Paperback cover: the one big yellow surface on the page. */}
         <section className="relative flex flex-wrap items-end gap-8 overflow-hidden rounded-md border-2 border-border bg-bg-secondary px-6 pt-12 text-text-primary sm:px-11">
           <div className="relative flex min-w-0 flex-[1_1_480px] flex-col gap-[22px] pb-11">
-            <p className="self-start -rotate-2 bg-accent px-3 py-1.5 text-sm font-extrabold text-ink">
+            <p className="self-start rounded border-2 border-border px-3 py-1 text-sm font-extrabold text-text-secondary">
               {t("badge")}
             </p>
             <h1 className="whitespace-pre-line font-display text-[64px] uppercase leading-[0.9] tracking-[0.005em] sm:text-[104px]">
@@ -62,7 +62,7 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
                     d="M120 210 L134 120 Q142 94 180 98 Q200 112 220 98 Q258 94 266 120 L280 210 Z"
                     fill="var(--text-primary)"
                   />
-                  <path d="M126 172 L274 172 L278 200 L122 200 Z" fill="var(--danger)" />
+                  <path d="M126 172 L274 172 L278 200 L122 200 Z" fill="var(--bg-primary)" />
                   <ellipse cx="200" cy="212" rx="150" ry="26" fill="var(--text-primary)" />
                 </g>
                 <g transform="rotate(35 290 300)">

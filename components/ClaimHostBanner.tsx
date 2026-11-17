@@ -51,9 +51,9 @@ export function ClaimHostBanner({
   }
 
   return (
-    <div className="flex flex-col gap-3 rounded-[10px] border-2 border-danger bg-bg-secondary p-4">
+    <div className="flex flex-col gap-3 rounded-[10px] border-2 border-text-primary bg-bg-secondary p-4">
       <p className="text-base font-bold text-text-primary">{t("message")}</p>
-      <Button variant="danger" onClick={handleClaim} disabled={isClaiming} className="w-full">
+      <Button onClick={handleClaim} disabled={isClaiming} className="w-full">
         {isClaiming ? t("claiming") : t("claim")}
       </Button>
       {error && <p className="text-sm text-danger">{error}</p>}

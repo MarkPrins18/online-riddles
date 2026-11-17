@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes, forwardRef } from "react";
 
-type ButtonVariant = "primary" | "secondary" | "ghost" | "danger" | "tab";
+type ButtonVariant = "primary" | "secondary" | "fact" | "ghost" | "danger" | "tab";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: ButtonVariant;
@@ -15,6 +15,9 @@ const VARIANT_CLASSES: Record<ButtonVariant, string> = {
     "rounded-lg border-2 border-accent bg-accent font-display uppercase tracking-wide text-ink hover:border-accent-muted hover:bg-accent-muted disabled:hover:border-accent disabled:hover:bg-accent",
   secondary:
     "rounded-lg border-2 border-text-primary bg-transparent font-display uppercase tracking-wide text-text-primary hover:bg-text-primary hover:text-ink",
+  // Confirms something as true (the Verteller's "Ja") — cream, matching
+  // the cream "Ja" label it produces.
+  fact: "rounded-lg border-2 border-paper bg-paper font-display uppercase tracking-wide text-ink hover:brightness-95",
   ghost: "rounded-lg bg-transparent font-bold text-text-secondary hover:text-text-primary",
   danger:
     "rounded-lg border-2 border-danger bg-danger font-display uppercase tracking-wide text-ink hover:brightness-110",

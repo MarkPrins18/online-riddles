@@ -85,10 +85,9 @@ export function StartGameButton({
     <div className="flex flex-col gap-2">
       {error && <p className="text-sm text-danger">{error}</p>}
       <Button
-        variant="danger"
         onClick={handleStart}
         disabled={isStarting || players.length < 2 || settingsIncomplete}
-        className="w-full border-[3px]! border-ink! py-4 text-[26px]"
+        className="w-full py-4 text-[26px]"
       >
         {isStarting
           ? t("starting")

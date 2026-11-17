@@ -15,10 +15,10 @@ const TONE_CLASSES: Record<CardTone, string> = {
   // cream outline with a hard yellow offset shadow, like a sticker on a
   // paperback cover — loud, but still a dark surface so any text color
   // that works on the page works here too.
-  case: "rounded-xl border-2 border-text-primary bg-bg-secondary p-6 shadow-[5px_5px_0_var(--accent)]",
+  case: "rounded-xl border-2 border-[#4a4a4a] bg-bg-secondary p-6",
   // Cream paper with ink text — reserved for things that are conceptually
   // a single sheet (clue cards, hints, the ask-a-question note).
-  paper: "rounded-xl border-[3px] border-ink bg-paper p-5 text-ink shadow-[5px_5px_0_var(--accent)]",
+  paper: "rounded-xl border-[3px] border-ink bg-paper p-5 text-ink",
 };
 
 export function Card({ tone = "chrome", className = "", ...props }: CardProps) {

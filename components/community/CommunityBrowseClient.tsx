@@ -87,7 +87,7 @@ export function CommunityBrowseClient() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="font-display text-5xl uppercase leading-none text-accent">{t("heading")}</h1>
+        <h1 className="font-display text-5xl uppercase leading-none text-text-primary">{t("heading")}</h1>
         <p className="mt-2 text-base text-text-secondary">{t("subtitle")}</p>
       </div>
 

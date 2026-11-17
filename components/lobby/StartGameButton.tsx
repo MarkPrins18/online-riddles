@@ -88,7 +88,7 @@ export function StartGameButton({
         variant="danger"
         onClick={handleStart}
         disabled={isStarting || players.length < 2 || settingsIncomplete}
-        className="w-full border-[3px]! border-ink! py-4 text-[26px] shadow-[5px_5px_0_var(--accent)]"
+        className="w-full border-[3px]! border-ink! py-4 text-[26px]"
       >
         {isStarting
           ? t("starting")

@@ -507,12 +507,8 @@ export function GamePlayClient({ code }: { code: string }) {
           <div className={narrating ? "hidden xl:block" : undefined}>
             {/* The case itself is the one loud surface on the screen: a
                 yellow paperback cover with ink text. */}
-            <div className="relative overflow-hidden rounded-md bg-accent px-5 py-5 text-ink sm:px-[30px] sm:py-[26px]">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute -bottom-20 -right-[60px] h-[280px] w-[280px] rounded-full bg-[radial-gradient(var(--ink)_2px,transparent_2.4px)] bg-[length:11px_11px] opacity-[0.16]"
-              />
-              <p className="relative text-sm font-extrabold">
+            <div className="relative overflow-hidden rounded-md border-2 border-border bg-bg-secondary px-5 py-5 text-text-primary sm:px-[30px] sm:py-[26px]">
+              <p className="relative text-sm font-extrabold text-accent">
                 {narratorName ? t("narratorIs", { name: narratorName }) : t("caseDossierLabel")}
                 {puzzle.category && ` · ${puzzle.category}`}
               </p>
@@ -525,7 +521,7 @@ export function GamePlayClient({ code }: { code: string }) {
                 <h1 className="font-display text-[32px] uppercase leading-[0.95] sm:text-[46px]">{puzzle.title}</h1>
               </button>
               {dossierOpen && (
-                <p className="relative mt-3 max-w-[40em] text-base font-medium leading-[1.55] sm:text-lg">
+                <p className="relative mt-3 max-w-[40em] text-base leading-[1.6] text-text-primary/90 sm:text-lg">
                   {puzzle.scenario}
                 </p>
               )}
@@ -771,7 +767,7 @@ export function GamePlayClient({ code }: { code: string }) {
               // in the design: the full Verhoor next to the confirmed facts.
               <div className="flex flex-wrap items-start gap-5">
                 <section className="min-w-0 flex-[3_1_340px] rounded-[10px] border-2 border-border bg-bg-secondary px-5 pb-2 pt-5">
-                  <h2 className="mb-1.5 font-display text-[22px] uppercase text-accent">
+                  <h2 className="mb-1.5 font-display text-[22px] uppercase text-text-primary">
                     {t("interrogationHeading", { count: questions.length })}
                   </h2>
                   <InterrogationLog

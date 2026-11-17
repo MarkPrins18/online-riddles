@@ -62,7 +62,7 @@ export function ChatPanel({
     <section
       className={`flex h-full min-h-0 flex-col rounded-[10px] border-2 border-border bg-bg-secondary px-5 py-[18px] ${className}`}
     >
-      <h2 className="mb-3 shrink-0 font-display text-xl uppercase text-accent">{t("heading")}</h2>
+      <h2 className="mb-3 shrink-0 font-display text-xl uppercase text-text-primary">{t("heading")}</h2>
       <div ref={chatScrollRef} className="min-h-0 flex-1 overflow-y-auto pr-1">
         <ChatThread
           messages={chatMessages}

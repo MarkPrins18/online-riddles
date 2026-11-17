@@ -70,7 +70,7 @@ export function ProfileClient() {
       <Card tone="chrome" className="max-w-xl">
         {isRegistered ? (
           <>
-            <h1 className="font-display text-4xl uppercase leading-none text-accent">{t("statsTitle")}</h1>
+            <h1 className="font-display text-4xl uppercase leading-none text-text-primary">{t("statsTitle")}</h1>
             <p className="mt-2 text-base text-text-secondary">{status.email}</p>
 
             <dl className="mt-5 grid grid-cols-2 gap-4">
@@ -116,7 +116,7 @@ export function ProfileClient() {
           </>
         ) : (
           <>
-            <h1 className="font-display text-4xl uppercase leading-none text-accent">{t("upgradeTitle")}</h1>
+            <h1 className="font-display text-4xl uppercase leading-none text-text-primary">{t("upgradeTitle")}</h1>
             <p className="mt-2 text-sm leading-relaxed text-text-secondary">
               {t("upgradeBody")}
             </p>

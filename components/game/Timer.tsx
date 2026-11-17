@@ -29,7 +29,7 @@ export function Timer({
 
   if (durationSeconds == null) {
     return (
-      <span className="rounded bg-accent px-3.5 py-0.5 font-display text-[26px] tabular-nums text-ink">
+      <span className="rounded border-2 border-[#3a3a3a] px-3 font-display text-[26px] tabular-nums text-text-primary">
         {formatDuration(elapsedSeconds)}
       </span>
     );
@@ -41,12 +41,12 @@ export function Timer({
 
   return (
     <span
-      className={`rounded px-3.5 py-0.5 font-display text-[26px] tabular-nums text-ink ${
-        isUrgent ? "bg-danger" : "bg-accent"
+      className={`rounded border-2 px-3 font-display text-[26px] tabular-nums ${
+        isUrgent ? "border-danger bg-danger text-ink" : "border-[#3a3a3a] text-text-primary"
       }`}
     >
       {/* Urgency isn't color-only: this prefix carries the signal for users
-          who can't perceive the yellow-to-red change. */}
+          who can't perceive the change to red. */}
       {isUrgent && !isUp && "⚠ "}
       {isUp ? t("timeUp") : formatDuration(remainingSeconds)}
     </span>

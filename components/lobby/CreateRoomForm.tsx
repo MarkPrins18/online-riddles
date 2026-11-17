@@ -77,7 +77,7 @@ export function CreateRoomForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex max-w-[516px] flex-col gap-3 rounded-[14px] border-[3px] border-ink bg-paper p-5 text-ink shadow-[6px_6px_0_var(--ink)]"
+      className="flex max-w-[516px] flex-col gap-3 rounded-[14px] border-[3px] border-ink bg-paper p-5 text-ink"
     >
       <label htmlFor="home-name" className="text-[15px] font-extrabold">
         {t("nameLabel")}

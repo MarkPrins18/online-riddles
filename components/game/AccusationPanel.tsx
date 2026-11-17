@@ -64,7 +64,7 @@ export function AccusationPanel({
   return (
     <Card>
       <div className="flex items-center justify-between gap-2">
-        <h2 className="font-display text-xl uppercase text-accent">{t("heading")}</h2>
+        <h2 className="font-display text-xl uppercase text-text-primary">{t("heading")}</h2>
         {secondsLeft !== null && (
           <span
             className={`rounded px-2.5 py-0.5 font-display text-lg tabular-nums text-ink ${isUrgent ? "bg-danger" : "bg-accent"}`}

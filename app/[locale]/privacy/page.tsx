@@ -22,7 +22,7 @@ export async function generateMetadata({
 function Section({ heading, body }: { heading: string; body: string }) {
   return (
     <div>
-      <h2 className="font-display text-2xl uppercase tracking-wide text-accent">{heading}</h2>
+      <h2 className="font-display text-2xl uppercase tracking-wide text-text-primary">{heading}</h2>
       <p className="mt-2 text-base leading-relaxed text-text-primary/90">{body}</p>
     </div>
   );
@@ -43,7 +43,7 @@ export default async function PrivacyPage({
         <SiteHeader languageSwitcher={<LocalizedLanguageSwitcher pathname="/privacy" />} />
         <div className="mx-auto mt-6 flex max-w-3xl flex-col gap-8 rounded-[10px] border-2 border-border bg-bg-secondary p-6 sm:p-10">
           <div>
-            <h1 className="font-display text-5xl uppercase leading-none text-accent">{t("title")}</h1>
+            <h1 className="font-display text-5xl uppercase leading-none text-text-primary">{t("title")}</h1>
             <p className="mt-4 text-base leading-relaxed text-text-primary/90">
               {t("intro")}
             </p>

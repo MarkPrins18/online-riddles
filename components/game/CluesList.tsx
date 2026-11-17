@@ -37,7 +37,7 @@ export function CluesList({
   // One cream "sheet" listing everything confirmed so far, numbered like a
   // case summary — the counterpart to Verhoor's full back-and-forth.
   return (
-    <section className="rounded-[10px] border-[3px] border-ink bg-paper p-5 text-ink shadow-[5px_5px_0_var(--accent)]">
+    <section className="rounded-[10px] border-[3px] border-ink bg-paper p-5 text-ink">
       <h2 className="mb-3 font-display text-[22px] uppercase">{t("heading")}</h2>
       {pinError && <p className="mb-2 text-xs font-bold text-[#b33a28]">{pinError}</p>}
       {clues.length === 0 ? (

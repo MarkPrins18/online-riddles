@@ -34,7 +34,7 @@ export function NarratorArchive({
     <div className="flex flex-col gap-6">
       {resolvedGuesses.length > 0 && (
         <div>
-          <p className="mb-3 font-display text-xl uppercase text-accent">
+          <p className="mb-3 font-display text-xl uppercase text-text-primary">
             {t("solutionsHeading")}
           </p>
           <ul className="flex flex-col gap-3">
@@ -58,7 +58,7 @@ export function NarratorArchive({
 
       {answered.length > 0 && (
         <div>
-          <p className="mb-3 font-display text-xl uppercase text-accent">
+          <p className="mb-3 font-display text-xl uppercase text-text-primary">
             {t("questionsHeading")}
           </p>
           <div className="flex flex-col gap-3">

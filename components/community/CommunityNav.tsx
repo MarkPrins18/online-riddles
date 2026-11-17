@@ -70,7 +70,7 @@ export function CommunityNav() {
           onClick={() => setMenuOpen((open) => !open)}
           aria-haspopup="menu"
           aria-expanded={menuOpen}
-          className="flex w-full items-center justify-between gap-2 rounded-lg border-2 border-accent bg-bg-secondary px-3 py-2.5 font-display text-lg uppercase tracking-wide text-accent transition-colors"
+          className="flex w-full items-center justify-between gap-2 rounded-lg border-2 border-accent bg-bg-secondary px-3 py-2.5 font-display text-lg uppercase tracking-wide text-text-primary transition-colors"
         >
           <span>{activeLabel}</span>
           <svg

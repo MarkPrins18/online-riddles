@@ -106,7 +106,7 @@ export function RoomSettingsForm({
     }
   }
 
-  const groupLegendClass = "mb-3 font-display text-xl uppercase text-accent";
+  const groupLegendClass = "mb-3 font-display text-xl uppercase text-text-primary";
   const fieldLegendClass = "mb-2 text-sm font-bold text-text-primary";
 
   return (

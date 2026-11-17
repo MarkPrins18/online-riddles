@@ -15,7 +15,7 @@ export function NarratorPicker({
 
   return (
     <fieldset className="flex flex-col gap-2">
-      <legend className="mb-3 font-display text-xl uppercase text-accent">
+      <legend className="mb-3 font-display text-xl uppercase text-text-primary">
         {t("legend")}
       </legend>
 

@@ -97,7 +97,7 @@ export function ShareRecapButton({
       {open && (
         <Modal onClose={() => setOpen(false)} className="mx-auto w-full max-w-md">
           <div className="flex items-center justify-between gap-3 border-b-2 border-border px-6 py-4">
-            <p className="font-display text-3xl uppercase tracking-wide text-accent">
+            <p className="font-display text-3xl uppercase tracking-wide text-text-primary">
               {t("caseClosed")}
             </p>
             <Button variant="ghost" onClick={() => setOpen(false)}>

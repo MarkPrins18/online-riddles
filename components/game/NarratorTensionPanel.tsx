@@ -29,7 +29,7 @@ export function NarratorTensionPanel({
   const t = useTranslations("NarratorTensionPanel");
 
   return (
-    <div className="relative rounded-[10px] border-[3px] border-ink bg-paper p-5 text-ink shadow-[5px_5px_0_var(--accent)]">
+    <div className="relative rounded-[10px] border-[3px] border-ink bg-paper p-5 text-ink">
       <p className="mb-2 font-display text-xl uppercase text-ink">
         {t("onlyForYou")}
       </p>

@@ -59,7 +59,7 @@ export function SetNameForm({
 
   const content = (
     <>
-      <p className="mb-4 font-display text-xl uppercase text-accent">
+      <p className="mb-4 font-display text-xl uppercase text-text-primary">
         {t(variant === "account" ? "headingAccount" : "heading")}
       </p>
       <p className="mb-4 text-sm text-text-secondary">

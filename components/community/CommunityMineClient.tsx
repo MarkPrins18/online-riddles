@@ -75,7 +75,7 @@ export function CommunityMineClient() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between gap-4">
-        <h1 className="font-display text-5xl uppercase leading-none text-accent">{t("heading")}</h1>
+        <h1 className="font-display text-5xl uppercase leading-none text-text-primary">{t("heading")}</h1>
         <Link href="/community/nieuw">
           <Button>{t("submitButton")}</Button>
         </Link>

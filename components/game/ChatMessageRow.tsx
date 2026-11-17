@@ -44,10 +44,10 @@ export function ChatMessageRow({
       <div className={`flex max-w-full items-center gap-1 ${isOwn ? "flex-row-reverse" : ""}`}>
         <p
           {...pressHold}
-          className={`min-w-0 select-none break-words px-3 py-2 text-[15px] text-ink ${
+          className={`min-w-0 select-none break-words px-3 py-2 text-[15px] ${
             isOwn
-              ? "rounded-[16px_16px_4px_16px] bg-accent font-medium"
-              : "rounded-[16px_16px_16px_4px] border-2 border-ink bg-paper"
+              ? "rounded-[16px_16px_4px_16px] bg-paper font-medium text-ink"
+              : "rounded-[16px_16px_16px_4px] border-2 border-border bg-bg-primary text-text-primary"
           }`}
         >
           {isOwn ? (

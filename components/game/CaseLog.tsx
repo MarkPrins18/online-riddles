@@ -12,7 +12,7 @@ export function CaseLog({ entries }: { entries: CaseLogEntry[] }) {
 
   return (
     <div>
-      <p className="mb-4 font-display text-xl uppercase text-accent">
+      <p className="mb-4 font-display text-xl uppercase text-text-primary">
         {t("heading")}
       </p>
       <ul className="flex max-h-48 flex-col gap-6 overflow-y-auto">

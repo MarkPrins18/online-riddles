@@ -40,7 +40,7 @@ export function NarratorCaseDrawer({
     <Drawer title={t("title")} onClose={onClose}>
       <div className="flex flex-col gap-4">
         <div>
-          <p className="mb-2 font-display text-xl uppercase text-accent">
+          <p className="mb-2 font-display text-xl uppercase text-text-primary">
             {title}
           </p>
           <p className="text-base leading-relaxed text-text-primary/90">{scenario}</p>

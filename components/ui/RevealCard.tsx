@@ -2,21 +2,22 @@ import type { CSSProperties, ReactNode } from "react";
 
 type RevealTone = "accent" | "danger";
 
-const HEADER_TONE: Record<RevealTone, string> = {
-  accent: "bg-accent",
-  danger: "bg-danger",
+const LABEL_TONE: Record<RevealTone, string> = {
+  accent: "text-accent",
+  danger: "text-danger",
 };
 
-const SHADOW_TONE: Record<RevealTone, string> = {
-  accent: "shadow-[6px_6px_0_var(--accent)]",
-  danger: "shadow-[6px_6px_0_var(--danger)]",
+const RULE_TONE: Record<RevealTone, string> = {
+  accent: "border-t-accent",
+  danger: "border-t-danger",
 };
 
 /**
  * The game's "big moment" card (a new case's briefing, the solution, the
- * final standings): a paperback-cover header strip in yellow (or red for
- * bad news) with the title in Anton, over a dark body so any regular
- * control inside keeps working as-is. Plays the redaction-lift reveal.
+ * final standings): a dark card with a thick colored top rule (yellow, or
+ * red for bad news), a colored label and the title in Anton. Color stays an
+ * accent rather than a whole surface, so it doesn't tire the eyes. Plays
+ * the redaction-lift reveal.
  */
 export function RevealCard({
   tone = "accent",
@@ -37,11 +38,11 @@ export function RevealCard({
 }) {
   return (
     <div
-      className={`redact-reveal overflow-hidden rounded-[10px] border-[3px] border-text-primary bg-bg-secondary ${SHADOW_TONE[tone]} ${className}`}
+      className={`redact-reveal overflow-hidden rounded-[10px] border-2 border-t-[6px] border-border bg-bg-secondary ${RULE_TONE[tone]} ${className}`}
       style={{ animation: "reveal-in 420ms cubic-bezier(0.16, 1, 0.3, 1)", ...style }}
     >
-      <div className={`px-6 py-5 text-ink sm:px-8 ${HEADER_TONE[tone]}`}>
-        <p className="text-sm font-extrabold">{label}</p>
+      <div className="border-b-2 border-dashed border-[#3a3a3a] px-6 py-5 text-text-primary sm:px-8">
+        <p className={`text-sm font-extrabold ${LABEL_TONE[tone]}`}>{label}</p>
         <h2 className="mt-1 font-display text-4xl uppercase leading-[0.95] sm:text-5xl">{title}</h2>
         {subtitle && <p className="mt-2 text-base font-bold">{subtitle}</p>}
       </div>

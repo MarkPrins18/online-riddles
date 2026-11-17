@@ -31,7 +31,7 @@ export function PlayersPanel({
   return (
     <section className="rounded-[10px] border-2 border-border bg-bg-secondary px-5 py-[18px]">
       <div className="mb-2.5 flex items-baseline justify-between gap-3">
-        <h2 className="font-display text-xl uppercase text-accent">{t("playersHeading")}</h2>
+        <h2 className="font-display text-xl uppercase text-text-primary">{t("playersHeading")}</h2>
         <button
           type="button"
           onClick={onOpenDetails}

@@ -18,7 +18,7 @@ import { NarratorPicker } from "./NarratorPicker";
 import { RoomSettingsForm } from "./RoomSettingsForm";
 import { LeaveRoomButton } from "./LeaveRoomButton";
 
-const CARD_TITLE_CLASS = "mb-3 font-display text-xl uppercase text-accent";
+const CARD_TITLE_CLASS = "mb-3 font-display text-xl uppercase text-text-primary";
 
 export function RoomLobbyClient({ code }: { code: string }) {
   const [playerId, setPlayerId] = useState(() => getStoredPlayerId(code));
@@ -64,14 +64,10 @@ export function RoomLobbyClient({ code }: { code: string }) {
   return (
     <div className="flex flex-wrap items-start gap-6">
       {/* Paperback cover: the room code is the one thing to hand out here. */}
-      <section className="relative flex min-w-0 flex-[1_1_420px] flex-col gap-6 overflow-hidden rounded-md bg-accent px-6 py-8 text-ink sm:px-10 sm:py-10">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-16 -top-16 h-[340px] w-[340px] rounded-full bg-[radial-gradient(var(--ink)_2.2px,transparent_2.6px)] bg-[length:12px_12px] opacity-[0.18]"
-        />
+      <section className="relative flex min-w-0 flex-[1_1_420px] flex-col gap-6 overflow-hidden rounded-md border-2 border-border bg-bg-secondary px-6 py-8 text-text-primary sm:px-10 sm:py-10">
         <div className="relative">
           <h1 className="font-display text-5xl uppercase leading-[0.95] sm:text-6xl">{t("coverTitle")}</h1>
-          <p className="mt-3 max-w-[28em] text-lg font-medium">{t("coverBody")}</p>
+          <p className="mt-3 max-w-[28em] text-lg font-medium text-text-primary/85">{t("coverBody")}</p>
         </div>
         <div className="relative">
           <RoomCodeDisplay code={state.room.code} />

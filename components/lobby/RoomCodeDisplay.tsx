@@ -41,16 +41,16 @@ export function RoomCodeDisplay({ code }: { code: string }) {
         className="group flex cursor-pointer flex-col items-start gap-1 text-left"
         aria-label={t("ariaLabel")}
       >
-        <span className="text-sm font-extrabold">{t("label")}</span>
+        <span className="text-sm font-extrabold text-accent">{t("label")}</span>
         <span className="font-display text-7xl leading-none tracking-[0.08em] sm:text-8xl">{code}</span>
-        <span className="text-sm font-bold underline decoration-2 underline-offset-2 group-hover:no-underline">
+        <span className="text-sm font-bold text-text-secondary underline decoration-2 underline-offset-2 group-hover:text-accent">
           {copied ? t("copied") : t("copyPrompt")}
         </span>
       </button>
       <button
         type="button"
         onClick={handleShare}
-        className="cursor-pointer rounded-[10px] border-[3px] border-ink bg-ink px-5 py-2.5 font-display text-xl uppercase tracking-[0.03em] text-accent transition-colors hover:bg-transparent hover:text-ink"
+        className="cursor-pointer rounded-[10px] border-2 border-text-primary bg-transparent px-5 py-2.5 font-display text-xl uppercase tracking-[0.03em] text-text-primary transition-colors hover:bg-text-primary hover:text-ink"
       >
         {linkCopied ? t("linkCopied") : t("shareLink")}
       </button>

@@ -135,7 +135,7 @@ export function QuestionCard({
           <AnswerBadge answer={question.answer as "yes" | "no" | "irrelevant"} />
         )}
         {!isAnswered && (
-          <span className="shrink-0 border-2 border-accent px-2 py-px font-display text-[15px] text-accent">
+          <span className="shrink-0 border-2 border-accent px-2 py-px font-display text-[15px] text-text-primary">
             ?
           </span>
         )}

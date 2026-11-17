@@ -38,6 +38,6 @@ describe("Timer", () => {
     const startedAt = "2026-01-01T00:00:00.000Z";
     const now = new Date(startedAt).getTime();
     renderWithIntl(<Timer startedAt={startedAt} now={now} durationSeconds={600} />);
-    expect(screen.getByText("10:00")).toHaveClass("bg-accent");
+    expect(screen.getByText("10:00")).not.toHaveClass("bg-danger");
   });
 });

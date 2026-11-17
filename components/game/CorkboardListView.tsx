@@ -81,7 +81,7 @@ export function CorkboardListView({
                         style={{ backgroundColor: NOTE_DOT_COLORS[item.color] }}
                       />
                     ) : (
-                      <span className="mt-0.5 shrink-0 text-xs font-bold text-accent">
+                      <span className="mt-0.5 shrink-0 text-xs font-bold text-text-secondary">
                         {t("questionBadge")}
                       </span>
                     )}

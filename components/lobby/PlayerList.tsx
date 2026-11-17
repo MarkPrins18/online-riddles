@@ -30,7 +30,7 @@ export function PlayerList({
             {onlinePlayerIds && (
               <span
                 className={`h-2.5 w-2.5 shrink-0 rounded-full ${
-                  onlinePlayerIds.has(player.id) ? "bg-accent" : "border-2 border-[#5a5a5a]"
+                  onlinePlayerIds.has(player.id) ? "bg-text-primary" : "border-2 border-[#5a5a5a]"
                 }`}
               >
                 <span className="sr-only">

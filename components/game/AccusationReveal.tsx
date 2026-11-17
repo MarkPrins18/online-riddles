@@ -67,7 +67,7 @@ export function AccusationReveal({
       tone="case"
       style={{ animation: "reveal-in 300ms ease-out" }}
     >
-      <p className="text-sm font-bold text-accent">
+      <p className="text-sm font-bold text-text-secondary">
         {t("heading")}
       </p>
 

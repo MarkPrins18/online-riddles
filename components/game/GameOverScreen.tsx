@@ -30,7 +30,7 @@ export function GameOverScreen({
 
   return (
     <RevealCard tone="danger" label={t("gameOver")} title={t("heading")} subtitle={t("subtitle")}>
-      <StandingsList players={ranked} tone="danger" />
+      <StandingsList players={ranked} />
 
       <SessionRecapPanel supabase={supabase} roomId={roomId} bare />
 

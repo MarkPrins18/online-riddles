@@ -2,20 +2,22 @@ import type { CSSProperties, ReactNode } from "react";
 
 type RevealTone = "accent" | "danger";
 
+// "accent" is the normal, neutral moment (cream rule, grey label); "danger"
+// is bad news (red rule and label). Yellow stays reserved for actions.
 const LABEL_TONE: Record<RevealTone, string> = {
-  accent: "text-accent",
+  accent: "text-text-secondary",
   danger: "text-danger",
 };
 
 const RULE_TONE: Record<RevealTone, string> = {
-  accent: "border-t-accent",
+  accent: "border-t-text-primary",
   danger: "border-t-danger",
 };
 
 /**
  * The game's "big moment" card (a new case's briefing, the solution, the
- * final standings): a dark card with a thick colored top rule (yellow, or
- * red for bad news), a colored label and the title in Anton. Color stays an
+ * final standings): a dark card with a thick top rule (cream, or red for
+ * bad news), a small label and the title in Anton. Color stays an
  * accent rather than a whole surface, so it doesn't tire the eyes. Plays
  * the redaction-lift reveal.
  */
@@ -54,10 +56,8 @@ export function RevealCard({
 /** Ranked standings row list shared by the end screens. */
 export function StandingsList({
   players,
-  tone = "accent",
 }: {
   players: { id: string; name: string; score: number }[];
-  tone?: RevealTone;
 }) {
   return (
     <ol className="flex flex-col divide-y divide-dashed divide-[#3a3a3a]">
@@ -65,7 +65,7 @@ export function StandingsList({
         <li key={player.id} className="flex items-baseline gap-3 py-3 text-lg">
           <span
             className={`w-6 shrink-0 font-display ${
-              index === 0 ? (tone === "accent" ? "text-accent" : "text-danger") : "text-[#8c8578]"
+              index === 0 ? "text-text-primary" : "text-[#8c8578]"
             }`}
           >
             {index + 1}

@@ -1,16 +1,18 @@
 import { HTMLAttributes } from "react";
 
-type BadgeTone = "neutral" | "accent" | "danger";
+type BadgeTone = "neutral" | "accent" | "fact" | "danger";
 
 type BadgeProps = HTMLAttributes<HTMLSpanElement> & {
   tone?: BadgeTone;
 };
 
-// Solid label, like a sticker on a paperback cover — fill carries the
-// tone, text stays readable on it.
+// Follows the color roles in globals.css: "accent" is an emphasized piece
+// of information (cream outline — yellow is reserved for actions), "fact"
+// is something confirmed (cream fill), "danger" is no/wrong (red fill).
 const TONE_CLASSES: Record<BadgeTone, string> = {
   neutral: "border-2 border-border text-text-secondary",
-  accent: "border-2 border-accent bg-accent text-ink",
+  accent: "border-2 border-text-primary text-text-primary",
+  fact: "border-2 border-paper bg-paper text-ink",
   danger: "border-2 border-danger bg-danger text-ink",
 };
 

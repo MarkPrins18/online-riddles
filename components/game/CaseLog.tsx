@@ -24,7 +24,7 @@ export function CaseLog({ entries }: { entries: CaseLogEntry[] }) {
             <p className="mt-0.5 text-text-secondary">
               {entry.puzzle_title} ·{" "}
               {entry.outcome === "solved" ? (
-                <span className="text-accent-secondary">
+                <span className="text-text-primary">
                   {t("solvedBy", { name: entry.solver_name ?? "", count: entry.questions_asked })}
                 </span>
               ) : (

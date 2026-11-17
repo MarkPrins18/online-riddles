@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/Button";
 function AnswerBadge({ answer }: { answer: "yes" | "no" | "irrelevant" }) {
   const t = useTranslations("QuestionCard");
   const styles: Record<typeof answer, string> = {
-    yes: "bg-accent px-2.5 py-[3px] text-ink",
+    yes: "bg-paper px-2.5 py-[3px] text-ink",
     no: "bg-danger px-2.5 py-[3px] text-ink",
     irrelevant: "border-2 border-[#5a5a5a] px-2 py-px text-text-secondary",
   };
@@ -42,7 +42,7 @@ function AnswerBadge({ answer }: { answer: "yes" | "no" | "irrelevant" }) {
 function Star({ isBest, onClick }: { isBest: boolean; onClick?: () => void }) {
   const t = useTranslations("QuestionCard");
   const className = `shrink-0 rounded text-lg leading-none transition-colors ${
-    isBest ? "text-accent" : "text-text-secondary/50"
+    isBest ? "text-text-primary" : "text-text-secondary/50"
   } ${onClick ? "p-1 hover:text-accent" : ""}`;
 
   if (!onClick) {
@@ -135,7 +135,7 @@ export function QuestionCard({
           <AnswerBadge answer={question.answer as "yes" | "no" | "irrelevant"} />
         )}
         {!isAnswered && (
-          <span className="shrink-0 border-2 border-accent px-2 py-px font-display text-[15px] text-text-primary">
+          <span className="shrink-0 border-2 border-dashed border-[#5a5a5a] px-2 py-px font-display text-[15px] text-text-secondary">
             ?
           </span>
         )}
@@ -155,7 +155,7 @@ export function QuestionCard({
       {narrating && !isAnswered && (
         <div className="mt-2.5 flex flex-col gap-2">
           <div className="flex flex-wrap gap-2">
-            <Button variant="primary" onClick={() => handleQuickAnswer("yes")}>
+            <Button variant="fact" onClick={() => handleQuickAnswer("yes")}>
               {t("quickYes")}
             </Button>
             <Button variant="danger" onClick={() => handleQuickAnswer("no")}>

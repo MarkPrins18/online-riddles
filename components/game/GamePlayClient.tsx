@@ -456,7 +456,7 @@ export function GamePlayClient({ code }: { code: string }) {
           <span className="rounded-md border-2 border-[#3a3a3a] px-2.5 py-0.5 text-[13px] font-extrabold tracking-[0.14em] text-[#cfc7b5]">
             {room.code}
           </span>
-          {narrating && <span className="text-sm font-bold text-accent">{t("youAreNarrator")}</span>}
+          {narrating && <span className="text-sm font-bold text-text-primary">{t("youAreNarrator")}</span>}
           {isSpectator && <span className="text-sm font-bold text-text-secondary">{t("spectator")}</span>}
           {narrating && !isRevealed && (
             <span className="hidden text-sm text-text-secondary sm:inline">
@@ -508,7 +508,7 @@ export function GamePlayClient({ code }: { code: string }) {
             {/* The case itself is the one loud surface on the screen: a
                 yellow paperback cover with ink text. */}
             <div className="relative overflow-hidden rounded-md border-2 border-border bg-bg-secondary px-5 py-5 text-text-primary sm:px-[30px] sm:py-[26px]">
-              <p className="relative text-sm font-extrabold text-accent">
+              <p className="relative text-sm font-extrabold text-text-secondary">
                 {narratorName ? t("narratorIs", { name: narratorName }) : t("caseDossierLabel")}
                 {puzzle.category && ` · ${puzzle.category}`}
               </p>

@@ -71,7 +71,7 @@ export function QuestionForm({
         <button
           type="submit"
           disabled={isSubmitting || !text.trim()}
-          className="cursor-pointer rounded-[10px] border-[3px] bg-text-primary border-text-primary px-6 py-[11px] font-display text-[22px] uppercase tracking-[0.03em] text-ink disabled:cursor-not-allowed"
+          className="cursor-pointer rounded-[10px] border-[3px] bg-accent border-accent px-6 py-[11px] font-display text-[22px] uppercase tracking-[0.03em] text-ink disabled:cursor-not-allowed"
         >
           {t("submit")}
         </button>

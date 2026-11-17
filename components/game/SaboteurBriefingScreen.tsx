@@ -29,7 +29,7 @@ export function SaboteurBriefingScreen({
         <p className="mt-1.5 text-lg font-medium leading-relaxed">{solution}</p>
       </div>
 
-      <Button variant="danger" className="mt-8 w-full py-3.5 text-xl" onClick={onAcknowledge}>
+      <Button className="mt-8 w-full py-3.5 text-xl" onClick={onAcknowledge}>
         {t("start")}
       </Button>
     </RevealCard>

@@ -49,7 +49,7 @@ export function CaseActionBar({
             <button
               type="button"
               onClick={() => setMode("solve")}
-              className={`${SWITCH_BUTTON} border-danger bg-danger text-ink`}
+              className={`${SWITCH_BUTTON} border-text-primary bg-transparent text-text-primary hover:bg-text-primary hover:text-ink`}
             >
               {t("iKnowIt")}
             </button>

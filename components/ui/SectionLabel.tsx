@@ -8,7 +8,7 @@ type SectionLabelProps = HTMLAttributes<HTMLParagraphElement> & {
 
 const TONE_CLASSES: Record<SectionLabelTone, string> = {
   muted: "text-text-primary",
-  hero: "text-accent",
+  hero: "text-text-primary",
 };
 
 export function SectionLabel({ tone = "muted", className = "", ...props }: SectionLabelProps) {
